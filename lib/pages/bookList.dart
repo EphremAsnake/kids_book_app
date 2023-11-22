@@ -40,7 +40,15 @@ class _BookListPageState extends State<BookListPage>
     for (int i = 0; i < widget.booksList.books.length; i++) {
       fetchDataForBookPage(i);
     }
+
+    _scrollController.addListener(() {
+      setState(() {
+        showScrollToTopButton = _scrollController.offset > 0;
+      });
+    });
   }
+
+  bool showScrollToTopButton = false;
 
   // Play or stop audio based on current state
   void toggleAudio() async {
@@ -110,7 +118,10 @@ class _BookListPageState extends State<BookListPage>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BooksPage(response: storypageresponses[index]!, indexValue: index,),
+          builder: (context) => BooksPage(
+            response: storypageresponses[index]!,
+            indexValue: index,
+          ),
         ),
       );
     } else {
@@ -191,24 +202,25 @@ class _BookListPageState extends State<BookListPage>
               ),
             ),
           ),
-          Positioned(
-            bottom: 20.0,
-            left: MediaQuery.of(context).size.height * 0.08,
-            child: CircleAvatar(
-              radius: MediaQuery.of(context).size.height * 0.06,
-              backgroundColor: Colors.white,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_upward_outlined),
-                onPressed: () {
-                  _scrollController.animateTo(
-                    0,
-                    duration: const Duration(milliseconds: 1500),
-                    curve: Curves.easeInOut,
-                  );
-                },
+          if (showScrollToTopButton)
+            Positioned(
+              bottom: 20.0,
+              left: MediaQuery.of(context).size.height * 0.08,
+              child: CircleAvatar(
+                radius: MediaQuery.of(context).size.height * 0.06,
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_upward_outlined),
+                  onPressed: () {
+                    _scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 1500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -242,7 +254,11 @@ class _BookListPageState extends State<BookListPage>
               left: 0,
               right: 0,
               child: Container(
-                color: Colors.black.withOpacity(0.3),
+                decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12))),
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Center(
                   child: Text(
@@ -285,7 +301,10 @@ class ShimmerEffect extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         child: Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
+          loop: 5,
+          direction: ShimmerDirection.ltr,
+          enabled: true,
+          baseColor: Colors.white,
           highlightColor: Colors.grey[100]!,
           child: const SizedBox(
             width: double.infinity,
