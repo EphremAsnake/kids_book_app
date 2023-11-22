@@ -28,7 +28,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  another_transformer_page_view: ^2.0.1
   audioplayers: ^5.2.1
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
@@ -37,13 +36,12 @@ dependencies:
     sdk: flutter
   flutter_staggered_animations: ^1.1.1
   flutter_svg: ^2.0.9
+  flutter_swipe_detector: ^2.0.0
   image_fade: ^0.6.2
   lottie: ^2.7.0
   shared_preferences: ^2.2.2
   shimmer: ^3.0.0
-  swipe_to: ^1.0.3
   transparent_image: ^2.0.1
-  flutter_swipe_detector: ^2.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

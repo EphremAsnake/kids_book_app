@@ -8,6 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 import '../model/booklistModel.dart';
 import '../model/storyPage.dart';
 import '../services/apiEndpoints.dart';
+import '../widget/choice.dart';
 import '../widget/dialog.dart';
 import 'books/books.dart';
 
@@ -158,6 +159,7 @@ class _BookListPageState extends State<BookListPage>
             ),
             child: AnimationLimiter(
               child: GridView.builder(
+                physics: const BouncingScrollPhysics(),
                 controller: _scrollController,
                 itemCount: widget.booksList.books.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -170,7 +172,35 @@ class _BookListPageState extends State<BookListPage>
                       child: FadeInAnimation(
                         child: InkWell(
                           onTap: () {
-                            navigateToNextPage(index);
+                            if (index == 0) {
+                              navigateToNextPage(index);
+                            } else {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return ChoiceDialogBox(
+                                    title: 'Access Stories',
+                                    titleColor: Colors.orange,
+                                    descriptions:
+                                        'To unlock these stories, please watch a short ad.',
+                                    text: 'Watch Ad',
+                                    sectext: 'Close',
+                                    functionCall: () {
+                                      
+                                      //showRewardAd();
+                                      //Navigator.pop(context);
+                                    },
+                                    secfunctionCall: () {
+                                      
+                                      //showRewardAd();
+                                      Navigator.pop(context);
+                                    },
+                                    img: 'assets/dialog_Info.svg',
+                                  );
+                                },
+                              );
+                            }
                           },
                           child: buildBookCard(book),
                         ),
