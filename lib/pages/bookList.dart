@@ -5,12 +5,14 @@ import 'package:shimmer/shimmer.dart';
 import 'package:storybook/utils/colorConvet.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:audioplayers/audioplayers.dart';
+import '../controller/audioController.dart';
 import '../model/booklistModel.dart';
 import '../model/storyPage.dart';
 import '../services/apiEndpoints.dart';
 import '../widget/choice.dart';
 import '../widget/dialog.dart';
 import 'books/books.dart';
+import 'package:get/get.dart' hide Response;
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -24,9 +26,9 @@ class _BookListPageState extends State<BookListPage>
     with WidgetsBindingObserver {
   final ScrollController _scrollController = ScrollController();
 
-  final AudioPlayer _audioPlayer = AudioPlayer();
+  late AudioController audioController;
 
-  bool isPlaying = false;
+  //bool isPlaying = false;
 
   Dio dio = Dio();
 
@@ -36,8 +38,8 @@ class _BookListPageState extends State<BookListPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _audioPlayer.setReleaseMode(ReleaseMode.loop);
-    toggleAudio();
+    audioController = Get.put(AudioController());
+    audioController.toggleAudio(widget.booksList.backgroundMusic);
     for (int i = 0; i < widget.booksList.books.length; i++) {
       fetchDataForBookPage(i);
     }
@@ -51,41 +53,41 @@ class _BookListPageState extends State<BookListPage>
 
   bool showScrollToTopButton = false;
 
-  // Play or stop audio based on current state
-  void toggleAudio() async {
-    // print('${APIEndpoints().listurl}${widget.booksList.backgroundMusic}');
-    if (isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.play(UrlSource(
-          '${APIEndpoints().listurl}${widget.booksList.backgroundMusic}'));
-    }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-  }
+  // // Play or stop audio based on current state
+  // void toggleAudio() async {
+  //   // print('${APIEndpoints().listurl}${widget.booksList.backgroundMusic}');
+  //   if (isPlaying) {
+  //     await _audioPlayer.pause();
+  //   } else {
+  //     await _audioPlayer.play(UrlSource(
+  //         '${APIEndpoints().listurl}${widget.booksList.backgroundMusic}'));
+  //   }
+  //   setState(() {
+  //     isPlaying = !isPlaying;
+  //   });
+  // }
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    //_audioPlayer.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
-      //! Pause audio when the app is paused or in the background
-      _audioPlayer.pause();
-    } else if (state == AppLifecycleState.resumed) {
-      //! Resume audio if needed when the app is resumed
-      if (isPlaying) {
-        _audioPlayer.resume();
-      }
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.inactive) {
+  //     //! Pause audio when the app is paused or in the background
+  //     //_audioPlayer.pause();
+  //   } else if (state == AppLifecycleState.resumed) {
+  //     //! Resume audio if needed when the app is resumed
+  //     if (isPlaying) {
+  //       //_audioPlayer.resume();
+  //     }
+  //   }
+  // }
 
   Future<void> fetchDataForBookPage(int index) async {
     if (index >= 0 && index < widget.booksList.books.length) {
@@ -122,6 +124,7 @@ class _BookListPageState extends State<BookListPage>
           builder: (context) => BooksPage(
             response: storypageresponses[index]!,
             indexValue: index,
+            backgroundMusic: widget.booksList.backgroundMusic,
           ),
         ),
       );
@@ -187,12 +190,10 @@ class _BookListPageState extends State<BookListPage>
                                     text: 'Watch Ad',
                                     sectext: 'Close',
                                     functionCall: () {
-                                      
                                       //showRewardAd();
                                       //Navigator.pop(context);
                                     },
                                     secfunctionCall: () {
-                                      
                                       //showRewardAd();
                                       Navigator.pop(context);
                                     },
@@ -220,17 +221,19 @@ class _BookListPageState extends State<BookListPage>
             top: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
             child: CircleAvatar(
-              radius: MediaQuery.of(context).size.height * 0.06,
-              backgroundColor: Colors.white,
-              child: IconButton(
-                icon: Icon(isPlaying
-                    ? Icons.music_note_outlined
-                    : Icons.music_off_outlined),
-                onPressed: () {
-                  toggleAudio();
-                },
-              ),
-            ),
+                radius: MediaQuery.of(context).size.height * 0.06,
+                backgroundColor: Colors.white,
+                child: GetBuilder<AudioController>(builder: (audioController) {
+                  return IconButton(
+                    icon: Icon(audioController.isPlaying
+                        ? Icons.music_note_outlined
+                        : Icons.music_off_outlined),
+                    onPressed: () {
+                      audioController
+                          .toggleAudio(widget.booksList.backgroundMusic);
+                    },
+                  );
+                })),
           ),
           if (showScrollToTopButton)
             Positioned(

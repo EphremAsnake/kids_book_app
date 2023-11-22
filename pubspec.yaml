@@ -37,6 +37,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   flutter_svg: ^2.0.9
   flutter_swipe_detector: ^2.0.0
+  get: ^4.6.6
   image_fade: ^0.6.2
   lottie: ^2.7.0
   shared_preferences: ^2.2.2

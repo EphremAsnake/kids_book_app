@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
+import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:storybook/utils/colorConvet.dart';
 import '../../../model/storyPage.dart';
 import '../../../services/apiEndpoints.dart';
+import '../../controller/audioController.dart';
 
 class BooksPage extends StatefulWidget {
   final StoryPageApiResponse response;
   final int indexValue;
+  final String backgroundMusic;
   const BooksPage(
-      {super.key, required this.response, required this.indexValue});
+      {super.key,
+      required this.response,
+      required this.indexValue,
+      required this.backgroundMusic});
 
   @override
   _BooksPageState createState() => _BooksPageState();
@@ -21,6 +27,9 @@ class _BooksPageState extends State<BooksPage> {
 
   int _counter = 0;
   bool _imageLoaded = false;
+
+  late AudioController audioController;
+  bool isAudioPlaying = false;
 
   Color nextbuttonColor = Colors.transparent;
   Color previousbuttonColor = Colors.transparent;
@@ -33,6 +42,9 @@ class _BooksPageState extends State<BooksPage> {
     //     _currentPage = _pageController.page!.round();
     //   });
     // });
+    audioController = Get.find<AudioController>();
+    isAudioPlaying = audioController.isPlaying;
+
     for (StoryPageModel page in widget.response.pages) {
       images.add('${APIEndpoints().book}${widget.indexValue}/${page.image}');
     }
@@ -179,14 +191,29 @@ class _BooksPageState extends State<BooksPage> {
                       top: MediaQuery.of(context).size.height * 0.03,
                       right: MediaQuery.of(context).size.height * 0.037,
                       child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.height * 0.06,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          icon: const Icon(Icons.music_note_outlined,
-                              color: Colors.blue),
-                          onPressed: () {},
-                        ),
-                      ),
+                          radius: MediaQuery.of(context).size.height * 0.06,
+                          backgroundColor: Colors.white,
+                          child: GetBuilder<AudioController>(
+                              builder: (audioController) {
+                            return IconButton(
+                              icon: GetBuilder<AudioController>(
+                                builder: (audioController) {
+                                  return Icon(
+                                    audioController.isPlaying
+                                        ? Icons.music_note_outlined
+                                        : Icons.music_off_outlined,
+                                    color: Colors.blue,
+                                  );
+                                },
+                              ),
+                              onPressed: () {
+                                AudioController audioController =
+                                    Get.find<AudioController>();
+                                audioController
+                                    .toggleAudio(widget.backgroundMusic);
+                              },
+                            );
+                          })),
                     ),
                     Positioned(
                       top: MediaQuery.of(context).size.height * 0.17,
