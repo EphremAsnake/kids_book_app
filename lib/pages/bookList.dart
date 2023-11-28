@@ -221,7 +221,7 @@ class _BookListPageState extends State<BookListPage> {
       // showCupertinoModalPopup(context: context, builder:
       //             (context) => SecondScreen()
       //         );
-      
+
       Navigator.of(context).push(
         BookOpeningPageRoute(
           page: BooksPage(
@@ -348,6 +348,20 @@ class _BookListPageState extends State<BookListPage> {
                                                       await AdManager
                                                           .incrementAdShownCount(
                                                               book.title);
+
+                                                      //! Chnage the state of the book if reward ad shown equals rewardedCountLimit
+                                                      int adScount =
+                                                          await AdManager
+                                                              .getAdShownCount(
+                                                                  book.title);
+                                                      if (adScount >=
+                                                          rewardedCountLimit) {
+                                                        book.status =
+                                                            "unlocked";
+                                                      }
+
+                                                      //! Call setState to trigger a rebuild of the GridView item
+                                                      setState(() {});
                                                       navigateToNextPage(index);
                                                     },
                                                   );
@@ -602,5 +616,3 @@ class BookOpeningPageRoute extends PageRouteBuilder {
           },
         );
 }
-
-

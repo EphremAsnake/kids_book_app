@@ -2,7 +2,7 @@ class BookList {
   final String folder;
   final String title;
   final String thumbnail;
-  final String status;
+   String status;
 
   BookList({
     required this.folder,
