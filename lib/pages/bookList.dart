@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:resize/resize.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:transparent_image/transparent_image.dart';
-import '../controller/audioController.dart';
+import '../controller/backgroundMusicAudioController.dart';
 import '../model/booklistModel.dart';
 import '../model/configModel.dart';
 import '../model/storyPage.dart';
@@ -18,6 +19,7 @@ import '../widget/dialog.dart';
 import 'books/books.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'books/choices/choice.dart';
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -54,7 +56,7 @@ class _BookListPageState extends State<BookListPage> {
     _loadInterstitialAd();
 
     audioController = Get.put(AudioController());
-    audioController.toggleAudio(widget.booksList.backgroundMusic);
+    audioController.startAudio(widget.booksList.backgroundMusic);
     for (int i = 0; i < widget.booksList.books.length; i++) {
       fetchDataForBookPage(i);
     }
@@ -216,32 +218,45 @@ class _BookListPageState extends State<BookListPage> {
         index < storypageresponses.length &&
         storypageresponses[index] != null) {
       //! Check if the response for the selected index exists
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BooksPage(
+      // showCupertinoModalPopup(context: context, builder:
+      //             (context) => SecondScreen()
+      //         );
+      
+      Navigator.of(context).push(
+        BookOpeningPageRoute(
+          page: BooksPage(
             response: storypageresponses[index]!,
             indexValue: index,
             backgroundMusic: widget.booksList.backgroundMusic,
           ),
         ),
       );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => BooksPage(
+      //       response: storypageresponses[index]!,
+      //       indexValue: index,
+      //       backgroundMusic: widget.booksList.backgroundMusic,
+      //     ),
+      //   ),
+      // );
     } else {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
             return ChoiceDialogBox(
-              title: 'Something Went Wrong',
-              titleColor: const Color(0xffED1E54),
-              descriptions: 'Something went wrong please try again.',
-              text: 'OK',
-              functionCall: () {
-                Navigator.pop(context);
-              },
-              closeicon:true
-              //img: 'assets/dialog_error.svg',
-            );
+                title: 'Something Went Wrong',
+                titleColor: const Color(0xffED1E54),
+                descriptions: 'Something went wrong please try again.',
+                text: 'OK',
+                functionCall: () {
+                  Navigator.pop(context);
+                },
+                closeicon: true
+                //img: 'assets/dialog_error.svg',
+                );
           });
       //! Handle scenarios where the response for the selected index is not available
     }
@@ -314,9 +329,8 @@ class _BookListPageState extends State<BookListPage> {
                                                     setState(() {
                                                       musicForAd = true;
                                                     });
-                                                    audioController.toggleAudio(
-                                                        widget.booksList
-                                                            .backgroundMusic);
+                                                    audioController
+                                                        .toggleAudio();
                                                   }
                                                   rewardedAd!.show(
                                                     onUserEarnedReward:
@@ -324,9 +338,7 @@ class _BookListPageState extends State<BookListPage> {
                                                             reward) async {
                                                       if (musicForAd) {
                                                         audioController
-                                                            .toggleAudio(widget
-                                                                .booksList
-                                                                .backgroundMusic);
+                                                            .toggleAudio();
                                                         setState(() {
                                                           musicForAd = false;
                                                         });
@@ -383,8 +395,7 @@ class _BookListPageState extends State<BookListPage> {
                         ? Icons.music_note_outlined
                         : Icons.music_off_outlined),
                     onPressed: () {
-                      audioController
-                          .toggleAudio(widget.booksList.backgroundMusic);
+                      audioController.toggleAudio();
                     },
                   );
                 })),
@@ -467,7 +478,7 @@ class _BookListPageState extends State<BookListPage> {
               child: FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image:
-                    '${APIEndpoints.baseUrl}${book.thumbnail}', // Provide the URL from your book object
+                    '${APIEndpoints.baseUrl}/${book.thumbnail}', // Provide the URL from your book object
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
@@ -493,7 +504,7 @@ class _BookListPageState extends State<BookListPage> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.visible,
                       maxLines: 3,
-                      style:  TextStyle(
+                      style: TextStyle(
                           height: 1,
                           color: Colors.white,
                           fontSize: 6.sp,
@@ -548,3 +559,48 @@ class ShimmerEffect extends StatelessWidget {
     );
   }
 }
+
+class BookOpeningPageRoute extends PageRouteBuilder {
+  final Widget page;
+
+  BookOpeningPageRoute({required this.page})
+      : super(
+          transitionDuration: Duration(seconds: 1),
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              page,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) {
+            var begin = Matrix4.identity()
+              ..setEntry(3, 2, 0.002)
+              ..rotateY(-0.5); // Adjust the angle if needed
+
+            var end = Matrix4.identity()
+              ..setEntry(3, 2, 0.002)
+              ..rotateY(0);
+
+            var tween = Matrix4Tween(begin: begin, end: end);
+
+            return AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return Transform(
+                  transform: tween.evaluate(animation),
+                  alignment: Alignment.center,
+                  child: child,
+                );
+              },
+              child: child,
+            );
+          },
+        );
+}
+
+

@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void fetchData() async {
     try {
       Response response =
-          await dio.get('${APIEndpoints.baseUrl}menu/book_list.json');
+          await dio.get('${APIEndpoints.baseUrl}/menu/book_list.json');
 
       // Map<String, dynamic> parsedJson = jsonDecode(response.data);
 

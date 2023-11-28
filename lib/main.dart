@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:resize/resize.dart';
 
-import 'controller/audioController.dart';
+import 'controller/backgroundMusicAudioController.dart';
+import 'controller/listenBookAudioController.dart';
 import 'pages/splashScreen.dart';
 
 void main() async {
@@ -16,6 +17,7 @@ void main() async {
     DeviceOrientation.landscapeRight,
   ]);
   Get.put(AudioController());
+  Get.put(BookAudioController());
   runApp(const MyApp());
 }
 

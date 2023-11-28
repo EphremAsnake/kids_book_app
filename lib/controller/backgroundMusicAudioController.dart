@@ -13,6 +13,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   void onInit() {
     super.onInit();
     _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -40,14 +41,21 @@ class AudioController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  void toggleAudio(String audioUrl) async {
+  void toggleAudio() async {
     if (isPlaying) {
       await _audioPlayer.pause();
     } else {
-      await _audioPlayer.play(UrlSource('${APIEndpoints.menuUrl}$audioUrl'));
+      await _audioPlayer.resume();
     }
     isPlaying = !isPlaying;
     update(); // Notify listeners of state change
+  }
+
+  void startAudio(String audioUrl) async {
+    await _audioPlayer.play(UrlSource('${APIEndpoints.menuUrl}$audioUrl'));
+
+    isPlaying = true;
+    update();
   }
 
   void audioVolumeUp() {
