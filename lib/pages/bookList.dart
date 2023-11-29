@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,8 @@ import '../utils/admanager.dart';
 import '../widget/about.dart';
 import '../widget/choice.dart';
 import '../widget/dialog.dart';
-import 'books/books.dart';
+import 'books/book.dart';
+import '../backup/books.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'books/choices/choice.dart';
@@ -224,7 +227,7 @@ class _BookListPageState extends State<BookListPage> {
 
       Navigator.of(context).push(
         BookOpeningPageRoute(
-          page: BooksPage(
+          page: BookPage(
             response: storypageresponses[index]!,
             indexValue: index,
             backgroundMusic: widget.booksList.backgroundMusic,
@@ -471,27 +474,58 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
             ),
-          Positioned(
-            top: 0.0,
-            left: 0,
-            right: 0,
-            child: CircleAvatar(
-                radius: MediaQuery.of(context).size.height * 0.06,
-                backgroundColor: Colors.white,
-                child: GetBuilder<AudioController>(builder: (audioController) {
-                  return IconButton(
-                    icon: Icon(audioController.isPlaying
-                        ? Icons.music_note_outlined
-                        : Icons.music_off_outlined),
-                    onPressed: () {
-                      audioController.toggleAudio();
-                    },
-                  );
-                })),
-          ),
+          if (widget.configResponse.houseAd!.show != null &&
+              widget.configResponse.houseAd!.show!)
+            Align(
+              alignment: Alignment.topCenter,
+              child: Positioned(
+                top: 0.0,
+                //left: 0,
+                //right: 0,
+                child: InkWell(
+                  onTap: () {
+                    if (widget.configResponse.houseAd!.typeApp!) {
+                      if (Platform.isAndroid) {
+                        openUrl(widget.configResponse.houseAd!.androidUrl!);
+                      } else {
+                        openUrl(widget.configResponse.houseAd!.iosUrl!);
+                      }
+                    }
+                  },
+                  child: Container(
+                      width: MediaQuery.sizeOf(context).width * 0.3,
+                      height: 25.w,
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12))),
+                      child: Center(
+                          child: Text(
+                        widget.configResponse.houseAd!.buttonText!,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 8.sp),
+                      ))),
+                ),
+              ),
+            ),
         ],
       ),
     );
+  }
+
+  void openUrl(String url) async {
+    // final String appPackageName =
+    //     'com.example.dagi';
+
+    // final String url =
+    //     'https://play.google.com/store/apps/details?id=$appPackageName';
+
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch Url.';
+    }
   }
 
   Widget buildBookCard(BookList book, int adShownCount) {
@@ -599,7 +633,7 @@ class BookOpeningPageRoute extends PageRouteBuilder {
 
   BookOpeningPageRoute({required this.page})
       : super(
-          transitionDuration: Duration(seconds: 1),
+          transitionDuration: const Duration(seconds: 1),
           pageBuilder: (
             BuildContext context,
             Animation<double> animation,
