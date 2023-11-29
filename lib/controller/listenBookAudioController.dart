@@ -28,6 +28,19 @@ class BookAudioController extends GetxController with WidgetsBindingObserver {
     updateAudioPlayback();
   }
 
+  void resetAudioController() {
+    // Reset all variables and flags to their initial state
+    _counter = 0;
+    isPlaying = false;
+    wasPlayingBeforeInterruption = false;
+    audioUrls.clear(); // Clear the list of audio URLs
+    _audioPlayer.stop(); // Stop audio playback
+    _audioPlayer.dispose;
+
+    // Notify listeners of state changes
+    update();
+  }
+
   void updateAudioPlayback() {
     if (_listen) {
       _audioPlayer.onPlayerStateChanged.listen(
@@ -68,17 +81,19 @@ class BookAudioController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
-  // void clearCounter() {
-  //   _counter = 0;
-  //   update();
-  // }
-
   void clearplayer() {
     _counter = 0;
     _audioPlayer.stop();
-    _audioPlayer.dispose;
+    isPlaying = false;
     update();
+    _audioPlayer.dispose;
   }
+
+  // void clearcounter() {
+  //   _counter = 0;
+
+  //   update();
+  // }
 
   @override
   void onInit() {
@@ -142,6 +157,9 @@ class BookAudioController extends GetxController with WidgetsBindingObserver {
   void startAudio(List<String> urls) {
     audioUrls = List<String>.from(urls);
 
+    // if (start != null) {
+    //   _counter = 0;
+    // }
     _playAudioAtIndex(_counter);
     setListenMode(true);
   }

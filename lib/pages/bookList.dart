@@ -228,6 +228,8 @@ class _BookListPageState extends State<BookListPage> {
             response: storypageresponses[index]!,
             indexValue: index,
             backgroundMusic: widget.booksList.backgroundMusic,
+            booksList: widget.booksList,
+            configResponse: widget.configResponse,
           ),
         ),
       );
@@ -469,6 +471,24 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
             ),
+          Positioned(
+            top: 0.0,
+            left: 0,
+            right: 0,
+            child: CircleAvatar(
+                radius: MediaQuery.of(context).size.height * 0.06,
+                backgroundColor: Colors.white,
+                child: GetBuilder<AudioController>(builder: (audioController) {
+                  return IconButton(
+                    icon: Icon(audioController.isPlaying
+                        ? Icons.music_note_outlined
+                        : Icons.music_off_outlined),
+                    onPressed: () {
+                      audioController.toggleAudio();
+                    },
+                  );
+                })),
+          ),
         ],
       ),
     );
