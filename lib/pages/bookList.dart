@@ -40,7 +40,7 @@ class _BookListPageState extends State<BookListPage> {
 
   late AudioController audioController;
   InterstitialAd? _interstitialAd;
-  late List<Future<int>> adCounts;
+  late List<Future<bool>> lockStatusList;
 
   //bool isPlaying = false;
 
@@ -63,9 +63,9 @@ class _BookListPageState extends State<BookListPage> {
     for (int i = 0; i < widget.booksList.books.length; i++) {
       fetchDataForBookPage(i);
     }
-    adCounts = List<Future<int>>.generate(
+    lockStatusList = List<Future<bool>>.generate(
       widget.booksList.books.length,
-      (index) => getCount(widget.booksList.books[index].title),
+      (index) => getLockStatus(widget.booksList.books[index].title),
     );
 
     _scrollController.addListener(() {
@@ -187,9 +187,22 @@ class _BookListPageState extends State<BookListPage> {
   //     }
   //   }
   // }
-  Future<int> getCount(String bookTitle) async {
-    int adShownCount = await AdManager.getAdShownCount(bookTitle);
-    return adShownCount;
+  Future<bool> getLockStatus(String bookTitle) async {
+    bool isWatched = await BookPreferences.getBookWatched(bookTitle);
+    int openedCount = await BookPreferences.getBookOpenedCount(bookTitle);
+    int rewardedCountLimit =
+        widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
+    // if (widget.configResponse.admobRewardedAd?.rewardedCount != null &&
+    //     rewardedCountLimit > 1) {
+    //   rewardedCountLimit =
+    //       widget.configResponse.admobRewardedAd!.rewardedCount! - 1;
+    // }
+    if (isWatched && openedCount <= rewardedCountLimit) {
+      return true;
+    } else {
+      return false;
+    }
+    //int bookWatchedCount = await NewAdManager.getBookWatchedCount(bookTitle);
   }
 
   Future<void> fetchDataForBookPage(int index) async {
@@ -288,14 +301,15 @@ class _BookListPageState extends State<BookListPage> {
                 itemCount: widget.booksList.books.length,
                 itemBuilder: (BuildContext context, int index) {
                   BookList book = widget.booksList.books[index];
-                  Future<int> adCountFuture = getCount(book.title);
+                  // Future<int> adCountFuture = getCount(book.title);
                   int rewardedCountLimit =
                       widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
+
                   //int adShownCount = 0;
-                  return FutureBuilder<int>(
-                      future: adCounts[index],
+                  return FutureBuilder<bool>(
+                      future: lockStatusList[index],
                       builder: (context, snapshot) {
-                        int adShownCount = snapshot.data ?? 0;
+                        bool bookstatus = snapshot.data ?? false;
                         return AnimationConfiguration.staggeredList(
                           position: index,
                           duration: const Duration(milliseconds: 500),
@@ -307,13 +321,31 @@ class _BookListPageState extends State<BookListPage> {
                                     if (index == 0) {
                                       navigateToNextPage(index);
                                     } else {
-                                      adShownCount =
-                                          await AdManager.getAdShownCount(
+                                      bool isWatched =
+                                          await BookPreferences.getBookWatched(
                                               book.title);
-                                      if (adShownCount >= rewardedCountLimit) {
+                                      int openedCount = await BookPreferences
+                                          .getBookOpenedCount(book.title);
+
+                                      //!check if book finished it's session if so reset or lock it again
+
+                                      if (isWatched &&
+                                          openedCount >= rewardedCountLimit) {
+                                        await BookPreferences.resetBookData(
+                                            book.title);
+                                      }
+
+                                      //!check if reward ad has been seen and if user has sessions left if so open story page
+
+                                      if (isWatched &&
+                                          openedCount <= rewardedCountLimit) {
                                         await _showInterstitialAd();
+                                        await BookPreferences
+                                            .incrementBookOpened(book.title);
                                         navigateToNextPage(index);
                                       } else {
+                                        //!show reward ad if available for locked books
+
                                         // ignore: use_build_context_synchronously
                                         showDialog(
                                           context: context,
@@ -350,20 +382,15 @@ class _BookListPageState extends State<BookListPage> {
                                                       }
                                                       rewardedAd = null;
                                                       loadRewarded();
-                                                      await AdManager
-                                                          .incrementAdShownCount(
-                                                              book.title);
 
-                                                      //! Chnage the state of the book if reward ad shown equals rewardedCountLimit
-                                                      int adScount =
-                                                          await AdManager
-                                                              .getAdShownCount(
-                                                                  book.title);
-                                                      if (adScount >=
-                                                          rewardedCountLimit) {
-                                                        book.status =
-                                                            "unlocked";
-                                                      }
+                                                      //!---! Chnage State of the book to Reward Ad watched and Book Opened
+
+                                                      await BookPreferences
+                                                          .setBookWatched(
+                                                              book.title, true);
+                                                      await BookPreferences
+                                                          .incrementBookOpened(
+                                                              book.title);
 
                                                       //! Call setState to trigger a rebuild of the GridView item
                                                       setState(() {});
@@ -373,6 +400,9 @@ class _BookListPageState extends State<BookListPage> {
                                                 } else if (_interstitialAd !=
                                                     null) {
                                                   await _showInterstitialAd();
+                                                  await BookPreferences
+                                                      .incrementBookOpened(
+                                                          book.title);
                                                   navigateToNextPage(index);
                                                 } else {
                                                   showDialogs(context);
@@ -388,7 +418,7 @@ class _BookListPageState extends State<BookListPage> {
                                       }
                                     }
                                   },
-                                  child: buildBookCard(book, adShownCount)),
+                                  child: buildBookCard(book, bookstatus)),
                             ),
                           ),
                         );
@@ -528,9 +558,9 @@ class _BookListPageState extends State<BookListPage> {
     }
   }
 
-  Widget buildBookCard(BookList book, int adShownCount) {
-    int rewardedCountLimit =
-        widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
+  Widget buildBookCard(BookList book, bool bookState) {
+    // int rewardedCountLimit =
+    //     widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
     return SizedBox(
       height: 150,
       child: Card(
@@ -583,7 +613,7 @@ class _BookListPageState extends State<BookListPage> {
               ),
             ),
 
-            if (book.status == "locked" && adShownCount < rewardedCountLimit)
+            if (book.status == "locked" && !bookState)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Container(

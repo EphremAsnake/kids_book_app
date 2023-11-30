@@ -142,7 +142,7 @@ class _BooksPageState extends State<BookPage> {
     // }
     if (_counter < images.length - 1) {
       setState(() {
-        _counter = _counter + 1;
+        _counter++;
       });
       // setState(() {
       //   _counter = listenaudioController.counter;
@@ -159,7 +159,7 @@ class _BooksPageState extends State<BookPage> {
   void _deccrementCounter() {
     if (_counter > 0) {
       setState(() {
-        _counter = _counter - 1;
+        _counter--;
       });
       // setState(() {
       //   _counter = listenaudioController.counter;
@@ -363,7 +363,7 @@ class _BooksPageState extends State<BookPage> {
                                       icon: Icon(
                                         isPlaying
                                             ? Icons.pause
-                                            : Icons.headphones,
+                                            : Icons.play_arrow_outlined,
                                         color: Colors.blue,
                                       ),
                                       onPressed: () {
@@ -514,6 +514,7 @@ class _BooksPageState extends State<BookPage> {
 
                 lastScreen();
               } else {
+                print('Completed Done');
                 _incrementCounter(); // Move to the next audio
               }
               break;
