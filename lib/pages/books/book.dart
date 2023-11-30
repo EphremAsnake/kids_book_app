@@ -43,6 +43,7 @@ class _BooksPageState extends State<BookPage> {
   bool wasPlayingBeforeInterruption = false; // New flag to track previous state
   List<String> audioUrls = [];
   int _counter = 0;
+  bool inlastPage = false;
   bool _listen = false;
 
   List<String> images = [];
@@ -80,10 +81,13 @@ class _BooksPageState extends State<BookPage> {
         builder: (context) => ChoiceScreen(
           read: () {
             //listenaudioController.clearplayer();
+            setState(() {
+              isListening = false;
+            });
             Navigator.of(context).pop();
           },
           listen: () {
-            startAudio(audiourls);
+            startAudio(audiourls[_counter]);
             //listenaudioController.startAudio(audiourls);
             Navigator.of(context).pop();
           },
@@ -133,27 +137,36 @@ class _BooksPageState extends State<BookPage> {
   }
 
   void _incrementCounter() {
+    // if (_counter == images.length - 1 && _listen) {
+    //   lastScreen();
+    // }
     if (_counter < images.length - 1) {
-      incrementCounter();
+      setState(() {
+        _counter = _counter + 1;
+      });
       // setState(() {
       //   _counter = listenaudioController.counter;
       // });
       if (_listen) {
-        startAudio(audiourls);
+        _audiobookPlayer.stop();
+        startAudio(audiourls[_counter]);
       }
-    } else {
+    } else if (!_listen) {
       lastScreen();
     }
   }
 
   void _deccrementCounter() {
     if (_counter > 0) {
-      decrementCounter();
+      setState(() {
+        _counter = _counter - 1;
+      });
       // setState(() {
       //   _counter = listenaudioController.counter;
       // });
       if (_listen) {
-        startAudio(audiourls);
+        _audiobookPlayer.stop;
+        startAudio(audiourls[_counter]);
       }
     }
   }
@@ -253,16 +266,16 @@ class _BooksPageState extends State<BookPage> {
                           //   }
                           //   return CircularProgressIndicator(value: progress);
                           // },
-                          loadingBuilder: (context, progress, chunkEvent) {
-                            // if (progress != 0.0) {
-                            //   setState(() {
-                            //     _imageLoaded = true;
-                            //   });
-                            // }
-                            return Center(
-                                child:
-                                    CircularProgressIndicator(value: progress));
-                          },
+                          // loadingBuilder: (context, progress, chunkEvent) {
+                          //   // if (progress != 0.0) {
+                          //   //   setState(() {
+                          //   //     _imageLoaded = true;
+                          //   //   });
+                          //   // }
+                          //   return Center(
+                          //       child:
+                          //           CircularProgressIndicator(value: progress));
+                          // },
 
                           // displayed when an error occurs:
                           errorBuilder: (context, error) => Container(
@@ -461,13 +474,13 @@ class _BooksPageState extends State<BookPage> {
 
   void incrementCounter() {
     setState(() {
-      _counter++;
+      _counter = _counter + 1;
     });
   }
 
   void decrementCounter() {
     setState(() {
-      _counter--;
+      _counter = _counter - 1;
     });
   }
 
@@ -479,22 +492,29 @@ class _BooksPageState extends State<BookPage> {
   void updateAudioPlayback() {
     if (_listen) {
       _audiobookPlayer.onPlayerStateChanged.listen(
-        (it) {
+        (it) async {
           switch (it) {
             case PlayerState.stopped:
+              // if (_counter == images.length - 1) {
+              //   lastScreen();
+              // } else {
+              //   //lastScreen();
+              // }
               print(
                 'Player stopped!'
                 'toast-player-stopped-index',
               );
               break;
             case PlayerState.completed:
-              if (_counter == images.length - 1) {
-                // Check if it's the last page
+              if (_counter == audiourls.length - 1) {
+                // setState(() {
+                //   isListening = false;
+                // });
+                await Future.delayed(const Duration(seconds: 14));
+
                 lastScreen();
               } else {
-                // If not, proceed with incrementing the counter and playing the audio
-                incrementCounter();
-                _playAudioAtIndex(_counter);
+                _incrementCounter(); // Move to the next audio
               }
               break;
             default:
@@ -511,6 +531,7 @@ class _BooksPageState extends State<BookPage> {
     if (isPlaying) {
       await _audiobookPlayer.pause();
     } else {
+      await _audiobookPlayer.seek(Duration.zero);
       await _audiobookPlayer.resume();
     }
     setState(() {
@@ -518,20 +539,20 @@ class _BooksPageState extends State<BookPage> {
     });
   }
 
-  void _playAudioAtIndex(int index) async {
-    if (index < audioUrls.length) {
-      await Future.delayed(const Duration(seconds: 3));
-      await _audiobookPlayer.play(UrlSource(audioUrls[index]));
-      setState(() {
-        isPlaying = true;
-      });
-    }
+  void _playAudioAtIndex(String url) async {
+    //if (index < audioUrls.length) {
+    await Future.delayed(const Duration(seconds: 3));
+    await _audiobookPlayer.play(UrlSource(url));
+    setState(() {
+      isPlaying = true;
+    });
+    //}
   }
 
   // Function to start playing the list of audio URLs
-  void startAudio(List<String> urls) {
-    audioUrls = List<String>.from(urls);
-    _playAudioAtIndex(_counter);
+  void startAudio(String url) {
+    //audioUrls = List<String>.from(urls);
+    _playAudioAtIndex(url);
     setListenMode(true);
   }
 }
