@@ -1,4 +1,4 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,7 +38,8 @@ class BookPage extends StatefulWidget {
 }
 
 class _BooksPageState extends State<BookPage> {
-  final AudioPlayer _audiobookPlayer = AudioPlayer();
+  //final AudioPlayer _audiobookPlayer = AudioPlayer();
+  AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
   bool wasPlayingBeforeInterruption = false; // New flag to track previous state
   List<String> audioUrls = [];
@@ -47,21 +48,32 @@ class _BooksPageState extends State<BookPage> {
   bool _listen = false;
 
   List<String> images = [];
-  List<String> audiourls = [];
+  List<String> bookAudioUrls = [];
 
   late AudioController audioController;
   bool isAudioPlaying = false;
-  bool isListening = false;
+  //bool isListening = false;
 
   Color nextbuttonColor = Colors.transparent;
   Color previousbuttonColor = Colors.transparent;
   bool hasLastScreenDisplayed = false;
 
+  // final playlist = ConcatenatingAudioSource(
+  //   // Start loading next item just before reaching it
+  //   useLazyPreparation: true,
+  //   // Customise the shuffle algorithm
+  //   shuffleOrder: DefaultShuffleOrder(),
+  //   // Specify the playlist items
+  //   children: [],
+  // );
+
+  bool isIncrementing = false;
+
   @override
   void initState() {
     super.initState();
 
-    isListening = isPlaying;
+    //isPlaying = bookplayer.playerState == PlayerState.playing;
 
     audioController = Get.find<AudioController>();
 
@@ -70,8 +82,11 @@ class _BooksPageState extends State<BookPage> {
 
     for (StoryPageModel page in widget.response.pages) {
       images.add('${APIEndpoints.booksUrl}${widget.indexValue}/${page.image}');
-      audiourls
+      bookAudioUrls
           .add('${APIEndpoints.booksUrl}${widget.indexValue}/${page.audio}');
+
+      // playlist.add(AudioSource.uri(Uri.parse(
+      //     '${APIEndpoints.booksUrl}${widget.indexValue}/${page.audio}')));
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -81,14 +96,20 @@ class _BooksPageState extends State<BookPage> {
         builder: (context) => ChoiceScreen(
           read: () {
             //listenaudioController.clearplayer();
+            // setState(() {
+            //   isListening = false;
+            // });
             setState(() {
-              isListening = false;
+              _listen = false;
             });
             Navigator.of(context).pop();
           },
-          listen: () {
-            startAudio(audiourls[_counter]);
+          listen: () async {
+            // await bookplayer.setAudioSource(playlist,
+            //     initialIndex: 0, initialPosition: Duration.zero);
             //listenaudioController.startAudio(audiourls);
+            // ignore: use_build_context_synchronously
+            startPlaying();
             Navigator.of(context).pop();
           },
           booksList: widget.booksList,
@@ -136,10 +157,37 @@ class _BooksPageState extends State<BookPage> {
     }
   }
 
-  void _incrementCounter() {
+  Future<void> startPlaying() async {
+    bookplayer.setUrl(bookAudioUrls[_counter]);
+    await Future.delayed(const Duration(seconds: 4));
+    setState(() {
+      isPlaying = true;
+      _listen = true;
+    });
+    bookplayer.play();
+    bookplayer.playerStateStream.listen((playerState) {
+      if (playerState.processingState == ProcessingState.completed) {
+        _incrementCounter();
+      }
+    });
+  }
+
+  Future<void> _incrementCounter() async {
+    if (_listen && isIncrementing) {
+      return; // Prevent multiple simultaneous increment calls
+    }
+    if (_listen) {
+      isIncrementing = true;
+    }
+
     // if (_counter == images.length - 1 && _listen) {
     //   lastScreen();
     // }
+
+    bookplayer.stop();
+    setState(() {
+      isPlaying = false;
+    });
     if (_counter < images.length - 1) {
       setState(() {
         _counter++;
@@ -148,15 +196,31 @@ class _BooksPageState extends State<BookPage> {
       //   _counter = listenaudioController.counter;
       // });
       if (_listen) {
-        _audiobookPlayer.stop();
-        startAudio(audiourls[_counter]);
+        bookplayer.setUrl(bookAudioUrls[_counter]);
+        await Future.delayed(const Duration(seconds: 4));
+        setState(() {
+          isPlaying = true;
+          isIncrementing = false;
+        });
+        bookplayer.play();
       }
-    } else if (!_listen) {
+    } else {
       lastScreen();
     }
   }
 
-  void _deccrementCounter() {
+  Future<void> _deccrementCounter() async {
+    if (_listen && isIncrementing) {
+      return; // Prevent multiple simultaneous increment calls
+    }
+    if (_listen) {
+      isIncrementing = true;
+    }
+
+    bookplayer.stop();
+    setState(() {
+      isPlaying = false;
+    });
     if (_counter > 0) {
       setState(() {
         _counter--;
@@ -165,8 +229,13 @@ class _BooksPageState extends State<BookPage> {
       //   _counter = listenaudioController.counter;
       // });
       if (_listen) {
-        _audiobookPlayer.stop;
-        startAudio(audiourls[_counter]);
+        bookplayer.setUrl(bookAudioUrls[_counter]);
+        await Future.delayed(const Duration(seconds: 4));
+        setState(() {
+          isPlaying = true;
+          isIncrementing = false;
+        });
+        bookplayer.play();
       }
     }
   }
@@ -174,7 +243,7 @@ class _BooksPageState extends State<BookPage> {
   @override
   void dispose() {
     super.dispose();
-    _audiobookPlayer.dispose();
+    bookplayer.dispose();
 
     audioController.audioVolumeUp();
   }
@@ -185,6 +254,12 @@ class _BooksPageState extends State<BookPage> {
         backgroundColor: widget.response.backgroundColor.toColor(),
         body: WillPopScope(
           onWillPop: () async {
+            if (bookplayer.playing) {
+              bookplayer.pause();
+              setState(() {
+                isPlaying = false;
+              });
+            }
             bool shouldPop = await showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -367,7 +442,7 @@ class _BooksPageState extends State<BookPage> {
                                         color: Colors.blue,
                                       ),
                                       onPressed: () {
-                                        toggleAudio();
+                                        togglePlayback();
                                       },
                                     )),
                             ],
@@ -472,88 +547,92 @@ class _BooksPageState extends State<BookPage> {
         ));
   }
 
-  void incrementCounter() {
-    setState(() {
-      _counter = _counter + 1;
-    });
-  }
+  // void incrementCounter() {
+  //   setState(() {
+  //     _counter = _counter + 1;
+  //   });
+  // }
 
-  void decrementCounter() {
-    setState(() {
-      _counter = _counter - 1;
-    });
-  }
+  // void decrementCounter() {
+  //   setState(() {
+  //     _counter = _counter - 1;
+  //   });
+  // }
 
-  void setListenMode(bool value) {
-    _listen = value;
-    updateAudioPlayback();
-  }
+  // void setListenMode(bool value) {
+  //   _listen = value;
+  //   updateAudioPlayback();
+  // }
 
-  void updateAudioPlayback() {
-    if (_listen) {
-      _audiobookPlayer.onPlayerStateChanged.listen(
-        (it) async {
-          switch (it) {
-            case PlayerState.stopped:
-              // if (_counter == images.length - 1) {
-              //   lastScreen();
-              // } else {
-              //   //lastScreen();
-              // }
-              print(
-                'Player stopped!'
-                'toast-player-stopped-index',
-              );
-              break;
-            case PlayerState.completed:
-              if (_counter == audiourls.length - 1) {
-                // setState(() {
-                //   isListening = false;
-                // });
-                await Future.delayed(const Duration(seconds: 14));
+  // void updateAudioPlayback() {
+  //   if (_listen) {
+  //     _audiobookPlayer
+  //       ..listen(
+  //         (it) async {
+  //           switch (it) {
+  //             case PlayerState.stopped:
+  //               // if (_counter == images.length - 1) {
+  //               //   lastScreen();
+  //               // } else {
+  //               //   //lastScreen();
+  //               // }
+  //               print(
+  //                 'Player stopped!'
+  //                 'toast-player-stopped-index',
+  //               );
+  //               break;
+  //             case PlayerState.completed:
+  //               if (_counter == audiourls.length - 1) {
+  //                 // setState(() {
+  //                 //   isListening = false;
+  //                 // });
+  //                 await Future.delayed(const Duration(seconds: 14));
 
-                lastScreen();
-              } else {
-                print('Completed Done');
-                _incrementCounter(); // Move to the next audio
-              }
-              break;
-            default:
-              break;
-          }
-        },
-      );
+  //                 lastScreen();
+  //               } else {
+  //                 print('Completed Done');
+  //                 _incrementCounter(); // Move to the next audio
+  //               }
+  //               break;
+  //             default:
+  //               break;
+  //           }
+  //         },
+  //       );
+  //   } else {
+  //     _audiobookPlayer.stop(); // Stop audio if not in listen mode
+  //   }
+  // }
+
+  void togglePlayback() {
+    if (bookplayer.playing) {
+      bookplayer.pause();
+      setState(() {
+        isPlaying = false;
+      });
     } else {
-      _audiobookPlayer.stop(); // Stop audio if not in listen mode
+      bookplayer.seek(Duration.zero);
+      bookplayer.play();
+      setState(() {
+        isPlaying = true;
+      });
     }
   }
 
-  void toggleAudio() async {
-    if (isPlaying) {
-      await _audiobookPlayer.pause();
-    } else {
-      await _audiobookPlayer.seek(Duration.zero);
-      await _audiobookPlayer.resume();
-    }
-    setState(() {
-      isPlaying = !isPlaying;
-    });
-  }
+  // void _playAudioAtIndex(String url) async {
+  //   //if (index < audioUrls.length) {
+  //   await Future.delayed(const Duration(seconds: 3));
+  //   await _audiobookPlayer.play(UrlSource(url));
+  //   setState(() {
+  //     isPlaying = true;
+  //   });
+  //   //}
+  // }
 
-  void _playAudioAtIndex(String url) async {
-    //if (index < audioUrls.length) {
-    await Future.delayed(const Duration(seconds: 3));
-    await _audiobookPlayer.play(UrlSource(url));
-    setState(() {
-      isPlaying = true;
-    });
-    //}
-  }
-
-  // Function to start playing the list of audio URLs
-  void startAudio(String url) {
-    //audioUrls = List<String>.from(urls);
-    _playAudioAtIndex(url);
-    setListenMode(true);
-  }
+  // // Function to start playing the list of audio URLs
+  // void startAudio(String url) {
+  //   //audioUrls = List<String>.from(urls);
+  //   _playAudioAtIndex(url);
+  //   setListenMode(true);
+  // }
 }

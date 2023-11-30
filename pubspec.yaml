@@ -47,7 +47,8 @@ dependencies:
   shimmer: ^3.0.0
   transparent_image: ^2.0.1
   url_launcher: ^6.2.1
-
+  just_audio: ^0.9.36
+  
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

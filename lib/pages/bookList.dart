@@ -342,6 +342,16 @@ class _BookListPageState extends State<BookListPage> {
                                         await _showInterstitialAd();
                                         await BookPreferences
                                             .incrementBookOpened(book.title);
+                                        //!
+
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(SnackBar(
+                                        //   content: Text(
+                                        //       '${book.title}  $openedCount   $isWatched'),
+                                        // ));
+
+                                        //!
+
                                         navigateToNextPage(index);
                                       } else {
                                         //!show reward ad if available for locked books
@@ -397,14 +407,15 @@ class _BookListPageState extends State<BookListPage> {
                                                       navigateToNextPage(index);
                                                     },
                                                   );
-                                                } else if (_interstitialAd !=
-                                                    null) {
-                                                  await _showInterstitialAd();
-                                                  await BookPreferences
-                                                      .incrementBookOpened(
-                                                          book.title);
-                                                  navigateToNextPage(index);
-                                                } else {
+                                                }
+                                                //  else if (_interstitialAd !=
+                                                //     null) {
+                                                //   await _showInterstitialAd();
+                                                //   await BookPreferences
+                                                //       .incrementBookOpened(
+                                                //           book.title);
+                                                //   navigateToNextPage(index);
+                                                 else {
                                                   showDialogs(context);
                                                 }
                                               },
