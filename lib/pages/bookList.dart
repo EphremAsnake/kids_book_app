@@ -519,35 +519,30 @@ class _BookListPageState extends State<BookListPage> {
               widget.configResponse.houseAd!.show!)
             Align(
               alignment: Alignment.topCenter,
-              child: Positioned(
-                top: 0.0,
-                //left: 0,
-                //right: 0,
-                child: InkWell(
-                  onTap: () {
-                    if (widget.configResponse.houseAd!.typeApp!) {
-                      if (Platform.isAndroid) {
-                        openUrl(widget.configResponse.houseAd!.androidUrl!);
-                      } else {
-                        openUrl(widget.configResponse.houseAd!.iosUrl!);
-                      }
+              child: InkWell(
+                onTap: () {
+                  if (widget.configResponse.houseAd!.typeApp!) {
+                    if (Platform.isAndroid) {
+                      openUrl(widget.configResponse.houseAd!.androidUrl!);
+                    } else {
+                      openUrl(widget.configResponse.houseAd!.iosUrl!);
                     }
-                  },
-                  child: Container(
-                      width: MediaQuery.sizeOf(context).width * 0.3,
-                      height: 25.w,
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(12),
-                              bottomRight: Radius.circular(12))),
-                      child: Center(
-                          child: Text(
-                        widget.configResponse.houseAd!.buttonText!,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 8.sp),
-                      ))),
-                ),
+                  }
+                },
+                child: Container(
+                    width: MediaQuery.sizeOf(context).width * 0.3,
+                    height: 25.w,
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(12),
+                            bottomRight: Radius.circular(12))),
+                    child: Center(
+                        child: Text(
+                      widget.configResponse.houseAd!.buttonText!,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 8.sp),
+                    ))),
               ),
             ),
         ],
