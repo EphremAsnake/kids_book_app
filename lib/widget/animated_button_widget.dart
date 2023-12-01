@@ -8,12 +8,13 @@ class AnimatedButtonWidget extends StatelessWidget {
   final Duration buttonPlayDuration;
   final String text;
   final IconData icon;
+  final bool? isRow;
   const AnimatedButtonWidget({
     Key? key,
     required this.buttonDelayDuration,
     required this.buttonPlayDuration,
     required this.text,
-    required this.icon,
+    required this.icon, this.isRow,
   }) : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class AnimatedButtonWidget extends StatelessWidget {
       children: [
         Positioned(
           child: Container(
-                  width: MediaQuery.of(context).size.width * .3,
+                  width: isRow==null?MediaQuery.of(context).size.width * .3:MediaQuery.of(context).size.width * .145,
                   height: 47,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(

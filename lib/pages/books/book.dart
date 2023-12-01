@@ -37,11 +37,12 @@ class BookPage extends StatefulWidget {
   _BooksPageState createState() => _BooksPageState();
 }
 
-class _BooksPageState extends State<BookPage> {
+class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
   //final AudioPlayer _audiobookPlayer = AudioPlayer();
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
-  bool wasPlayingBeforeInterruption = false; // New flag to track previous state
+  bool wasPlayingBeforeInterruption =
+      false; //! New flag to track previous state
   List<String> audioUrls = [];
   int _counter = 0;
   bool inlastPage = false;
@@ -72,7 +73,7 @@ class _BooksPageState extends State<BookPage> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
     //isPlaying = bookplayer.playerState == PlayerState.playing;
 
     audioController = Get.find<AudioController>();
@@ -243,9 +244,43 @@ class _BooksPageState extends State<BookPage> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    if (bookplayer.playing) {
+      bookplayer.stop(); //! Stop the audio player when leaving the page
+    }
     bookplayer.dispose();
 
     audioController.audioVolumeUp();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // App resumed from the background
+      // Check if audio was playing before going to the background
+      if (wasPlayingBeforeInterruption) {
+        bookplayer.seek(Duration.zero);
+        bookplayer.play();
+        setState(() {
+          isPlaying = true;
+        });
+        wasPlayingBeforeInterruption = false;
+      }
+    } else if (state == AppLifecycleState.paused) {
+      // App went to the background
+      // Check if audio is playing and store its state
+      wasPlayingBeforeInterruption = bookplayer.playing;
+      if (bookplayer.playing) {
+        bookplayer.pause();
+        setState(() {
+          isPlaying = false;
+        });
+      }
+
+      // Pause or stop audio playback here if needed
+      // Example: bookplayer.pause();
+    }
   }
 
   @override
@@ -254,11 +289,8 @@ class _BooksPageState extends State<BookPage> {
         backgroundColor: widget.response.backgroundColor.toColor(),
         body: WillPopScope(
           onWillPop: () async {
-            if (bookplayer.playing) {
-              bookplayer.pause();
-              setState(() {
-                isPlaying = false;
-              });
+            if (_listen) {
+              togglePlayback();
             }
             bool shouldPop = await showDialog(
                 context: context,
@@ -288,6 +320,10 @@ class _BooksPageState extends State<BookPage> {
                       //Navigator.pop(context);
                     },
                     secfunctionCall: () {
+                      if (_listen) {
+                        togglePlayback();
+                      }
+
                       Navigator.pop(context);
                     },
                   );

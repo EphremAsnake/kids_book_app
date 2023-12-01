@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:resize/resize.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'controller/backgroundMusicAudioController.dart';
 import 'backup/listenBookAudioController.dart';
@@ -16,6 +17,7 @@ void main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
+  Wakelock.enable();
   Get.put(AudioController());
   //Get.put(BookAudioController());
   runApp(const MyApp());

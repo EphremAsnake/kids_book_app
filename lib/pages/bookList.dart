@@ -79,47 +79,53 @@ class _BookListPageState extends State<BookListPage> {
   bool isRewardedAdLoaded = false;
 
   void loadRewarded() {
-    RewardedAd.load(
-      adUnitId: AdHelper.getRewardedAdUnitId(),
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          debugPrint("Ad Loaded");
-          setState(() {
-            rewardedAd = ad;
-            isRewardedAdLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (error) {
-          if (_interstitialAd == null) {
-            showDialogs(context);
-          }
-        },
-      ),
-    );
+    if (rewardedAd != null) {
+    } else {
+      RewardedAd.load(
+        adUnitId: AdHelper.getRewardedAdUnitId(),
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (ad) {
+            debugPrint("Ad Loaded");
+            setState(() {
+              rewardedAd = ad;
+              isRewardedAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (error) {
+            if (_interstitialAd == null) {
+              showDialogs(context);
+            }
+          },
+        ),
+      );
+    }
   }
 
   Future<void> _loadInterstitialAd() async {
-    InterstitialAd.load(
-      adUnitId: AdHelper.getInterstitalAdUnitId(),
-      request: const AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) {
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-              setState(() {
-                _interstitialAd = null;
-              });
-              _loadInterstitialAd();
-            },
-          );
-          _interstitialAd = ad;
-        },
-        onAdFailedToLoad: (err) {
-          print('Failed to load an interstitial ad: ${err.message}');
-        },
-      ),
-    );
+    if (_interstitialAd != null) {
+    } else {
+      InterstitialAd.load(
+        adUnitId: AdHelper.getInterstitalAdUnitId(),
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            ad.fullScreenContentCallback = FullScreenContentCallback(
+              onAdDismissedFullScreenContent: (ad) {
+                setState(() {
+                  _interstitialAd = null;
+                });
+                _loadInterstitialAd();
+              },
+            );
+            _interstitialAd = ad;
+          },
+          onAdFailedToLoad: (err) {
+            print('Failed to load an interstitial ad: ${err.message}');
+          },
+        ),
+      );
+    }
   }
 
   Future<void> _showInterstitialAd() async {
@@ -318,6 +324,8 @@ class _BookListPageState extends State<BookListPage> {
                             child: FadeInAnimation(
                               child: InkWell(
                                   onTap: () async {
+                                    loadRewarded();
+                                    _loadInterstitialAd();
                                     if (index == 0) {
                                       navigateToNextPage(index);
                                     } else {
@@ -331,6 +339,37 @@ class _BookListPageState extends State<BookListPage> {
 
                                       if (isWatched &&
                                           openedCount >= rewardedCountLimit) {
+                                        //!Toast for lock again
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'You Have Finished your free Session for book ${book.title}.'),
+                                            behavior: SnackBarBehavior.floating,
+                                            margin: EdgeInsets.only(
+                                              // ignore: use_build_context_synchronously
+                                              bottom: MediaQuery.of(context)
+                                                      .size
+                                                      .height -
+                                                  100,
+                                              left: 10,
+                                              right: 10,
+                                            ),
+                                          ),
+                                        );
+                                        // final snackBar = SnackBar(
+                                        //   content: Text(
+                                        //       'You Have Finished your free Session for book ${book.title}.'),
+                                        // );
+                                        // // ignore: use_build_context_synchronously
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(snackBar);
+                                        // Get.snackbar(
+                                        //     'You Have Finished your free Session for book ${book.title}.',
+                                        //     '',
+                                        //     colorText: Colors.black,
+                                        //     backgroundColor: Colors.red);
                                         await BookPreferences.resetBookData(
                                             book.title);
                                       }
@@ -415,7 +454,7 @@ class _BookListPageState extends State<BookListPage> {
                                                 //       .incrementBookOpened(
                                                 //           book.title);
                                                 //   navigateToNextPage(index);
-                                                 else {
+                                                else {
                                                   showDialogs(context);
                                                 }
                                               },
