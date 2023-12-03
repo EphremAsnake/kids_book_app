@@ -38,7 +38,8 @@ class BookPage extends StatefulWidget {
   _BooksPageState createState() => _BooksPageState();
 }
 
-class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
+class _BooksPageState extends State<BookPage>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   //final AudioPlayer _audiobookPlayer = AudioPlayer();
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
@@ -48,7 +49,7 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
   int _counter = 0;
   bool inlastPage = false;
   bool _listen = false;
-
+  late AnimationController _controller;
   List<String> images = [];
   List<String> bookAudioUrls = [];
 
@@ -78,7 +79,10 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
     //isPlaying = bookplayer.playerState == PlayerState.playing;
 
     audioController = Get.find<AudioController>();
-
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000), // Adjust the duration as needed
+    );
     audioController.audioVolumeDown();
     isAudioPlaying = audioController.isPlaying;
 
@@ -193,6 +197,7 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
     if (_counter < images.length - 1) {
       setState(() {
         _counter++;
+        _controller.forward(from: 0);
       });
       // setState(() {
       //   _counter = listenaudioController.counter;
@@ -246,6 +251,7 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    _controller.dispose();
     if (bookplayer.playing) {
       bookplayer.stop(); //! Stop the audio player when leaving the page
     }
@@ -369,14 +375,62 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
                         //   ),
                         //   imageurl: images[_counter],
                         // ),
-                        FadeInImage(
-                          key: ValueKey<int>(_counter),
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          placeholder: const AssetImage('assets/bg.png'),
-                          image: CachedNetworkImageProvider(
-                            images[_counter],
+
+                        //   CachedNetworkImage(
+                        //   width: MediaQuery.of(context).size.width * 0.85,
+                        //   imageUrl: _counter==0?images[_counter]:images[_counter-1],
+                        //   placeholder: (context, url) =>
+                        //       Container(width: MediaQuery.of(context).size.width * 0.85,color: Colors.white,),
+                        //   errorWidget: (context, url, error) =>
+                        //       const Icon(Icons.error),
+                        //   imageBuilder: (context, imageProvider) {
+                        //     // Image loading is complete, do additional work here
+                        //     // For example, you can perform some other tasks or display the image
+                        //     // once it's loaded.
+                        //     return Container(
+                        //       decoration: BoxDecoration(
+                        //         image: DecorationImage(
+                        //           image: imageProvider,
+                        //           fit: BoxFit.cover,
+
+                        //         ),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+
+                        // FadeInImage(
+                        //   key: ValueKey<int>(_counter),
+                        //   width: MediaQuery.of(context).size.width * 0.85,
+                        //   placeholder:   CachedNetworkImageProvider(_counter==0?images[_counter]:images[_counter-1]),
+                        //   image: CachedNetworkImageProvider(
+                        //     images[_counter],
+                        //   ),
+                        //   fadeInDuration: const Duration(milliseconds: 2000),
+                        //   fit: BoxFit.cover,
+                        // ),
+                        if (_counter > 0)
+                          FadeTransition(
+                            opacity:
+                                Tween<double>(begin: 1.0, end: 0.0).animate(
+                              CurvedAnimation(
+                                parent:
+                                    _controller, // Use an AnimationController to control the fading effect
+                                curve: Curves
+                                    .easeOut, // Choose a suitable curve for fading
+                              ),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: images[
+                                  _counter - 1], // Display the previous image
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          fadeInDuration: const Duration(milliseconds: 2000),
+                        CachedNetworkImage(
+                          key: ValueKey<int>(_counter),
+                          imageUrl: images[_counter],
+                          width: MediaQuery.of(context).size.width * 0.85,
                           fit: BoxFit.cover,
                         ),
                         // CachedNetworkImage(
