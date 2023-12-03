@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -610,22 +611,32 @@ class _BookListPageState extends State<BookListPage> {
       height: 150,
       child: Card(
         elevation: 2,
-        color: Colors.white,
+        color: Colors.transparent,
         child: Stack(
           children: [
             // Placeholder with shimmer effect
-            const ShimmerEffect(),
+            //const ShimmerEffect(),
             // FadeInImage for loading the network image
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image:
-                    '${APIEndpoints.baseUrl}/${book.thumbnail}', // Provide the URL from your book object
-                fit: BoxFit.cover,
+              child: FadeInImage(
                 width: double.infinity,
                 height: double.infinity,
+                placeholder: const AssetImage('assets/bg.png'),
+                image: CachedNetworkImageProvider(
+                  '${APIEndpoints.baseUrl}/${book.thumbnail}',
+                ),
+                fadeInDuration: const Duration(milliseconds: 2000),
+                fit: BoxFit.cover,
               ),
+              // FadeInImage.memoryNetwork(
+              //   placeholder: kTransparentImage,
+              //   image:
+              //       '${APIEndpoints.baseUrl}/${book.thumbnail}', // Provide the URL from your book object
+              //   fit: BoxFit.cover,
+              //   width: double.infinity,
+              //   height: double.infinity,
+              // ),
             ),
             // Overlay for the title
             Positioned(
@@ -675,33 +686,33 @@ class _BookListPageState extends State<BookListPage> {
   }
 }
 
-// Shimmer Effect Widget for Placeholder
-class ShimmerEffect extends StatelessWidget {
-  const ShimmerEffect({super.key});
+// // Shimmer Effect Widget for Placeholder
+// class ShimmerEffect extends StatelessWidget {
+//   const ShimmerEffect({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        color: Colors.grey[300],
-        width: double.infinity,
-        height: double.infinity,
-        child: Shimmer.fromColors(
-          loop: 5,
-          direction: ShimmerDirection.ltr,
-          enabled: true,
-          baseColor: Colors.white,
-          highlightColor: Colors.grey[100]!,
-          child: const SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ClipRRect(
+//       borderRadius: BorderRadius.circular(12),
+//       child: Container(
+//         color: Colors.grey[300],
+//         width: double.infinity,
+//         height: double.infinity,
+//         child: Shimmer.fromColors(
+//           loop: 5,
+//           direction: ShimmerDirection.ltr,
+//           enabled: true,
+//           baseColor: Colors.white,
+//           highlightColor: Colors.grey[100]!,
+//           child: const SizedBox(
+//             width: double.infinity,
+//             height: double.infinity,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class BookOpeningPageRoute extends PageRouteBuilder {
   final Widget page;

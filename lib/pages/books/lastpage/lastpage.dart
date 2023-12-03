@@ -155,7 +155,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pushReplacement(
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => BookListPage(
@@ -163,6 +163,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                                     configResponse: widget.configResponse,
                                   ),
                                 ),
+                                (route) => false,
                               );
                             },
                             child: AnimatedButtonWidget(
@@ -190,8 +191,8 @@ class _ChoiceScreenState extends State<LastScreen> {
                             height: 40.h,
                           ),
                           Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                           // crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
                                 onTap: () {},
@@ -204,7 +205,9 @@ class _ChoiceScreenState extends State<LastScreen> {
                                   icon: Icons.star_border,
                                 ),
                               ),
-                              SizedBox(width: MediaQuery.of(context).size.width * .01,),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * .01,
+                              ),
                               InkWell(
                                 onTap: () => {},
                                 child: AnimatedButtonWidget(

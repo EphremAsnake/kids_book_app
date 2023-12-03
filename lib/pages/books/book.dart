@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -344,58 +345,114 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
                   Center(
                     child: Stack(
                       children: [
-                        ImageFade(
+                        // AnimatedImageWidget(
+                        //   childWidget: CachedNetworkImage(
+                        //     width: MediaQuery.of(context).size.width * 0.85,
+                        //     imageUrl: images[_counter],
+                        //     placeholder: (context, url) =>
+                        //         const CircularProgressIndicator(),
+                        //     errorWidget: (context, url, error) =>
+                        //         const Icon(Icons.error),
+                        //     imageBuilder: (context, imageProvider) {
+                        //       // Image loading is complete, do additional work here
+                        //       // For example, you can perform some other tasks or display the image
+                        //       // once it's loaded.
+                        //       return Container(
+                        //         decoration: BoxDecoration(
+                        //           image: DecorationImage(
+                        //             image: imageProvider,
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                        //   imageurl: images[_counter],
+                        // ),
+                        FadeInImage(
+                          key: ValueKey<int>(_counter),
                           width: MediaQuery.of(context).size.width * 0.85,
-                          // whenever the image changes, it will be loaded, and then faded in:
-                          image: NetworkImage(images[_counter]),
-
-                          // slow-ish fade for loaded images:
-                          duration: const Duration(milliseconds: 900),
-
-                          // if the image is loaded synchronously (ex. from memory), fade in faster:
-                          syncDuration: const Duration(milliseconds: 500),
-
-                          // supports most properties of Image:
-                          alignment: Alignment.center,
+                          placeholder: const AssetImage('assets/bg.png'),
+                          image: CachedNetworkImageProvider(
+                            images[_counter],
+                          ),
+                          fadeInDuration: const Duration(milliseconds: 2000),
                           fit: BoxFit.cover,
-                          scale: 2,
-
-                          // shown behind everything:
-                          placeholder: Container(
-                            color: const Color(0xFFCFCDCA),
-                            alignment: Alignment.center,
-                            child: const Icon(Icons.photo,
-                                color: Colors.white30, size: 128.0),
-                          ),
-
-                          // shows progress while loading an image:
-                          // loadingBuilder: (context, progress, chunkEvent) {
-                          //   if (progress == 1.0) {
-                          //     setState(() {
-                          //       _imageLoaded = true;
-                          //     });
-                          //   }
-                          //   return CircularProgressIndicator(value: progress);
-                          // },
-                          // loadingBuilder: (context, progress, chunkEvent) {
-                          //   // if (progress != 0.0) {
-                          //   //   setState(() {
-                          //   //     _imageLoaded = true;
-                          //   //   });
-                          //   // }
-                          //   return Center(
-                          //       child:
-                          //           CircularProgressIndicator(value: progress));
-                          // },
-
-                          // displayed when an error occurs:
-                          errorBuilder: (context, error) => Container(
-                            color: const Color(0xFF6F6D6A),
-                            alignment: Alignment.center,
-                            child: const Icon(Icons.warning,
-                                color: Colors.black26, size: 128.0),
-                          ),
                         ),
+                        // CachedNetworkImage(
+                        //   width: MediaQuery.of(context).size.width * 0.85,
+                        //   imageUrl: images[_counter],
+                        //   placeholder: (context, url) =>
+                        //       Container(width: MediaQuery.of(context).size.width * 0.85,color: Colors.white,),
+                        //   errorWidget: (context, url, error) =>
+                        //       const Icon(Icons.error),
+                        //   imageBuilder: (context, imageProvider) {
+                        //     // Image loading is complete, do additional work here
+                        //     // For example, you can perform some other tasks or display the image
+                        //     // once it's loaded.
+                        //     return Container(
+                        //       decoration: BoxDecoration(
+                        //         image: DecorationImage(
+                        //           image: imageProvider,
+                        //           fit: BoxFit.cover,
+
+                        //         ),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // ImageFade(
+                        //   width: MediaQuery.of(context).size.width * 0.85,
+                        //   // whenever the image changes, it will be loaded, and then faded in:
+                        //   image: NetworkImage(images[_counter]),
+
+                        //   // slow-ish fade for loaded images:
+                        //   duration: const Duration(milliseconds: 900),
+
+                        //   // if the image is loaded synchronously (ex. from memory), fade in faster:
+                        //   syncDuration: const Duration(milliseconds: 500),
+
+                        //   // supports most properties of Image:
+                        //   alignment: Alignment.center,
+                        //   fit: BoxFit.cover,
+                        //   scale: 2,
+
+                        //   // shown behind everything:
+                        //   placeholder: Container(
+                        //     color: const Color(0xFFCFCDCA),
+                        //     alignment: Alignment.center,
+                        //     child: const Icon(Icons.photo,
+                        //         color: Colors.white30, size: 128.0),
+                        //   ),
+
+                        //   // shows progress while loading an image:
+                        //   // loadingBuilder: (context, progress, chunkEvent) {
+                        //   //   if (progress == 1.0) {
+                        //   //     setState(() {
+                        //   //       _imageLoaded = true;
+                        //   //     });
+                        //   //   }
+                        //   //   return CircularProgressIndicator(value: progress);
+                        //   // },
+                        //   // loadingBuilder: (context, progress, chunkEvent) {
+                        //   //   // if (progress != 0.0) {
+                        //   //   //   setState(() {
+                        //   //   //     _imageLoaded = true;
+                        //   //   //   });
+                        //   //   // }
+                        //   //   return Center(
+                        //   //       child:
+                        //   //           CircularProgressIndicator(value: progress));
+                        //   // },
+
+                        //   // displayed when an error occurs:
+                        //   errorBuilder: (context, error) => Container(
+                        //     color: const Color(0xFF6F6D6A),
+                        //     alignment: Alignment.center,
+                        //     child: const Icon(Icons.warning,
+                        //         color: Colors.black26, size: 128.0),
+                        //   ),
+                        // ),
                         Positioned(
                           top: MediaQuery.of(context).size.height * 0.03,
                           left: MediaQuery.of(context).size.height * 0.037,
@@ -408,7 +465,18 @@ class _BooksPageState extends State<BookPage> with WidgetsBindingObserver {
                                 child: IconButton(
                                   icon: const Icon(Icons.home_outlined,
                                       color: Colors.blue),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BookListPage(
+                                          booksList: widget.booksList,
+                                          configResponse: widget.configResponse,
+                                        ),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
