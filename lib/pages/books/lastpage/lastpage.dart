@@ -18,17 +18,18 @@ import '../../bookList.dart';
 class LastScreen extends StatefulWidget {
   final Function replay;
   final Function close;
-  final Function ratingdialog;
+  //final Function ratingdialog;
 
   final ApiResponse booksList;
   final ConfigApiResponseModel configResponse;
-  const LastScreen(
-      {super.key,
-      required this.replay,
-      required this.booksList,
-      required this.configResponse,
-      required this.close,
-      required this.ratingdialog});
+  const LastScreen({
+    super.key,
+    required this.replay,
+    required this.booksList,
+    required this.configResponse,
+    required this.close,
+    //required this.ratingdialog
+  });
 
   @override
   State<LastScreen> createState() => _ChoiceScreenState();

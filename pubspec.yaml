@@ -45,6 +45,8 @@ dependencies:
   image_fade: ^0.6.2
   just_audio: ^0.9.36
   lottie: ^2.7.0
+  neopop: ^1.0.2
+  open_store: ^0.5.0
   rating_dialog: ^2.0.4
   resize: ^1.0.0
   shared_preferences: ^2.2.2

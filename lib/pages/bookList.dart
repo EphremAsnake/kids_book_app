@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:open_store/open_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -551,6 +552,7 @@ class _BookListPageState extends State<BookListPage> {
                   },
                 )),
           ),
+          //!Scroll to Top
           if (showScrollToTopButton)
             Positioned(
               bottom: 20.0,
@@ -604,6 +606,25 @@ class _BookListPageState extends State<BookListPage> {
                           color: widget.configResponse.houseAd!.buttonTextColor!
                               .toColor()),
                     ))),
+
+                //                NeoPopTiltedButton(
+                //   isFloating: true,
+                //   onTapUp: () => debugPrint('Play now'),
+                //   decoration:  NeoPopTiltedButtonDecoration(
+                //     color: widget.configResponse.houseAd!.buttonColor!
+                //                       .toColor(),
+                //     plunkColor: Color(0xFFc3a13b),
+                //     shadowColor: Colors.black,
+                //   ),
+                //     child: Padding(
+                //       padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 15),
+                //       child: Text('${widget.configResponse.houseAd!.buttonText!} →',
+                //           style: TextStyle(
+                //               color: Colors.black,
+                //               fontSize: 25,
+                //               fontWeight: FontWeight.bold)),
+                //   ),
+                // )
               ),
             ),
         ],
@@ -623,6 +644,12 @@ class _BookListPageState extends State<BookListPage> {
       }
     } else {
       //!'The url is package name open playstore
+
+      OpenStore.instance.open(
+        //appStoreId: '1543803459',
+        androidAppBundleId: url,
+      );
+
       final String appPackageName = url;
 
       final String playstoreurl = 'market://details?id=$appPackageName';
@@ -639,6 +666,23 @@ class _BookListPageState extends State<BookListPage> {
   }
 
   void openAppStore(String appId) async {
+    Uri uri = Uri.parse(appId);
+
+    if (uri.isAbsolute && (uri.scheme == 'http' || uri.scheme == 'https')) {
+      //!The Url is a web link'
+      if (await canLaunch(appId)) {
+        await launch(appId);
+      } else {
+        throw 'Could not launch Url.';
+      }
+    } else {
+      //!'The url is package name open playstore
+      OpenStore.instance.open(
+        appStoreId: appId,
+        //androidAppBundleId: 'com.google.android.googlequicksearchbox',
+      );
+    }
+
     final String appStoreUrl = 'itms-apps://itunes.apple.com/app/id$appId';
 
     if (await canLaunch(appStoreUrl)) {

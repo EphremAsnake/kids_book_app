@@ -166,9 +166,9 @@ class _BooksPageState extends State<BookPage>
             });
             Navigator.of(context).pop();
           },
-          ratingdialog: () {
-            _showRatingDialog(context);
-          },
+          // ratingdialog: () {
+          //   _showRatingDialog(context);
+          // },
         ),
       );
     }
@@ -420,31 +420,86 @@ class _BooksPageState extends State<BookPage>
                         //   fadeInDuration: const Duration(milliseconds: 2000),
                         //   fit: BoxFit.cover,
                         // ),
-                        if (_counter > 0)
-                          FadeTransition(
-                            opacity:
-                                Tween<double>(begin: 1.0, end: 0.0).animate(
-                              CurvedAnimation(
-                                parent:
-                                    _controller, // Use an AnimationController to control the fading effect
-                                curve: Curves
-                                    .easeOut, // Choose a suitable curve for fading
-                              ),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl: images[
-                                  _counter - 1], // Display the previous image
-                              width: MediaQuery.of(context).size.width * 0.85,
-                              height: MediaQuery.of(context).size.height,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        CachedNetworkImage(
-                          key: ValueKey<int>(_counter),
-                          imageUrl: images[_counter],
+                        ImageFade(
                           width: MediaQuery.of(context).size.width * 0.85,
+                          // whenever the image changes, it will be loaded, and then faded in:
+                          image: CachedNetworkImageProvider(images[_counter]),
+
+                          // slow-ish fade for loaded images:
+                          duration: const Duration(milliseconds: 900),
+
+                          // if the image is loaded synchronously (ex. from memory), fade in faster:
+                          syncDuration: const Duration(milliseconds: 500),
+
+                          // supports most properties of Image:
+                          alignment: Alignment.center,
                           fit: BoxFit.cover,
+                          scale: 2,
+
+                          // shown behind everything:
+                          placeholder: Container(
+                            color: const Color(0xFFCFCDCA),
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.photo,
+                                color: Colors.white30, size: 128.0),
+                          ),
+
+                          // shows progress while loading an image:
+                          // loadingBuilder: (context, progress, chunkEvent) {
+                          //   if (progress == 1.0) {
+                          //     setState(() {
+                          //       _imageLoaded = true;
+                          //     });
+                          //   }
+                          //   return CircularProgressIndicator(value: progress);
+                          // },
+                          loadingBuilder: (context, progress, chunkEvent) {
+                            // if (progress != 0.0) {
+                            //   setState(() {
+                            //     _imageLoaded = true;
+                            //   });
+                            // }
+                            return Center(
+                                child:
+                                    CircularProgressIndicator(value: progress));
+                          },
+
+                          // displayed when an error occurs:
+                          errorBuilder: (context, error) => Container(
+                            color: const Color(0xFF6F6D6A),
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.warning,
+                                color: Colors.black26, size: 128.0),
+                          ),
                         ),
+                        // if (_counter > 0)
+                        //   FadeTransition(
+                        //     opacity:
+                        //         Tween<double>(begin: 1.0, end: 0.0).animate(
+                        //       CurvedAnimation(
+                        //         parent:
+                        //             _controller, // Use an AnimationController to control the fading effect
+                        //         curve: Curves
+                        //             .easeOut, // Choose a suitable curve for fading
+                        //       ),
+                        //     ),
+                        //     child: CachedNetworkImage(
+                        //       imageUrl: images[
+                        //           _counter - 1], // Display the previous image
+                        //       width: MediaQuery.of(context).size.width * 0.85,
+                        //       height: MediaQuery.of(context).size.height,
+                        //       fit: BoxFit.cover,
+                        //     ),
+                        //   ),
+                        // Positioned(
+
+                        //   child: CachedNetworkImage(
+                        //     key: ValueKey<int>(_counter),
+                        //     imageUrl: images[_counter],
+                        //     width: MediaQuery.of(context).size.width * 0.85,
+                        //     fit: BoxFit.cover,
+                        //   ),
+                        // ),
                         // CachedNetworkImage(
                         //   width: MediaQuery.of(context).size.width * 0.85,
                         //   imageUrl: images[_counter],
@@ -778,34 +833,34 @@ class _BooksPageState extends State<BookPage>
         context: context,
         builder: (BuildContext context) {
           return RatingDialog(
-                initialRating: 1.0,
-                title: const Text(
-                  'Kids Book',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                // encourage your user to leave a high rating?
-                message: const Text(
-                  'Tap a star to set your rating. Add more description here if you want.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15),
-                ),
-                // image: const Image(
-                //   image: AssetImage("assets/sp.png"),
-                //   width: 150,
-                //   height: 150,
-                // ),
-                submitButtonText: 'Submit',
-                commentHint: 'your comment',
-                onCancelled: () => debugPrint('cancelled'),
-                onSubmitted: (response) {
-                  debugPrint(
-                      'rating: ${response.rating}, comment: ${response.comment}');
-                },
-              );
+            initialRating: 1.0,
+            title: const Text(
+              'Kids Book',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // encourage your user to leave a high rating?
+            message: const Text(
+              'Tap a star to set your rating. Add more description here if you want.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15),
+            ),
+            // image: const Image(
+            //   image: AssetImage("assets/sp.png"),
+            //   width: 150,
+            //   height: 150,
+            // ),
+            submitButtonText: 'Submit',
+            commentHint: 'your comment',
+            onCancelled: () => debugPrint('cancelled'),
+            onSubmitted: (response) {
+              debugPrint(
+                  'rating: ${response.rating}, comment: ${response.comment}');
+            },
+          );
         });
   }
 
