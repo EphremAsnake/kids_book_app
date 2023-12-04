@@ -67,6 +67,8 @@ class AudioController extends GetxController with WidgetsBindingObserver {
         // setState(() {
         //   isPlaying = false;
         // });
+      }else{
+        _backgrounMusicPlayer.stop();
       }
 
       // Pause or stop audio playback here if needed

@@ -51,13 +51,15 @@ class AdmobRewardedAd {
 class AdmobInterstitialAd {
   String? ios;
   String? android;
+  bool? show;
 
-  AdmobInterstitialAd({this.ios, this.android});
+  AdmobInterstitialAd({this.ios, this.android, this.show});
 
   factory AdmobInterstitialAd.fromJson(Map<String, dynamic> json) {
     return AdmobInterstitialAd(
       ios: json['ios'],
       android: json['android'],
+      show: json['show'] ?? true,
     );
   }
 }

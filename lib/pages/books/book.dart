@@ -61,7 +61,7 @@ class _BooksPageState extends State<BookPage>
   Color nextbuttonColor = Colors.transparent;
   Color previousbuttonColor = Colors.transparent;
   bool hasLastScreenDisplayed = false;
-
+  bool buttonsVisiblity = true;
   // final playlist = ConcatenatingAudioSource(
   //   // Start loading next item just before reaching it
   //   useLazyPreparation: true,
@@ -145,17 +145,24 @@ class _BooksPageState extends State<BookPage>
             setState(() {
               hasLastScreenDisplayed = false;
             });
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BookPage(
-                        response: widget.response,
-                        indexValue: widget.indexValue,
-                        backgroundMusic: widget.backgroundMusic,
-                        booksList: widget.booksList,
-                        configResponse: widget.configResponse,
-                      )),
-            );
+            Get.to(BookPage(
+              response: widget.response,
+              indexValue: widget.indexValue,
+              backgroundMusic: widget.backgroundMusic,
+              booksList: widget.booksList,
+              configResponse: widget.configResponse,
+            ));
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => BookPage(
+            //             response: widget.response,
+            //             indexValue: widget.indexValue,
+            //             backgroundMusic: widget.backgroundMusic,
+            //             booksList: widget.booksList,
+            //             configResponse: widget.configResponse,
+            //           )),
+            // );
             // Navigator.of(context).pop();
           },
           booksList: widget.booksList,
@@ -201,7 +208,7 @@ class _BooksPageState extends State<BookPage>
     //   lastScreen();
     // }
 
-    await bookplayer.stop();
+    bookplayer.stop();
     setState(() {
       isPlaying = false;
     });
@@ -220,7 +227,7 @@ class _BooksPageState extends State<BookPage>
           isPlaying = true;
           isIncrementing = false;
         });
-        await bookplayer.play();
+        bookplayer.play();
         bookplayer.playerStateStream.listen((playerState) {
           if (playerState.processingState == ProcessingState.completed) {
             setState(() {
@@ -242,7 +249,7 @@ class _BooksPageState extends State<BookPage>
       isIncrementing = true;
     }
 
-    await bookplayer.stop();
+    bookplayer.stop();
     setState(() {
       isPlaying = false;
     });
@@ -260,7 +267,7 @@ class _BooksPageState extends State<BookPage>
           isPlaying = true;
           isIncrementing = false;
         });
-        await bookplayer.play();
+        bookplayer.play();
       }
     }
   }
@@ -317,42 +324,7 @@ class _BooksPageState extends State<BookPage>
             if (_listen) {
               togglePlayback();
             }
-            bool shouldPop = await showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return ExitDialogBox(
-                    title: 'Leave Story?',
-                    titleColor: Colors.orange,
-                    descriptions:
-                        'Do you want to leave this story and go back to home?',
-                    text: 'Leave',
-                    text2: 'Stay',
-                    functionCall: () async {
-                      //listenaudioController.resetAudioController();
-
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookListPage(
-                            booksList: widget.booksList,
-                            configResponse: widget.configResponse,
-                          ),
-                        ),
-                        (route) => false, // Remove all routes in the stack
-                      );
-
-                      //Navigator.pop(context);
-                    },
-                    secfunctionCall: () {
-                      if (_listen) {
-                        togglePlayback();
-                      }
-
-                      Navigator.pop(context);
-                    },
-                  );
-                });
+            bool shouldPop = await exitDialog(context);
 
             return shouldPop;
           },
@@ -363,89 +335,41 @@ class _BooksPageState extends State<BookPage>
             onSwipeLeft: (offset) {
               _incrementCounter();
             },
+            onSwipeUp: (offset) {
+              setState(() {
+                buttonsVisiblity = false;
+              });
+            },
+            onSwipeDown: (offset) {
+              setState(() {
+                buttonsVisiblity = true;
+              });
+            },
             child: Center(
               child: Stack(
                 children: <Widget>[
                   Center(
                     child: Stack(
                       children: [
-                        // AnimatedImageWidget(
-                        //   childWidget: CachedNetworkImage(
-                        //     width: MediaQuery.of(context).size.width * 0.85,
-                        //     imageUrl: images[_counter],
-                        //     placeholder: (context, url) =>
-                        //         const CircularProgressIndicator(),
-                        //     errorWidget: (context, url, error) =>
-                        //         const Icon(Icons.error),
-                        //     imageBuilder: (context, imageProvider) {
-                        //       // Image loading is complete, do additional work here
-                        //       // For example, you can perform some other tasks or display the image
-                        //       // once it's loaded.
-                        //       return Container(
-                        //         decoration: BoxDecoration(
-                        //           image: DecorationImage(
-                        //             image: imageProvider,
-                        //             fit: BoxFit.cover,
-                        //           ),
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        //   imageurl: images[_counter],
-                        // ),
-
-                        //   CachedNetworkImage(
-                        //   width: MediaQuery.of(context).size.width * 0.85,
-                        //   imageUrl: _counter==0?images[_counter]:images[_counter-1],
-                        //   placeholder: (context, url) =>
-                        //       Container(width: MediaQuery.of(context).size.width * 0.85,color: Colors.white,),
-                        //   errorWidget: (context, url, error) =>
-                        //       const Icon(Icons.error),
-                        //   imageBuilder: (context, imageProvider) {
-                        //     // Image loading is complete, do additional work here
-                        //     // For example, you can perform some other tasks or display the image
-                        //     // once it's loaded.
-                        //     return Container(
-                        //       decoration: BoxDecoration(
-                        //         image: DecorationImage(
-                        //           image: imageProvider,
-                        //           fit: BoxFit.cover,
-
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-
-                        // FadeInImage(
-                        //   key: ValueKey<int>(_counter),
-                        //   width: MediaQuery.of(context).size.width * 0.85,
-                        //   placeholder:   CachedNetworkImageProvider(_counter==0?images[_counter]:images[_counter-1]),
-                        //   image: CachedNetworkImageProvider(
-                        //     images[_counter],
-                        //   ),
-                        //   fadeInDuration: const Duration(milliseconds: 2000),
-                        //   fit: BoxFit.cover,
-                        // ),
+                        //!StoryImage
                         ImageFade(
                           width: MediaQuery.of(context).size.width * 0.85,
-                          // whenever the image changes, it will be loaded, and then faded in:
+                          //! whenever the image changes, it will be loaded, and then faded in:
                           image: CachedNetworkImageProvider(images[_counter]),
 
-                          // slow-ish fade for loaded images:
+                          //! slow-ish fade for loaded images:
                           duration: const Duration(milliseconds: 900),
 
-                          // if the image is loaded synchronously (ex. from memory), fade in faster:
-                          syncDuration: const Duration(milliseconds: 500),
+                          //! if the image is loaded synchronously ,
+                          syncDuration: const Duration(milliseconds: 900),
 
-                          // supports most properties of Image:
                           alignment: Alignment.center,
                           fit: BoxFit.cover,
                           scale: 2,
 
                           // shown behind everything:
                           placeholder: Container(
-                            color: const Color(0xFFCFCDCA),
+                            color: Colors.white,
                             alignment: Alignment.center,
                             child: const Icon(Icons.photo,
                                 color: Colors.white30, size: 128.0),
@@ -471,7 +395,7 @@ class _BooksPageState extends State<BookPage>
                           //           CircularProgressIndicator(value: progress));
                           // },
 
-                          // displayed when an error occurs:
+                          //! displayed when an error occurs:
                           errorBuilder: (context, error) => Container(
                             color: const Color(0xFF6F6D6A),
                             alignment: Alignment.center,
@@ -479,207 +403,125 @@ class _BooksPageState extends State<BookPage>
                                 color: Colors.black26, size: 128.0),
                           ),
                         ),
-                        // if (_counter > 0)
-                        //   FadeTransition(
-                        //     opacity:
-                        //         Tween<double>(begin: 1.0, end: 0.0).animate(
-                        //       CurvedAnimation(
-                        //         parent:
-                        //             _controller, // Use an AnimationController to control the fading effect
-                        //         curve: Curves
-                        //             .easeOut, // Choose a suitable curve for fading
-                        //       ),
-                        //     ),
-                        //     child: CachedNetworkImage(
-                        //       imageUrl: images[
-                        //           _counter - 1], // Display the previous image
-                        //       width: MediaQuery.of(context).size.width * 0.85,
-                        //       height: MediaQuery.of(context).size.height,
-                        //       fit: BoxFit.cover,
-                        //     ),
-                        //   ),
-                        // Positioned(
 
-                        //   child: CachedNetworkImage(
-                        //     key: ValueKey<int>(_counter),
-                        //     imageUrl: images[_counter],
-                        //     width: MediaQuery.of(context).size.width * 0.85,
-                        //     fit: BoxFit.cover,
-                        //   ),
-                        // ),
-                        // CachedNetworkImage(
-                        //   width: MediaQuery.of(context).size.width * 0.85,
-                        //   imageUrl: images[_counter],
-                        //   placeholder: (context, url) =>
-                        //       Container(width: MediaQuery.of(context).size.width * 0.85,color: Colors.white,),
-                        //   errorWidget: (context, url, error) =>
-                        //       const Icon(Icons.error),
-                        //   imageBuilder: (context, imageProvider) {
-                        //     // Image loading is complete, do additional work here
-                        //     // For example, you can perform some other tasks or display the image
-                        //     // once it's loaded.
-                        //     return Container(
-                        //       decoration: BoxDecoration(
-                        //         image: DecorationImage(
-                        //           image: imageProvider,
-                        //           fit: BoxFit.cover,
-
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-                        // ImageFade(
-                        //   width: MediaQuery.of(context).size.width * 0.85,
-                        //   // whenever the image changes, it will be loaded, and then faded in:
-                        //   image: NetworkImage(images[_counter]),
-
-                        //   // slow-ish fade for loaded images:
-                        //   duration: const Duration(milliseconds: 900),
-
-                        //   // if the image is loaded synchronously (ex. from memory), fade in faster:
-                        //   syncDuration: const Duration(milliseconds: 500),
-
-                        //   // supports most properties of Image:
-                        //   alignment: Alignment.center,
-                        //   fit: BoxFit.cover,
-                        //   scale: 2,
-
-                        //   // shown behind everything:
-                        //   placeholder: Container(
-                        //     color: const Color(0xFFCFCDCA),
-                        //     alignment: Alignment.center,
-                        //     child: const Icon(Icons.photo,
-                        //         color: Colors.white30, size: 128.0),
-                        //   ),
-
-                        //   // shows progress while loading an image:
-                        //   // loadingBuilder: (context, progress, chunkEvent) {
-                        //   //   if (progress == 1.0) {
-                        //   //     setState(() {
-                        //   //       _imageLoaded = true;
-                        //   //     });
-                        //   //   }
-                        //   //   return CircularProgressIndicator(value: progress);
-                        //   // },
-                        //   // loadingBuilder: (context, progress, chunkEvent) {
-                        //   //   // if (progress != 0.0) {
-                        //   //   //   setState(() {
-                        //   //   //     _imageLoaded = true;
-                        //   //   //   });
-                        //   //   // }
-                        //   //   return Center(
-                        //   //       child:
-                        //   //           CircularProgressIndicator(value: progress));
-                        //   // },
-
-                        //   // displayed when an error occurs:
-                        //   errorBuilder: (context, error) => Container(
-                        //     color: const Color(0xFF6F6D6A),
-                        //     alignment: Alignment.center,
-                        //     child: const Icon(Icons.warning,
-                        //         color: Colors.black26, size: 128.0),
-                        //   ),
-                        // ),
-                        Positioned(
-                          top: MediaQuery.of(context).size.height * 0.03,
-                          left: MediaQuery.of(context).size.height * 0.037,
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                radius:
-                                    MediaQuery.of(context).size.height * 0.06,
-                                backgroundColor: Colors.white,
-                                child: IconButton(
-                                  icon: const Icon(Icons.home_outlined,
-                                      color: Colors.blue),
-                                  onPressed: () {
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => BookListPage(
-                                          booksList: widget.booksList,
-                                          configResponse: widget.configResponse,
-                                        ),
-                                      ),
-                                      (route) => false,
-                                    );
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  '${_counter + 1}/${widget.response.pages.length}',
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: MediaQuery.of(context).size.height * 0.03,
-                          right: MediaQuery.of(context).size.height * 0.037,
-                          child: Column(
-                            children: [
-                              CircleAvatar(
+                        //!Home and Page Counter
+                        Visibility(
+                          visible: buttonsVisiblity,
+                          child: Positioned(
+                            top: MediaQuery.of(context).size.height * 0.03,
+                            left: MediaQuery.of(context).size.height * 0.037,
+                            child: Column(
+                              children: [
+                                //!Home Button
+                                CircleAvatar(
                                   radius:
                                       MediaQuery.of(context).size.height * 0.06,
                                   backgroundColor: Colors.white,
-                                  child: GetBuilder<AudioController>(
-                                      builder: (audioController) {
-                                    return IconButton(
-                                      icon: GetBuilder<AudioController>(
-                                        builder: (audioController) {
-                                          return Icon(
-                                            audioController.isPlaying
-                                                ? Icons.music_note_outlined
-                                                : Icons.music_off_outlined,
-                                            color: Colors.blue,
-                                          );
-                                        },
-                                      ),
-                                      onPressed: () {
-                                        AudioController audioController =
-                                            Get.find<AudioController>();
-                                        audioController.toggleAudio();
-                                      },
-                                    );
-                                  })),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              if (_listen)
+                                  child: IconButton(
+                                    icon: const Icon(Icons.home_outlined,
+                                        color: Colors.blue),
+                                    onPressed: () {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => BookListPage(
+                                            booksList: widget.booksList,
+                                            configResponse:
+                                                widget.configResponse,
+                                          ),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+
+                                //!Page Counter
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    '${_counter + 1}/${widget.response.pages.length}',
+                                    style: const TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        //!Background Music And Strory Play
+                        Visibility(
+                          visible: buttonsVisiblity,
+                          child: Positioned(
+                            top: MediaQuery.of(context).size.height * 0.03,
+                            right: MediaQuery.of(context).size.height * 0.037,
+                            child: Column(
+                              children: [
+                                //!Background Music
                                 CircleAvatar(
                                     radius: MediaQuery.of(context).size.height *
                                         0.06,
                                     backgroundColor: Colors.white,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        isPlaying
-                                            ? Icons.pause
-                                            : Icons.play_arrow_outlined,
-                                        color: Colors.blue,
-                                      ),
-                                      onPressed: () {
-                                        togglePlayback();
-                                      },
-                                    )),
-                            ],
+                                    child: GetBuilder<AudioController>(
+                                        builder: (audioController) {
+                                      return IconButton(
+                                        icon: GetBuilder<AudioController>(
+                                          builder: (audioController) {
+                                            return Icon(
+                                              audioController.isPlaying
+                                                  ? Icons.music_note_outlined
+                                                  : Icons.music_off_outlined,
+                                              color: Colors.blue,
+                                            );
+                                          },
+                                        ),
+                                        onPressed: () {
+                                          AudioController audioController =
+                                              Get.find<AudioController>();
+                                          audioController.toggleAudio();
+                                        },
+                                      );
+                                    })),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+
+                                //!Story Play
+                                if (_listen)
+                                  CircleAvatar(
+                                      radius:
+                                          MediaQuery.of(context).size.height *
+                                              0.06,
+                                      backgroundColor: Colors.white,
+                                      child: IconButton(
+                                        icon: Icon(
+                                          isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow_outlined,
+                                          color: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          togglePlayback();
+                                        },
+                                      )),
+                              ],
+                            ),
                           ),
                         ),
+
+                        //!Story Text
                         Positioned(
                           bottom: 0,
                           left: 0,
@@ -712,62 +554,72 @@ class _BooksPageState extends State<BookPage>
                       ],
                     ),
                   ),
-                  Positioned(
-                    bottom: MediaQuery.of(context).size.height * 0.03,
-                    left: MediaQuery.of(context).size.width * 0.035,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          previousbuttonColor = Colors.blue;
-                        });
 
-                        Future.delayed(const Duration(milliseconds: 500), () {
+                  //!Previous Button
+                  Visibility(
+                    visible: buttonsVisiblity,
+                    child: Positioned(
+                      bottom: MediaQuery.of(context).size.height * 0.03,
+                      left: MediaQuery.of(context).size.width * 0.035,
+                      child: InkWell(
+                        onTap: () {
                           setState(() {
-                            previousbuttonColor = Colors.transparent;
+                            previousbuttonColor = Colors.blue;
                           });
-                        });
 
-                        _deccrementCounter();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: previousbuttonColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(3.0),
-                        child: SvgPicture.asset(
-                          'assets/previous.svg',
-                          height: 55,
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            setState(() {
+                              previousbuttonColor = Colors.transparent;
+                            });
+                          });
+
+                          _deccrementCounter();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: previousbuttonColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(3.0),
+                          child: SvgPicture.asset(
+                            'assets/previous.svg',
+                            height: 55,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: MediaQuery.of(context).size.height * 0.03,
-                    right: MediaQuery.of(context).size.width * 0.035,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          nextbuttonColor = Colors.blue;
-                        });
 
-                        Future.delayed(const Duration(milliseconds: 500), () {
+                  //!Next Button
+                  Visibility(
+                    visible: buttonsVisiblity,
+                    child: Positioned(
+                      bottom: MediaQuery.of(context).size.height * 0.03,
+                      right: MediaQuery.of(context).size.width * 0.035,
+                      child: InkWell(
+                        onTap: () {
                           setState(() {
-                            nextbuttonColor = Colors.transparent;
+                            nextbuttonColor = Colors.blue;
                           });
-                        });
 
-                        _incrementCounter();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: nextbuttonColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(3.0),
-                        child: SvgPicture.asset(
-                          'assets/next.svg',
-                          height: 55,
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            setState(() {
+                              nextbuttonColor = Colors.transparent;
+                            });
+                          });
+
+                          _incrementCounter();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: nextbuttonColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.all(3.0),
+                          child: SvgPicture.asset(
+                            'assets/next.svg',
+                            height: 55,
+                          ),
                         ),
                       ),
                     ),
@@ -777,6 +629,45 @@ class _BooksPageState extends State<BookPage>
             ),
           ),
         ));
+  }
+
+  Future<dynamic> exitDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ExitDialogBox(
+            title: 'Leave Story?',
+            titleColor: Colors.orange,
+            descriptions:
+                'Do you want to leave this story and go back to home?',
+            text: 'Leave',
+            text2: 'Stay',
+            functionCall: () async {
+              //listenaudioController.resetAudioController();
+
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BookListPage(
+                    booksList: widget.booksList,
+                    configResponse: widget.configResponse,
+                  ),
+                ),
+                (route) => false, // Remove all routes in the stack
+              );
+
+              //Navigator.pop(context);
+            },
+            secfunctionCall: () {
+              if (_listen) {
+                togglePlayback();
+              }
+
+              Navigator.pop(context);
+            },
+          );
+        });
   }
 
   // void incrementCounter() {

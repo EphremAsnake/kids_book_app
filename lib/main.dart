@@ -11,6 +11,7 @@ import 'pages/splashScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await _initGoogleMobileAds();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky, overlays: []);
   SystemChrome.setPreferredOrientations([

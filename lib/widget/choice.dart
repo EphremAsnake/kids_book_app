@@ -99,10 +99,10 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        buttonColor = Colors.blue;
+                        buttonColor = widget.titleColor!.withOpacity(0.5);
                       });
 
-                      Future.delayed(const Duration(milliseconds: 500), () {
+                      Future.delayed(const Duration(milliseconds: 100), () {
                         setState(() {
                           buttonColor = widget.titleColor!;
                         });
