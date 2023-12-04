@@ -61,15 +61,15 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                             const Icon(Icons.home_outlined, color: Colors.blue),
                         onPressed: () {
                           Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => BookListPage(
-                                          booksList: widget.booksList,
-                                          configResponse: widget.configResponse,
-                                        ),
-                                      ),
-                                      (route) => false,
-                                    );
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BookListPage(
+                                booksList: widget.booksList,
+                                configResponse: widget.configResponse,
+                              ),
+                            ),
+                            (route) => false,
+                          );
                         },
                       ),
                     ),
@@ -111,7 +111,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                             buttonDelayDuration:
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
-                            text: 'Listen',
+                            text: 'Read to Me',
                             icon: Icons.headphones,
                           ),
                         ),
@@ -124,7 +124,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                             buttonDelayDuration:
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
-                            text: 'Read',
+                            text: 'Read Myself',
                             icon: Icons.chrome_reader_mode_rounded,
                           ),
                         ),

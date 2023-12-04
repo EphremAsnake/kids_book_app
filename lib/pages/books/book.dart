@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import '../../../model/storyPage.dart';
 import '../../../services/apiEndpoints.dart';
@@ -81,7 +82,8 @@ class _BooksPageState extends State<BookPage>
     audioController = Get.find<AudioController>();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3000), // Adjust the duration as needed
+      duration:
+          const Duration(milliseconds: 3000), // Adjust the duration as needed
     );
     audioController.audioVolumeDown();
     isAudioPlaying = audioController.isPlaying;
@@ -158,6 +160,15 @@ class _BooksPageState extends State<BookPage>
           },
           booksList: widget.booksList,
           configResponse: widget.configResponse,
+          close: () {
+            setState(() {
+              hasLastScreenDisplayed = false;
+            });
+            Navigator.of(context).pop();
+          },
+          ratingdialog: () {
+            _showRatingDialog(context);
+          },
         ),
       );
     }
@@ -165,12 +176,12 @@ class _BooksPageState extends State<BookPage>
 
   Future<void> startPlaying() async {
     bookplayer.setUrl(bookAudioUrls[_counter]);
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       isPlaying = true;
       _listen = true;
     });
-    bookplayer.play();
+    await bookplayer.play();
     bookplayer.playerStateStream.listen((playerState) {
       if (playerState.processingState == ProcessingState.completed) {
         _incrementCounter();
@@ -190,7 +201,7 @@ class _BooksPageState extends State<BookPage>
     //   lastScreen();
     // }
 
-    bookplayer.stop();
+    await bookplayer.stop();
     setState(() {
       isPlaying = false;
     });
@@ -204,12 +215,12 @@ class _BooksPageState extends State<BookPage>
       // });
       if (_listen) {
         bookplayer.setUrl(bookAudioUrls[_counter]);
-        await Future.delayed(const Duration(seconds: 4));
+        await Future.delayed(const Duration(seconds: 1));
         setState(() {
           isPlaying = true;
           isIncrementing = false;
         });
-        bookplayer.play();
+        await bookplayer.play();
       }
     } else {
       lastScreen();
@@ -224,7 +235,7 @@ class _BooksPageState extends State<BookPage>
       isIncrementing = true;
     }
 
-    bookplayer.stop();
+    await bookplayer.stop();
     setState(() {
       isPlaying = false;
     });
@@ -237,12 +248,12 @@ class _BooksPageState extends State<BookPage>
       // });
       if (_listen) {
         bookplayer.setUrl(bookAudioUrls[_counter]);
-        await Future.delayed(const Duration(seconds: 4));
+        await Future.delayed(const Duration(seconds: 1));
         setState(() {
           isPlaying = true;
           isIncrementing = false;
         });
-        bookplayer.play();
+        await bookplayer.play();
       }
     }
   }
@@ -424,6 +435,7 @@ class _BooksPageState extends State<BookPage>
                               imageUrl: images[
                                   _counter - 1], // Display the previous image
                               width: MediaQuery.of(context).size.width * 0.85,
+                              height: MediaQuery.of(context).size.height,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -761,6 +773,41 @@ class _BooksPageState extends State<BookPage>
   //     _audiobookPlayer.stop(); // Stop audio if not in listen mode
   //   }
   // }
+  void _showRatingDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return RatingDialog(
+                initialRating: 1.0,
+                title: const Text(
+                  'Kids Book',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // encourage your user to leave a high rating?
+                message: const Text(
+                  'Tap a star to set your rating. Add more description here if you want.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15),
+                ),
+                // image: const Image(
+                //   image: AssetImage("assets/sp.png"),
+                //   width: 150,
+                //   height: 150,
+                // ),
+                submitButtonText: 'Submit',
+                commentHint: 'your comment',
+                onCancelled: () => debugPrint('cancelled'),
+                onSubmitted: (response) {
+                  debugPrint(
+                      'rating: ${response.rating}, comment: ${response.comment}');
+                },
+              );
+        });
+  }
 
   void togglePlayback() {
     if (bookplayer.playing) {

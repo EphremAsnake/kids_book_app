@@ -178,6 +178,8 @@ class _BookListPageState extends State<BookListPage> {
 
     // _rewardedAd?.dispose();
     super.dispose();
+    rewardedAd?.dispose();
+    _interstitialAd?.dispose();
   }
 
   // @override
@@ -293,6 +295,15 @@ class _BookListPageState extends State<BookListPage> {
       backgroundColor: widget.booksList.backgroundColor.toColor(),
       body: Stack(
         children: [
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Image.asset(
+              'assets/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(
               top: 20.0,
@@ -348,12 +359,12 @@ class _BookListPageState extends State<BookListPage> {
                                             content: Text(
                                                 'You Have Finished your free Session for book ${book.title}.'),
                                             behavior: SnackBarBehavior.floating,
-                                            margin: EdgeInsets.only(
+                                            margin: const EdgeInsets.only(
                                               // ignore: use_build_context_synchronously
-                                              bottom: MediaQuery.of(context)
-                                                      .size
-                                                      .height -
-                                                  100,
+                                              // bottom: MediaQuery.of(context)
+                                              //         .size
+                                              //         .height -
+                                              //     100,
                                               left: 10,
                                               right: 10,
                                             ),
@@ -430,7 +441,7 @@ class _BookListPageState extends State<BookListPage> {
                                                           musicForAd = false;
                                                         });
                                                       }
-                                                      rewardedAd = null;
+                                                      //rewardedAd = null;
                                                       loadRewarded();
 
                                                       //!---! Chnage State of the book to Reward Ad watched and Book Opened
@@ -483,6 +494,8 @@ class _BookListPageState extends State<BookListPage> {
               ),
             ),
           ),
+
+          //!Background Music
           Positioned(
             top: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
@@ -500,6 +513,8 @@ class _BookListPageState extends State<BookListPage> {
                   );
                 })),
           ),
+
+          //!About
           Positioned(
             bottom: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
@@ -555,33 +570,39 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
             ),
+
+          //!House AD
           if (widget.configResponse.houseAd!.show != null &&
               widget.configResponse.houseAd!.show!)
             Align(
               alignment: Alignment.topCenter,
               child: InkWell(
                 onTap: () {
-                  if (widget.configResponse.houseAd!.typeApp!) {
-                    if (Platform.isAndroid) {
-                      openUrl(widget.configResponse.houseAd!.androidUrl!);
-                    } else {
-                      openUrl(widget.configResponse.houseAd!.iosUrl!);
-                    }
+                  //if (widget.configResponse.houseAd!.typeApp!) {
+                  if (Platform.isAndroid) {
+                    openUrlAndroid(widget.configResponse.houseAd!.androidUrl!);
+                  } else {
+                    openAppStore(widget.configResponse.houseAd!.iosUrl!);
                   }
+                  //  }
                 },
                 child: Container(
                     width: MediaQuery.sizeOf(context).width * 0.3,
                     height: 25.w,
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                        color: widget.configResponse.houseAd!.buttonColor!
+                            .toColor(),
+                        borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(12),
                             bottomRight: Radius.circular(12))),
                     child: Center(
                         child: Text(
                       widget.configResponse.houseAd!.buttonText!,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 8.sp),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 8.sp,
+                          color: widget.configResponse.houseAd!.buttonTextColor!
+                              .toColor()),
                     ))),
               ),
             ),
@@ -590,17 +611,40 @@ class _BookListPageState extends State<BookListPage> {
     );
   }
 
-  void openUrl(String url) async {
-    // final String appPackageName =
-    //     'com.example.dagi';
+  void openUrlAndroid(String url) async {
+    Uri uri = Uri.parse(url);
 
-    // final String url =
-    //     'https://play.google.com/store/apps/details?id=$appPackageName';
-
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (uri.isAbsolute && (uri.scheme == 'http' || uri.scheme == 'https')) {
+      //!The Url is a web link'
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch Url.';
+      }
     } else {
-      throw 'Could not launch Url.';
+      //!'The url is package name open playstore
+      final String appPackageName = url;
+
+      final String playstoreurl = 'market://details?id=$appPackageName';
+
+      if (await canLaunch(playstoreurl)) {
+        await launch(playstoreurl);
+      } else {
+        final String playstoreurlweb =
+            'https://play.google.com/store/apps/details?id=$appPackageName';
+        await launch(playstoreurlweb);
+        //throw 'Could not launch Url.';
+      }
+    }
+  }
+
+  void openAppStore(String appId) async {
+    final String appStoreUrl = 'itms-apps://itunes.apple.com/app/id$appId';
+
+    if (await canLaunch(appStoreUrl)) {
+      await launch(appStoreUrl);
+    } else {
+      throw 'Could not launch App Store';
     }
   }
 

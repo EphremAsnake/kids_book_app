@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:resize/resize.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
@@ -15,6 +17,8 @@ import '../../bookList.dart';
 
 class LastScreen extends StatefulWidget {
   final Function replay;
+  final Function close;
+  final Function ratingdialog;
 
   final ApiResponse booksList;
   final ConfigApiResponseModel configResponse;
@@ -22,7 +26,9 @@ class LastScreen extends StatefulWidget {
       {super.key,
       required this.replay,
       required this.booksList,
-      required this.configResponse});
+      required this.configResponse,
+      required this.close,
+      required this.ratingdialog});
 
   @override
   State<LastScreen> createState() => _ChoiceScreenState();
@@ -30,47 +36,44 @@ class LastScreen extends StatefulWidget {
 
 class _ChoiceScreenState extends State<LastScreen> {
   Future<void> shareApp() async {
-    // Set the app link and the message to be shared
+    //! Set the app link and the message to be shared
     const String appLink =
         'https://play.google.com/store/apps/details?id=tenaplus.ahaduweb.com';
     const String message = 'Enjoy My Video PLayer App: $appLink';
 
-    // Share the app link and message using the share dialog
+    //! Share the app link and message using the share dialog
     await FlutterShare.share(
       title: 'Share App',
-      text: message,
+      text: Platform.isAndroid
+          ? widget.configResponse.appRateAndShare!.androidShare
+          : widget.configResponse.appRateAndShare!.iosShare,
     );
   }
 
-  void _showRatingDialog() {
-    final dialog = RatingDialog(
-      initialRating: 1.0,
-      title: const Text(
-        'Video Player',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      // encourage your user to leave a high rating?
-      message: const Text(
-        'Tap a star to set your rating. Add more description here if you want.',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 15),
-      ),
-      image: const Image(
-        image: AssetImage("assets/sp.png"),
-        width: 150,
-        height: 150,
-      ),
-      submitButtonText: 'Submit',
-      commentHint: 'Set your custom comment hint',
-      onCancelled: () => print('cancelled'),
-      onSubmitted: (response) {
-        debugPrint('rating: ${response.rating}, comment: ${response.comment}');
-      },
-    );
+  void openUrlAndroid(String url) async {
+    //!package name open playstore
+    final String appPackageName = url;
+
+    final String playstoreurl = 'market://details?id=$appPackageName';
+
+    if (await canLaunch(playstoreurl)) {
+      await launch(playstoreurl);
+    } else {
+      final String playstoreurlweb =
+          'https://play.google.com/store/apps/details?id=$appPackageName';
+      await launch(playstoreurlweb);
+      //throw 'Could not launch Url.';
+    }
+  }
+
+  void openAppStore(String appId) async {
+    final String appStoreUrl = 'itms-apps://itunes.apple.com/app/id$appId';
+
+    if (await canLaunch(appStoreUrl)) {
+      await launch(appStoreUrl);
+    } else {
+      throw 'Could not launch App Store';
+    }
   }
 
   @override
@@ -83,6 +86,7 @@ class _ChoiceScreenState extends State<LastScreen> {
     final buttonPlayDuration = mainPlayDuration - 200.ms;
     return WillPopScope(
       onWillPop: () async {
+        widget.close();
         return false;
       },
       child: Scaffold(
@@ -99,29 +103,18 @@ class _ChoiceScreenState extends State<LastScreen> {
                 height: MediaQuery.of(context).size.height,
                 child: Stack(
                   children: [
-                    // Positioned(
-                    //   top: 20,
-                    //   left: MediaQuery.of(context).size.width * 0.075,
-                    //   child: CircleAvatar(
-                    //     radius: MediaQuery.of(context).size.height * 0.06,
-                    //     backgroundColor: Colors.white,
-                    //     child: IconButton(
-                    //       icon:
-                    //           const Icon(Icons.home_outlined, color: Colors.blue),
-                    //       onPressed: () {
-                    //         Navigator.pushReplacement(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder: (context) => BookListPage(
-                    //               booksList: widget.booksList,
-                    //               configResponse: widget.configResponse,
-                    //             ),
-                    //           ),
-                    //         );
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
+                    Positioned(
+                      top: 20,
+                      right: MediaQuery.of(context).size.width * 0.075,
+                      child: CircleAvatar(
+                        radius: MediaQuery.of(context).size.height * 0.06,
+                        backgroundColor: Colors.white,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.blue),
+                          onPressed: () => widget.close(),
+                        ),
+                      ),
+                    ),
                     // Positioned(
                     //   top: 20,
                     //   right: MediaQuery.of(context).size.width * 0.075,
@@ -183,7 +176,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                               buttonDelayDuration:
                                   const Duration(milliseconds: 1),
                               buttonPlayDuration: buttonPlayDuration,
-                              text: 'Replay Story',
+                              text: 'Replay',
                               icon: Icons.headphones,
                             ),
                           ),
@@ -195,7 +188,15 @@ class _ChoiceScreenState extends State<LastScreen> {
                             // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  if (Platform.isAndroid) {
+                                    openUrlAndroid(widget.configResponse
+                                        .appRateAndShare!.androidID!);
+                                  } else {
+                                    openAppStore(widget.configResponse
+                                        .appRateAndShare!.iosID!);
+                                  }
+                                },
                                 child: AnimatedButtonWidget(
                                   isRow: true,
                                   buttonDelayDuration:
@@ -209,7 +210,9 @@ class _ChoiceScreenState extends State<LastScreen> {
                                 width: MediaQuery.of(context).size.width * .01,
                               ),
                               InkWell(
-                                onTap: () => {},
+                                onTap: () {
+                                  shareApp();
+                                },
                                 child: AnimatedButtonWidget(
                                   isRow: true,
                                   buttonDelayDuration:
