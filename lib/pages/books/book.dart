@@ -191,9 +191,9 @@ class _BooksPageState extends State<BookPage>
 
   Future<void> _incrementCounter() async {
     if (_listen && isIncrementing) {
-      return; // Prevent multiple simultaneous increment calls
+      return; //! Prevent multiple simultaneous increment calls
     }
-    if (_listen) {
+    if (_listen && !isLastPage()) {
       isIncrementing = true;
     }
 
@@ -221,6 +221,13 @@ class _BooksPageState extends State<BookPage>
           isIncrementing = false;
         });
         await bookplayer.play();
+        bookplayer.playerStateStream.listen((playerState) {
+          if (playerState.processingState == ProcessingState.completed) {
+            setState(() {
+              isIncrementing = false;
+            });
+          }
+        });
       }
     } else {
       lastScreen();
@@ -231,7 +238,7 @@ class _BooksPageState extends State<BookPage>
     if (_listen && isIncrementing) {
       return; // Prevent multiple simultaneous increment calls
     }
-    if (_listen) {
+    if (_listen && !isLastPage()) {
       isIncrementing = true;
     }
 
@@ -453,16 +460,16 @@ class _BooksPageState extends State<BookPage>
                           //   }
                           //   return CircularProgressIndicator(value: progress);
                           // },
-                          loadingBuilder: (context, progress, chunkEvent) {
-                            // if (progress != 0.0) {
-                            //   setState(() {
-                            //     _imageLoaded = true;
-                            //   });
-                            // }
-                            return Center(
-                                child:
-                                    CircularProgressIndicator(value: progress));
-                          },
+                          // loadingBuilder: (context, progress, chunkEvent) {
+                          //   // if (progress != 0.0) {
+                          //   //   setState(() {
+                          //   //     _imageLoaded = true;
+                          //   //   });
+                          //   // }
+                          //   return Center(
+                          //       child:
+                          //           CircularProgressIndicator(value: progress));
+                          // },
 
                           // displayed when an error occurs:
                           errorBuilder: (context, error) => Container(
@@ -828,41 +835,6 @@ class _BooksPageState extends State<BookPage>
   //     _audiobookPlayer.stop(); // Stop audio if not in listen mode
   //   }
   // }
-  void _showRatingDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return RatingDialog(
-            initialRating: 1.0,
-            title: const Text(
-              'Kids Book',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            // encourage your user to leave a high rating?
-            message: const Text(
-              'Tap a star to set your rating. Add more description here if you want.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
-            ),
-            // image: const Image(
-            //   image: AssetImage("assets/sp.png"),
-            //   width: 150,
-            //   height: 150,
-            // ),
-            submitButtonText: 'Submit',
-            commentHint: 'your comment',
-            onCancelled: () => debugPrint('cancelled'),
-            onSubmitted: (response) {
-              debugPrint(
-                  'rating: ${response.rating}, comment: ${response.comment}');
-            },
-          );
-        });
-  }
 
   void togglePlayback() {
     if (bookplayer.playing) {

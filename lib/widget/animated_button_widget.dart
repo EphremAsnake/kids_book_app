@@ -7,14 +7,15 @@ class AnimatedButtonWidget extends StatelessWidget {
   final Duration buttonDelayDuration;
   final Duration buttonPlayDuration;
   final String text;
-  final IconData icon;
+  final IconData? icon;
   final bool? isRow;
   const AnimatedButtonWidget({
     Key? key,
     required this.buttonDelayDuration,
     required this.buttonPlayDuration,
     required this.text,
-    required this.icon, this.isRow,
+    this.icon,
+    this.isRow,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,9 @@ class AnimatedButtonWidget extends StatelessWidget {
       children: [
         Positioned(
           child: Container(
-                  width: isRow==null?MediaQuery.of(context).size.width * .3:MediaQuery.of(context).size.width * .145,
+                  width: isRow == null
+                      ? MediaQuery.of(context).size.width * .3
+                      : MediaQuery.of(context).size.width * .145,
                   height: 47,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -52,14 +55,14 @@ class AnimatedButtonWidget extends StatelessWidget {
 class AnimatedTextWidget extends StatelessWidget {
   final Duration buttonPlayDuration;
   final Duration buttonDelayDuration;
-  final IconData icon;
+  final IconData? icon;
   final String text;
   const AnimatedTextWidget({
     Key? key,
     required this.buttonPlayDuration,
     required this.buttonDelayDuration,
     required this.text,
-    required this.icon,
+    this.icon,
   }) : super(key: key);
 
   @override
@@ -69,10 +72,11 @@ class AnimatedTextWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            color: Colors.white,
-          ),
+          if (icon != null)
+            Icon(
+              icon,
+              color: Colors.white,
+            ),
           const SizedBox(
             width: 5,
           ),

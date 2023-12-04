@@ -17,25 +17,24 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
   late Animation<double> _fadeInAnimation;
 
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  _animationController = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 2000),
-  );
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
 
-  _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-    CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeIn,
-    ),
-  );
+    _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
 
-  // Trigger the animation when the widget is created
-  _animationController.forward();
-}
-
+    // Trigger the animation when the widget is created
+    _animationController.forward();
+  }
 
   @override
   void dispose() {
@@ -64,7 +63,7 @@ void initState() {
             widget.text,
             overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
-            maxLines: 3,
+            maxLines: 2,
             style: TextStyle(
               color: Colors.black,
               fontSize: 8.sp,

@@ -178,7 +178,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                                   const Duration(milliseconds: 1),
                               buttonPlayDuration: buttonPlayDuration,
                               text: 'Replay',
-                              icon: Icons.headphones,
+                              icon: Icons.replay,
                             ),
                           ),
                           SizedBox(
@@ -188,6 +188,22 @@ class _ChoiceScreenState extends State<LastScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              InkWell(
+                                onTap: () {
+                                  shareApp();
+                                },
+                                child: AnimatedButtonWidget(
+                                  isRow: true,
+                                  buttonDelayDuration:
+                                      const Duration(milliseconds: 1),
+                                  buttonPlayDuration: buttonPlayDuration,
+                                  text: '',
+                                  icon: Icons.share,
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * .01,
+                              ),
                               InkWell(
                                 onTap: () {
                                   if (Platform.isAndroid) {
@@ -205,22 +221,6 @@ class _ChoiceScreenState extends State<LastScreen> {
                                   buttonPlayDuration: buttonPlayDuration,
                                   text: '',
                                   icon: Icons.star_border,
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * .01,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  shareApp();
-                                },
-                                child: AnimatedButtonWidget(
-                                  isRow: true,
-                                  buttonDelayDuration:
-                                      const Duration(milliseconds: 1),
-                                  buttonPlayDuration: buttonPlayDuration,
-                                  text: '',
-                                  icon: Icons.share,
                                 ),
                               ),
                             ],

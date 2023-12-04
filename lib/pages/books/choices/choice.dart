@@ -112,11 +112,11 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
                             text: 'Read to Me',
-                            icon: Icons.headphones,
+                           // icon: Icons.headphones,
                           ),
                         ),
                         SizedBox(
-                          height: 30.h,
+                          height: 50.h,
                         ),
                         InkWell(
                           onTap: () => widget.read(),
@@ -125,7 +125,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
                             text: 'Read Myself',
-                            icon: Icons.chrome_reader_mode_rounded,
+                            //icon: Icons.chrome_reader_mode_rounded,
                           ),
                         ),
                       ],
