@@ -34,15 +34,28 @@ class _SplashScreenState extends State<SplashScreen> {
     //fetchData();
   }
 
-  void saveToLocalStorage(data) async {
+  void saveToLocalStorageBookList(data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String jsonData = json.encode(data); // Convert to JSON string
+    String jsonData = json.encode(data); //! Convert to JSON string
     await prefs.setString('booklist_response_data', jsonData);
   }
 
-  Future<String> getFromStorage() async {
+  Future<String> getFromStorageBookList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedData = prefs.getString('booklist_response_data');
+    //print(storedData);
+    return storedData ?? "";
+  }
+
+  void saveToLocalStorageConfig(data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonData = json.encode(data); // Convert to JSON string
+    await prefs.setString('config_data', jsonData);
+  }
+
+  Future<String> getFromStorageConfig() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedData = prefs.getString('config_data');
     //print(storedData);
     return storedData ?? "";
   }
@@ -53,8 +66,9 @@ class _SplashScreenState extends State<SplashScreen> {
       _connectivityResult = connectivityResult;
     });
 
-    String storedData = await getFromStorage();
-    if (connectivityResult == ConnectivityResult.none && storedData == "") {
+    String storedBookList = await getFromStorageBookList();
+    String storedConfigData = await getFromStorageBookList();
+    if (connectivityResult == ConnectivityResult.none && storedBookList == "") {
       // ignore: use_build_context_synchronously
       showDialog(
           context: context,
@@ -75,7 +89,9 @@ class _SplashScreenState extends State<SplashScreen> {
             );
           });
     } else if (connectivityResult == ConnectivityResult.none &&
-        storedData != "") {
+        storedBookList != "" &&
+        storedConfigData != "") {
+      useLocalDataBoth();
       //useLocalData();
     } else {
       await fetchConfigData().then((_) {
@@ -94,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (response.statusCode == 200) {
         ApiResponse apiResponse = ApiResponse.fromJson(response.data);
 
-        //saveToLocalStorage(response.data);
+        saveToLocalStorageBookList(response.data);
 
         // ignore: use_build_context_synchronously
         if (configResponses == null) {
@@ -139,6 +155,9 @@ class _SplashScreenState extends State<SplashScreen> {
         ConfigApiResponseModel configResponse =
             ConfigApiResponseModel.fromJson(response.data);
 
+        //!Saving To Local Config Data
+        saveToLocalStorageConfig(response.data);
+
         setState(() {
           configResponses = configResponse;
         });
@@ -161,20 +180,39 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  // void useLocalData() async {
-  //   String storedData = await getFromStorage();
-  //   Map<String, dynamic> parsedData = json.decode(storedData);
-  //   ApiResponse apiResponse = ApiResponse.fromJson(parsedData);
+  void useLocalDataBoth() async {
+    //!BookList
+    String storedBookList = await getFromStorageBookList();
+    Map<String, dynamic> parsedBookListData = json.decode(storedBookList);
+    ApiResponse storedBookListResponse =
+        ApiResponse.fromJson(parsedBookListData);
 
-  //   // ignore: use_build_context_synchronously
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(
-  //         builder: (context) => BookListPage(
-  //               booksList: apiResponse,
-  //             )),
-  //   );
-  // }
+    //!Config Data
+    String storedConfigData = await getFromStorageConfig();
+    Map<String, dynamic> parsedConfigData = json.decode(storedConfigData);
+    ConfigApiResponseModel storedConfigResponse =
+        ConfigApiResponseModel.fromJson(parsedConfigData);
+
+    //! Set the ad unit IDs in AdHelper
+    AdHelper.setAdUnits(
+      interstitialId: Platform.isAndroid
+          ? storedConfigResponse.admobInterstitialAd?.android
+          : storedConfigResponse.admobInterstitialAd?.ios,
+      rewardedId: Platform.isAndroid
+          ? storedConfigResponse.admobRewardedAd?.android
+          : storedConfigResponse.admobRewardedAd?.ios,
+    );
+
+    // ignore: use_build_context_synchronously
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => BookListPage(
+              booksList: storedBookListResponse,
+              configResponse: storedConfigResponse,
+              fromlocal: true)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

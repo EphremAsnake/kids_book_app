@@ -29,8 +29,12 @@ import 'books/choices/choice.dart';
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
   final ConfigApiResponseModel configResponse;
+  final bool? fromlocal;
   const BookListPage(
-      {Key? key, required this.booksList, required this.configResponse})
+      {Key? key,
+      required this.booksList,
+      required this.configResponse,
+      this.fromlocal})
       : super(key: key);
 
   @override
@@ -152,9 +156,13 @@ class _BookListPageState extends State<BookListPage> {
             descriptions: 'Oops! We couldn\'t load the ad. Please try again.',
             text: 'OK',
             functionCall: () {
-              loadRewarded();
-              _loadInterstitialAd();
-              Navigator.pop(context);
+              if (widget.fromlocal == null) {
+                loadRewarded();
+                _loadInterstitialAd();
+                Navigator.pop(context);
+              } else {
+                Navigator.pop(context);
+              }
             },
             closeicon: true,
             //img: 'assets/dialog_error.svg',
