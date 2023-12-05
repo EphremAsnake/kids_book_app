@@ -7,6 +7,7 @@ import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:rating_dialog/rating_dialog.dart';
+import 'package:resize/resize.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import '../../../model/storyPage.dart';
 import '../../../services/apiEndpoints.dart';
@@ -57,6 +58,7 @@ class _BooksPageState extends State<BookPage>
   late AudioController audioController;
   bool isAudioPlaying = false;
   //bool isListening = false;
+  Color trybuttonColor = const Color(0xffED1E54);
 
   Color nextbuttonColor = Colors.transparent;
   Color previousbuttonColor = Colors.transparent;
@@ -145,25 +147,25 @@ class _BooksPageState extends State<BookPage>
             setState(() {
               hasLastScreenDisplayed = false;
             });
-            Get.to(BookPage(
-              response: widget.response,
-              indexValue: widget.indexValue,
-              backgroundMusic: widget.backgroundMusic,
-              booksList: widget.booksList,
-              configResponse: widget.configResponse,
-            ));
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => BookPage(
-            //             response: widget.response,
-            //             indexValue: widget.indexValue,
-            //             backgroundMusic: widget.backgroundMusic,
-            //             booksList: widget.booksList,
-            //             configResponse: widget.configResponse,
-            //           )),
-            // );
-            // Navigator.of(context).pop();
+            // Get.to(BookPage(
+            //   response: widget.response,
+            //   indexValue: widget.indexValue,
+            //   backgroundMusic: widget.backgroundMusic,
+            //   booksList: widget.booksList,
+            //   configResponse: widget.configResponse,
+            // ));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BookPage(
+                        response: widget.response,
+                        indexValue: widget.indexValue,
+                        backgroundMusic: widget.backgroundMusic,
+                        booksList: widget.booksList,
+                        configResponse: widget.configResponse,
+                      )),
+            );
+            //Navigator.of(context).pop();
           },
           booksList: widget.booksList,
           configResponse: widget.configResponse,
@@ -194,6 +196,50 @@ class _BooksPageState extends State<BookPage>
         _incrementCounter();
       }
     });
+  }
+
+  Future<void> _tryagain() async {
+    // if (_listen && isIncrementing) {
+    //   return; //! Prevent multiple simultaneous increment calls
+    // }
+    // if (_listen && !isLastPage()) {
+    //   isIncrementing = true;
+    // }
+
+    // if (_counter == images.length - 1 && _listen) {
+    //   lastScreen();
+    // }
+
+    bookplayer.stop();
+    setState(() {
+      isPlaying = false;
+    });
+    if (_counter < images.length - 1) {
+      setState(() {
+        _counter = _counter;
+      });
+      // setState(() {
+      //   _counter = listenaudioController.counter;
+      // });
+      if (_listen) {
+        bookplayer.setUrl(bookAudioUrls[_counter]);
+        await Future.delayed(const Duration(seconds: 1));
+        setState(() {
+          isPlaying = true;
+          isIncrementing = false;
+        });
+        bookplayer.play();
+        bookplayer.playerStateStream.listen((playerState) {
+          if (playerState.processingState == ProcessingState.completed) {
+            setState(() {
+              isIncrementing = false;
+            });
+          }
+        });
+      }
+    } else {
+      lastScreen();
+    }
   }
 
   Future<void> _incrementCounter() async {
@@ -353,56 +399,80 @@ class _BooksPageState extends State<BookPage>
                       children: [
                         //!StoryImage
                         ImageFade(
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          //! whenever the image changes, it will be loaded, and then faded in:
-                          image: CachedNetworkImageProvider(images[_counter]),
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            //! whenever the image changes, it will be loaded, and then faded in:
+                            image: CachedNetworkImageProvider(images[_counter]),
 
-                          //! slow-ish fade for loaded images:
-                          duration: const Duration(milliseconds: 900),
+                            //! slow-ish fade for loaded images:
+                            duration: const Duration(milliseconds: 900),
 
-                          //! if the image is loaded synchronously ,
-                          syncDuration: const Duration(milliseconds: 900),
-
-                          alignment: Alignment.center,
-                          fit: BoxFit.cover,
-                          scale: 2,
-
-                          // shown behind everything:
-                          placeholder: Container(
-                            color: Colors.white,
+                            //! if the image is loaded synchronously ,
+                            syncDuration: const Duration(milliseconds: 900),
                             alignment: Alignment.center,
-                            child: const Icon(Icons.photo,
-                                color: Colors.white30, size: 128.0),
-                          ),
+                            fit: BoxFit.cover,
+                            scale: 2,
 
-                          // shows progress while loading an image:
-                          // loadingBuilder: (context, progress, chunkEvent) {
-                          //   if (progress == 1.0) {
-                          //     setState(() {
-                          //       _imageLoaded = true;
-                          //     });
-                          //   }
-                          //   return CircularProgressIndicator(value: progress);
-                          // },
-                          // loadingBuilder: (context, progress, chunkEvent) {
-                          //   // if (progress != 0.0) {
-                          //   //   setState(() {
-                          //   //     _imageLoaded = true;
-                          //   //   });
-                          //   // }
-                          //   return Center(
-                          //       child:
-                          //           CircularProgressIndicator(value: progress));
-                          // },
+                            // shown behind everything:
+                            placeholder: Container(
+                              color: Colors.white,
+                              alignment: Alignment.center,
+                              child: const Icon(Icons.photo,
+                                  color: Colors.white30, size: 128.0),
+                            ),
 
-                          //! displayed when an error occurs:
-                          errorBuilder: (context, error) => Container(
-                            color: const Color(0xFF6F6D6A),
-                            alignment: Alignment.center,
-                            child: const Icon(Icons.warning,
-                                color: Colors.black26, size: 128.0),
-                          ),
-                        ),
+                            // shows progress while loading an image:
+                            // loadingBuilder: (context, progress, chunkEvent) {
+                            //   if (progress == 1.0) {
+                            //     setState(() {
+                            //       _imageLoaded = true;
+                            //     });
+                            //   }
+                            //   return CircularProgressIndicator(value: progress);
+                            // },
+                            // loadingBuilder: (context, progress, chunkEvent) {
+                            //   // if (progress != 0.0) {
+                            //   //   setState(() {
+                            //   //     _imageLoaded = true;
+                            //   //   });
+                            //   // }
+                            //   return Center(
+                            //       child:
+                            //           CircularProgressIndicator(value: progress));
+                            // },
+
+                            //! displayed when an error occurs:
+                            errorBuilder: (context, error) {
+                              //togglePlayback();
+                              bookplayer.stop;
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Oops couldn\'t load story',
+                                      style: TextStyle(
+                                          fontSize: 8.sp, color: Colors.red),
+                                    ),
+                                    TextButton(
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.blue,
+                                      ),
+                                      onPressed: () {
+                                        //_incrementCounter();
+                                        _deccrementCounter();
+                                      },
+                                      child: Text(
+                                        'Try Again',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 8.sp),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }),
 
                         //!Home and Page Counter
                         Visibility(

@@ -282,8 +282,9 @@ class _BookListPageState extends State<BookListPage> {
                 descriptions: 'Something went wrong please try again.',
                 text: 'OK',
                 functionCall: () {
-                  loadRewarded();
-                  _loadInterstitialAd();
+                  for (int i = 0; i < widget.booksList.books.length; i++) {
+                    fetchDataForBookPage(i);
+                  }
                   Navigator.pop(context);
                 },
                 closeicon: true
@@ -359,23 +360,23 @@ class _BookListPageState extends State<BookListPage> {
                                           openedCount >= rewardedCountLimit) {
                                         //!Toast for lock again
                                         // ignore: use_build_context_synchronously
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'You Have Finished your free Session for book ${book.title}.'),
-                                            behavior: SnackBarBehavior.floating,
-                                            margin: const EdgeInsets.only(
-                                              // ignore: use_build_context_synchronously
-                                              // bottom: MediaQuery.of(context)
-                                              //         .size
-                                              //         .height -
-                                              //     100,
-                                              left: 10,
-                                              right: 10,
-                                            ),
-                                          ),
-                                        );
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(
+                                        //   SnackBar(
+                                        //     content: Text(
+                                        //         'You Have Finished your free Session for book ${book.title}.'),
+                                        //     behavior: SnackBarBehavior.floating,
+                                        //     margin: const EdgeInsets.only(
+                                        //       // ignore: use_build_context_synchronously
+                                        //       // bottom: MediaQuery.of(context)
+                                        //       //         .size
+                                        //       //         .height -
+                                        //       //     100,
+                                        //       left: 10,
+                                        //       right: 10,
+                                        //     ),
+                                        //   ),
+                                        //);
                                         // final snackBar = SnackBar(
                                         //   content: Text(
                                         //       'You Have Finished your free Session for book ${book.title}.'),
@@ -426,7 +427,7 @@ class _BookListPageState extends State<BookListPage> {
                                               title: 'Unlock Your Story',
                                               titleColor: Colors.orange,
                                               descriptions:
-                                                  'Watch a short ad to unlock this story for 3 sessions',
+                                                  'Watch a short ad to unlock this story for $rewardedCountLimit sessions',
                                               text: 'Watch Ad',
                                               functionCall: () async {
                                                 //showRewardAd();
@@ -624,6 +625,7 @@ class _BookListPageState extends State<BookListPage> {
                     child: Center(
                         child: Text(
                       widget.configResponse.houseAd!.buttonText!,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 8.sp,

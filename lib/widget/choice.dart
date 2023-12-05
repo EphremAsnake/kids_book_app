@@ -126,7 +126,8 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                         ),
                       ),
                     ),
-                  )),
+                  )
+                  ),
             ],
           ),
         ),

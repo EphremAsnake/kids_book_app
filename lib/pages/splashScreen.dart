@@ -182,12 +182,13 @@ class _SplashScreenState extends State<SplashScreen> {
     //   statusBarColor: Colors.white, // Change this to your desired color
     // ));
     return Scaffold(
+      backgroundColor: const Color(0xFF9FE6CF),
       body: Center(
         child: Lottie.asset(
           'assets/book.json',
           fit: BoxFit.cover,
-          width: MediaQuery.sizeOf(context).height * 0.5,
-          height: MediaQuery.sizeOf(context).width * 0.25,
+          // width: MediaQuery.sizeOf(context).width * 0.5,
+          // height: MediaQuery.sizeOf(context).height * 0.5,
           repeat: true,
         ),
       ),
