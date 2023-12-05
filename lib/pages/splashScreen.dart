@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import '../model/booklistModel.dart';
@@ -116,24 +117,38 @@ class _SplashScreenState extends State<SplashScreen> {
         if (configResponses == null) {
           await fetchConfigData();
           // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BookListPage(
-                      booksList: apiResponse,
-                      configResponse: configResponses!,
-                    )),
-          );
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => BookListPage(
+          //             booksList: apiResponse,
+          //             configResponse: configResponses!,
+          //           )),
+          Get.offAll(
+              BookListPage(
+                booksList: apiResponse,
+                configResponse: configResponses!,
+              ),
+              transition: Transition.zoom,
+              duration: const Duration(seconds: 2));
+          //);
         } else {
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BookListPage(
-                      booksList: apiResponse,
-                      configResponse: configResponses!,
-                    )),
-          );
+          Get.offAll(
+              BookListPage(
+                booksList: apiResponse,
+                configResponse: configResponses!,
+              ),
+              transition: Transition.zoom,
+              duration: const Duration(seconds: 2));
+          // // ignore: use_build_context_synchronously
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => BookListPage(
+          //             booksList: apiResponse,
+          //             configResponse: configResponses!,
+          //           )),
+          // );
         }
       } else {
         print('Something Went Wrong Try Again');
@@ -204,14 +219,21 @@ class _SplashScreenState extends State<SplashScreen> {
     );
 
     // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => BookListPage(
-              booksList: storedBookListResponse,
-              configResponse: storedConfigResponse,
-              fromlocal: true)),
-    );
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => BookListPage(
+    //           booksList: storedBookListResponse,
+    //           configResponse: storedConfigResponse,
+    //           fromlocal: true)),
+    // );
+    Get.offAll(
+        BookListPage(
+            booksList: storedBookListResponse,
+            configResponse: storedConfigResponse,
+            fromlocal: true),
+        transition: Transition.zoom,
+        duration: const Duration(seconds: 2));
   }
 
   @override
@@ -220,7 +242,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //   statusBarColor: Colors.white, // Change this to your desired color
     // ));
     return Scaffold(
-      backgroundColor: const Color(0xFF9FE6CF),
+      backgroundColor: const Color(0xff4bebfa),
       body: Center(
         child: Lottie.asset(
           'assets/book.json',

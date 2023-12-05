@@ -30,11 +30,13 @@ class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
   final ConfigApiResponseModel configResponse;
   final bool? fromlocal;
+  final bool? isbackgroundsilent;
   const BookListPage(
       {Key? key,
       required this.booksList,
       required this.configResponse,
-      this.fromlocal})
+      this.fromlocal,
+      this.isbackgroundsilent})
       : super(key: key);
 
   @override
@@ -60,15 +62,23 @@ class _BookListPageState extends State<BookListPage> {
   @override
   void initState() {
     super.initState();
-
-    loadRewarded();
-    _loadInterstitialAd();
-
-    audioController = Get.put(AudioController());
-    audioController.startAudio(widget.booksList.backgroundMusic);
+    print(widget.booksList.backgroundColor.toColor());
+    if (widget.fromlocal != null) {
+      loadRewarded();
+      _loadInterstitialAd();
+    }
     for (int i = 0; i < widget.booksList.books.length; i++) {
       fetchDataForBookPage(i);
     }
+
+    audioController = Get.put(AudioController());
+    if (widget.isbackgroundsilent == null) {
+      audioController.startAudio(widget.booksList.backgroundMusic);
+    } else {
+      audioController.startAudio(widget.booksList.backgroundMusic,
+          backgroundMusicPause: true);
+    }
+
     lockStatusList = List<Future<bool>>.generate(
       widget.booksList.books.length,
       (index) => getLockStatus(widget.booksList.books[index].title),
@@ -290,10 +300,15 @@ class _BookListPageState extends State<BookListPage> {
                 descriptions: 'Something went wrong please try again.',
                 text: 'OK',
                 functionCall: () {
-                  for (int i = 0; i < widget.booksList.books.length; i++) {
-                    fetchDataForBookPage(i);
+                  if (index >= 0 &&
+                      index < storypageresponses.length &&
+                      storypageresponses[index] != null) {
+                    Navigator.pop(context);
+                  } else {
+                    for (int i = 0; i < widget.booksList.books.length; i++) {
+                      fetchDataForBookPage(i);
+                    }
                   }
-                  Navigator.pop(context);
                 },
                 closeicon: true
                 //img: 'assets/dialog_error.svg',
@@ -321,14 +336,18 @@ class _BookListPageState extends State<BookListPage> {
 
           Padding(
             padding: EdgeInsets.only(
-              top: 20.0,
+              //top: 20.0,
               left: MediaQuery.of(context).size.height * 0.25,
               right: MediaQuery.of(context).size.height * 0.25,
             ),
             child: AnimationLimiter(
               child: GridView.builder(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.3),
+                    bottom: MediaQuery.of(context).size.height * 0.3,
+                    top: widget.configResponse.houseAd!.show != null &&
+                            widget.configResponse.houseAd!.show!
+                        ? 25.w
+                        : 20),
                 physics: const BouncingScrollPhysics(),
                 controller: _scrollController,
                 itemCount: widget.booksList.books.length,
@@ -353,7 +372,13 @@ class _BookListPageState extends State<BookListPage> {
                                   onTap: () async {
                                     loadRewarded();
                                     _loadInterstitialAd();
-                                    if (index == 0) {
+                                    if (book.status == 'unlocked') {
+                                      //!check if show interstitialad is true
+                                      if (widget.configResponse
+                                          .admobInterstitialAd!.show!) {
+                                        await _showInterstitialAd();
+                                      }
+                                      //!Navigate to Story Page
                                       navigateToNextPage(index);
                                     } else {
                                       bool isWatched =
@@ -366,37 +391,6 @@ class _BookListPageState extends State<BookListPage> {
 
                                       if (isWatched &&
                                           openedCount >= rewardedCountLimit) {
-                                        //!Toast for lock again
-                                        // ignore: use_build_context_synchronously
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(
-                                        //   SnackBar(
-                                        //     content: Text(
-                                        //         'You Have Finished your free Session for book ${book.title}.'),
-                                        //     behavior: SnackBarBehavior.floating,
-                                        //     margin: const EdgeInsets.only(
-                                        //       // ignore: use_build_context_synchronously
-                                        //       // bottom: MediaQuery.of(context)
-                                        //       //         .size
-                                        //       //         .height -
-                                        //       //     100,
-                                        //       left: 10,
-                                        //       right: 10,
-                                        //     ),
-                                        //   ),
-                                        //);
-                                        // final snackBar = SnackBar(
-                                        //   content: Text(
-                                        //       'You Have Finished your free Session for book ${book.title}.'),
-                                        // );
-                                        // // ignore: use_build_context_synchronously
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(snackBar);
-                                        // Get.snackbar(
-                                        //     'You Have Finished your free Session for book ${book.title}.',
-                                        //     '',
-                                        //     colorText: Colors.black,
-                                        //     backgroundColor: Colors.red);
                                         await BookPreferences.resetBookData(
                                             book.title);
                                       }
@@ -637,28 +631,10 @@ class _BookListPageState extends State<BookListPage> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 8.sp,
+                          height: 1.2,
                           color: widget.configResponse.houseAd!.buttonTextColor!
                               .toColor()),
                     ))),
-
-                //                NeoPopTiltedButton(
-                //   isFloating: true,
-                //   onTapUp: () => debugPrint('Play now'),
-                //   decoration:  NeoPopTiltedButtonDecoration(
-                //     color: widget.configResponse.houseAd!.buttonColor!
-                //                       .toColor(),
-                //     plunkColor: Color(0xFFc3a13b),
-                //     shadowColor: Colors.black,
-                //   ),
-                //     child: Padding(
-                //       padding: EdgeInsets.symmetric(horizontal: 70.0, vertical: 15),
-                //       child: Text('${widget.configResponse.houseAd!.buttonText!} →',
-                //           style: TextStyle(
-                //               color: Colors.black,
-                //               fontSize: 25,
-                //               fontWeight: FontWeight.bold)),
-                //   ),
-                // )
               ),
             ),
         ],

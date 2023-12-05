@@ -189,57 +189,19 @@ class _BooksPageState extends State<BookPage>
     setState(() {
       isPlaying = true;
       _listen = true;
+      isIncrementing = true;
     });
-    await bookplayer.play();
+    bookplayer.play();
     bookplayer.playerStateStream.listen((playerState) {
+      if (playerState.processingState == ProcessingState.ready) {
+        setState(() {
+          isIncrementing = false;
+        });
+      }
       if (playerState.processingState == ProcessingState.completed) {
         _incrementCounter();
       }
     });
-  }
-
-  Future<void> _tryagain() async {
-    // if (_listen && isIncrementing) {
-    //   return; //! Prevent multiple simultaneous increment calls
-    // }
-    // if (_listen && !isLastPage()) {
-    //   isIncrementing = true;
-    // }
-
-    // if (_counter == images.length - 1 && _listen) {
-    //   lastScreen();
-    // }
-
-    bookplayer.stop();
-    setState(() {
-      isPlaying = false;
-    });
-    if (_counter < images.length - 1) {
-      setState(() {
-        _counter = _counter;
-      });
-      // setState(() {
-      //   _counter = listenaudioController.counter;
-      // });
-      if (_listen) {
-        bookplayer.setUrl(bookAudioUrls[_counter]);
-        await Future.delayed(const Duration(seconds: 1));
-        setState(() {
-          isPlaying = true;
-          isIncrementing = false;
-        });
-        bookplayer.play();
-        bookplayer.playerStateStream.listen((playerState) {
-          if (playerState.processingState == ProcessingState.completed) {
-            setState(() {
-              isIncrementing = false;
-            });
-          }
-        });
-      }
-    } else {
-      lastScreen();
-    }
   }
 
   Future<void> _incrementCounter() async {
@@ -268,17 +230,19 @@ class _BooksPageState extends State<BookPage>
       // });
       if (_listen) {
         bookplayer.setUrl(bookAudioUrls[_counter]);
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 2));
         setState(() {
           isPlaying = true;
-          isIncrementing = false;
+          //isIncrementing = false;
         });
         bookplayer.play();
         bookplayer.playerStateStream.listen((playerState) {
-          if (playerState.processingState == ProcessingState.completed) {
+          if (playerState.processingState == ProcessingState.ready) {
             setState(() {
               isIncrementing = false;
+              //isPlaying = false;
             });
+            //_incrementCounter();
           }
         });
       }
@@ -308,12 +272,21 @@ class _BooksPageState extends State<BookPage>
       // });
       if (_listen) {
         bookplayer.setUrl(bookAudioUrls[_counter]);
-        await Future.delayed(const Duration(seconds: 1));
+        await Future.delayed(const Duration(seconds: 2));
         setState(() {
           isPlaying = true;
-          isIncrementing = false;
+          //isIncrementing = false;
         });
         bookplayer.play();
+        bookplayer.playerStateStream.listen((playerState) {
+          if (playerState.processingState == ProcessingState.ready) {
+            setState(() {
+              isIncrementing = false;
+              // isPlaying = false;
+            });
+            //_incrementCounter();
+          }
+        });
       }
     }
   }
@@ -381,16 +354,19 @@ class _BooksPageState extends State<BookPage>
             onSwipeLeft: (offset) {
               _incrementCounter();
             },
-            onSwipeUp: (offset) {
-              setState(() {
-                buttonsVisiblity = false;
-              });
-            },
-            onSwipeDown: (offset) {
-              setState(() {
-                buttonsVisiblity = true;
-              });
-            },
+
+            //!Hide Buttons
+            // onSwipeUp: (offset) {
+            //   setState(() {
+            //     buttonsVisiblity = false;
+            //   });
+            // },
+            // onSwipeDown: (offset) {
+            //   setState(() {
+            //     buttonsVisiblity = true;
+            //   }
+            //   );
+            // },
             child: Center(
               child: Stack(
                 children: <Widget>[
@@ -414,10 +390,10 @@ class _BooksPageState extends State<BookPage>
 
                             // shown behind everything:
                             placeholder: Container(
-                              color: Colors.white,
+                              color: Colors.white.withOpacity(0.7),
                               alignment: Alignment.center,
                               child: const Icon(Icons.photo,
-                                  color: Colors.white30, size: 128.0),
+                                  color: Colors.transparent, size: 128.0),
                             ),
 
                             // shows progress while loading an image:
@@ -452,7 +428,7 @@ class _BooksPageState extends State<BookPage>
                                     Text(
                                       'Oops couldn\'t load story',
                                       style: TextStyle(
-                                          fontSize: 8.sp, color: Colors.red),
+                                          fontSize: 8.sp, color: Colors.blue),
                                     ),
                                     TextButton(
                                       style: TextButton.styleFrom(
@@ -491,17 +467,53 @@ class _BooksPageState extends State<BookPage>
                                     icon: const Icon(Icons.home_outlined,
                                         color: Colors.blue),
                                     onPressed: () {
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => BookListPage(
-                                            booksList: widget.booksList,
-                                            configResponse:
-                                                widget.configResponse,
-                                          ),
-                                        ),
-                                        (route) => false,
-                                      );
+                                      if (audioController.isPlaying) {
+                                        Get.offAll(
+                                            BookListPage(
+                                              booksList: widget.booksList,
+                                              configResponse:
+                                                  widget.configResponse,
+                                            ),
+                                            transition: Transition.fadeIn,
+                                            duration:
+                                                const Duration(seconds: 2));
+
+                                        // Navigator.pushAndRemoveUntil(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => BookListPage(
+                                        //       booksList: widget.booksList,
+                                        //       configResponse:
+                                        //           widget.configResponse,
+                                        //     ),
+                                        //   ),
+                                        //   (route) => false,
+                                        // );
+                                      } else {
+                                        Get.offAll(
+                                            BookListPage(
+                                              booksList: widget.booksList,
+                                              configResponse:
+                                                  widget.configResponse,
+                                              isbackgroundsilent: true,
+                                            ),
+                                            transition: Transition.fadeIn,
+                                            duration:
+                                                const Duration(seconds: 2));
+
+                                        // Navigator.pushAndRemoveUntil(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => BookListPage(
+                                        //       booksList: widget.booksList,
+                                        //       configResponse:
+                                        //           widget.configResponse,
+                                        //       isbackgroundsilent: true,
+                                        //     ),
+                                        //   ),
+                                        //   (route) => false,
+                                        // );
+                                      }
                                     },
                                   ),
                                 ),

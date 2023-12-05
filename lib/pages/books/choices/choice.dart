@@ -29,6 +29,7 @@ class ChoiceScreen extends StatefulWidget {
 }
 
 class _ChoiceScreenState extends State<ChoiceScreen> {
+  AudioController backgroundaudioController = Get.put(AudioController());
   @override
   Widget build(BuildContext context) {
     final mainPlayDuration = 1000.ms;
@@ -60,16 +61,47 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                         icon:
                             const Icon(Icons.home_outlined, color: Colors.blue),
                         onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BookListPage(
-                                booksList: widget.booksList,
-                                configResponse: widget.configResponse,
-                              ),
-                            ),
-                            (route) => false,
-                          );
+                          if (backgroundaudioController.isPlaying) {
+                            Get.offAll(
+                                BookListPage(
+                                  booksList: widget.booksList,
+                                  configResponse: widget.configResponse,
+                                ),
+                                transition: Transition.fadeIn,
+                                duration: const Duration(seconds: 2));
+
+                            // Navigator.pushAndRemoveUntil(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => BookListPage(
+                            //       booksList: widget.booksList,
+                            //       configResponse: widget.configResponse,
+                            //     ),
+                            //   ),
+                            //   (route) => false,
+                            // );
+                          } else {
+                            Get.offAll(
+                                BookListPage(
+                                  booksList: widget.booksList,
+                                  configResponse: widget.configResponse,
+                                  isbackgroundsilent: true,
+                                ),
+                                transition: Transition.fadeIn,
+                                duration: const Duration(seconds: 2));
+
+                            // Navigator.pushAndRemoveUntil(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => BookListPage(
+                            //       booksList: widget.booksList,
+                            //       configResponse: widget.configResponse,
+                            //       isbackgroundsilent: true,
+                            //     ),
+                            //   ),
+                            //   (route) => false,
+                            // );
+                          }
                         },
                       ),
                     ),
@@ -112,7 +144,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
                             text: 'Read to Me',
-                           // icon: Icons.headphones,
+                            // icon: Icons.headphones,
                           ),
                         ),
                         SizedBox(

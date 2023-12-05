@@ -36,6 +36,8 @@ class LastScreen extends StatefulWidget {
 }
 
 class _ChoiceScreenState extends State<LastScreen> {
+  AudioController backgroundaudioController = Get.put(AudioController());
+
   Future<void> shareApp() async {
     //! Set the app link and the message to be shared
     const String appLink =
@@ -149,22 +151,53 @@ class _ChoiceScreenState extends State<LastScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BookListPage(
-                                    booksList: widget.booksList,
-                                    configResponse: widget.configResponse,
-                                  ),
-                                ),
-                                (route) => false,
-                              );
+                              if (backgroundaudioController.isPlaying) {
+                                Get.offAll(
+                                    BookListPage(
+                                      booksList: widget.booksList,
+                                      configResponse: widget.configResponse,
+                                    ),
+                                    transition: Transition.fadeIn,
+                                    duration: const Duration(seconds: 2));
+
+                                // Navigator.pushAndRemoveUntil(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => BookListPage(
+                                //       booksList: widget.booksList,
+                                //       configResponse: widget.configResponse,
+                                //     ),
+                                //   ),
+                                //   (route) => false,
+                                // );
+                              } else {
+                                Get.offAll(
+                                    BookListPage(
+                                      booksList: widget.booksList,
+                                      configResponse: widget.configResponse,
+                                      isbackgroundsilent: true,
+                                    ),
+                                    transition: Transition.fadeIn,
+                                    duration: const Duration(seconds: 2));
+
+                                // Navigator.pushAndRemoveUntil(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => BookListPage(
+                                //       booksList: widget.booksList,
+                                //       configResponse: widget.configResponse,
+                                //       isbackgroundsilent: true,
+                                //     ),
+                                //   ),
+                                //   (route) => false,
+                                // );
+                              }
                             },
                             child: AnimatedButtonWidget(
                               buttonDelayDuration:
                                   const Duration(milliseconds: 1),
                               buttonPlayDuration: buttonPlayDuration,
-                              text: 'Home',
+                              text: 'Home ',
                               icon: Icons.home_outlined,
                             ),
                           ),

@@ -67,7 +67,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
         // setState(() {
         //   isPlaying = false;
         // });
-      }else{
+      } else {
         _backgrounMusicPlayer.stop();
       }
 
@@ -101,10 +101,16 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   //   }
   // }
 
-  void startAudio(String audioUrl) async {
+  void startAudio(String audioUrl, {bool? backgroundMusicPause}) async {
     await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$audioUrl');
-    _backgrounMusicPlayer.play();
-    isPlaying = true;
+    if (backgroundMusicPause != null && backgroundMusicPause) {
+      isPlaying = false;
+    } else {
+      _backgrounMusicPlayer.play();
+      isPlaying = true;
+    }
+
+    //isPlaying = true;
     update();
   }
 
