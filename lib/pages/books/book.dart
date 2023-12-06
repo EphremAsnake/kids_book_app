@@ -488,55 +488,59 @@ class _BooksPageState extends State<BookPage>
                                   child: IconButton(
                                     icon: const Icon(Icons.home_outlined,
                                         color: Colors.blue),
-                                    onPressed: () {
-                                      bookplayer.stop();
-                                      if (audioController.isPlaying) {
-                                        Get.offAll(
-                                            BookListPage(
-                                              booksList: widget.booksList,
-                                              configResponse:
-                                                  widget.configResponse,
-                                            ),
-                                            transition: Transition.fadeIn,
-                                            duration:
-                                                const Duration(seconds: 2));
+                                    onPressed: () async {
+                                      if (_listen) {
+              togglePlayback();
+            }
+            bool shouldPop = await exitDialog(context);
+                                      // bookplayer.stop();
+                                      // if (audioController.isPlaying) {
+                                      //   Get.offAll(
+                                      //       BookListPage(
+                                      //         booksList: widget.booksList,
+                                      //         configResponse:
+                                      //             widget.configResponse,
+                                      //       ),
+                                      //       transition: Transition.fadeIn,
+                                      //       duration:
+                                      //           const Duration(seconds: 2));
 
-                                        // Navigator.pushAndRemoveUntil(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => BookListPage(
-                                        //       booksList: widget.booksList,
-                                        //       configResponse:
-                                        //           widget.configResponse,
-                                        //     ),
-                                        //   ),
-                                        //   (route) => false,
-                                        // );
-                                      } else {
-                                        Get.offAll(
-                                            BookListPage(
-                                              booksList: widget.booksList,
-                                              configResponse:
-                                                  widget.configResponse,
-                                              isbackgroundsilent: true,
-                                            ),
-                                            transition: Transition.fadeIn,
-                                            duration:
-                                                const Duration(seconds: 2));
+                                      //   // Navigator.pushAndRemoveUntil(
+                                      //   //   context,
+                                      //   //   MaterialPageRoute(
+                                      //   //     builder: (context) => BookListPage(
+                                      //   //       booksList: widget.booksList,
+                                      //   //       configResponse:
+                                      //   //           widget.configResponse,
+                                      //   //     ),
+                                      //   //   ),
+                                      //   //   (route) => false,
+                                      //   // );
+                                      // } else {
+                                      //   Get.offAll(
+                                      //       BookListPage(
+                                      //         booksList: widget.booksList,
+                                      //         configResponse:
+                                      //             widget.configResponse,
+                                      //         isbackgroundsilent: true,
+                                      //       ),
+                                      //       transition: Transition.fadeIn,
+                                      //       duration:
+                                      //           const Duration(seconds: 2));
 
-                                        // Navigator.pushAndRemoveUntil(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => BookListPage(
-                                        //       booksList: widget.booksList,
-                                        //       configResponse:
-                                        //           widget.configResponse,
-                                        //       isbackgroundsilent: true,
-                                        //     ),
-                                        //   ),
-                                        //   (route) => false,
-                                        // );
-                                      }
+                                      //   // Navigator.pushAndRemoveUntil(
+                                      //   //   context,
+                                      //   //   MaterialPageRoute(
+                                      //   //     builder: (context) => BookListPage(
+                                      //   //       booksList: widget.booksList,
+                                      //   //       configResponse:
+                                      //   //           widget.configResponse,
+                                      //   //       isbackgroundsilent: true,
+                                      //   //     ),
+                                      //   //   ),
+                                      //   //   (route) => false,
+                                      //   // );
+                                      // }
                                     },
                                   ),
                                 ),
