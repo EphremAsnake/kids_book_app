@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -368,263 +369,320 @@ class _BookListPageState extends State<BookListPage> {
               right: MediaQuery.of(context).size.height * 0.25,
             ),
             child: AnimationLimiter(
-              child: GridView.builder(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.3,
-                    top: widget.configResponse.houseAd!.show != null &&
-                            widget.configResponse.houseAd!.show!
-                        ? 25.w
-                        : 20),
-                physics: const BouncingScrollPhysics(),
+              child: CustomScrollView(
                 controller: _scrollController,
-                itemCount: widget.booksList.books.length,
-                itemBuilder: (BuildContext context, int index) {
-                  BookList book = widget.booksList.books[index];
-                  // Future<int> adCountFuture = getCount(book.title);
-                  int rewardedCountLimit =
-                      widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
-
-                  //int adShownCount = 0;
-                  return FutureBuilder<bool>(
-                      future: lockStatusList[index],
-                      builder: (context, snapshot) {
-                        bool bookstatus = snapshot.data ?? false;
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 500),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: InkWell(
-                                  onTap: () async {
-                                    // checkInternetConnection();
-                                    // if (_connectivityResult ==
-                                    //     ConnectivityResult.none) {
-                                    // } else {
-                                    if (index == 0) {
-                                      //!Navigate to Story Page for First index Without Ad
-                                      navigateToNextPage(index);
-                                    } else if (book.status == 'unlocked') {
-                                      //!check if show interstitialad is true
-                                      if (widget.configResponse
-                                          .admobInterstitialAd!.show!) {
-                                        adController
-                                            .showInterstitialAd(() async {
-                                          adController
-                                              .loadInterstitialAdAfterError();
-                                          adController
-                                              .loadRewardedAdAfterError();
-                                          navigateToNextPage(index);
-                                        });
-                                        //await _showInterstitialAd();
-                                      } else {
-                                        //!Interstitial ad show Set to False Navigate to Story Page
-                                        navigateToNextPage(index);
-                                      }
-                                    } else {
-                                      bool isWatched =
-                                          await BookPreferences.getBookWatched(
-                                              book.title);
-                                      int openedCount = await BookPreferences
-                                          .getBookOpenedCount(book.title);
-
-                                      //!check if book finished it's session if so reset or lock it again
-
-                                      if (isWatched &&
-                                          openedCount >= rewardedCountLimit) {
-                                        await BookPreferences.resetBookData(
-                                            book.title);
-                                      }
-                                      //! For Locked Books
-                                      //!check if reward ad has been seen and if user has sessions left if so open story page
-
-                                      if (isWatched &&
-                                          openedCount <= rewardedCountLimit) {
-                                        //!check if show interstitialad is true
-                                        if (widget.configResponse
-                                            .admobInterstitialAd!.show!) {
-                                          //!Check If Interstitial Ad is available
-                                          if (adController
-                                              .interstitialAdLoaded.value) {
-                                            adController
-                                                .showInterstitialAd(() async {
-                                              adController
-                                                  .loadInterstitialAdAfterError();
-                                              adController
-                                                  .loadRewardedAdAfterError();
-
-                                              //!Increment Count of Book Opened
-                                              await BookPreferences
-                                                  .incrementBookOpened(
-                                                      book.title);
-
-                                              //!Navigate To Story Page
-                                              navigateToNextPage(index);
-                                            });
-                                          } else {
-                                            //!try to load Interstitial Ad Again
-                                            await adController
-                                                .loadInterstitialAdAfterError();
-
-                                            //!try to show again
-                                            if (adController
-                                                .interstitialAdLoaded.value) {
-                                              adController
-                                                  .showInterstitialAd(() async {
-                                                adController
-                                                    .loadInterstitialAdAfterError();
-                                                adController
-                                                    .loadRewardedAdAfterError();
-
-                                                //!Increment Count of Book Opened
-                                                await BookPreferences
-                                                    .incrementBookOpened(
-                                                        book.title);
-
-                                                //!Navigate To Story Page
+                physics: const BouncingScrollPhysics(),
+                slivers: <Widget>[
+                  SliverPadding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height * 0.15,
+                        top: widget.configResponse.houseAd!.show != null &&
+                                widget.configResponse.houseAd!.show!
+                            ? 25.w
+                            : 20,
+                      ),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 30,
+                          crossAxisCount: 3,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            BookList book = widget.booksList.books[index];
+                            return FutureBuilder<bool>(
+                                future: lockStatusList[index],
+                                builder: (context, snapshot) {
+                                  bool bookstatus = snapshot.data ?? false;
+                                  int rewardedCountLimit = widget.configResponse
+                                          .admobRewardedAd!.rewardedCount ??
+                                      3;
+                                  return AnimationConfiguration.staggeredList(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 500),
+                                    child: SlideAnimation(
+                                      verticalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                        child: InkWell(
+                                            onTap: () async {
+                                              // checkInternetConnection();
+                                              // if (_connectivityResult ==
+                                              //     ConnectivityResult.none) {
+                                              // } else {
+                                              if (index == 0) {
+                                                //!Navigate to Story Page for First index Without Ad
                                                 navigateToNextPage(index);
-                                              });
-                                            } else {
-                                              //!We tried to load and show interstial ad 2 times but got nothing so just open the story and Increment the book Opened Count
-                                              await BookPreferences
-                                                  .incrementBookOpened(
-                                                      book.title);
-                                              //!Navigate to Story Page
-                                              navigateToNextPage(index);
-                                            }
-                                          }
-                                        } else {
-                                          //! show interstitial ad set to False
-                                          //!Navigate To Story Page
-                                          navigateToNextPage(index);
-                                        }
-
-                                        //!
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(SnackBar(
-                                        //   content: Text(
-                                        //       '${book.title}  $openedCount   $isWatched'),
-                                        // ));
-                                        //!
-                                      } else {
-                                        //!show reward ad if available for locked books
-                                        adController
-                                            .loadInterstitialAdAfterError();
-                                        adController.loadRewardedAdAfterError();
-                                        // ignore: use_build_context_synchronously
-                                        showDialog(
-                                          context: context,
-                                          barrierDismissible: false,
-                                          builder: (BuildContext context) {
-                                            return ChoiceDialogBox(
-                                              title: 'Unlock Your Story',
-                                              titleColor: Colors.orange,
-                                              descriptions:
-                                                  'Watch a short ad to unlock this story for $rewardedCountLimit sessions',
-                                              text: 'Watch Ad',
-                                              functionCall: () async {
-                                                //showRewardAd();
-                                                // //!log
-                                                // logger.e('watch ad pressed');
-                                                Navigator.pop(context);
-                                                if (adController
-                                                    .rewardedAdLoaded.value) {
-                                                  if (audioController
-                                                      .isPlaying) {
-                                                    setState(() {
-                                                      musicForAd = true;
-                                                    });
-                                                    audioController
-                                                        .toggleAudio();
-                                                  }
-                                                  // //!log
-                                                  // logger.e(
-                                                  //     'adController.rewardedAdLoaded.value: ${adController.rewardedAdLoaded.value} \n');
-                                                  // adController
-                                                  //     .showRewardedAd();
-                                                  adController.showRewardedAd(
-                                                      () async {
-                                                    if (musicForAd) {
-                                                      audioController
-                                                          .toggleAudio();
-                                                      setState(() {
-                                                        musicForAd = false;
-                                                      });
-                                                    }
-
-                                                    //!---! Chnage State of the book to Reward Ad watched and Book Opened
-
-                                                    await BookPreferences
-                                                        .setBookWatched(
-                                                            book.title, true);
-                                                    await BookPreferences
-                                                        .incrementBookOpened(
-                                                            book.title);
-                                                    adController
-                                                        .loadInterstitialAdAfterError();
-                                                    adController
-                                                        .loadRewardedAdAfterError();
-                                                    //! Call setState to trigger a rebuild of the GridView item
-                                                    setState(() {});
-                                                  }, () async {
+                                              } else if (book.status ==
+                                                  'unlocked') {
+                                                //!check if show interstitialad is true
+                                                if (widget
+                                                    .configResponse
+                                                    .admobInterstitialAd!
+                                                    .show!) {
+                                                  adController
+                                                      .showInterstitialAd(
+                                                          () async {
                                                     adController
                                                         .loadInterstitialAdAfterError();
                                                     adController
                                                         .loadRewardedAdAfterError();
                                                     navigateToNextPage(index);
                                                   });
-                                                  // rewardedAd!
-                                                  //         .fullScreenContentCallback =
-                                                  //     FullScreenContentCallback(
-                                                  //   onAdFailedToShowFullScreenContent:
-                                                  //       (ad, error) {
-                                                  //     ad.dispose();
-                                                  //     loadRewarded();
-                                                  //   },
-                                                  //   onAdDismissedFullScreenContent:
-                                                  //       (ad) {
-                                                  //     ad.dispose();
-                                                  //     loadRewarded();
-                                                  //     navigateToNextPage(
-                                                  //         index);
-                                                  //  },
-                                                  //);
+                                                  //await _showInterstitialAd();
+                                                } else {
+                                                  //!Interstitial ad show Set to False Navigate to Story Page
+                                                  navigateToNextPage(index);
                                                 }
-                                                //  else if (_interstitialAd !=
-                                                //     null) {
-                                                //   await _showInterstitialAd();
-                                                //   await BookPreferences
-                                                //       .incrementBookOpened(
-                                                //           book.title);
-                                                //   navigateToNextPage(index);
-                                                else {
-                                                  logger.e('false value for: ${adController
-                                                    .rewardedAdLoaded.value} \n');
-                                                  showDialogss(context);
+                                              } else {
+                                                bool isWatched =
+                                                    await BookPreferences
+                                                        .getBookWatched(
+                                                            book.title);
+                                                int openedCount =
+                                                    await BookPreferences
+                                                        .getBookOpenedCount(
+                                                            book.title);
+
+                                                //!check if book finished it's session if so reset or lock it again
+
+                                                if (isWatched &&
+                                                    openedCount >=
+                                                        rewardedCountLimit) {
+                                                  await BookPreferences
+                                                      .resetBookData(
+                                                          book.title);
                                                 }
-                                              },
-                                              secfunctionCall: () {
-                                                //showRewardAd();
-                                                Navigator.pop(context);
-                                              },
-                                            );
-                                          },
-                                        );
-                                      }
-                                    }
-                                    //   }
-                                  },
-                                  child: buildBookCard(book, bookstatus)),
-                            ),
-                          ),
-                        );
-                      });
-                },
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 30,
-                  crossAxisCount: 3,
-                ),
+                                                //! For Locked Books
+                                                //!check if reward ad has been seen and if user has sessions left if so open story page
+
+                                                if (isWatched &&
+                                                    openedCount <=
+                                                        rewardedCountLimit) {
+                                                  //!check if show interstitialad is true
+                                                  if (widget
+                                                      .configResponse
+                                                      .admobInterstitialAd!
+                                                      .show!) {
+                                                    //!Check If Interstitial Ad is available
+                                                    if (adController
+                                                        .interstitialAdLoaded
+                                                        .value) {
+                                                      adController
+                                                          .showInterstitialAd(
+                                                              () async {
+                                                        adController
+                                                            .loadInterstitialAdAfterError();
+                                                        adController
+                                                            .loadRewardedAdAfterError();
+
+                                                        //!Increment Count of Book Opened
+                                                        await BookPreferences
+                                                            .incrementBookOpened(
+                                                                book.title);
+
+                                                        //!Navigate To Story Page
+                                                        navigateToNextPage(
+                                                            index);
+                                                      });
+                                                    } else {
+                                                      //!try to load Interstitial Ad Again
+                                                      await adController
+                                                          .loadInterstitialAdAfterError();
+
+                                                      //!try to show again
+                                                      if (adController
+                                                          .interstitialAdLoaded
+                                                          .value) {
+                                                        adController
+                                                            .showInterstitialAd(
+                                                                () async {
+                                                          adController
+                                                              .loadInterstitialAdAfterError();
+                                                          adController
+                                                              .loadRewardedAdAfterError();
+
+                                                          //!Increment Count of Book Opened
+                                                          await BookPreferences
+                                                              .incrementBookOpened(
+                                                                  book.title);
+
+                                                          //!Navigate To Story Page
+                                                          navigateToNextPage(
+                                                              index);
+                                                        });
+                                                      } else {
+                                                        //!We tried to load and show interstial ad 2 times but got nothing so just open the story and Increment the book Opened Count
+                                                        await BookPreferences
+                                                            .incrementBookOpened(
+                                                                book.title);
+                                                        //!Navigate to Story Page
+                                                        navigateToNextPage(
+                                                            index);
+                                                      }
+                                                    }
+                                                  } else {
+                                                    //! show interstitial ad set to False
+                                                    //!Navigate To Story Page
+                                                    navigateToNextPage(index);
+                                                  }
+
+                                                  //!
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(SnackBar(
+                                                  //   content: Text(
+                                                  //       '${book.title}  $openedCount   $isWatched'),
+                                                  // ));
+                                                  //!
+                                                } else {
+                                                  //!show reward ad if available for locked books
+                                                  adController
+                                                      .loadInterstitialAdAfterError();
+                                                  adController
+                                                      .loadRewardedAdAfterError();
+                                                  // ignore: use_build_context_synchronously
+                                                  showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return ChoiceDialogBox(
+                                                        title:
+                                                            'Unlock Your Story',
+                                                        titleColor:
+                                                            Colors.orange,
+                                                        descriptions:
+                                                            'Watch a short ad to unlock this story for $rewardedCountLimit sessions',
+                                                        text: 'Watch Ad',
+                                                        functionCall: () async {
+                                                          //showRewardAd();
+                                                          // //!log
+                                                          // logger.e('watch ad pressed');
+                                                          Navigator.pop(
+                                                              context);
+                                                          if (adController
+                                                              .rewardedAdLoaded
+                                                              .value) {
+                                                            if (audioController
+                                                                .isPlaying) {
+                                                              setState(() {
+                                                                musicForAd =
+                                                                    true;
+                                                              });
+                                                              audioController
+                                                                  .toggleAudio();
+                                                            }
+                                                            // //!log
+                                                            // logger.e(
+                                                            //     'adController.rewardedAdLoaded.value: ${adController.rewardedAdLoaded.value} \n');
+                                                            // adController
+                                                            //     .showRewardedAd();
+                                                            adController
+                                                                .showRewardedAd(
+                                                                    () async {
+                                                              if (musicForAd) {
+                                                                audioController
+                                                                    .toggleAudio();
+                                                                setState(() {
+                                                                  musicForAd =
+                                                                      false;
+                                                                });
+                                                              }
+
+                                                              //!---! Chnage State of the book to Reward Ad watched and Book Opened
+
+                                                              await BookPreferences
+                                                                  .setBookWatched(
+                                                                      book.title,
+                                                                      true);
+                                                              await BookPreferences
+                                                                  .incrementBookOpened(
+                                                                      book.title);
+                                                              adController
+                                                                  .loadInterstitialAdAfterError();
+                                                              adController
+                                                                  .loadRewardedAdAfterError();
+                                                              //! Call setState to trigger a rebuild of the GridView item
+                                                              setState(() {});
+                                                            }, () async {
+                                                              adController
+                                                                  .loadInterstitialAdAfterError();
+                                                              adController
+                                                                  .loadRewardedAdAfterError();
+                                                              navigateToNextPage(
+                                                                  index);
+                                                            });
+                                                            // rewardedAd!
+                                                            //         .fullScreenContentCallback =
+                                                            //     FullScreenContentCallback(
+                                                            //   onAdFailedToShowFullScreenContent:
+                                                            //       (ad, error) {
+                                                            //     ad.dispose();
+                                                            //     loadRewarded();
+                                                            //   },
+                                                            //   onAdDismissedFullScreenContent:
+                                                            //       (ad) {
+                                                            //     ad.dispose();
+                                                            //     loadRewarded();
+                                                            //     navigateToNextPage(
+                                                            //         index);
+                                                            //  },
+                                                            //);
+                                                          }
+                                                          //  else if (_interstitialAd !=
+                                                          //     null) {
+                                                          //   await _showInterstitialAd();
+                                                          //   await BookPreferences
+                                                          //       .incrementBookOpened(
+                                                          //           book.title);
+                                                          //   navigateToNextPage(index);
+                                                          else {
+                                                            logger.e(
+                                                                'false value for: ${adController.rewardedAdLoaded.value} \n');
+                                                            showDialogss(
+                                                                context);
+                                                          }
+                                                        },
+                                                        secfunctionCall: () {
+                                                          //showRewardAd();
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      );
+                                                    },
+                                                  );
+                                                }
+                                              }
+                                              //   }
+                                            },
+                                            child: buildBookCard(
+                                                book, bookstatus)),
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          childCount: widget.booksList.books.length,
+                        ),
+                      )),
+                  if (widget.booksList.bookListEndText != null)
+                    SliverToBoxAdapter(
+                      child: Center(
+                          child: Text(
+                        widget.booksList.bookListEndText!,
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.rubikBubbles(
+                          
+                            color: Colors.white, fontSize: 14.sp),
+                      )),
+                    ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height * 0.15,
+                    ),
+                  )
+                ],
               ),
             ),
           ),

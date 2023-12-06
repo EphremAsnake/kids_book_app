@@ -2,7 +2,7 @@ class BookList {
   final String folder;
   final String title;
   final String thumbnail;
-   String status;
+  String status;
 
   BookList({
     required this.folder,
@@ -24,8 +24,9 @@ class BookList {
 class ApiResponse {
   final List<BookList> books;
   final String backgroundMusic;
-  final String backgroundColor; // Change this to 'background_menu_color'
-  
+  final String backgroundColor;
+  final String? bookListEndText;
+
   final Map<String, dynamic>? houseAd;
 
   ApiResponse({
@@ -33,6 +34,7 @@ class ApiResponse {
     required this.backgroundMusic,
     required this.backgroundColor,
     this.houseAd,
+    this.bookListEndText,
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
@@ -41,8 +43,10 @@ class ApiResponse {
           .map((bookJson) => BookList.fromJson(bookJson))
           .toList(),
       backgroundMusic: json['background_music'] ?? '',
-      backgroundColor: json['background_menu_color'] ?? '', // Match the JSON key here
+      backgroundColor:
+          json['background_menu_color'] ?? '', // Match the JSON key here
       houseAd: json['house_ad'],
+      bookListEndText: json['bookListEndText'],
     );
   }
 }
