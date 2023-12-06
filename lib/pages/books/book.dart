@@ -139,6 +139,8 @@ class _BooksPageState extends State<BookPage>
         hasLastScreenDisplayed = true;
       });
 
+      bookplayer.pause();
+
       showCupertinoModalPopup(
         context: context,
         builder: (context) => LastScreen(
@@ -193,6 +195,11 @@ class _BooksPageState extends State<BookPage>
     });
     bookplayer.play();
     bookplayer.playerStateStream.listen((playerState) {
+      if (playerState.processingState == ProcessingState.loading) {
+        setState(() {
+          isIncrementing = true;
+        });
+      }
       if (playerState.processingState == ProcessingState.ready) {
         setState(() {
           isIncrementing = false;
@@ -236,17 +243,32 @@ class _BooksPageState extends State<BookPage>
           //isIncrementing = false;
         });
         bookplayer.play();
-        bookplayer.playerStateStream.listen((playerState) {
-          if (playerState.processingState == ProcessingState.ready) {
-            setState(() {
-              isIncrementing = false;
-              //isPlaying = false;
-            });
-            //_incrementCounter();
-          }
-        });
+        // bookplayer.playerStateStream.listen((playerState) {
+        //   if (playerState.processingState == ProcessingState.loading) {
+        //     setState(() {
+        //       isIncrementing = true;
+        //       //isPlaying = false;
+        //     });
+        //     //_incrementCounter();
+        //   } else if (playerState.processingState == ProcessingState.ready) {
+        //     setState(() {
+        //       isIncrementing = false;
+        //       //isPlaying = false;
+        //     });
+        //}
+        //}
+        //);
       }
     } else {
+      // bookplayer.playerStateStream.listen((playerState) {
+      //   if (playerState.processingState == ProcessingState.ready) {
+      //     bookplayer.stop();
+      //     setState(() {
+      //       isPlaying = false;
+      //     });
+      //   }
+      // });
+
       lastScreen();
     }
   }
@@ -278,15 +300,15 @@ class _BooksPageState extends State<BookPage>
           //isIncrementing = false;
         });
         bookplayer.play();
-        bookplayer.playerStateStream.listen((playerState) {
-          if (playerState.processingState == ProcessingState.ready) {
-            setState(() {
-              isIncrementing = false;
-              // isPlaying = false;
-            });
-            //_incrementCounter();
-          }
-        });
+        // bookplayer.playerStateStream.listen((playerState) {
+        //   if (playerState.processingState == ProcessingState.ready) {
+        //     setState(() {
+        //       // isIncrementing = false;
+        //       // isPlaying = false;
+        //     });
+        //     //_incrementCounter();
+        //   }
+        // });
       }
     }
   }
@@ -467,6 +489,7 @@ class _BooksPageState extends State<BookPage>
                                     icon: const Icon(Icons.home_outlined,
                                         color: Colors.blue),
                                     onPressed: () {
+                                      bookplayer.stop();
                                       if (audioController.isPlaying) {
                                         Get.offAll(
                                             BookListPage(
@@ -727,17 +750,50 @@ class _BooksPageState extends State<BookPage>
             text2: 'Stay',
             functionCall: () async {
               //listenaudioController.resetAudioController();
+              bookplayer.stop();
+              if (audioController.isPlaying) {
+                Get.offAll(
+                    BookListPage(
+                      booksList: widget.booksList,
+                      configResponse: widget.configResponse,
+                    ),
+                    transition: Transition.fadeIn,
+                    duration: const Duration(seconds: 2));
 
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BookListPage(
-                    booksList: widget.booksList,
-                    configResponse: widget.configResponse,
-                  ),
-                ),
-                (route) => false, // Remove all routes in the stack
-              );
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => BookListPage(
+                //       booksList: widget.booksList,
+                //       configResponse:
+                //           widget.configResponse,
+                //     ),
+                //   ),
+                //   (route) => false,
+                // );
+              } else {
+                Get.offAll(
+                    BookListPage(
+                      booksList: widget.booksList,
+                      configResponse: widget.configResponse,
+                      isbackgroundsilent: true,
+                    ),
+                    transition: Transition.fadeIn,
+                    duration: const Duration(seconds: 2));
+
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => BookListPage(
+                //       booksList: widget.booksList,
+                //       configResponse:
+                //           widget.configResponse,
+                //       isbackgroundsilent: true,
+                //     ),
+                //   ),
+                //   (route) => false,
+                // );
+              }
 
               //Navigator.pop(context);
             },

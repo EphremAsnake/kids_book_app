@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -102,7 +103,12 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   // }
 
   void startAudio(String audioUrl, {bool? backgroundMusicPause}) async {
-    await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$audioUrl');
+    Duration? audioDuration;
+    try {
+      await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$audioUrl');
+    } catch (e) {
+      print("Error loading audio source: $e");
+    }
     if (backgroundMusicPause != null && backgroundMusicPause) {
       isPlaying = false;
     } else {
