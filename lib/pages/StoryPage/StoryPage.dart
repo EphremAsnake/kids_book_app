@@ -44,6 +44,7 @@ class _BooksPageState extends State<BookPage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
+  bool wasplayingdialog = false;
   bool wasPlayingBeforeInterruption =
       false; //! New flag to track previous state
   List<String> audioUrls = [];
@@ -53,7 +54,7 @@ class _BooksPageState extends State<BookPage>
   late AnimationController _controller;
   List<String> images = [];
   List<String> bookAudioUrls = [];
-
+  bool dialogPausebackground = false;
   late AudioController audioController;
   bool isAudioPlaying = false;
   Color trybuttonColor = const Color(0xffED1E54);
@@ -134,7 +135,7 @@ class _BooksPageState extends State<BookPage>
               MaterialPageRoute(
                   builder: (context) => BookPage(
                         response: widget.response,
-                        folder:widget.folder,
+                        folder: widget.folder,
                         backgroundMusic: widget.backgroundMusic,
                         booksList: widget.booksList,
                         configResponse: widget.configResponse,
@@ -286,10 +287,23 @@ class _BooksPageState extends State<BookPage>
         body: WillPopScope(
           onWillPop: () async {
             if (_listen) {
-              togglePlayback();
+              if (bookplayer.playing) {
+                bookplayer.pause();
+                setState(() {
+                  isPlaying = false;
+                  wasplayingdialog = true;
+                });
+              }
             }
             bool shouldPop = await exitDialog(context);
 
+            if (!shouldPop && wasplayingdialog) {
+              //! Resume playback if the user decided not to exit and there was music playing
+              bookplayer.play();
+              setState(() {
+                isPlaying = true;
+              });
+            }
             return shouldPop;
           },
           child: SwipeDetector(
@@ -631,11 +645,18 @@ class _BooksPageState extends State<BookPage>
               //Navigator.pop(context);
             },
             secfunctionCall: () {
-              if (_listen) {
-                togglePlayback();
-              }
+              // if (_listen) {
+              //   if (wasplayingdialog) {
+              //     bookplayer.seek(Duration.zero);
+              //     bookplayer.play();
+              //     setState(() {
+              //       isPlaying = true;
+              //       wasplayingdialog = false;
+              //     });
+              //   }
+              // }
 
-              Navigator.pop(context);
+              Navigator.of(context).pop(false);
             },
           );
         });

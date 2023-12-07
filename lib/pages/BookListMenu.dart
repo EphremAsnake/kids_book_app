@@ -56,6 +56,7 @@ class _BookListPageState extends State<BookListPage> {
   ConnectivityResult _connectivityResult = ConnectivityResult.none;
   List<StoryPageApiResponse?> storypageresponses = [];
   StoryPageApiResponse? singlestoryPageResponse;
+  String folderName = '';
 
   bool musicForAd = false;
   Color buttonColor = Colors.white;
@@ -75,7 +76,7 @@ class _BookListPageState extends State<BookListPage> {
   //!usage
   Future<void> fetchAdIds() async {
     //! Simulating async fetching of ad IDs
-    await Future.delayed(const Duration(seconds: 1));
+    //await Future.delayed(const Duration(seconds: 1));
 
     String? rewardedAdId = AdHelper.getRewardedAdUnitId();
     String? interstitialAdId = AdHelper.getInterstitalAdUnitId();
@@ -255,7 +256,25 @@ class _BookListPageState extends State<BookListPage> {
   //   }
   // }
 
-  Future<void> getSelectedStory(String folder) async {
+  void goToStoryPage(String folder) {
+    if (folderName == folder) {
+      Navigator.of(context).push(
+        BookOpeningPageRoute(
+          page: BookPage(
+            response: singlestoryPageResponse!,
+            folder: folder,
+            backgroundMusic: widget.booksList.backgroundMusic,
+            booksList: widget.booksList,
+            configResponse: widget.configResponse,
+          ),
+        ),
+      );
+    } else {
+      getSelectedStory(folder, goto: true);
+    }
+  }
+
+  Future<void> getSelectedStory(String folder, {bool? goto}) async {
     setState(() {
       loadingStory = true;
     });
@@ -269,21 +288,25 @@ class _BookListPageState extends State<BookListPage> {
         });
         StoryPageApiResponse storyPageresponse =
             StoryPageApiResponse.fromJson(sResponse.data);
-        //logger.e(storyPageresponse);
+        logger.e(storyPageresponse);
         singlestoryPageResponse = storyPageresponse;
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).push(
-          BookOpeningPageRoute(
-            page: BookPage(
-              response: singlestoryPageResponse!,
-              folder: folder,
-              backgroundMusic: widget.booksList.backgroundMusic,
-              booksList: widget.booksList,
-              configResponse: widget.configResponse,
+        folderName = folder;
+
+        if (goto != null) {
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).push(
+            BookOpeningPageRoute(
+              page: BookPage(
+                response: singlestoryPageResponse!,
+                folder: folder,
+                backgroundMusic: widget.booksList.backgroundMusic,
+                booksList: widget.booksList,
+                configResponse: widget.configResponse,
+              ),
             ),
-          ),
-        );
-        //logger.e(singlestoryPageResponse!.pages[0].image.toString());
+          );
+        }
+        logger.e(singlestoryPageResponse!.pages[0].image.toString());
       } else {
         setState(() {
           loadingStory = false;
@@ -411,6 +434,7 @@ class _BookListPageState extends State<BookListPage> {
                                       child: FadeInAnimation(
                                         child: InkWell(
                                             onTap: () async {
+                                              
                                               if (!loadingStory) {
                                                 final connectivityResult =
                                                     await (Connectivity()
@@ -442,11 +466,13 @@ class _BookListPageState extends State<BookListPage> {
                                                         );
                                                       });
                                                 } else {
+                                                  getSelectedStory(book.folder);
                                                   if (index == 0) {
                                                     //!Navigate to Story Page for First index Without Ad
                                                     //navigateToNextPage(index);
                                                     getSelectedStory(
-                                                        book.folder);
+                                                        book.folder,
+                                                        goto: true);
                                                   } else if (book.status ==
                                                       Strings.statusUnlocked) {
                                                     //!check if show interstitialad is true
@@ -461,14 +487,15 @@ class _BookListPageState extends State<BookListPage> {
                                                             .loadInterstitialAdAfterError();
                                                         adController
                                                             .loadRewardedAdAfterError();
-                                                        getSelectedStory(
+                                                        goToStoryPage(
                                                             book.folder);
                                                       });
                                                       //await _showInterstitialAd();
                                                     } else {
                                                       //!Interstitial ad show Set to False Navigate to Story Page
                                                       getSelectedStory(
-                                                          book.folder);
+                                                          book.folder,
+                                                          goto: true);
                                                     }
                                                   } else {
                                                     bool isWatched =
@@ -518,7 +545,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                     book.title);
 
                                                             //!Navigate To Story Page
-                                                            getSelectedStory(
+                                                            goToStoryPage(
                                                                 book.folder);
                                                           });
                                                         } else {
@@ -544,7 +571,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                       book.title);
 
                                                               //!Navigate To Story Page
-                                                              getSelectedStory(
+                                                              goToStoryPage(
                                                                   book.folder);
                                                             });
                                                           } else {
@@ -553,14 +580,14 @@ class _BookListPageState extends State<BookListPage> {
                                                                 .incrementBookOpened(
                                                                     book.title);
                                                             //!Navigate to Story Page
-                                                            getSelectedStory(
+                                                            goToStoryPage(
                                                                 book.folder);
                                                           }
                                                         }
                                                       } else {
                                                         //! show interstitial ad set to False
                                                         //!Navigate To Story Page
-                                                        getSelectedStory(
+                                                        goToStoryPage(
                                                             book.folder);
                                                       }
                                                     } else {
@@ -636,7 +663,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                       .loadInterstitialAdAfterError();
                                                                   adController
                                                                       .loadRewardedAdAfterError();
-                                                                  getSelectedStory(
+                                                                  goToStoryPage(
                                                                       book.folder);
                                                                 });
                                                               } else {
