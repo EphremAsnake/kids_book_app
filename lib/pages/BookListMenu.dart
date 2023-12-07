@@ -663,12 +663,14 @@ class _BookListPageState extends State<BookListPage> {
                           childCount: widget.booksList.books.length,
                         ),
                       )),
+
+                  //!End Text
                   if (widget.booksList.bookListEndText != null)
                     SliverToBoxAdapter(
                       child: Center(
                           child: Text(
                         widget.booksList.bookListEndText!,
-                        maxLines: 1,
+                        maxLines: 2,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.rubikBubbles(
                             color: Colors.white, fontSize: 14.sp),
