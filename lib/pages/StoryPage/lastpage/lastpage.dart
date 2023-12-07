@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
+import 'package:open_store/open_store.dart';
 import 'package:resize/resize.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
@@ -46,23 +47,28 @@ class _ChoiceScreenState extends State<LastScreen> {
   }
 
   void openUrlAndroid(String url) async {
-    //!package name open playstore
-    final String appPackageName = url;
+    OpenStore.instance.open(
+      //appStoreId: appId,
+      androidAppBundleId: url,
+    );
+    // //!package name open playstore
+    // final String appPackageName = url;
 
-    final String playstoreurl = 'market://details?id=$appPackageName';
+    // final String playstoreurl = 'market://details?id=$appPackageName';
 
-    if (await canLaunch(playstoreurl)) {
-      await launch(playstoreurl);
-    } else {
-      final String playstoreurlweb =
-          'https://play.google.com/store/apps/details?id=$appPackageName';
-      await launch(playstoreurlweb);
-      //throw 'Could not launch Url.';
-    }
+    // if (await canLaunch(playstoreurl)) {
+    //   await launch(playstoreurl);
+    // } else {
+    //   final String playstoreurlweb =
+    //       'https://play.google.com/store/apps/details?id=$appPackageName';
+    //   await launch(playstoreurlweb);
+    //   //throw 'Could not launch Url.';
+    // }
   }
 
   void openAppStore(String appId) async {
-    final String appStoreUrl = 'itms-apps://itunes.apple.com/app/id$appId';
+    final String appStoreUrl =
+        'https://apps.apple.com/app/id$appId?action=write-review';
 
     if (await canLaunch(appStoreUrl)) {
       await launch(appStoreUrl);
