@@ -22,7 +22,7 @@ import 'LastPage/lastpage.dart';
 
 class BookPage extends StatefulWidget {
   final StoryPageApiResponse response;
-  final int indexValue;
+  final String folder;
   final String backgroundMusic;
 
   final ApiResponse booksList;
@@ -30,7 +30,7 @@ class BookPage extends StatefulWidget {
   const BookPage(
       {super.key,
       required this.response,
-      required this.indexValue,
+      required this.folder,
       required this.backgroundMusic,
       required this.booksList,
       required this.configResponse});
@@ -81,9 +81,9 @@ class _BooksPageState extends State<BookPage>
     isAudioPlaying = audioController.isPlaying;
 
     for (StoryPageModel page in widget.response.pages) {
-      images.add('${APIEndpoints.booksUrl}${widget.indexValue}/${page.image}');
+      images.add('${APIEndpoints.baseUrl}/${widget.folder}/${page.image}');
       bookAudioUrls
-          .add('${APIEndpoints.booksUrl}${widget.indexValue}/${page.audio}');
+          .add('${APIEndpoints.baseUrl}/${widget.folder}/${page.audio}');
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -134,7 +134,7 @@ class _BooksPageState extends State<BookPage>
               MaterialPageRoute(
                   builder: (context) => BookPage(
                         response: widget.response,
-                        indexValue: widget.indexValue,
+                        folder:widget.folder,
                         backgroundMusic: widget.backgroundMusic,
                         booksList: widget.booksList,
                         configResponse: widget.configResponse,
@@ -603,8 +603,7 @@ class _BooksPageState extends State<BookPage>
           return ExitDialogBox(
             title: Strings.leaveStory,
             titleColor: Colors.orange,
-            descriptions:
-                Strings.gohomeDescription,
+            descriptions: Strings.gohomeDescription,
             text: Strings.leave,
             text2: Strings.stay,
             functionCall: () async {
