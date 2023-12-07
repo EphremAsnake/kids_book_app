@@ -18,6 +18,7 @@ class AboutDialogBox extends StatefulWidget {
       : super(key: key);
 
   @override
+
   // ignore: library_private_types_in_public_api
   _AboutDialogBoxState createState() => _AboutDialogBoxState();
 }
@@ -40,7 +41,6 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
       child: Stack(
         children: <Widget>[
           Container(
-            //height: MediaQuery.sizeOf(context).width * 0.4,
             width: MediaQuery.sizeOf(context).width * 0.5,
             padding: const EdgeInsets.only(
                 left: Constants.padding,
@@ -49,22 +49,16 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
                 bottom: 30),
             margin: const EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Constants.padding),
-                // boxShadow: const [
-                //   BoxShadow(
-                //       color: Colors.black,
-                //       offset: Offset(0, 10),
-                //       blurRadius: 10),
-                // ]
-                ),
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(Constants.padding),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
                   widget.descriptions!,
-                  style:  TextStyle(fontSize: 8.sp, color: Colors.black),
+                  style: TextStyle(fontSize: 8.sp, color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(

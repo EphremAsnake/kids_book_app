@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import '../services/apiEndpoints.dart';
+import '../utils/services/apiEndpoints.dart';
 
 class AudioController extends GetxController with WidgetsBindingObserver {
   final AudioPlayer _backgrounMusicPlayer = AudioPlayer();
   bool isPlaying = false;
-  bool wasPlayingBeforeInterruption = false; // New flag to track previous state
+  bool wasPlayingBeforeInterruption = false;
 
   @override
   void onInit() {
@@ -24,56 +23,26 @@ class AudioController extends GetxController with WidgetsBindingObserver {
     super.onClose();
   }
 
-//  @override
-//   void didChangeAppLifecycleState(AppLifecycleState state) {
-//     super.didChangeAppLifecycleState(state);
-//     if (state == AppLifecycleState.paused ||
-//         state == AppLifecycleState.inactive) {
-//       if (isPlaying) {
-//         wasPlayingBeforeInterruption = true; // Update flag
-//         _audioPlayer.stop();
-//       }
-//     } else if (state == AppLifecycleState.resumed) {
-//       if (wasPlayingBeforeInterruption) {
-//         wasPlayingBeforeInterruption = false; // Reset flag
-//         //_audioPlayer.resume();
-//       }
-//     }
-//   }
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      // App resumed from the background
-      // Check if audio was playing before going to the background
       if (wasPlayingBeforeInterruption) {
-        // _backgrounMusicPlayer.seek(Duration.zero);
         _backgrounMusicPlayer.play();
         wasPlayingBeforeInterruption = false;
         isPlaying = true;
         update();
-        // setState(() {
-        //   isPlaying = true;
-        // });
       }
     } else if (state == AppLifecycleState.paused) {
-      // App went to the background
-      // Check if audio is playing and store its state
       wasPlayingBeforeInterruption = _backgrounMusicPlayer.playing;
       if (_backgrounMusicPlayer.playing) {
         isPlaying = false;
 
         _backgrounMusicPlayer.pause();
         update();
-        // setState(() {
-        //   isPlaying = false;
-        // });
       } else {
         _backgrounMusicPlayer.stop();
       }
-
-      // Pause or stop audio playback here if needed
-      // Example: bookplayer.pause();
     }
   }
 
@@ -84,30 +53,14 @@ class AudioController extends GetxController with WidgetsBindingObserver {
       _backgrounMusicPlayer.play();
     }
     isPlaying = !isPlaying;
-    update(); // Notify listeners of state change
+    update();
   }
 
-  //  void togglePlayback() {
-  //   if (bookplayer.playing) {
-  //     bookplayer.pause();
-  //     setState(() {
-  //       isPlaying = false;
-  //     });
-  //   } else {
-  //     bookplayer.seek(Duration.zero);
-  //     bookplayer.play();
-  //     setState(() {
-  //       isPlaying = true;
-  //     });
-  //   }
-  // }
-
   void startAudio(String audioUrl, {bool? backgroundMusicPause}) async {
-    Duration? audioDuration;
     try {
       await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$audioUrl');
     } catch (e) {
-      print("Error loading audio source: $e");
+      debugPrint("Error loading audio source: $e");
     }
     if (backgroundMusicPause != null && backgroundMusicPause) {
       isPlaying = false;
@@ -116,7 +69,6 @@ class AudioController extends GetxController with WidgetsBindingObserver {
       isPlaying = true;
     }
 
-    //isPlaying = true;
     update();
   }
 

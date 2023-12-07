@@ -6,19 +6,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
-import 'package:rating_dialog/rating_dialog.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import '../../../model/storyPage.dart';
-import '../../../services/apiEndpoints.dart';
+import '../../utils/services/apiEndpoints.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../widget/animatedTextWidget.dart';
 import '../../widget/dialog.dart';
-import '../bookList.dart';
-import 'choices/choice.dart';
-import 'lastpage/lastpage.dart';
+import '../BookListMenu.dart';
+import 'FistPageChoice/choice.dart';
+import 'LastPage/lastpage.dart';
 
 class BookPage extends StatefulWidget {
   final StoryPageApiResponse response;
@@ -42,7 +42,6 @@ class BookPage extends StatefulWidget {
 
 class _BooksPageState extends State<BookPage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  //final AudioPlayer _audiobookPlayer = AudioPlayer();
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
   bool wasPlayingBeforeInterruption =
@@ -57,21 +56,12 @@ class _BooksPageState extends State<BookPage>
 
   late AudioController audioController;
   bool isAudioPlaying = false;
-  //bool isListening = false;
   Color trybuttonColor = const Color(0xffED1E54);
 
   Color nextbuttonColor = Colors.transparent;
   Color previousbuttonColor = Colors.transparent;
   bool hasLastScreenDisplayed = false;
   bool buttonsVisiblity = true;
-  // final playlist = ConcatenatingAudioSource(
-  //   // Start loading next item just before reaching it
-  //   useLazyPreparation: true,
-  //   // Customise the shuffle algorithm
-  //   shuffleOrder: DefaultShuffleOrder(),
-  //   // Specify the playlist items
-  //   children: [],
-  // );
 
   bool isIncrementing = false;
 
@@ -94,31 +84,20 @@ class _BooksPageState extends State<BookPage>
       images.add('${APIEndpoints.booksUrl}${widget.indexValue}/${page.image}');
       bookAudioUrls
           .add('${APIEndpoints.booksUrl}${widget.indexValue}/${page.audio}');
-
-      // playlist.add(AudioSource.uri(Uri.parse(
-      //     '${APIEndpoints.booksUrl}${widget.indexValue}/${page.audio}')));
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Show the SecondScreen as a modal when the BooksPage is fully built and visible
+      //! Show the ChoiceScreen as a modal when the BooksPage is fully built and visible
       showCupertinoModalPopup(
         context: context,
         builder: (context) => ChoiceScreen(
           read: () {
-            //listenaudioController.clearplayer();
-            // setState(() {
-            //   isListening = false;
-            // });
             setState(() {
               _listen = false;
             });
             Navigator.of(context).pop();
           },
           listen: () async {
-            // await bookplayer.setAudioSource(playlist,
-            //     initialIndex: 0, initialPosition: Duration.zero);
-            //listenaudioController.startAudio(audiourls);
-            // ignore: use_build_context_synchronously
             startPlaying();
             Navigator.of(context).pop();
           },
@@ -149,13 +128,7 @@ class _BooksPageState extends State<BookPage>
             setState(() {
               hasLastScreenDisplayed = false;
             });
-            // Get.to(BookPage(
-            //   response: widget.response,
-            //   indexValue: widget.indexValue,
-            //   backgroundMusic: widget.backgroundMusic,
-            //   booksList: widget.booksList,
-            //   configResponse: widget.configResponse,
-            // ));
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -167,7 +140,6 @@ class _BooksPageState extends State<BookPage>
                         configResponse: widget.configResponse,
                       )),
             );
-            //Navigator.of(context).pop();
           },
           booksList: widget.booksList,
           configResponse: widget.configResponse,
@@ -177,9 +149,6 @@ class _BooksPageState extends State<BookPage>
             });
             Navigator.of(context).pop();
           },
-          // ratingdialog: () {
-          //   _showRatingDialog(context);
-          // },
         ),
       );
     }
@@ -219,10 +188,6 @@ class _BooksPageState extends State<BookPage>
       isIncrementing = true;
     }
 
-    // if (_counter == images.length - 1 && _listen) {
-    //   lastScreen();
-    // }
-
     bookplayer.stop();
     setState(() {
       isPlaying = false;
@@ -232,43 +197,16 @@ class _BooksPageState extends State<BookPage>
         _counter++;
         _controller.forward(from: 0);
       });
-      // setState(() {
-      //   _counter = listenaudioController.counter;
-      // });
+
       if (_listen) {
         bookplayer.setUrl(bookAudioUrls[_counter]);
         await Future.delayed(const Duration(seconds: 2));
         setState(() {
           isPlaying = true;
-          //isIncrementing = false;
         });
         bookplayer.play();
-        // bookplayer.playerStateStream.listen((playerState) {
-        //   if (playerState.processingState == ProcessingState.loading) {
-        //     setState(() {
-        //       isIncrementing = true;
-        //       //isPlaying = false;
-        //     });
-        //     //_incrementCounter();
-        //   } else if (playerState.processingState == ProcessingState.ready) {
-        //     setState(() {
-        //       isIncrementing = false;
-        //       //isPlaying = false;
-        //     });
-        //}
-        //}
-        //);
       }
     } else {
-      // bookplayer.playerStateStream.listen((playerState) {
-      //   if (playerState.processingState == ProcessingState.ready) {
-      //     bookplayer.stop();
-      //     setState(() {
-      //       isPlaying = false;
-      //     });
-      //   }
-      // });
-
       lastScreen();
     }
   }
@@ -289,26 +227,14 @@ class _BooksPageState extends State<BookPage>
       setState(() {
         _counter--;
       });
-      // setState(() {
-      //   _counter = listenaudioController.counter;
-      // });
+
       if (_listen) {
         bookplayer.setUrl(bookAudioUrls[_counter]);
         await Future.delayed(const Duration(seconds: 2));
         setState(() {
           isPlaying = true;
-          //isIncrementing = false;
         });
         bookplayer.play();
-        // bookplayer.playerStateStream.listen((playerState) {
-        //   if (playerState.processingState == ProcessingState.ready) {
-        //     setState(() {
-        //       // isIncrementing = false;
-        //       // isPlaying = false;
-        //     });
-        //     //_incrementCounter();
-        //   }
-        // });
       }
     }
   }
@@ -330,8 +256,8 @@ class _BooksPageState extends State<BookPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      // App resumed from the background
-      // Check if audio was playing before going to the background
+      //! App resumed from the background
+      //! Check if audio was playing before going to the background
       if (wasPlayingBeforeInterruption) {
         bookplayer.seek(Duration.zero);
         bookplayer.play();
@@ -341,8 +267,8 @@ class _BooksPageState extends State<BookPage>
         wasPlayingBeforeInterruption = false;
       }
     } else if (state == AppLifecycleState.paused) {
-      // App went to the background
-      // Check if audio is playing and store its state
+      //! App went to the background
+      //! Check if audio is playing and store its state
       wasPlayingBeforeInterruption = bookplayer.playing;
       if (bookplayer.playing) {
         bookplayer.pause();
@@ -350,9 +276,6 @@ class _BooksPageState extends State<BookPage>
           isPlaying = false;
         });
       }
-
-      // Pause or stop audio playback here if needed
-      // Example: bookplayer.pause();
     }
   }
 
@@ -418,26 +341,6 @@ class _BooksPageState extends State<BookPage>
                                   color: Colors.transparent, size: 128.0),
                             ),
 
-                            // shows progress while loading an image:
-                            // loadingBuilder: (context, progress, chunkEvent) {
-                            //   if (progress == 1.0) {
-                            //     setState(() {
-                            //       _imageLoaded = true;
-                            //     });
-                            //   }
-                            //   return CircularProgressIndicator(value: progress);
-                            // },
-                            // loadingBuilder: (context, progress, chunkEvent) {
-                            //   // if (progress != 0.0) {
-                            //   //   setState(() {
-                            //   //     _imageLoaded = true;
-                            //   //   });
-                            //   // }
-                            //   return Center(
-                            //       child:
-                            //           CircularProgressIndicator(value: progress));
-                            // },
-
                             //! displayed when an error occurs:
                             errorBuilder: (context, error) {
                               //togglePlayback();
@@ -448,7 +351,7 @@ class _BooksPageState extends State<BookPage>
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Oops couldn\'t load story',
+                                      Strings.oppscoudntloadString,
                                       style: TextStyle(
                                           fontSize: 8.sp, color: Colors.blue),
                                     ),
@@ -461,7 +364,7 @@ class _BooksPageState extends State<BookPage>
                                         _deccrementCounter();
                                       },
                                       child: Text(
-                                        'Try Again',
+                                        Strings.tryAgain,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 8.sp),
@@ -490,57 +393,9 @@ class _BooksPageState extends State<BookPage>
                                         color: Colors.blue),
                                     onPressed: () async {
                                       if (_listen) {
-              togglePlayback();
-            }
-            bool shouldPop = await exitDialog(context);
-                                      // bookplayer.stop();
-                                      // if (audioController.isPlaying) {
-                                      //   Get.offAll(
-                                      //       BookListPage(
-                                      //         booksList: widget.booksList,
-                                      //         configResponse:
-                                      //             widget.configResponse,
-                                      //       ),
-                                      //       transition: Transition.fadeIn,
-                                      //       duration:
-                                      //           const Duration(seconds: 2));
-
-                                      //   // Navigator.pushAndRemoveUntil(
-                                      //   //   context,
-                                      //   //   MaterialPageRoute(
-                                      //   //     builder: (context) => BookListPage(
-                                      //   //       booksList: widget.booksList,
-                                      //   //       configResponse:
-                                      //   //           widget.configResponse,
-                                      //   //     ),
-                                      //   //   ),
-                                      //   //   (route) => false,
-                                      //   // );
-                                      // } else {
-                                      //   Get.offAll(
-                                      //       BookListPage(
-                                      //         booksList: widget.booksList,
-                                      //         configResponse:
-                                      //             widget.configResponse,
-                                      //         isbackgroundsilent: true,
-                                      //       ),
-                                      //       transition: Transition.fadeIn,
-                                      //       duration:
-                                      //           const Duration(seconds: 2));
-
-                                      //   // Navigator.pushAndRemoveUntil(
-                                      //   //   context,
-                                      //   //   MaterialPageRoute(
-                                      //   //     builder: (context) => BookListPage(
-                                      //   //       booksList: widget.booksList,
-                                      //   //       configResponse:
-                                      //   //           widget.configResponse,
-                                      //   //       isbackgroundsilent: true,
-                                      //   //     ),
-                                      //   //   ),
-                                      //   //   (route) => false,
-                                      //   // );
-                                      // }
+                                        togglePlayback();
+                                      }
+                                      await exitDialog(context);
                                     },
                                   ),
                                 ),
@@ -746,12 +601,12 @@ class _BooksPageState extends State<BookPage>
         barrierDismissible: false,
         builder: (BuildContext context) {
           return ExitDialogBox(
-            title: 'Leave Story?',
+            title: Strings.leaveStory,
             titleColor: Colors.orange,
             descriptions:
-                'Do you want to leave this story and go back to home?',
-            text: 'Leave',
-            text2: 'Stay',
+                Strings.gohomeDescription,
+            text: Strings.leave,
+            text2: Strings.stay,
             functionCall: () async {
               //listenaudioController.resetAudioController();
               bookplayer.stop();
@@ -763,18 +618,6 @@ class _BooksPageState extends State<BookPage>
                     ),
                     transition: Transition.fadeIn,
                     duration: const Duration(seconds: 2));
-
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => BookListPage(
-                //       booksList: widget.booksList,
-                //       configResponse:
-                //           widget.configResponse,
-                //     ),
-                //   ),
-                //   (route) => false,
-                // );
               } else {
                 Get.offAll(
                     BookListPage(
@@ -784,19 +627,6 @@ class _BooksPageState extends State<BookPage>
                     ),
                     transition: Transition.fadeIn,
                     duration: const Duration(seconds: 2));
-
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => BookListPage(
-                //       booksList: widget.booksList,
-                //       configResponse:
-                //           widget.configResponse,
-                //       isbackgroundsilent: true,
-                //     ),
-                //   ),
-                //   (route) => false,
-                // );
               }
 
               //Navigator.pop(context);
@@ -812,63 +642,6 @@ class _BooksPageState extends State<BookPage>
         });
   }
 
-  // void incrementCounter() {
-  //   setState(() {
-  //     _counter = _counter + 1;
-  //   });
-  // }
-
-  // void decrementCounter() {
-  //   setState(() {
-  //     _counter = _counter - 1;
-  //   });
-  // }
-
-  // void setListenMode(bool value) {
-  //   _listen = value;
-  //   updateAudioPlayback();
-  // }
-
-  // void updateAudioPlayback() {
-  //   if (_listen) {
-  //     _audiobookPlayer
-  //       ..listen(
-  //         (it) async {
-  //           switch (it) {
-  //             case PlayerState.stopped:
-  //               // if (_counter == images.length - 1) {
-  //               //   lastScreen();
-  //               // } else {
-  //               //   //lastScreen();
-  //               // }
-  //               print(
-  //                 'Player stopped!'
-  //                 'toast-player-stopped-index',
-  //               );
-  //               break;
-  //             case PlayerState.completed:
-  //               if (_counter == audiourls.length - 1) {
-  //                 // setState(() {
-  //                 //   isListening = false;
-  //                 // });
-  //                 await Future.delayed(const Duration(seconds: 14));
-
-  //                 lastScreen();
-  //               } else {
-  //                 print('Completed Done');
-  //                 _incrementCounter(); // Move to the next audio
-  //               }
-  //               break;
-  //             default:
-  //               break;
-  //           }
-  //         },
-  //       );
-  //   } else {
-  //     _audiobookPlayer.stop(); // Stop audio if not in listen mode
-  //   }
-  // }
-
   void togglePlayback() {
     if (bookplayer.playing) {
       bookplayer.pause();
@@ -883,21 +656,4 @@ class _BooksPageState extends State<BookPage>
       });
     }
   }
-
-  // void _playAudioAtIndex(String url) async {
-  //   //if (index < audioUrls.length) {
-  //   await Future.delayed(const Duration(seconds: 3));
-  //   await _audiobookPlayer.play(UrlSource(url));
-  //   setState(() {
-  //     isPlaying = true;
-  //   });
-  //   //}
-  // }
-
-  // // Function to start playing the list of audio URLs
-  // void startAudio(String url) {
-  //   //audioUrls = List<String>.from(urls);
-  //   _playAudioAtIndex(url);
-  //   setListenMode(true);
-  // }
 }

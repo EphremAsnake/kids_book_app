@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ExitDialogBox extends StatefulWidget {
   final String? title, descriptions, text, text2;
@@ -15,7 +14,8 @@ class ExitDialogBox extends StatefulWidget {
       this.titleColor,
       this.functionCall,
       this.secfunctionCall,
-      this.closeicon, this.text2})
+      this.closeicon,
+      this.text2})
       : super(key: key);
 
   @override
@@ -98,7 +98,6 @@ class _ChoiceDialogBoxState extends State<ExitDialogBox> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-
                   InkWell(
                     onTap: () {
                       setState(() {
@@ -130,7 +129,7 @@ class _ChoiceDialogBoxState extends State<ExitDialogBox> {
                       ),
                     ),
                   ),
-                     // const SizedBox(width: 10,),
+                  // const SizedBox(width: 10,),
                   InkWell(
                     onTap: () {
                       setState(() {
@@ -167,18 +166,6 @@ class _ChoiceDialogBoxState extends State<ExitDialogBox> {
             ],
           ),
         ),
-        // Positioned(
-        //   left: Constants.padding,
-        //   right: Constants.padding,
-        //   child: CircleAvatar(
-        //     backgroundColor: Colors.transparent,
-        //     radius: Constants.avatarRadius,
-        //     child: ClipRRect(
-        //         borderRadius: const BorderRadius.all(
-        //             Radius.circular(Constants.avatarRadius)),
-        //         child: SvgPicture.asset('${widget.img}')),
-        //   ),
-        // ),
         if (widget.closeicon == null)
           Positioned(
             right: 0,

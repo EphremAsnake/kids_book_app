@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class AdHelper {
   static String? interstitialAdUnitId;
   static String? rewardedAdUnitId;

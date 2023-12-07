@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ChoiceDialogBox extends StatefulWidget {
   final String? title, descriptions, text;
@@ -131,18 +130,7 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
             ],
           ),
         ),
-        // Positioned(
-        //   left: Constants.padding,
-        //   right: Constants.padding,
-        //   child: CircleAvatar(
-        //     backgroundColor: Colors.transparent,
-        //     radius: Constants.avatarRadius,
-        //     child: ClipRRect(
-        //         borderRadius: const BorderRadius.all(
-        //             Radius.circular(Constants.avatarRadius)),
-        //         child: SvgPicture.asset('${widget.img}')),
-        //   ),
-        // ),
+       
         if (widget.closeicon == null)
           Positioned(
             right: 0,

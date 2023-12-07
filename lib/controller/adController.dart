@@ -24,8 +24,7 @@ class AdController extends GetxController {
   }
 
   Future<void> _loadAds() async {
-    // await Future.delayed(
-    //     const Duration(seconds: 1)); //! Simulating delayed loading
+ 
     _loadRewardedAd();
     _loadInterstitialAd();
   }
@@ -48,8 +47,7 @@ class AdController extends GetxController {
             update();
           },
           onAdFailedToLoad: (error) {
-            // interstitialAdLoaded.value = false;
-            // update();
+            
             debugPrint('Rewarded Ad failed to load: $error');
           },
         ),
@@ -67,18 +65,15 @@ class AdController extends GetxController {
             interstitialAdLoaded.value = true;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
-                // _interstitialAd = null;
-                // update();
+                
                 _loadInterstitialAd();
-                //update();
               },
             );
             _interstitialAd = ad;
             update();
           },
           onAdFailedToLoad: (error) {
-            // interstitialAdLoaded.value = false;
-            // update();
+            
             debugPrint('Interstitial Ad failed to load: $error');
           },
         ),
@@ -91,12 +86,10 @@ class AdController extends GetxController {
     if (rewardedAdLoaded.value) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
-          //ad.dispose();
           _loadRewardedAd();
           //! Handle failed ad (Try to Load Again)
         },
         onAdDismissedFullScreenContent: (ad) {
-          //ad.dispose();
           _loadRewardedAd();
           onContentClosed?.call(); //! Callback after content is closed
         },
@@ -105,7 +98,6 @@ class AdController extends GetxController {
       _rewardedAd?.show(
         onUserEarnedReward: (ad, reward) async {
           onUserEarnedReward?.call(); //! Callback after earning reward
-          //ad.dispose();
           _loadRewardedAd();
         },
       );
@@ -130,9 +122,7 @@ class AdController extends GetxController {
       );
       _interstitialAd?.show();
     }
-    // else {
-    //   debugPrint('Interstitial Ad is not ready yet');
-    // }
+    
   }
 
   Future<void> loadRewardedAdAfterError() async {
@@ -150,7 +140,7 @@ class AdController extends GetxController {
     if (_interstitialAd == null) {
       //!Ad still null
       _loadInterstitialAd();
-      //!      Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
+      //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
     }
   }
 

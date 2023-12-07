@@ -1,19 +1,16 @@
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
-import 'package:rating_dialog/rating_dialog.dart';
 import 'package:resize/resize.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
 import '../../../widget/animated_button_widget.dart';
-import '../../bookList.dart';
+import '../../BookListMenu.dart';
 
 class LastScreen extends StatefulWidget {
   final Function replay;
@@ -39,11 +36,6 @@ class _ChoiceScreenState extends State<LastScreen> {
   AudioController backgroundaudioController = Get.put(AudioController());
 
   Future<void> shareApp() async {
-    //! Set the app link and the message to be shared
-    const String appLink =
-        'https://play.google.com/store/apps/details?id=tenaplus.ahaduweb.com';
-    const String message = 'Enjoy My Video PLayer App: $appLink';
-
     //! Share the app link and message using the share dialog
     await FlutterShare.share(
       title: 'Share App',
@@ -82,10 +74,6 @@ class _ChoiceScreenState extends State<LastScreen> {
   @override
   Widget build(BuildContext context) {
     final mainPlayDuration = 1000.ms;
-    final leavesDelayDuration = 600.ms;
-    final titleDelayDuration = mainPlayDuration + 50.ms;
-    final descriptionDelayDuration = titleDelayDuration + 300.ms;
-    final buttonDelayDuration = descriptionDelayDuration + 100.ms;
     final buttonPlayDuration = mainPlayDuration - 200.ms;
     return WillPopScope(
       onWillPop: () async {

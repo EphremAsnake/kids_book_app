@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/utils/Constants/AllStrings.dart';
 
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
 import '../../../widget/animated_button_widget.dart';
-import '../../bookList.dart';
+import '../../BookListMenu.dart';
 
 class ChoiceScreen extends StatefulWidget {
   final Function read;
@@ -39,9 +40,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
         return false;
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        // ),
+        
         backgroundColor: Colors.transparent,
         body: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -70,16 +69,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 transition: Transition.fadeIn,
                                 duration: const Duration(seconds: 2));
 
-                            // Navigator.pushAndRemoveUntil(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => BookListPage(
-                            //       booksList: widget.booksList,
-                            //       configResponse: widget.configResponse,
-                            //     ),
-                            //   ),
-                            //   (route) => false,
-                            // );
+                           
                           } else {
                             Get.offAll(
                                 BookListPage(
@@ -90,17 +80,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 transition: Transition.fadeIn,
                                 duration: const Duration(seconds: 2));
 
-                            // Navigator.pushAndRemoveUntil(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => BookListPage(
-                            //       booksList: widget.booksList,
-                            //       configResponse: widget.configResponse,
-                            //       isbackgroundsilent: true,
-                            //     ),
-                            //   ),
-                            //   (route) => false,
-                            // );
+                         
                           }
                         },
                       ),
@@ -143,7 +123,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                             buttonDelayDuration:
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
-                            text: 'Read to Me',
+                            text: Strings.readtoMe,
                             // icon: Icons.headphones,
                           ),
                         ),
@@ -156,7 +136,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                             buttonDelayDuration:
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
-                            text: 'Read Myself',
+                            text: Strings.readMySelf,
                             //icon: Icons.chrome_reader_mode_rounded,
                           ),
                         ),

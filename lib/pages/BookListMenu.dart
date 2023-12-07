@@ -4,31 +4,25 @@ import 'package:connectivity/connectivity.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
+import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:resize/resize.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:storyapp/utils/colorConvet.dart';
-import 'package:transparent_image/transparent_image.dart';
 import '../controller/adController.dart';
 import '../controller/backgroundMusicAudioController.dart';
 import '../model/booklistModel.dart';
 import '../model/configModel.dart';
 import '../model/storyPage.dart';
-import '../services/apiEndpoints.dart';
+import '../utils/services/apiEndpoints.dart';
 import '../utils/adhelper.dart';
 import '../utils/admanager.dart';
 import '../widget/about.dart';
 import '../widget/choice.dart';
-import '../widget/dialog.dart';
-import 'books/book.dart';
-import '../backup/books.dart';
+import 'StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'books/choices/choice.dart';
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -68,11 +62,7 @@ class _BookListPageState extends State<BookListPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.booksList.backgroundColor.toColor());
-    if (widget.fromlocal == null) {
-      // loadRewarded();
-      // _loadInterstitialAd();
-    }
+    if (widget.fromlocal == null) {}
     initcalls();
     fetchAdIds();
   }
@@ -133,11 +123,10 @@ class _BookListPageState extends State<BookListPage> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return ChoiceDialogBox(
-              title: 'Oops! No Internet!',
+              title: Strings.noInternet,
               titleColor: const Color(0xffED1E54),
-              descriptions:
-                  'It seems we lost our magical connection! 🌟📶\nCheck your internet and try again.',
-              text: 'OK',
+              descriptions: Strings.noInternetDescription,
+              text: Strings.ok,
               functionCall: () {
                 Navigator.pop(context);
                 checkInternetConnection();
@@ -146,74 +135,9 @@ class _BookListPageState extends State<BookListPage> {
             );
           });
     } else {
-      // loadRewarded();
-      // _loadInterstitialAd();
       initcalls();
     }
   }
-
-  // RewardedAd? rewardedAd;
-  // bool isRewardedAdLoaded = false;
-
-  // void loadRewarded() {
-  //   if (rewardedAd != null) {
-  //   } else {
-  //     RewardedAd.load(
-  //       adUnitId: AdHelper.getRewardedAdUnitId(),
-  //       request: const AdRequest(),
-  //       rewardedAdLoadCallback: RewardedAdLoadCallback(
-  //         onAdLoaded: (ad) {
-  //           debugPrint("Ad Loaded");
-  //           setState(() {
-  //             rewardedAd = ad;
-  //             isRewardedAdLoaded = true;
-  //           });
-  //         },
-  //         onAdFailedToLoad: (error) {
-  //           if (_interstitialAd == null) {
-  //             showDialogs(context);
-  //           }
-  //         },
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // Future<void> _loadInterstitialAd() async {
-  //   if (_interstitialAd != null) {
-  //   } else {
-  //     InterstitialAd.load(
-  //       adUnitId: AdHelper.getInterstitalAdUnitId(),
-  //       request: const AdRequest(),
-  //       adLoadCallback: InterstitialAdLoadCallback(
-  //         onAdLoaded: (ad) {
-  //           ad.fullScreenContentCallback = FullScreenContentCallback(
-  //             onAdDismissedFullScreenContent: (ad) {
-  //               setState(() {
-  //                 _interstitialAd = null;
-  //               });
-  //               _loadInterstitialAd();
-  //             },
-  //           );
-  //           _interstitialAd = ad;
-  //         },
-  //         onAdFailedToLoad: (err) {
-  //           print('Failed to load an interstitial ad: ${err.message}');
-  //         },
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // Future<void> _showInterstitialAd() async {
-  //   if (_interstitialAd == null) {
-  //     await _loadInterstitialAd();
-  //   }
-
-  //   if (_interstitialAd != null) {
-  //     await _interstitialAd?.show();
-  //   }
-  // }
 
   bool showScrollToTopButton = false;
   void showDialogss(BuildContext context) {
@@ -224,10 +148,10 @@ class _BookListPageState extends State<BookListPage> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return ChoiceDialogBox(
-              title: 'Oops!',
+              title: Strings.oops,
               titleColor: const Color(0xffED1E54),
-              descriptions: 'We couldn\'t load the fun ad. Let\'s try again!',
-              text: 'OK',
+              descriptions: Strings.storyTryagain,
+              text: Strings.ok,
               functionCall: () {
                 adController.loadInterstitialAdAfterError();
                 adController.loadRewardedAdAfterError();
@@ -250,17 +174,12 @@ class _BookListPageState extends State<BookListPage> {
     int openedCount = await BookPreferences.getBookOpenedCount(bookTitle);
     int rewardedCountLimit =
         widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
-    // if (widget.configResponse.admobRewardedAd?.rewardedCount != null &&
-    //     rewardedCountLimit > 1) {
-    //   rewardedCountLimit =
-    //       widget.configResponse.admobRewardedAd!.rewardedCount! - 1;
-    // }
+
     if (isWatched && openedCount <= rewardedCountLimit) {
       return true;
     } else {
       return false;
     }
-    //int bookWatchedCount = await NewAdManager.getBookWatchedCount(bookTitle);
   }
 
   Future<void> fetchDataForBookPage(int index) async {
@@ -278,9 +197,7 @@ class _BookListPageState extends State<BookListPage> {
                 index + 1 - storypageresponses.length, (_) => null));
           }
           storypageresponses[index] = storyPageresponse;
-        } else {
-          print('Something Went Wrong Try Again');
-        }
+        } else {}
       } catch (e) {
         //! Handle errors if any
       }
@@ -292,9 +209,6 @@ class _BookListPageState extends State<BookListPage> {
         index < storypageresponses.length &&
         storypageresponses[index] != null) {
       //! Check if the response for the selected index exists
-      // showCupertinoModalPopup(context: context, builder:
-      //             (context) => SecondScreen()
-      //         );
 
       Navigator.of(context).push(
         BookOpeningPageRoute(
@@ -307,26 +221,16 @@ class _BookListPageState extends State<BookListPage> {
           ),
         ),
       );
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => BooksPage(
-      //       response: storypageresponses[index]!,
-      //       indexValue: index,
-      //       backgroundMusic: widget.booksList.backgroundMusic,
-      //     ),
-      //   ),
-      // );
     } else {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
             return ChoiceDialogBox(
-                title: 'Oops!',
+                title: Strings.oops,
                 titleColor: const Color(0xffED1E54),
-                descriptions: 'Looks like something got mixed up in the storybook adventure. Let’s try again!',
-                text: 'OK',
+                descriptions: Strings.oopsDescription,
+                text: Strings.ok,
                 functionCall: () {
                   if (index >= 0 &&
                       index < storypageresponses.length &&
@@ -352,6 +256,8 @@ class _BookListPageState extends State<BookListPage> {
       backgroundColor: widget.booksList.backgroundColor.toColor(),
       body: Stack(
         children: [
+
+          //!Background Image
           Positioned(
             bottom: 0,
             left: 0,
@@ -362,6 +268,7 @@ class _BookListPageState extends State<BookListPage> {
             ),
           ),
 
+          //!BookList GridView
           Padding(
             padding: EdgeInsets.only(
               //top: 20.0,
@@ -420,12 +327,12 @@ class _BookListPageState extends State<BookListPage> {
                                                         (BuildContext context) {
                                                       return ChoiceDialogBox(
                                                         title:
-                                                            'Oops! No Internet!',
+                                                            Strings.noInternet,
                                                         titleColor: const Color(
                                                             0xffED1E54),
-                                                        descriptions:
-                                                            'It seems we lost our magical connection! 🌟📶\nCheck your internet and try again.',
-                                                        text: 'OK',
+                                                        descriptions: Strings
+                                                            .noInternetDescription,
+                                                        text: Strings.ok,
                                                         functionCall: () {
                                                           Navigator.pop(
                                                               context);
@@ -439,7 +346,7 @@ class _BookListPageState extends State<BookListPage> {
                                                   //!Navigate to Story Page for First index Without Ad
                                                   navigateToNextPage(index);
                                                 } else if (book.status ==
-                                                    'unlocked') {
+                                                    Strings.statusUnlocked) {
                                                   //!check if show interstitialad is true
                                                   if (widget
                                                       .configResponse
@@ -551,14 +458,6 @@ class _BookListPageState extends State<BookListPage> {
                                                       //!Navigate To Story Page
                                                       navigateToNextPage(index);
                                                     }
-
-                                                    //!
-                                                    // ScaffoldMessenger.of(context)
-                                                    //     .showSnackBar(SnackBar(
-                                                    //   content: Text(
-                                                    //       '${book.title}  $openedCount   $isWatched'),
-                                                    // ));
-                                                    //!
                                                   } else {
                                                     //!show reward ad if available for locked books
                                                     adController
@@ -572,18 +471,15 @@ class _BookListPageState extends State<BookListPage> {
                                                       builder: (BuildContext
                                                           context) {
                                                         return ChoiceDialogBox(
-                                                          title:
-                                                              'Unlock Your Story',
+                                                          title: Strings
+                                                              .unloackStory,
                                                           titleColor:
                                                               Colors.orange,
                                                           descriptions:
-                                                              'Watch a short ad to unlock this story for $rewardedCountLimit sessions',
-                                                          text: 'Watch Ad',
+                                                              '${Strings.watchshortAd} $rewardedCountLimit ${Strings.sessions}',
+                                                          text: Strings.watchAd,
                                                           functionCall:
                                                               () async {
-                                                            //showRewardAd();
-                                                            // //!log
-                                                            // logger.e('watch ad pressed');
                                                             Navigator.pop(
                                                                 context);
                                                             if (adController
@@ -598,11 +494,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                 audioController
                                                                     .toggleAudio();
                                                               }
-                                                              // //!log
-                                                              // logger.e(
-                                                              //     'adController.rewardedAdLoaded.value: ${adController.rewardedAdLoaded.value} \n');
-                                                              // adController
-                                                              //     .showRewardedAd();
+
                                                               adController
                                                                   .showRewardedAd(
                                                                       () async {
@@ -638,31 +530,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                 navigateToNextPage(
                                                                     index);
                                                               });
-                                                              // rewardedAd!
-                                                              //         .fullScreenContentCallback =
-                                                              //     FullScreenContentCallback(
-                                                              //   onAdFailedToShowFullScreenContent:
-                                                              //       (ad, error) {
-                                                              //     ad.dispose();
-                                                              //     loadRewarded();
-                                                              //   },
-                                                              //   onAdDismissedFullScreenContent:
-                                                              //       (ad) {
-                                                              //     ad.dispose();
-                                                              //     loadRewarded();
-                                                              //     navigateToNextPage(
-                                                              //         index);
-                                                              //  },
-                                                              //);
-                                                            }
-                                                            //  else if (_interstitialAd !=
-                                                            //     null) {
-                                                            //   await _showInterstitialAd();
-                                                            //   await BookPreferences
-                                                            //       .incrementBookOpened(
-                                                            //           book.title);
-                                                            //   navigateToNextPage(index);
-                                                            else {
+                                                            } else {
                                                               logger.e(
                                                                   'false value for: ${adController.rewardedAdLoaded.value} \n');
                                                               showDialogss(
@@ -796,13 +664,11 @@ class _BookListPageState extends State<BookListPage> {
               alignment: Alignment.topCenter,
               child: InkWell(
                 onTap: () {
-                  //if (widget.configResponse.houseAd!.typeApp!) {
                   if (Platform.isAndroid) {
                     openUrlAndroid(widget.configResponse.houseAd!.androidUrl!);
                   } else {
                     openAppStore(widget.configResponse.houseAd!.iosUrl!);
                   }
-                  //  }
                 },
                 child: Container(
                     width: MediaQuery.sizeOf(context).width * 0.3,
@@ -881,19 +747,9 @@ class _BookListPageState extends State<BookListPage> {
         //androidAppBundleId: 'com.google.android.googlequicksearchbox',
       );
     }
-
-    // final String appStoreUrl = 'itms-apps://itunes.apple.com/app/id$appId';
-
-    // if (await canLaunch(appStoreUrl)) {
-    //   await launch(appStoreUrl);
-    // } else {
-    //   throw 'Could not launch App Store';
-    // }
   }
 
   Widget buildBookCard(BookList book, bool bookState) {
-    // int rewardedCountLimit =
-    //     widget.configResponse.admobRewardedAd!.rewardedCount ?? 3;
     return SizedBox(
       height: 150,
       child: Card(
@@ -901,9 +757,6 @@ class _BookListPageState extends State<BookListPage> {
         color: Colors.transparent,
         child: Stack(
           children: [
-            // Placeholder with shimmer effect
-            //const ShimmerEffect(),
-            // FadeInImage for loading the network image
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: FadeInImage(
@@ -916,14 +769,6 @@ class _BookListPageState extends State<BookListPage> {
                 fadeInDuration: const Duration(milliseconds: 2000),
                 fit: BoxFit.cover,
               ),
-              // FadeInImage.memoryNetwork(
-              //   placeholder: kTransparentImage,
-              //   image:
-              //       '${APIEndpoints.baseUrl}/${book.thumbnail}', // Provide the URL from your book object
-              //   fit: BoxFit.cover,
-              //   width: double.infinity,
-              //   height: double.infinity,
-              // ),
             ),
             // Overlay for the title
             Positioned(
@@ -956,7 +801,7 @@ class _BookListPageState extends State<BookListPage> {
               ),
             ),
 
-            if (book.status == "locked" && !bookState)
+            if (book.status == Strings.statuslocked && !bookState)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
@@ -972,34 +817,6 @@ class _BookListPageState extends State<BookListPage> {
     );
   }
 }
-
-// // Shimmer Effect Widget for Placeholder
-// class ShimmerEffect extends StatelessWidget {
-//   const ShimmerEffect({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ClipRRect(
-//       borderRadius: BorderRadius.circular(12),
-//       child: Container(
-//         color: Colors.grey[300],
-//         width: double.infinity,
-//         height: double.infinity,
-//         child: Shimmer.fromColors(
-//           loop: 5,
-//           direction: ShimmerDirection.ltr,
-//           enabled: true,
-//           baseColor: Colors.white,
-//           highlightColor: Colors.grey[100]!,
-//           child: const SizedBox(
-//             width: double.infinity,
-//             height: double.infinity,
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class BookOpeningPageRoute extends PageRouteBuilder {
   final Widget page;

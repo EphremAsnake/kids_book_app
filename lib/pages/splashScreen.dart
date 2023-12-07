@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import '../model/booklistModel.dart';
 import '../model/configModel.dart';
-import '../services/apiEndpoints.dart';
+import '../utils/Constants/AllStrings.dart';
+import '../utils/services/apiEndpoints.dart';
 import '../utils/adhelper.dart';
 import '../widget/choice.dart';
-import '../widget/dialog.dart';
-import 'bookList.dart';
+import 'BookListMenu.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,14 +24,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Dio dio = Dio();
-  ConnectivityResult _connectivityResult = ConnectivityResult.none;
   ConfigApiResponseModel? configResponses;
 
   @override
   void initState() {
     super.initState();
     checkInternetConnection();
-    //fetchData();
   }
 
   void saveToLocalStorageBookList(data) async {
@@ -57,15 +54,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<String> getFromStorageConfig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedData = prefs.getString('config_data');
-    //print(storedData);
     return storedData ?? "";
   }
 
   Future<void> checkInternetConnection() async {
     final connectivityResult = await (Connectivity().checkConnectivity());
-    setState(() {
-      _connectivityResult = connectivityResult;
-    });
+    setState(() {});
 
     String storedBookList = await getFromStorageBookList();
     String storedConfigData = await getFromStorageBookList();
@@ -76,24 +70,22 @@ class _SplashScreenState extends State<SplashScreen> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return ChoiceDialogBox(
-              title: 'No internet connection',
+              title: Strings.noInternet,
               titleColor: const Color(0xffED1E54),
               descriptions:
-                  'Please check your internet connection and try again.',
-              text: 'OK',
+                  Strings.noInternetDescription,
+              text: Strings.ok,
               functionCall: () {
                 Navigator.pop(context);
                 checkInternetConnection();
               },
               closeicon: true,
-              //img: 'assets/dialog_error.svg',
             );
           });
     } else if (connectivityResult == ConnectivityResult.none &&
         storedBookList != "" &&
         storedConfigData != "") {
       useLocalDataBoth();
-      //useLocalData();
     } else {
       await fetchConfigData().then((_) {
         fetchData();
@@ -106,8 +98,6 @@ class _SplashScreenState extends State<SplashScreen> {
       Response response =
           await dio.get('${APIEndpoints.baseUrl}/menu/book_list.json');
 
-      // Map<String, dynamic> parsedJson = jsonDecode(response.data);
-
       if (response.statusCode == 200) {
         ApiResponse apiResponse = ApiResponse.fromJson(response.data);
 
@@ -116,14 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // ignore: use_build_context_synchronously
         if (configResponses == null) {
           await fetchConfigData();
-          // ignore: use_build_context_synchronously
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => BookListPage(
-          //             booksList: apiResponse,
-          //             configResponse: configResponses!,
-          //           )),
+
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -131,7 +114,6 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               transition: Transition.zoom,
               duration: const Duration(seconds: 2));
-          //);
         } else {
           Get.offAll(
               BookListPage(
@@ -140,22 +122,12 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               transition: Transition.zoom,
               duration: const Duration(seconds: 2));
-          // // ignore: use_build_context_synchronously
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => BookListPage(
-          //             booksList: apiResponse,
-          //             configResponse: configResponses!,
-          //           )),
-          // );
         }
       } else {
-        print('Something Went Wrong Try Again');
+        debugPrint('Something Went Wrong Try Again');
       }
     } catch (e) {
-      print('Something Went Wrong $e');
-      //useLocalData();
+      debugPrint('Something Went Wrong $e');
     }
   }
 
@@ -163,8 +135,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Future fetchConfigData() async {
     try {
       Response response = await dio.get(APIEndpoints.configsUrl);
-
-      // Map<String, dynamic> parsedJson = jsonDecode(response.data);
 
       if (response.statusCode == 200) {
         ConfigApiResponseModel configResponse =
@@ -186,12 +156,10 @@ class _SplashScreenState extends State<SplashScreen> {
               : configResponse.admobRewardedAd?.ios,
         );
 
-        //saveToLocalStorage(response.data);
-      } else {
         debugPrint('Something Went Wrong Try Again');
       }
     } catch (e) {
-      print('Something Went Wrong $e');
+      debugPrint('Something Went Wrong $e');
     }
   }
 
@@ -218,15 +186,6 @@ class _SplashScreenState extends State<SplashScreen> {
           : storedConfigResponse.admobRewardedAd?.ios,
     );
 
-    // ignore: use_build_context_synchronously
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //       builder: (context) => BookListPage(
-    //           booksList: storedBookListResponse,
-    //           configResponse: storedConfigResponse,
-    //           fromlocal: true)),
-    // );
     Get.offAll(
         BookListPage(
             booksList: storedBookListResponse,
@@ -238,17 +197,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   statusBarColor: Colors.white, // Change this to your desired color
-    // ));
     return Scaffold(
       backgroundColor: const Color(0xff4bebfa),
       body: Center(
         child: Lottie.asset(
           'assets/book.json',
           fit: BoxFit.cover,
-          // width: MediaQuery.sizeOf(context).width * 0.5,
-          // height: MediaQuery.sizeOf(context).height * 0.5,
           repeat: true,
         ),
       ),
