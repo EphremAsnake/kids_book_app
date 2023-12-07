@@ -24,7 +24,6 @@ class AdController extends GetxController {
   }
 
   Future<void> _loadAds() async {
- 
     _loadRewardedAd();
     _loadInterstitialAd();
   }
@@ -47,7 +46,6 @@ class AdController extends GetxController {
             update();
           },
           onAdFailedToLoad: (error) {
-            
             debugPrint('Rewarded Ad failed to load: $error');
           },
         ),
@@ -65,7 +63,6 @@ class AdController extends GetxController {
             interstitialAdLoaded.value = true;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
-                
                 _loadInterstitialAd();
               },
             );
@@ -73,7 +70,6 @@ class AdController extends GetxController {
             update();
           },
           onAdFailedToLoad: (error) {
-            
             debugPrint('Interstitial Ad failed to load: $error');
           },
         ),
@@ -111,6 +107,7 @@ class AdController extends GetxController {
       _loadInterstitialAd();
     }
     if (interstitialAdLoaded.value) {
+      //_interstitialAd?.setImmersiveMode(true);
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
           _loadInterstitialAd();
@@ -122,7 +119,6 @@ class AdController extends GetxController {
       );
       _interstitialAd?.show();
     }
-    
   }
 
   Future<void> loadRewardedAdAfterError() async {

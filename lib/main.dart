@@ -13,12 +13,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await _initGoogleMobileAds();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-      overlays: []);
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+  //     overlays: []);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   Wakelock.enable();
   Get.put(AudioController());
   runApp(const MyApp());
