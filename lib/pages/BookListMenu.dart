@@ -368,16 +368,11 @@ class _BookListPageState extends State<BookListPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-        overlays: []);
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeLeft,
-    //   DeviceOrientation.landscapeRight,
-    // ]);
-    return Scaffold(
-      backgroundColor: widget.booksList.backgroundColor.toColor(),
-      body: SafeArea(
-        child: Stack(
+    
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: widget.booksList.backgroundColor.toColor(),
+        body: Stack(
           children: [
             //!Background Image
             Positioned(
@@ -389,7 +384,7 @@ class _BookListPageState extends State<BookListPage> {
                 fit: BoxFit.cover,
               ),
             ),
-        
+      
             //!BookList GridView
             Padding(
               padding: EdgeInsets.only(
@@ -435,12 +430,11 @@ class _BookListPageState extends State<BookListPage> {
                                         child: FadeInAnimation(
                                           child: InkWell(
                                               onTap: () async {
-                                                
                                                 if (!loadingStory) {
                                                   final connectivityResult =
                                                       await (Connectivity()
                                                           .checkConnectivity());
-        
+      
                                                   if (connectivityResult ==
                                                       ConnectivityResult.none) {
                                                     // ignore: use_build_context_synchronously
@@ -507,9 +501,9 @@ class _BookListPageState extends State<BookListPage> {
                                                           await BookPreferences
                                                               .getBookOpenedCount(
                                                                   book.title);
-        
+      
                                                       //!check if book finished it's session if so reset or lock it again
-        
+      
                                                       if (isWatched &&
                                                           openedCount >=
                                                               rewardedCountLimit) {
@@ -519,7 +513,7 @@ class _BookListPageState extends State<BookListPage> {
                                                       }
                                                       //! For Locked Books
                                                       //!check if reward ad has been seen and if user has sessions left if so open story page
-        
+      
                                                       if (isWatched &&
                                                           openedCount <=
                                                               rewardedCountLimit) {
@@ -539,12 +533,12 @@ class _BookListPageState extends State<BookListPage> {
                                                                   .loadInterstitialAdAfterError();
                                                               adController
                                                                   .loadRewardedAdAfterError();
-        
+      
                                                               //!Increment Count of Book Opened
                                                               await BookPreferences
                                                                   .incrementBookOpened(
                                                                       book.title);
-        
+      
                                                               //!Navigate To Story Page
                                                               goToStoryPage(
                                                                   book.folder);
@@ -553,7 +547,7 @@ class _BookListPageState extends State<BookListPage> {
                                                             //!try to load Interstitial Ad Again
                                                             await adController
                                                                 .loadInterstitialAdAfterError();
-        
+      
                                                             //!try to show again
                                                             if (adController
                                                                 .interstitialAdLoaded
@@ -565,12 +559,12 @@ class _BookListPageState extends State<BookListPage> {
                                                                     .loadInterstitialAdAfterError();
                                                                 adController
                                                                     .loadRewardedAdAfterError();
-        
+      
                                                                 //!Increment Count of Book Opened
                                                                 await BookPreferences
                                                                     .incrementBookOpened(
                                                                         book.title);
-        
+      
                                                                 //!Navigate To Story Page
                                                                 goToStoryPage(
                                                                     book.folder);
@@ -629,7 +623,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                     audioController
                                                                         .toggleAudio();
                                                                   }
-        
+      
                                                                   adController
                                                                       .showRewardedAd(
                                                                           () async {
@@ -642,9 +636,9 @@ class _BookListPageState extends State<BookListPage> {
                                                                             false;
                                                                       });
                                                                     }
-        
+      
                                                                     //!---! Chnage State of the book to Reward Ad watched and Book Opened
-        
+      
                                                                     await BookPreferences
                                                                         .setBookWatched(
                                                                             book.title,
@@ -698,7 +692,7 @@ class _BookListPageState extends State<BookListPage> {
                             childCount: widget.booksList.books.length,
                           ),
                         )),
-        
+      
                     //!End Text
                     if (widget.booksList.bookListEndText != null)
                       SliverToBoxAdapter(
@@ -720,7 +714,7 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
             ),
-        
+      
             //!Background Music
             Positioned(
               top: 20.0,
@@ -739,7 +733,7 @@ class _BookListPageState extends State<BookListPage> {
                     );
                   })),
             ),
-        
+      
             //!About
             Positioned(
               bottom: 20.0,
@@ -753,7 +747,7 @@ class _BookListPageState extends State<BookListPage> {
                       setState(() {
                         buttonColor = Colors.blue;
                       });
-        
+      
                       Future.delayed(const Duration(milliseconds: 500), () {
                         setState(() {
                           buttonColor = Colors.white;
@@ -797,7 +791,7 @@ class _BookListPageState extends State<BookListPage> {
                   ),
                 ),
               ),
-        
+      
             //!House AD
             if (widget.configResponse.houseAd!.show != null &&
                 widget.configResponse.houseAd!.show!)
@@ -833,7 +827,7 @@ class _BookListPageState extends State<BookListPage> {
                       ))),
                 ),
               ),
-        
+      
             //!Loading
             if (loadingStory)
               Positioned(
