@@ -291,7 +291,7 @@ class _BooksPageState extends State<BookPage>
                 bookplayer.pause();
                 setState(() {
                   isPlaying = false;
-                  wasplayingdialog = true;
+                  //wasplayingdialog = true;
                 });
               }
             }
@@ -645,18 +645,18 @@ class _BooksPageState extends State<BookPage>
               //Navigator.pop(context);
             },
             secfunctionCall: () {
-              // if (_listen) {
-              //   if (wasplayingdialog) {
-              //     bookplayer.seek(Duration.zero);
-              //     bookplayer.play();
-              //     setState(() {
-              //       isPlaying = true;
-              //       wasplayingdialog = false;
-              //     });
-              //   }
-              // }
+              if (_listen) {
+                //if (wasplayingdialog) {
+                  bookplayer.seek(Duration.zero);
+                  bookplayer.play();
+                  setState(() {
+                    isPlaying = true;
+                    //wasplayingdialog = false;
+                  });
+               // }
+              }
 
-              Navigator.of(context).pop(false);
+              Navigator.pop(context);
             },
           );
         });
