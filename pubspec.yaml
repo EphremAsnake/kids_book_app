@@ -47,13 +47,9 @@ dependencies:
   just_audio: ^0.9.36
   logger: ^2.0.2+1
   lottie: ^2.7.0
-  neopop: ^1.0.2
   open_store: ^0.5.0
-  rating_dialog: ^2.0.4
   resize: ^1.0.0
   shared_preferences: ^2.2.2
-  shimmer: ^3.0.0
-  transparent_image: ^2.0.1
   url_launcher: ^6.2.1
   wakelock: ^0.6.2
 

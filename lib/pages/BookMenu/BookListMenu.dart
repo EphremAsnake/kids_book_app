@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
@@ -13,17 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/colorConvet.dart';
-import '../controller/adController.dart';
-import '../controller/backgroundMusicAudioController.dart';
-import '../model/booklistModel.dart';
-import '../model/configModel.dart';
-import '../model/storyPage.dart';
-import '../utils/services/apiEndpoints.dart';
-import '../utils/adhelper.dart';
-import '../utils/admanager.dart';
-import '../widget/about.dart';
-import '../widget/choice.dart';
-import 'StoryPage/StoryPage.dart';
+import '../../controller/adController.dart';
+import '../../controller/backgroundMusicAudioController.dart';
+import '../../model/booklistModel.dart';
+import '../../model/configModel.dart';
+import '../../model/storyPage.dart';
+import '../../services/apiEndpoints.dart';
+import '../../utils/adhelper.dart';
+import '../../utils/admanager.dart';
+import '../../widget/aboutdialog.dart';
+import '../../widget/choice.dart';
+import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
 
 class BookListPage extends StatefulWidget {
@@ -47,10 +46,8 @@ class _BookListPageState extends State<BookListPage> {
   final ScrollController _scrollController = ScrollController();
 
   late AudioController audioController;
-  // InterstitialAd? _interstitialAd;
   late List<Future<bool>> lockStatusList;
 
-  //bool isPlaying = false;
 
   Dio dio = Dio();
   ConnectivityResult _connectivityResult = ConnectivityResult.none;
@@ -75,8 +72,7 @@ class _BookListPageState extends State<BookListPage> {
 
   //!usage
   Future<void> fetchAdIds() async {
-    //! Simulating async fetching of ad IDs
-    //await Future.delayed(const Duration(seconds: 1));
+    
 
     String? rewardedAdId = AdHelper.getRewardedAdUnitId();
     String? interstitialAdId = AdHelper.getInterstitalAdUnitId();
@@ -92,10 +88,7 @@ class _BookListPageState extends State<BookListPage> {
   }
 
   void initcalls() {
-    // for (int i = 0; i < widget.booksList.books.length; i++) {
-    //   fetchDataForBookPage(i);
-    // }
-
+   
     audioController = Get.put(AudioController());
     if (widget.isbackgroundsilent == null) {
       audioController.startAudio(widget.booksList.backgroundMusic);
@@ -188,74 +181,6 @@ class _BookListPageState extends State<BookListPage> {
     }
   }
 
-  Future<void> fetchDataForBookPages(int index) async {
-    if (index >= 0 && index < widget.booksList.books.length) {
-      try {
-        Response sResponse =
-            await dio.get('${APIEndpoints.booksUrl}$index/book.json');
-
-        if (sResponse.statusCode == 200) {
-          StoryPageApiResponse storyPageresponse =
-              StoryPageApiResponse.fromJson(sResponse.data);
-
-          if (index >= storypageresponses.length) {
-            storypageresponses.addAll(List.generate(
-                index + 1 - storypageresponses.length, (_) => null));
-          }
-          storypageresponses[index] = storyPageresponse;
-        } else {}
-      } catch (e) {
-        //! Handle errors if any
-      }
-    }
-  }
-
-  // void navigateToNextPage(int index) {
-  //   if (index >= 0 &&
-  //       index < storypageresponses.length &&
-  //       storypageresponses[index] != null) {
-  //     //! Check if the response for the selected index exists
-
-  //     // Navigator.of(context).push(
-  //     //   BookOpeningPageRoute(
-  //     //     page: BookPage(
-  //     //       response: storypageresponses[index]!,
-  //     //       indexValue: index,
-  //     //       backgroundMusic: widget.booksList.backgroundMusic,
-  //     //       booksList: widget.booksList,
-  //     //       configResponse: widget.configResponse,
-  //     //     ),
-  //     //   ),
-  //     // );
-  //   } else {
-  //     showDialog(
-  //         context: context,
-  //         barrierDismissible: false,
-  //         builder: (BuildContext context) {
-  //           return ChoiceDialogBox(
-  //               title: Strings.oops,
-  //               titleColor: const Color(0xffED1E54),
-  //               descriptions: Strings.oopsDescription,
-  //               text: Strings.ok,
-  //               functionCall: () {
-  //                 if (index >= 0 &&
-  //                     index < storypageresponses.length &&
-  //                     storypageresponses[index] != null) {
-  //                   Navigator.pop(context);
-  //                 } else {
-  //                   // for (int i = 0; i < widget.booksList.books.length; i++) {
-  //                   //   fetchDataForBookPage(i);
-  //                   // }
-  //                 }
-  //               },
-  //               closeicon: true
-  //               //img: 'assets/dialog_error.svg',
-  //               );
-  //         });
-  //     //! Handle scenarios where the response for the selected index is not available
-  //   }
-  // }
-
   void goToStoryPage(String folder) {
     if (folderName == folder) {
       Navigator.of(context).push(
@@ -319,56 +244,13 @@ class _BookListPageState extends State<BookListPage> {
       setState(() {
         loadingStory = false;
       });
-      //! Handle errors if any
-    }
-    // if (index >= 0 &&
-    //     index < storypageresponses.length &&
-    //     storypageresponses[index] != null) {
-    //   //! Check if the response for the selected index exists
 
-    //   Navigator.of(context).push(
-    //     BookOpeningPageRoute(
-    //       page: BookPage(
-    //         response: storypageresponses[index]!,
-    //         indexValue: index,
-    //         backgroundMusic: widget.booksList.backgroundMusic,
-    //         booksList: widget.booksList,
-    //         configResponse: widget.configResponse,
-    //       ),
-    //     ),
-    //   );
-    // } else {
-    //   showDialog(
-    //       context: context,
-    //       barrierDismissible: false,
-    //       builder: (BuildContext context) {
-    //         return ChoiceDialogBox(
-    //             title: Strings.oops,
-    //             titleColor: const Color(0xffED1E54),
-    //             descriptions: Strings.oopsDescription,
-    //             text: Strings.ok,
-    //             functionCall: () {
-    //               if (index >= 0 &&
-    //                   index < storypageresponses.length &&
-    //                   storypageresponses[index] != null) {
-    //                 Navigator.pop(context);
-    //               } else {
-    //                 for (int i = 0; i < widget.booksList.books.length; i++) {
-    //                   fetchDataForBookPage(i);
-    //                 }
-    //               }
-    //             },
-    //             closeicon: true
-    //             //img: 'assets/dialog_error.svg',
-    //             );
-    //       });
-    //   //! Handle scenarios where the response for the selected index is not available
-    // }
+    }
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: widget.booksList.backgroundColor.toColor(),
       body: Stack(
@@ -383,7 +265,7 @@ class _BookListPageState extends State<BookListPage> {
               fit: BoxFit.cover,
             ),
           ),
-    
+
           //!BookList GridView
           Padding(
             padding: EdgeInsets.only(
@@ -433,7 +315,7 @@ class _BookListPageState extends State<BookListPage> {
                                                 final connectivityResult =
                                                     await (Connectivity()
                                                         .checkConnectivity());
-    
+
                                                 if (connectivityResult ==
                                                     ConnectivityResult.none) {
                                                   // ignore: use_build_context_synchronously
@@ -500,9 +382,9 @@ class _BookListPageState extends State<BookListPage> {
                                                         await BookPreferences
                                                             .getBookOpenedCount(
                                                                 book.title);
-    
+
                                                     //!check if book finished it's session if so reset or lock it again
-    
+
                                                     if (isWatched &&
                                                         openedCount >=
                                                             rewardedCountLimit) {
@@ -510,9 +392,10 @@ class _BookListPageState extends State<BookListPage> {
                                                           .resetBookData(
                                                               book.title);
                                                     }
+
                                                     //! For Locked Books
                                                     //!check if reward ad has been seen and if user has sessions left if so open story page
-    
+
                                                     if (isWatched &&
                                                         openedCount <=
                                                             rewardedCountLimit) {
@@ -532,12 +415,12 @@ class _BookListPageState extends State<BookListPage> {
                                                                 .loadInterstitialAdAfterError();
                                                             adController
                                                                 .loadRewardedAdAfterError();
-    
+
                                                             //!Increment Count of Book Opened
                                                             await BookPreferences
                                                                 .incrementBookOpened(
                                                                     book.title);
-    
+
                                                             //!Navigate To Story Page
                                                             goToStoryPage(
                                                                 book.folder);
@@ -546,7 +429,7 @@ class _BookListPageState extends State<BookListPage> {
                                                           //!try to load Interstitial Ad Again
                                                           await adController
                                                               .loadInterstitialAdAfterError();
-    
+
                                                           //!try to show again
                                                           if (adController
                                                               .interstitialAdLoaded
@@ -558,12 +441,12 @@ class _BookListPageState extends State<BookListPage> {
                                                                   .loadInterstitialAdAfterError();
                                                               adController
                                                                   .loadRewardedAdAfterError();
-    
+
                                                               //!Increment Count of Book Opened
                                                               await BookPreferences
                                                                   .incrementBookOpened(
                                                                       book.title);
-    
+
                                                               //!Navigate To Story Page
                                                               goToStoryPage(
                                                                   book.folder);
@@ -573,6 +456,7 @@ class _BookListPageState extends State<BookListPage> {
                                                             await BookPreferences
                                                                 .incrementBookOpened(
                                                                     book.title);
+
                                                             //!Navigate to Story Page
                                                             goToStoryPage(
                                                                 book.folder);
@@ -622,7 +506,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                   audioController
                                                                       .toggleAudio();
                                                                 }
-    
+
                                                                 adController
                                                                     .showRewardedAd(
                                                                         () async {
@@ -635,9 +519,9 @@ class _BookListPageState extends State<BookListPage> {
                                                                           false;
                                                                     });
                                                                   }
-    
+
                                                                   //!---! Chnage State of the book to Reward Ad watched and Book Opened
-    
+
                                                                   await BookPreferences
                                                                       .setBookWatched(
                                                                           book.title,
@@ -649,6 +533,7 @@ class _BookListPageState extends State<BookListPage> {
                                                                       .loadInterstitialAdAfterError();
                                                                   adController
                                                                       .loadRewardedAdAfterError();
+
                                                                   //! Call setState to trigger a rebuild of the GridView item
                                                                   setState(
                                                                       () {});
@@ -691,7 +576,7 @@ class _BookListPageState extends State<BookListPage> {
                           childCount: widget.booksList.books.length,
                         ),
                       )),
-    
+
                   //!End Text
                   if (widget.booksList.bookListEndText != null)
                     SliverToBoxAdapter(
@@ -713,7 +598,7 @@ class _BookListPageState extends State<BookListPage> {
               ),
             ),
           ),
-    
+
           //!Background Music
           Positioned(
             top: 20.0,
@@ -732,7 +617,7 @@ class _BookListPageState extends State<BookListPage> {
                   );
                 })),
           ),
-    
+
           //!About
           Positioned(
             bottom: 20.0,
@@ -746,7 +631,7 @@ class _BookListPageState extends State<BookListPage> {
                     setState(() {
                       buttonColor = Colors.blue;
                     });
-    
+
                     Future.delayed(const Duration(milliseconds: 500), () {
                       setState(() {
                         buttonColor = Colors.white;
@@ -770,6 +655,7 @@ class _BookListPageState extends State<BookListPage> {
                   },
                 )),
           ),
+
           //!Scroll to Top
           if (showScrollToTopButton)
             Positioned(
@@ -790,7 +676,7 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
             ),
-    
+
           //!House AD
           if (widget.configResponse.houseAd!.show != null &&
               widget.configResponse.houseAd!.show!)
@@ -826,7 +712,7 @@ class _BookListPageState extends State<BookListPage> {
                     ))),
               ),
             ),
-    
+
           //!Loading
           if (loadingStory)
             Positioned(
@@ -878,7 +764,6 @@ class _BookListPageState extends State<BookListPage> {
         final String playstoreurlweb =
             'https://play.google.com/store/apps/details?id=$appPackageName';
         await launch(playstoreurlweb);
-        //throw 'Could not launch Url.';
       }
     }
   }
@@ -897,7 +782,6 @@ class _BookListPageState extends State<BookListPage> {
       //!'The url is AppId open Appstore
       OpenStore.instance.open(
         appStoreId: appId,
-        //androidAppBundleId: 'com.google.android.googlequicksearchbox',
       );
     }
   }
@@ -923,7 +807,7 @@ class _BookListPageState extends State<BookListPage> {
                 fit: BoxFit.cover,
               ),
             ),
-            // Overlay for the title
+            //! Overlay for the title
             Positioned(
               bottom: 0,
               left: 0,

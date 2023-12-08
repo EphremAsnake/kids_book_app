@@ -10,13 +10,13 @@ import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import '../../../model/storyPage.dart';
-import '../../utils/services/apiEndpoints.dart';
+import '../../services/apiEndpoints.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
-import '../../widget/animatedTextWidget.dart';
+import '../../widget/animatedtextwidget.dart';
 import '../../widget/dialog.dart';
-import '../BookListMenu.dart';
+import '../BookMenu/BookListMenu.dart';
 import 'FistPageChoice/choice.dart';
 import 'LastPage/lastpage.dart';
 
@@ -45,8 +45,9 @@ class _BooksPageState extends State<BookPage>
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
   bool wasplayingdialog = false;
-  bool wasPlayingBeforeInterruption =
-      false; //! New flag to track previous state
+  bool wasPlayingBeforeInterruption = false;
+
+  //! New flag to track previous state
   List<String> audioUrls = [];
   int _counter = 0;
   bool inlastPage = false;
@@ -70,13 +71,12 @@ class _BooksPageState extends State<BookPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    //isPlaying = bookplayer.playerState == PlayerState.playing;
 
     audioController = Get.find<AudioController>();
     _controller = AnimationController(
       vsync: this,
       duration:
-          const Duration(milliseconds: 3000), // Adjust the duration as needed
+          const Duration(milliseconds: 3000), 
     );
     audioController.audioVolumeDown();
     isAudioPlaying = audioController.isPlaying;
@@ -125,7 +125,6 @@ class _BooksPageState extends State<BookPage>
         context: context,
         builder: (context) => LastScreen(
           replay: () {
-            //listenaudioController.clearplayer();
             setState(() {
               hasLastScreenDisplayed = false;
             });
@@ -183,7 +182,9 @@ class _BooksPageState extends State<BookPage>
 
   Future<void> _incrementCounter() async {
     if (_listen && isIncrementing) {
-      return; //! Prevent multiple simultaneous increment calls
+      return;
+
+      //! Prevent multiple simultaneous increment calls
     }
     if (_listen && !isLastPage()) {
       isIncrementing = true;
@@ -214,7 +215,7 @@ class _BooksPageState extends State<BookPage>
 
   Future<void> _deccrementCounter() async {
     if (_listen && isIncrementing) {
-      return; // Prevent multiple simultaneous increment calls
+      return; //! Prevent multiple simultaneous increment calls
     }
     if (_listen && !isLastPage()) {
       isIncrementing = true;
@@ -246,7 +247,9 @@ class _BooksPageState extends State<BookPage>
     WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     if (bookplayer.playing) {
-      bookplayer.stop(); //! Stop the audio player when leaving the page
+      bookplayer.stop();
+
+      //! Stop the audio player when leaving the page
     }
     bookplayer.dispose();
 
@@ -335,6 +338,7 @@ class _BooksPageState extends State<BookPage>
                         //!StoryImage
                         ImageFade(
                             width: MediaQuery.of(context).size.width * 0.85,
+
                             //! whenever the image changes, it will be loaded, and then faded in:
                             image: CachedNetworkImageProvider(images[_counter]),
 
@@ -347,7 +351,6 @@ class _BooksPageState extends State<BookPage>
                             fit: BoxFit.cover,
                             scale: 2,
 
-                            // shown behind everything:
                             placeholder: Container(
                               color: Colors.white.withOpacity(0.7),
                               alignment: Alignment.center,
@@ -357,7 +360,6 @@ class _BooksPageState extends State<BookPage>
 
                             //! displayed when an error occurs:
                             errorBuilder: (context, error) {
-                              //togglePlayback();
                               bookplayer.stop;
                               return Center(
                                 child: Column(
@@ -513,9 +515,7 @@ class _BooksPageState extends State<BookPage>
                               ),
                             ),
                             height: MediaQuery.of(context).size.height * 0.2,
-                            // margin: EdgeInsets.symmetric(
-                            //   horizontal: MediaQuery.of(context).size.width * 0.0075,
-                            // ),
+                            
                             child: Center(
                               child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -621,7 +621,6 @@ class _BooksPageState extends State<BookPage>
             text: Strings.leave,
             text2: Strings.stay,
             functionCall: () async {
-              //listenaudioController.resetAudioController();
               bookplayer.stop();
               if (audioController.isPlaying) {
                 Get.offAll(
@@ -642,18 +641,14 @@ class _BooksPageState extends State<BookPage>
                     duration: const Duration(seconds: 2));
               }
 
-              //Navigator.pop(context);
             },
             secfunctionCall: () {
               if (_listen) {
-                //if (wasplayingdialog) {
-                  bookplayer.seek(Duration.zero);
-                  bookplayer.play();
-                  setState(() {
-                    isPlaying = true;
-                    //wasplayingdialog = false;
-                  });
-               // }
+                bookplayer.seek(Duration.zero);
+                bookplayer.play();
+                setState(() {
+                  isPlaying = true;
+                });
               }
 
               Navigator.pop(context);

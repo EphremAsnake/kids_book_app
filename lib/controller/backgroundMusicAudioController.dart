@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import '../utils/services/apiEndpoints.dart';
+import '../services/apiEndpoints.dart';
 
 class AudioController extends GetxController with WidgetsBindingObserver {
   final AudioPlayer _backgrounMusicPlayer = AudioPlayer();

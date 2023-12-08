@@ -6,21 +6,20 @@ import 'package:resize/resize.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'controller/backgroundMusicAudioController.dart';
-import 'pages/splashScreen.dart';
+import 'pages/SplashScreen/splashScreen.dart';
 import 'utils/Constants/AllStrings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await _initGoogleMobileAds();
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
-  //     overlays: []);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+      overlays: []);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
 
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   Wakelock.enable();
   Get.put(AudioController());
   runApp(const MyApp());

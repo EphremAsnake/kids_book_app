@@ -83,17 +83,22 @@ class AdController extends GetxController {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
           _loadRewardedAd();
+
           //! Handle failed ad (Try to Load Again)
         },
         onAdDismissedFullScreenContent: (ad) {
           _loadRewardedAd();
-          onContentClosed?.call(); //! Callback after content is closed
+          onContentClosed?.call();
+
+          //! Callback after content is closed
         },
       );
 
       _rewardedAd?.show(
         onUserEarnedReward: (ad, reward) async {
-          onUserEarnedReward?.call(); //! Callback after earning reward
+          onUserEarnedReward?.call();
+
+          //! Callback after earning reward
           _loadRewardedAd();
         },
       );
@@ -125,7 +130,9 @@ class AdController extends GetxController {
     if (!rewardedAdLoaded.value) {
       //!Ad still failed to load so try to load again
 
-      _loadRewardedAd(); //! Load rewarded ad
+      _loadRewardedAd();
+
+      //! Load rewarded ad
 
       //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
     }
@@ -136,12 +143,13 @@ class AdController extends GetxController {
     if (_interstitialAd == null) {
       //!Ad still null
       _loadInterstitialAd();
+
       //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
     }
   }
 
   @override
-  void dispose() {
+  void onClose() {
     _rewardedAd?.dispose();
     _interstitialAd?.dispose();
     super.dispose();

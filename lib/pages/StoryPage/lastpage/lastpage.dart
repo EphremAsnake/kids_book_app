@@ -10,14 +10,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
-import '../../../widget/animated_button_widget.dart';
-import '../../BookListMenu.dart';
+import '../../../widget/animatedbuttonwidget.dart';
+import '../../BookMenu/BookListMenu.dart';
 
 class LastScreen extends StatefulWidget {
   final Function replay;
   final Function close;
-  //final Function ratingdialog;
-
   final ApiResponse booksList;
   final ConfigApiResponseModel configResponse;
   const LastScreen({
@@ -26,7 +24,6 @@ class LastScreen extends StatefulWidget {
     required this.booksList,
     required this.configResponse,
     required this.close,
-    //required this.ratingdialog
   });
 
   @override
@@ -47,23 +44,10 @@ class _ChoiceScreenState extends State<LastScreen> {
   }
 
   void openUrlAndroid(String url) async {
+    //!open Playstore
     OpenStore.instance.open(
-      //appStoreId: appId,
       androidAppBundleId: url,
     );
-    // //!package name open playstore
-    // final String appPackageName = url;
-
-    // final String playstoreurl = 'market://details?id=$appPackageName';
-
-    // if (await canLaunch(playstoreurl)) {
-    //   await launch(playstoreurl);
-    // } else {
-    //   final String playstoreurlweb =
-    //       'https://play.google.com/store/apps/details?id=$appPackageName';
-    //   await launch(playstoreurlweb);
-    //   //throw 'Could not launch Url.';
-    // }
   }
 
   void openAppStore(String appId) async {
@@ -87,9 +71,6 @@ class _ChoiceScreenState extends State<LastScreen> {
         return false;
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        // ),
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: BackdropFilter(
@@ -112,33 +93,6 @@ class _ChoiceScreenState extends State<LastScreen> {
                         ),
                       ),
                     ),
-                    // Positioned(
-                    //   top: 20,
-                    //   right: MediaQuery.of(context).size.width * 0.075,
-                    //   child: CircleAvatar(
-                    //       radius: MediaQuery.of(context).size.height * 0.06,
-                    //       backgroundColor: Colors.white,
-                    //       child: GetBuilder<AudioController>(
-                    //           builder: (audioController) {
-                    //         return IconButton(
-                    //           icon: GetBuilder<AudioController>(
-                    //             builder: (audioController) {
-                    //               return Icon(
-                    //                 audioController.isPlaying
-                    //                     ? Icons.music_note_outlined
-                    //                     : Icons.music_off_outlined,
-                    //                 color: Colors.blue,
-                    //               );
-                    //             },
-                    //           ),
-                    //           onPressed: () {
-                    //             AudioController audioController =
-                    //                 Get.find<AudioController>();
-                    //             audioController.toggleAudio();
-                    //           },
-                    //         );
-                    //       })),
-                    // ),
                     Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -153,17 +107,6 @@ class _ChoiceScreenState extends State<LastScreen> {
                                     ),
                                     transition: Transition.fadeIn,
                                     duration: const Duration(seconds: 2));
-
-                                // Navigator.pushAndRemoveUntil(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => BookListPage(
-                                //       booksList: widget.booksList,
-                                //       configResponse: widget.configResponse,
-                                //     ),
-                                //   ),
-                                //   (route) => false,
-                                // );
                               } else {
                                 Get.offAll(
                                     BookListPage(
@@ -173,18 +116,6 @@ class _ChoiceScreenState extends State<LastScreen> {
                                     ),
                                     transition: Transition.fadeIn,
                                     duration: const Duration(seconds: 2));
-
-                                // Navigator.pushAndRemoveUntil(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => BookListPage(
-                                //       booksList: widget.booksList,
-                                //       configResponse: widget.configResponse,
-                                //       isbackgroundsilent: true,
-                                //     ),
-                                //   ),
-                                //   (route) => false,
-                                // );
                               }
                             },
                             child: AnimatedButtonWidget(
@@ -213,7 +144,6 @@ class _ChoiceScreenState extends State<LastScreen> {
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            // crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
                                 onTap: () {
@@ -252,19 +182,6 @@ class _ChoiceScreenState extends State<LastScreen> {
                               ),
                             ],
                           ),
-                          // SizedBox(
-                          //   height: 30.h,
-                          // ),
-                          // InkWell(
-                          //   onTap: () => {},
-                          //   child: AnimatedButtonWidget(
-                          //     buttonDelayDuration:
-                          //         const Duration(milliseconds: 1),
-                          //     buttonPlayDuration: buttonPlayDuration,
-                          //     text: 'Share',
-                          //     icon: Icons.headphones,
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),

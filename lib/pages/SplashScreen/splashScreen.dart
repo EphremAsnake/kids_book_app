@@ -6,13 +6,13 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
-import '../model/booklistModel.dart';
-import '../model/configModel.dart';
-import '../utils/Constants/AllStrings.dart';
-import '../utils/services/apiEndpoints.dart';
-import '../utils/adhelper.dart';
-import '../widget/choice.dart';
-import 'BookListMenu.dart';
+import '../../model/booklistModel.dart';
+import '../../model/configModel.dart';
+import '../../utils/Constants/AllStrings.dart';
+import '../../services/apiEndpoints.dart';
+import '../../utils/adhelper.dart';
+import '../../widget/choice.dart';
+import '../BookMenu/BookListMenu.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,7 +34,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void saveToLocalStorageBookList(data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String jsonData = json.encode(data); //! Convert to JSON string
+    String jsonData = json.encode(data);
+
+    //! Convert to JSON string
     await prefs.setString('booklist_response_data', jsonData);
   }
 
@@ -72,8 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
             return ChoiceDialogBox(
               title: Strings.noInternet,
               titleColor: const Color(0xffED1E54),
-              descriptions:
-                  Strings.noInternetDescription,
+              descriptions: Strings.noInternetDescription,
               text: Strings.ok,
               functionCall: () {
                 Navigator.pop(context);
@@ -146,6 +147,7 @@ class _SplashScreenState extends State<SplashScreen> {
         setState(() {
           configResponses = configResponse;
         });
+
         //! Set the ad unit IDs in AdHelper
         AdHelper.setAdUnits(
           interstitialId: Platform.isAndroid

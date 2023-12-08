@@ -9,8 +9,8 @@ import 'package:storyapp/utils/Constants/AllStrings.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
-import '../../../widget/animated_button_widget.dart';
-import '../../BookListMenu.dart';
+import '../../../widget/animatedbuttonwidget.dart';
+import '../../BookMenu/BookListMenu.dart';
 
 class ChoiceScreen extends StatefulWidget {
   final Function read;
@@ -137,7 +137,6 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 const Duration(milliseconds: 1),
                             buttonPlayDuration: buttonPlayDuration,
                             text: Strings.readMySelf,
-                            //icon: Icons.chrome_reader_mode_rounded,
                           ),
                         ),
                       ],
