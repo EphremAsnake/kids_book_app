@@ -42,7 +42,7 @@ dependencies:
   flutter_swipe_detector: ^2.0.0
   get: ^4.6.6
   google_fonts: ^6.1.0
-  google_mobile_ads: ^3.1.0
+  google_mobile_ads: ^4.0.0
   image_fade: ^0.6.2
   just_audio: ^0.9.36
   logger: ^2.0.2+1
