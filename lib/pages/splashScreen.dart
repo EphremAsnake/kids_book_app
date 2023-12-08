@@ -112,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 booksList: apiResponse,
                 configResponse: configResponses!,
               ),
-              transition: Transition.zoom,
+              transition: Transition.fade,
               duration: const Duration(seconds: 2));
         } else {
           Get.offAll(
@@ -120,7 +120,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 booksList: apiResponse,
                 configResponse: configResponses!,
               ),
-              transition: Transition.zoom,
+              transition: Transition.fade,
               duration: const Duration(seconds: 2));
         }
       } else {
