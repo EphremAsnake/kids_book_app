@@ -77,13 +77,13 @@ class AdController extends GetxController {
     }
   }
 
-  void showRewardedAd(
-      Function()? onUserEarnedReward, Function()? onContentClosed) {
+  void showRewardedAd(Function()? onUserEarnedReward,
+      Function()? onContentClosed) {
     if (rewardedAdLoaded.value) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
           _loadRewardedAd();
-
+          //onRewardadFailedtoLoad?.call();
           //! Handle failed ad (Try to Load Again)
         },
         onAdDismissedFullScreenContent: (ad) {
