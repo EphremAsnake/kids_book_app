@@ -39,13 +39,18 @@ class AdController extends GetxController {
             rewardedAdLoaded.value = true;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
-                // ad.dispose;
+                ad.dispose;
+                _loadRewardedAd();
+              },
+              onAdFailedToShowFullScreenContent: (ad, error) {
+                ad.dispose;
                 _loadRewardedAd();
               },
             );
             update();
           },
           onAdFailedToLoad: (error) {
+            _loadRewardedAd();
             debugPrint('Rewarded Ad failed to load: $error');
           },
         ),
@@ -63,13 +68,22 @@ class AdController extends GetxController {
             interstitialAdLoaded.value = true;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdDismissedFullScreenContent: (ad) {
+                ad.dispose();
                 _loadInterstitialAd();
               },
+              onAdFailedToShowFullScreenContent: (ad, error) {
+                ad.dispose();
+              },
+              onAdImpression: (ad) {
+                _interstitialAd = ad;
+              },
             );
-            _interstitialAd = ad;
+
+            //_interstitialAd = ad;
             update();
           },
           onAdFailedToLoad: (error) {
+            _loadInterstitialAd();
             debugPrint('Interstitial Ad failed to load: $error');
           },
         ),
@@ -77,16 +91,17 @@ class AdController extends GetxController {
     }
   }
 
-  void showRewardedAd(Function()? onUserEarnedReward,
-      Function()? onContentClosed) {
+  void showRewardedAd(
+      Function()? onUserEarnedReward, Function()? onContentClosed) {
     if (rewardedAdLoaded.value) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
-        onAdFailedToShowFullScreenContent: (ad, error) {
-          _loadRewardedAd();
-          //onRewardadFailedtoLoad?.call();
-          //! Handle failed ad (Try to Load Again)
-        },
+        // onAdFailedToShowFullScreenContent: (ad, error) {
+        //   _loadRewardedAd();
+        //   //onRewardadFailedtoLoad?.call();
+        //   //! Handle failed ad (Try to Load Again)
+        // },
         onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
           _loadRewardedAd();
           onContentClosed?.call();
 
