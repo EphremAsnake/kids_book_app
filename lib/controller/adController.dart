@@ -77,8 +77,8 @@ class AdController extends GetxController {
     }
   }
 
-  void showRewardedAd(Function()? onUserEarnedReward,
-      Function()? onContentClosed) {
+  void showRewardedAd(
+      Function()? onUserEarnedReward, Function()? onContentClosed) {
     if (rewardedAdLoaded.value) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
@@ -107,50 +107,75 @@ class AdController extends GetxController {
     }
   }
 
-  Future<void> showInterstitialAd(Function() onContentClosed) async {
+  Future<void> showInterstitialAd(
+      Function()? onContentClosed, Function() onContentfail) async {
     if (_interstitialAd == null) {
+      //  Get.snackbar('da',
+      //     'Strings.storyTryagain',
+      //     backgroundColor: Colors.orange);
       _loadInterstitialAd();
     }
     if (interstitialAdLoaded.value) {
+       
       //_interstitialAd?.setImmersiveMode(true);
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
-          _loadInterstitialAd();
-          onContentClosed.call();
+          //_loadInterstitialAd();
+          // Get.snackbar('da',
+          // 'Strings.storyTryagain',
+          // backgroundColor: Colors.orange);
+          onContentClosed?.call();
         },
         onAdDismissedFullScreenContent: (ad) {
-          _loadInterstitialAd();
-          onContentClosed.call();
+          // Get.snackbar('da',
+          // 'Strings.storyTryagain',
+          // backgroundColor: Colors.orange);
+          //_loadInterstitialAd();
+          onContentClosed?.call();
+        },
+        onAdWillDismissFullScreenContent: (ad) {
+          // Get.snackbar('da',
+          // 'Strings.storyTryagain',
+          // backgroundColor: Colors.orange);
+        },
+        onAdShowedFullScreenContent: (ad) {
+          // Get.snackbar('da',
+          // 'Strings.storyTryagain',
+          // backgroundColor: Colors.orange);
         },
       );
       _interstitialAd?.show();
+    } else {
+      // Get.snackbar('da',
+      //     'Strings.storyTryagain',
+      //     backgroundColor: Colors.orange);
     }
   }
 
-  Future<void> loadRewardedAdAfterError() async {
-    if (!rewardedAdLoaded.value) {
-      //!Ad still failed to load so try to load again
+  // Future<void> loadRewardedAdAfterError() async {
+  //   if (!rewardedAdLoaded.value) {
+  //     //!Ad still failed to load so try to load again
 
-      _loadRewardedAd();
+  //     _loadRewardedAd();
 
-      //! Load rewarded ad
+  //     //! Load rewarded ad
 
-      //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
-    }
-  }
+  //     //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
+  //   }
+  // }
 
-  Future<void> loadInterstitialAdAfterError() async {
-    //! Load rewarded ad
-    if (_interstitialAd == null) {
-      //!Ad still null
-      _loadInterstitialAd();
+  // Future<void> loadInterstitialAdAfterError() async {
+  //   //! Load rewarded ad
+  //   if (_interstitialAd == null) {
+  //     //!Ad still null
+  //     _loadInterstitialAd();
 
-      //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
-    }
-  }
+  //     //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
+  //   }
+  // }
 
   @override
-  void onClose() {
+  void dispose() {
     _rewardedAd?.dispose();
     _interstitialAd?.dispose();
     super.dispose();

@@ -80,8 +80,8 @@ class _BookListPageState extends State<BookListPage> {
       interstitialAdUnitId: interstitialAdId,
     ));
 
-    adController.loadInterstitialAdAfterError();
-    adController.loadRewardedAdAfterError();
+    // adController.loadInterstitialAdAfterError();
+    // adController.loadRewardedAdAfterError();
   }
 
   void initcalls() {
@@ -148,8 +148,8 @@ class _BookListPageState extends State<BookListPage> {
               descriptions: Strings.storyTryagain,
               text: Strings.ok,
               functionCall: () {
-                adController.loadInterstitialAdAfterError();
-                adController.loadRewardedAdAfterError();
+                // adController.loadInterstitialAdAfterError();
+                // adController.loadRewardedAdAfterError();
 
                 Navigator.pop(context);
               },
@@ -345,6 +345,7 @@ class _BookListPageState extends State<BookListPage> {
                                                         goto: true);
                                                   } else if (book.status ==
                                                       Strings.statusUnlocked) {
+                                                       
                                                     //!check if show interstitialad is true
                                                     if (widget
                                                         .configResponse
@@ -353,13 +354,13 @@ class _BookListPageState extends State<BookListPage> {
                                                       adController
                                                           .showInterstitialAd(
                                                               () async {
-                                                        adController
-                                                            .loadInterstitialAdAfterError();
-                                                        adController
-                                                            .loadRewardedAdAfterError();
+                                                        // adController
+                                                        //     .loadInterstitialAdAfterError();
+                                                        // adController
+                                                        //     .loadRewardedAdAfterError();
                                                         goToStoryPage(
                                                             book.folder);
-                                                      });
+                                                      },(){});
                                                       //await _showInterstitialAd();
                                                     } else {
                                                       //!Interstitial ad show Set to False Navigate to Story Page
@@ -377,6 +378,10 @@ class _BookListPageState extends State<BookListPage> {
                                                             .getBookOpenedCount(
                                                                 book.title);
 
+
+
+                                                                 
+
                                                     //!check if book finished it's session if so reset or lock it again
 
                                                     if (isWatched &&
@@ -393,22 +398,27 @@ class _BookListPageState extends State<BookListPage> {
                                                     if (isWatched &&
                                                         openedCount <=
                                                             rewardedCountLimit) {
+                                                              
                                                       //!check if show interstitialad is true
                                                       if (widget
                                                           .configResponse
                                                           .admobInterstitialAd!
                                                           .show!) {
+
+                                                            
                                                         //!Check If Interstitial Ad is available
                                                         if (adController
                                                             .interstitialAdLoaded
                                                             .value) {
+                                                              
                                                           adController
                                                               .showInterstitialAd(
                                                                   () async {
-                                                            adController
-                                                                .loadInterstitialAdAfterError();
-                                                            adController
-                                                                .loadRewardedAdAfterError();
+                                                                   
+                                                            // adController
+                                                            //     .loadInterstitialAdAfterError();
+                                                            // adController
+                                                            //     .loadRewardedAdAfterError();
 
                                                             //!Increment Count of Book Opened
                                                             await BookPreferences
@@ -418,11 +428,20 @@ class _BookListPageState extends State<BookListPage> {
                                                             //!Navigate To Story Page
                                                             goToStoryPage(
                                                                 book.folder);
+                                                          },()async{
+                                                            Get.snackbar(
+                                                                      '$isWatched    $openedCount    $rewardedCountLimit',
+                                                                      Strings
+                                                                          .storyTryagain,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .orange);
+                                                            
                                                           });
                                                         } else {
                                                           //!try to load Interstitial Ad Again
-                                                          await adController
-                                                              .loadInterstitialAdAfterError();
+                                                          // await adController
+                                                          //     .loadInterstitialAdAfterError();
 
                                                           //!try to show again
                                                           if (adController
@@ -431,10 +450,10 @@ class _BookListPageState extends State<BookListPage> {
                                                             adController
                                                                 .showInterstitialAd(
                                                                     () async {
-                                                              adController
-                                                                  .loadInterstitialAdAfterError();
-                                                              adController
-                                                                  .loadRewardedAdAfterError();
+                                                              // adController
+                                                              //     .loadInterstitialAdAfterError();
+                                                              // adController
+                                                              //     .loadRewardedAdAfterError();
 
                                                               //!Increment Count of Book Opened
                                                               await BookPreferences
@@ -444,7 +463,7 @@ class _BookListPageState extends State<BookListPage> {
                                                               //!Navigate To Story Page
                                                               goToStoryPage(
                                                                   book.folder);
-                                                            });
+                                                            },(){});
                                                           } else {
                                                             //!We tried to load and show interstial ad 2 times but got nothing so just open the story and Increment the book Opened Count
                                                             await BookPreferences
@@ -464,10 +483,10 @@ class _BookListPageState extends State<BookListPage> {
                                                       }
                                                     } else {
                                                       //!show reward ad if available for locked books
-                                                      adController
-                                                          .loadInterstitialAdAfterError();
-                                                      adController
-                                                          .loadRewardedAdAfterError();
+                                                      // adController
+                                                      //     .loadInterstitialAdAfterError();
+                                                      // adController
+                                                      //     .loadRewardedAdAfterError();
                                                       // ignore: use_build_context_synchronously
                                                       showDialog(
                                                         context: context,
@@ -523,10 +542,10 @@ class _BookListPageState extends State<BookListPage> {
                                                                   await BookPreferences
                                                                       .incrementBookOpened(
                                                                           book.title);
-                                                                  adController
-                                                                      .loadInterstitialAdAfterError();
-                                                                  adController
-                                                                      .loadRewardedAdAfterError();
+                                                                  // adController
+                                                                  //     .loadInterstitialAdAfterError();
+                                                                  // adController
+                                                                  //     .loadRewardedAdAfterError();
 
                                                                   //! Call setState to trigger a rebuild of the GridView item
                                                                   setState(
@@ -534,10 +553,10 @@ class _BookListPageState extends State<BookListPage> {
                                                                 },
                                                                     //!onContentClosed   Reward
                                                                     () async {
-                                                                  adController
-                                                                      .loadInterstitialAdAfterError();
-                                                                  adController
-                                                                      .loadRewardedAdAfterError();
+                                                                  // adController
+                                                                  //     .loadInterstitialAdAfterError();
+                                                                  // adController
+                                                                  //     .loadRewardedAdAfterError();
                                                                   goToStoryPage(
                                                                       book.folder);
                                                                 });
@@ -565,21 +584,21 @@ class _BookListPageState extends State<BookListPage> {
                                                                       await BookPreferences
                                                                           .incrementBookOpened(
                                                                               book.title);
-                                                                      adController
-                                                                          .loadInterstitialAdAfterError();
-                                                                      adController
-                                                                          .loadRewardedAdAfterError();
+                                                                      // adController
+                                                                      //     .loadInterstitialAdAfterError();
+                                                                      // adController
+                                                                      //     .loadRewardedAdAfterError();
 
                                                                       //! Call setState to trigger a rebuild of the GridView item
                                                                       setState(
                                                                           () {});
                                                                       goToStoryPage(
                                                                           book.folder);
-                                                                    });
+                                                                    },(){});
                                                                   } else {
                                                                     //!try to load Interstitial Ad Again
-                                                                    await adController
-                                                                        .loadInterstitialAdAfterError();
+                                                                    // await adController
+                                                                    //     .loadInterstitialAdAfterError();
 
                                                                     //!try to show again
                                                                     if (adController
@@ -595,17 +614,17 @@ class _BookListPageState extends State<BookListPage> {
                                                                             true);
                                                                         await BookPreferences.incrementBookOpened(
                                                                             book.title);
-                                                                        adController
-                                                                            .loadInterstitialAdAfterError();
-                                                                        adController
-                                                                            .loadRewardedAdAfterError();
+                                                                        // adController
+                                                                        //     .loadInterstitialAdAfterError();
+                                                                        // adController
+                                                                        //     .loadRewardedAdAfterError();
 
                                                                         //! Call setState to trigger a rebuild of the GridView item
                                                                         setState(
                                                                             () {});
                                                                         goToStoryPage(
                                                                             book.folder);
-                                                                      });
+                                                                      },(){});
                                                                     } else {
                                                                       //! Both Reward ad and interstitial ad failed so show dialog
                                                                     }
