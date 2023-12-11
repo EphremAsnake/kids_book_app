@@ -1,13 +1,9 @@
 class ConfigApiResponseModel {
-  AdmobRewardedAd? admobRewardedAd;
-  AdmobInterstitialAd? admobInterstitialAd;
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   String aboutApp;
 
   ConfigApiResponseModel({
-    this.admobRewardedAd,
-    this.admobInterstitialAd,
     this.appRateAndShare,
     this.houseAd,
     required this.aboutApp,
@@ -15,12 +11,6 @@ class ConfigApiResponseModel {
 
   factory ConfigApiResponseModel.fromJson(Map<String, dynamic> json) {
     return ConfigApiResponseModel(
-      admobRewardedAd: json.containsKey('admob_rewarded_ad')
-          ? AdmobRewardedAd.fromJson(json['admob_rewarded_ad'])
-          : null,
-      admobInterstitialAd: json.containsKey('admob_interstitial_ad')
-          ? AdmobInterstitialAd.fromJson(json['admob_interstitial_ad'])
-          : null,
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
@@ -32,37 +22,6 @@ class ConfigApiResponseModel {
   }
 }
 
-class AdmobRewardedAd {
-  String? ios;
-  String? android;
-  int? rewardedCount;
-
-  AdmobRewardedAd({this.ios, this.android, this.rewardedCount});
-
-  factory AdmobRewardedAd.fromJson(Map<String, dynamic> json) {
-    return AdmobRewardedAd(
-      ios: json['ios'],
-      android: json['android'],
-      rewardedCount: json['rewarded_count'] ?? 0,
-    );
-  }
-}
-
-class AdmobInterstitialAd {
-  String? ios;
-  String? android;
-  bool? show;
-
-  AdmobInterstitialAd({this.ios, this.android, this.show});
-
-  factory AdmobInterstitialAd.fromJson(Map<String, dynamic> json) {
-    return AdmobInterstitialAd(
-      ios: json['ios'],
-      android: json['android'],
-      show: json['show'] ?? true,
-    );
-  }
-}
 
 class AppRateAndShare {
   String? iosID;

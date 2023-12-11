@@ -2,13 +2,11 @@ class BookList {
   final String folder;
   final String title;
   final String thumbnail;
-  String status;
 
   BookList({
     required this.folder,
     required this.title,
     required this.thumbnail,
-    required this.status,
   });
 
   factory BookList.fromJson(Map<String, dynamic> json) {
@@ -16,7 +14,6 @@ class BookList {
       folder: json['folder'] ?? '',
       title: json['title'] ?? '',
       thumbnail: json['thumbnail'] ?? '',
-      status: json['status'] ?? '',
     );
   }
 }

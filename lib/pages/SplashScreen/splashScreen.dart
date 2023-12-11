@@ -10,7 +10,6 @@ import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
 import '../../services/apiEndpoints.dart';
-import '../../utils/adhelper.dart';
 import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
 
@@ -132,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  //! get admob Ids
+  //! get Config Ids
   Future fetchConfigData() async {
     try {
       Response response = await dio.get(APIEndpoints.configsUrl);
@@ -148,15 +147,7 @@ class _SplashScreenState extends State<SplashScreen> {
           configResponses = configResponse;
         });
 
-        //! Set the ad unit IDs in AdHelper
-        AdHelper.setAdUnits(
-          interstitialId: Platform.isAndroid
-              ? configResponse.admobInterstitialAd?.android
-              : configResponse.admobInterstitialAd?.ios,
-          rewardedId: Platform.isAndroid
-              ? configResponse.admobRewardedAd?.android
-              : configResponse.admobRewardedAd?.ios,
-        );
+       
 
         debugPrint('Something Went Wrong Try Again');
       }
@@ -177,16 +168,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Map<String, dynamic> parsedConfigData = json.decode(storedConfigData);
     ConfigApiResponseModel storedConfigResponse =
         ConfigApiResponseModel.fromJson(parsedConfigData);
-
-    //! Set the ad unit IDs in AdHelper
-    AdHelper.setAdUnits(
-      interstitialId: Platform.isAndroid
-          ? storedConfigResponse.admobInterstitialAd?.android
-          : storedConfigResponse.admobInterstitialAd?.ios,
-      rewardedId: Platform.isAndroid
-          ? storedConfigResponse.admobRewardedAd?.android
-          : storedConfigResponse.admobRewardedAd?.ios,
-    );
 
     Get.offAll(
         BookListPage(
