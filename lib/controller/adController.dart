@@ -83,7 +83,6 @@ class AdController extends GetxController {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
           _loadRewardedAd();
-          //onRewardadFailedtoLoad?.call();
           //! Handle failed ad (Try to Load Again)
         },
         onAdDismissedFullScreenContent: (ad) {
@@ -110,69 +109,32 @@ class AdController extends GetxController {
   Future<void> showInterstitialAd(
       Function()? onContentClosed, Function() onContentfail) async {
     if (_interstitialAd == null) {
-      //  Get.snackbar('da',
-      //     'Strings.storyTryagain',
-      //     backgroundColor: Colors.orange);
+   
       _loadInterstitialAd();
     }
     if (interstitialAdLoaded.value) {
        
-      //_interstitialAd?.setImmersiveMode(true);
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
-          //_loadInterstitialAd();
-          // Get.snackbar('da',
-          // 'Strings.storyTryagain',
-          // backgroundColor: Colors.orange);
+          
           onContentClosed?.call();
         },
         onAdDismissedFullScreenContent: (ad) {
-          // Get.snackbar('da',
-          // 'Strings.storyTryagain',
-          // backgroundColor: Colors.orange);
-          //_loadInterstitialAd();
+        
           onContentClosed?.call();
         },
         onAdWillDismissFullScreenContent: (ad) {
-          // Get.snackbar('da',
-          // 'Strings.storyTryagain',
-          // backgroundColor: Colors.orange);
+       
         },
         onAdShowedFullScreenContent: (ad) {
-          // Get.snackbar('da',
-          // 'Strings.storyTryagain',
-          // backgroundColor: Colors.orange);
+         
         },
       );
       _interstitialAd?.show();
     } else {
-      // Get.snackbar('da',
-      //     'Strings.storyTryagain',
-      //     backgroundColor: Colors.orange);
+      
     }
   }
-
-  // Future<void> loadRewardedAdAfterError() async {
-  //   if (!rewardedAdLoaded.value) {
-  //     //!Ad still failed to load so try to load again
-
-  //     _loadRewardedAd();
-
-  //     //! Load rewarded ad
-
-  //     //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
-  //   }
-  // }
-
-  // Future<void> loadInterstitialAdAfterError() async {
-  //   //! Load rewarded ad
-  //   if (_interstitialAd == null) {
-  //     //!Ad still null
-  //     _loadInterstitialAd();
-
-  //     //!Get.snackbar('Ad Loading Failed', 'Unable to load rewarded ad');
-  //   }
-  // }
 
   @override
   void dispose() {
