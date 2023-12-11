@@ -79,8 +79,6 @@ class _BookListPageState extends State<BookListPage> {
       rewardedAdUnitId: rewardedAdId,
       interstitialAdUnitId: interstitialAdId,
     ));
-
-   
   }
 
   void initcalls() {
@@ -175,17 +173,16 @@ class _BookListPageState extends State<BookListPage> {
 
   void goToStoryPage(String folder) {
     if (folderName == folder) {
-      Navigator.of(context).push(
-        BookOpeningPageRoute(
-          page: BookPage(
+      Get.offAll(
+          BookPage(
             response: singlestoryPageResponse!,
             folder: folder,
             backgroundMusic: widget.booksList.backgroundMusic,
             booksList: widget.booksList,
             configResponse: widget.configResponse,
           ),
-        ),
-      );
+          transition: Transition.circularReveal,
+          duration: const Duration(seconds: 2));
     } else {
       getSelectedStory(folder, goto: true);
     }
@@ -210,18 +207,16 @@ class _BookListPageState extends State<BookListPage> {
         folderName = folder;
 
         if (goto != null) {
-          // ignore: use_build_context_synchronously
-          Navigator.of(context).push(
-            BookOpeningPageRoute(
-              page: BookPage(
+          Get.offAll(
+              BookPage(
                 response: singlestoryPageResponse!,
                 folder: folder,
                 backgroundMusic: widget.booksList.backgroundMusic,
                 booksList: widget.booksList,
                 configResponse: widget.configResponse,
               ),
-            ),
-          );
+              transition: Transition.circularReveal,
+              duration: const Duration(seconds: 2));
         }
         logger.e(singlestoryPageResponse!.pages[0].image.toString());
       } else {
@@ -348,7 +343,6 @@ class _BookListPageState extends State<BookListPage> {
                                                       adController
                                                           .showInterstitialAd(
                                                               () async {
-                                                      
                                                         goToStoryPage(
                                                             book.folder);
                                                       }, () {});

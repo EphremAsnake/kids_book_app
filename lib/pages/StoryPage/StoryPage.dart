@@ -75,8 +75,7 @@ class _BooksPageState extends State<BookPage>
     audioController = Get.find<AudioController>();
     _controller = AnimationController(
       vsync: this,
-      duration:
-          const Duration(milliseconds: 3000), 
+      duration: const Duration(milliseconds: 3000),
     );
     audioController.audioVolumeDown();
     isAudioPlaying = audioController.isPlaying;
@@ -128,18 +127,16 @@ class _BooksPageState extends State<BookPage>
             setState(() {
               hasLastScreenDisplayed = false;
             });
-
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BookPage(
-                        response: widget.response,
-                        folder: widget.folder,
-                        backgroundMusic: widget.backgroundMusic,
-                        booksList: widget.booksList,
-                        configResponse: widget.configResponse,
-                      )),
-            );
+            Get.offAll(
+                BookPage(
+                  response: widget.response,
+                  folder: widget.folder,
+                  backgroundMusic: widget.backgroundMusic,
+                  booksList: widget.booksList,
+                  configResponse: widget.configResponse,
+                ),
+                transition: Transition.fadeIn,
+                duration: const Duration(milliseconds: 1));
           },
           booksList: widget.booksList,
           configResponse: widget.configResponse,
@@ -350,7 +347,6 @@ class _BooksPageState extends State<BookPage>
                             alignment: Alignment.center,
                             fit: BoxFit.cover,
                             scale: 2,
-
                             placeholder: Container(
                               color: Colors.white.withOpacity(0.7),
                               alignment: Alignment.center,
@@ -515,7 +511,6 @@ class _BooksPageState extends State<BookPage>
                               ),
                             ),
                             height: MediaQuery.of(context).size.height * 0.2,
-                            
                             child: Center(
                               child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -640,7 +635,6 @@ class _BooksPageState extends State<BookPage>
                     transition: Transition.fadeIn,
                     duration: const Duration(seconds: 2));
               }
-
             },
             secfunctionCall: () {
               if (_listen) {
