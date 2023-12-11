@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,7 +51,6 @@ class _BookListPageState extends State<BookListPage> {
 
   bool musicForAd = false;
   Color buttonColor = Colors.white;
-  Logger logger = Logger();
   bool loadingStory = false;
 
   @override
@@ -177,7 +175,6 @@ class _BookListPageState extends State<BookListPage> {
         });
         StoryPageApiResponse storyPageresponse =
             StoryPageApiResponse.fromJson(sResponse.data);
-        logger.e(storyPageresponse);
         singlestoryPageResponse = storyPageresponse;
         folderName = folder;
 
@@ -205,7 +202,6 @@ class _BookListPageState extends State<BookListPage> {
           //   ),
           // );
         }
-        logger.e(singlestoryPageResponse!.pages[0].image.toString());
       } else {
         setState(() {
           loadingStory = false;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:resize/resize.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -12,7 +11,6 @@ import 'utils/Constants/AllStrings.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await _initGoogleMobileAds();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
       overlays: []);
   SystemChrome.setPreferredOrientations([
@@ -25,9 +23,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-Future<void> _initGoogleMobileAds() async {
-  await MobileAds.instance.initialize();
-}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
