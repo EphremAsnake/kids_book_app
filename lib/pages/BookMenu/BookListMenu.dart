@@ -136,17 +136,28 @@ class _BookListPageState extends State<BookListPage> {
 
   void goToStoryPage(String folder) {
     if (folderName == folder) {
-      Navigator.of(context).push(
-        BookOpeningPageRoute(
-          page: BookPage(
+      Get.offAll(
+          BookPage(
             response: singlestoryPageResponse!,
             folder: folder,
             backgroundMusic: widget.booksList.backgroundMusic,
             booksList: widget.booksList,
             configResponse: widget.configResponse,
           ),
-        ),
-      );
+          transition: Transition.circularReveal,
+          duration: const Duration(seconds: 2));
+
+      // Navigator.of(context).push(
+      //   BookOpeningPageRoute(
+      //     page: BookPage(
+      //       response: singlestoryPageResponse!,
+      //       folder: folder,
+      //       backgroundMusic: widget.booksList.backgroundMusic,
+      //       booksList: widget.booksList,
+      //       configResponse: widget.configResponse,
+      //     ),
+      //   ),
+      // );
     } else {
       getSelectedStory(folder, goto: true);
     }
@@ -171,18 +182,28 @@ class _BookListPageState extends State<BookListPage> {
         folderName = folder;
 
         if (goto != null) {
-          // ignore: use_build_context_synchronously
-          Navigator.of(context).push(
-            BookOpeningPageRoute(
-              page: BookPage(
+          Get.offAll(
+              BookPage(
                 response: singlestoryPageResponse!,
                 folder: folder,
                 backgroundMusic: widget.booksList.backgroundMusic,
                 booksList: widget.booksList,
                 configResponse: widget.configResponse,
               ),
-            ),
-          );
+              transition: Transition.circularReveal,
+              duration: const Duration(seconds: 2));
+          // // ignore: use_build_context_synchronously
+          // Navigator.of(context).push(
+          //   BookOpeningPageRoute(
+          //     page: BookPage(
+          //       response: singlestoryPageResponse!,
+          //       folder: folder,
+          //       backgroundMusic: widget.booksList.backgroundMusic,
+          //       booksList: widget.booksList,
+          //       configResponse: widget.configResponse,
+          //     ),
+          //   ),
+          // );
         }
         logger.e(singlestoryPageResponse!.pages[0].image.toString());
       } else {

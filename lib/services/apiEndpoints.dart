@@ -4,5 +4,3 @@ class APIEndpoints {
   static const String booksUrl = '$baseUrl/books/';
   static const String configsUrl = '$baseUrl/configs/configs.json';
 }
-
-//https://www.buy.et/devwork/kids_book_app/v1-pro/
