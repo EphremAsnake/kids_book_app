@@ -44,6 +44,7 @@ class _BooksPageState extends State<BookPage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
+  bool isPl = false;
   bool wasplayingdialog = false;
   bool wasPlayingBeforeInterruption = false;
 
@@ -333,11 +334,11 @@ class _BooksPageState extends State<BookPage>
                     child: Stack(
                       children: [
                         //!StoryImage
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.height * 0.2),
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.height * 0.2,
                           child: ImageFade(
                               width: MediaQuery.of(context).size.width,
+                              //height: MediaQuery.of(context).size.height * 0.8,
 
                               //! whenever the image changes, it will be loaded, and then faded in:
                               image:
@@ -349,8 +350,8 @@ class _BooksPageState extends State<BookPage>
                               //! if the image is loaded synchronously ,
                               syncDuration: const Duration(milliseconds: 900),
                               alignment: Alignment.center,
-                              fit: BoxFit.cover,
-                              scale: 2,
+                              fit: BoxFit.fitWidth,
+                              //scale: 2,
                               placeholder: Container(
                                 color: Colors.white.withOpacity(0.7),
                                 alignment: Alignment.center,
@@ -413,7 +414,21 @@ class _BooksPageState extends State<BookPage>
                                         color: Colors.blue),
                                     onPressed: () async {
                                       if (_listen) {
-                                        togglePlayback();
+                                        if (bookplayer.playing) {
+                                          bookplayer.pause();
+                                          setState(() {
+                                            isPlaying = false;
+                                            isPl = true;
+                                          });
+                                        }
+                                        // else {
+                                        //   bookplayer.seek(Duration.zero);
+                                        //   bookplayer.play();
+                                        //   setState(() {
+                                        //     isPlaying = true;
+                                        //   });
+                                        // }
+                                        //togglePlayback();
                                       }
                                       await exitDialog(context);
                                     },
@@ -428,7 +443,7 @@ class _BooksPageState extends State<BookPage>
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: Colors.white.withOpacity(.95),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
@@ -490,7 +505,7 @@ class _BooksPageState extends State<BookPage>
                                       radius:
                                           MediaQuery.of(context).size.height *
                                               0.06,
-                                      backgroundColor: Colors.white,
+                                      backgroundColor: Colors.white.withOpacity(.95),
                                       child: IconButton(
                                         icon: Icon(
                                           isPlaying
@@ -522,10 +537,12 @@ class _BooksPageState extends State<BookPage>
                                   padding: EdgeInsets.symmetric(
                                     horizontal:
                                         MediaQuery.of(context).size.width *
-                                            0.035,
+                                                0.035 +
+                                            55,
                                   ),
                                   child: AnimatedTextWidget(
-                                    text: widget.response.pages[_counter].text,
+                                    text:
+                                        '${widget.response.pages[_counter].text} ${widget.response.pages[_counter].text} ${widget.response.pages[_counter].text} ${widget.response.pages[_counter].text}',
                                   )),
                             ),
                           ),
@@ -538,7 +555,7 @@ class _BooksPageState extends State<BookPage>
                   Visibility(
                     visible: buttonsVisiblity,
                     child: Positioned(
-                      bottom: MediaQuery.of(context).size.height * 0.03,
+                      bottom: MediaQuery.of(context).size.height * 0.02,
                       left: MediaQuery.of(context).size.width * 0.035,
                       child: InkWell(
                         onTap: () {
@@ -574,9 +591,8 @@ class _BooksPageState extends State<BookPage>
                   Visibility(
                     visible: buttonsVisiblity,
                     child: Positioned(
-                      bottom: MediaQuery.of(context).size.height * 0.03,
+                      bottom: MediaQuery.of(context).size.height * 0.02,
                       right: MediaQuery.of(context).size.width * 0.035,
-                      
                       child: InkWell(
                         onTap: () {
                           setState(() {
@@ -646,16 +662,18 @@ class _BooksPageState extends State<BookPage>
               }
             },
             secfunctionCall: () {
-              if (_listen) {
+              if (_listen && isPl) {
                 bookplayer.seek(Duration.zero);
                 bookplayer.play();
                 setState(() {
                   isPlaying = true;
+                  isPl = false;
                 });
               }
 
               Navigator.pop(context);
             },
+            fromexitdialog: true,
           );
         });
   }

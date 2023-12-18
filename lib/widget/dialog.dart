@@ -4,6 +4,7 @@ class CustomDialogBox extends StatefulWidget {
   final String? title, descriptions, text, text2;
   final Color? titleColor;
   final bool? closeicon;
+  final bool? fromexitdialog;
   final Function? functionCall, secfunctionCall;
 
   const CustomDialogBox(
@@ -15,7 +16,8 @@ class CustomDialogBox extends StatefulWidget {
       this.functionCall,
       this.secfunctionCall,
       this.closeicon,
-      this.text2})
+      this.text2,
+      this.fromexitdialog})
       : super(key: key);
 
   @override
@@ -99,45 +101,6 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   if (widget.functionCall != null && widget.text != null)
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          buttonColor = Colors.blue;
-                        });
-
-                        Future.delayed(const Duration(milliseconds: 10), () {
-                          setState(() {
-                            buttonColor = widget.titleColor!;
-                          });
-                        });
-                        widget.functionCall!();
-                      },
-                      child: Container(
-                        height: 47,
-                        width: MediaQuery.of(context).size.width * .15,
-                        decoration: BoxDecoration(
-                            color: buttonColor,
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Center(
-                          child: Text(
-                            widget.text!,
-                            style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // const SizedBox(width: 10,),
-                  if (widget.functionCall != null && widget.text != null)
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  
                     Expanded(
                       child: InkWell(
                         onTap: () {
@@ -150,7 +113,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                               buttonColor = widget.titleColor!;
                             });
                           });
-                          widget.secfunctionCall!();
+                          widget.functionCall!();
                         },
                         child: Container(
                           height: 47,
@@ -160,7 +123,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                               borderRadius: BorderRadius.circular(12)),
                           child: Center(
                             child: Text(
-                              widget.text2!,
+                              widget.text!,
                               style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
@@ -171,6 +134,45 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         ),
                       ),
                     ),
+                  // const SizedBox(width: 10,),
+                  if (widget.functionCall != null && widget.text != null)
+                    const SizedBox(
+                      width: 10,
+                    ),
+
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          buttonColor = Colors.blue;
+                        });
+
+                        Future.delayed(const Duration(milliseconds: 10), () {
+                          setState(() {
+                            buttonColor = widget.titleColor!;
+                          });
+                        });
+                        widget.secfunctionCall!();
+                      },
+                      child: Container(
+                        height: 47,
+                        width: MediaQuery.of(context).size.width * .15,
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                          child: Text(
+                            widget.text2!,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -181,7 +183,9 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
             right: 0,
             top: 0,
             child: GestureDetector(
-              onTap: () => Navigator.pop(context),
+              onTap: () => widget.fromexitdialog == null
+                  ? Navigator.pop(context)
+                  : widget.secfunctionCall!(),
               child: CircleAvatar(
                   backgroundColor: widget.titleColor,
                   radius: Constants.avatarRadius / 3,
