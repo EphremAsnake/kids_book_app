@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ExitDialogBox extends StatefulWidget {
+class CustomDialogBox extends StatefulWidget {
   final String? title, descriptions, text, text2;
   final Color? titleColor;
   final bool? closeicon;
   final Function? functionCall, secfunctionCall;
 
-  const ExitDialogBox(
+  const CustomDialogBox(
       {Key? key,
       this.title,
       this.descriptions,
@@ -23,7 +23,7 @@ class ExitDialogBox extends StatefulWidget {
   _ChoiceDialogBoxState createState() => _ChoiceDialogBoxState();
 }
 
-class _ChoiceDialogBoxState extends State<ExitDialogBox> {
+class _ChoiceDialogBoxState extends State<CustomDialogBox> {
   late Color buttonColor;
   @override
   void initState() {
@@ -171,7 +171,7 @@ class _ChoiceDialogBoxState extends State<ExitDialogBox> {
             right: 0,
             top: 0,
             child: GestureDetector(
-              onTap: () => widget.secfunctionCall!(),
+              onTap: () => Navigator.pop(context),
               child: CircleAvatar(
                   backgroundColor: widget.titleColor,
                   radius: Constants.avatarRadius / 3,

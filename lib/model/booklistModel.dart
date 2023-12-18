@@ -1,19 +1,25 @@
 class BookList {
-  final String folder;
+  final int id;
+  final String path;
   final String title;
   final String thumbnail;
+  final bool locked;
 
   BookList({
-    required this.folder,
+    required this.id,
+    required this.path,
     required this.title,
     required this.thumbnail,
+    required this.locked,
   });
 
   factory BookList.fromJson(Map<String, dynamic> json) {
     return BookList(
-      folder: json['folder'] ?? '',
+      id: json['id'] ?? 0,
+      path: json['path'] ?? '',
       title: json['title'] ?? '',
       thumbnail: json['thumbnail'] ?? '',
+      locked: json['Locked'] ?? false,
     );
   }
 }
@@ -24,13 +30,10 @@ class ApiResponse {
   final String backgroundColor;
   final String? bookListEndText;
 
-  final Map<String, dynamic>? houseAd;
-
   ApiResponse({
     required this.books,
     required this.backgroundMusic,
     required this.backgroundColor,
-    this.houseAd,
     this.bookListEndText,
   });
 
@@ -40,9 +43,7 @@ class ApiResponse {
           .map((bookJson) => BookList.fromJson(bookJson))
           .toList(),
       backgroundMusic: json['background_music'] ?? '',
-      backgroundColor:
-          json['background_menu_color'] ?? '', // Match the JSON key here
-      houseAd: json['house_ad'],
+      backgroundColor: json['background_menu_color'] ?? '',
       bookListEndText: json['bookListEndText'],
     );
   }

@@ -38,8 +38,8 @@ class _ChoiceScreenState extends State<LastScreen> {
     await FlutterShare.share(
       title: 'Share App',
       text: Platform.isAndroid
-          ? widget.configResponse.appRateAndShare!.androidShare
-          : widget.configResponse.appRateAndShare!.iosShare,
+          ? widget.configResponse.androidSettings.appRateAndShare!.share
+          : widget.configResponse.iosSettings.appRateAndShare!.share,
     );
   }
 
@@ -164,11 +164,14 @@ class _ChoiceScreenState extends State<LastScreen> {
                               InkWell(
                                 onTap: () {
                                   if (Platform.isAndroid) {
-                                    openUrlAndroid(widget.configResponse
-                                        .appRateAndShare!.androidID!);
+                                    openUrlAndroid(widget
+                                        .configResponse
+                                        .androidSettings
+                                        .appRateAndShare!
+                                        .urlId!);
                                   } else {
                                     openAppStore(widget.configResponse
-                                        .appRateAndShare!.iosID!);
+                                        .iosSettings.appRateAndShare!.urlId!);
                                   }
                                 },
                                 child: AnimatedButtonWidget(

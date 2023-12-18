@@ -130,10 +130,10 @@ class _BooksPageState extends State<BookPage>
             Get.offAll(
                 BookPage(
                   response: widget.response,
-                        folder: widget.folder,
-                        backgroundMusic: widget.backgroundMusic,
-                        booksList: widget.booksList,
-                        configResponse: widget.configResponse,
+                  folder: widget.folder,
+                  backgroundMusic: widget.backgroundMusic,
+                  booksList: widget.booksList,
+                  configResponse: widget.configResponse,
                 ),
                 transition: Transition.fadeIn,
                 duration: const Duration(milliseconds: 1));
@@ -620,7 +620,7 @@ class _BooksPageState extends State<BookPage>
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return ExitDialogBox(
+          return CustomDialogBox(
             title: Strings.leaveStory,
             titleColor: Colors.orange,
             descriptions: Strings.gohomeDescription,

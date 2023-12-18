@@ -10,6 +10,7 @@ import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
 import '../../services/apiEndpoints.dart';
+import '../../utils/adHelper.dart';
 import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
 
@@ -147,7 +148,19 @@ class _SplashScreenState extends State<SplashScreen> {
           configResponses = configResponse;
         });
 
-       
+        //! Set the ad unit IDs in AdHelper
+        AdHelper.setAdUnits(
+          interstitialId: Platform.isAndroid
+              ? configResponse
+                  .androidSettings.admobSettings.admobInterstitialAd?.adUnitId
+              : configResponse
+                  .iosSettings.admobSettings.admobInterstitialAd?.adUnitId,
+          rewardedId: Platform.isAndroid
+              ? configResponse
+                  .androidSettings.admobSettings.admobRewardedAd?.adUnitId
+              : configResponse
+                  .iosSettings.admobSettings.admobRewardedAd?.adUnitId,
+        );
 
         debugPrint('Something Went Wrong Try Again');
       }
