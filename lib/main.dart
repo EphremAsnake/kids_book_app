@@ -27,11 +27,13 @@ void main() async {
 
 Future<void> _initGoogleMobileAds() async {
   await MobileAds.instance.initialize();
+  await MobileAds.instance.updateRequestConfiguration(
+    RequestConfiguration(testDeviceIds: ['E8B8069F86DB9F7CFC536F078FB104C1']),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
 
   @override
   Widget build(BuildContext context) {

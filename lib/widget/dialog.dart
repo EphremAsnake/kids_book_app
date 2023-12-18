@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ExitDialogBox extends StatefulWidget {
+class CustomDialogBox extends StatefulWidget {
   final String? title, descriptions, text, text2;
   final Color? titleColor;
   final bool? closeicon;
   final Function? functionCall, secfunctionCall;
 
-  const ExitDialogBox(
+  const CustomDialogBox(
       {Key? key,
       this.title,
       this.descriptions,
@@ -23,7 +23,7 @@ class ExitDialogBox extends StatefulWidget {
   _ChoiceDialogBoxState createState() => _ChoiceDialogBoxState();
 }
 
-class _ChoiceDialogBoxState extends State<ExitDialogBox> {
+class _ChoiceDialogBoxState extends State<CustomDialogBox> {
   late Color buttonColor;
   @override
   void initState() {
@@ -98,69 +98,79 @@ class _ChoiceDialogBoxState extends State<ExitDialogBox> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        buttonColor = Colors.blue;
-                      });
-
-                      Future.delayed(const Duration(milliseconds: 10), () {
+                  if (widget.functionCall != null && widget.text != null)
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
                         setState(() {
-                          buttonColor = widget.titleColor!;
+                          buttonColor = Colors.blue;
                         });
-                      });
-                      widget.functionCall!();
-                    },
-                    child: Container(
-                      height: 47,
-                      width: MediaQuery.of(context).size.width * .15,
-                      decoration: BoxDecoration(
-                          color: buttonColor,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Center(
-                        child: Text(
-                          widget.text!,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
+
+                        Future.delayed(const Duration(milliseconds: 10), () {
+                          setState(() {
+                            buttonColor = widget.titleColor!;
+                          });
+                        });
+                        widget.functionCall!();
+                      },
+                      child: Container(
+                        height: 47,
+                        width: MediaQuery.of(context).size.width * .15,
+                        decoration: BoxDecoration(
+                            color: buttonColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                          child: Text(
+                            widget.text!,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   // const SizedBox(width: 10,),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        buttonColor = Colors.blue;
-                      });
+                  if (widget.functionCall != null && widget.text != null)
+                    const SizedBox(
+                      width: 10,
+                    ),
+                  
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            buttonColor = Colors.blue;
+                          });
 
-                      Future.delayed(const Duration(milliseconds: 10), () {
-                        setState(() {
-                          buttonColor = widget.titleColor!;
-                        });
-                      });
-                      widget.secfunctionCall!();
-                    },
-                    child: Container(
-                      height: 47,
-                      width: MediaQuery.of(context).size.width * .15,
-                      decoration: BoxDecoration(
-                          color: buttonColor,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Center(
-                        child: Text(
-                          widget.text2!,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
+                          Future.delayed(const Duration(milliseconds: 10), () {
+                            setState(() {
+                              buttonColor = widget.titleColor!;
+                            });
+                          });
+                          widget.secfunctionCall!();
+                        },
+                        child: Container(
+                          height: 47,
+                          width: MediaQuery.of(context).size.width * .15,
+                          decoration: BoxDecoration(
+                              color: buttonColor,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Center(
+                            child: Text(
+                              widget.text2!,
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ],
@@ -171,7 +181,7 @@ class _ChoiceDialogBoxState extends State<ExitDialogBox> {
             right: 0,
             top: 0,
             child: GestureDetector(
-              onTap: () => widget.secfunctionCall!(),
+              onTap: () => Navigator.pop(context),
               child: CircleAvatar(
                   backgroundColor: widget.titleColor,
                   radius: Constants.avatarRadius / 3,

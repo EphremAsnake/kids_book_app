@@ -109,31 +109,26 @@ class AdController extends GetxController {
   Future<void> showInterstitialAd(
       Function()? onContentClosed, Function() onContentfail) async {
     if (_interstitialAd == null) {
-   
       _loadInterstitialAd();
     }
     if (interstitialAdLoaded.value) {
-       
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, error) {
-          
           onContentClosed?.call();
         },
         onAdDismissedFullScreenContent: (ad) {
-        
           onContentClosed?.call();
         },
-        onAdWillDismissFullScreenContent: (ad) {
-       
-        },
-        onAdShowedFullScreenContent: (ad) {
-         
-        },
+        onAdWillDismissFullScreenContent: (ad) {},
+        onAdShowedFullScreenContent: (ad) {},
       );
       _interstitialAd?.show();
-    } else {
-      
-    }
+    } else {}
+  }
+
+  Future<void> loadRewardAd() async {
+    _rewardedAd = null;
+    await _loadRewardedAd();
   }
 
   @override

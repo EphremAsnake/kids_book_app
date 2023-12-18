@@ -151,11 +151,15 @@ class _SplashScreenState extends State<SplashScreen> {
         //! Set the ad unit IDs in AdHelper
         AdHelper.setAdUnits(
           interstitialId: Platform.isAndroid
-              ? configResponse.admobInterstitialAd?.android
-              : configResponse.admobInterstitialAd?.ios,
+              ? configResponse
+                  .androidSettings.admobSettings.admobInterstitialAd?.adUnitId
+              : configResponse
+                  .iosSettings.admobSettings.admobInterstitialAd?.adUnitId,
           rewardedId: Platform.isAndroid
-              ? configResponse.admobRewardedAd?.android
-              : configResponse.admobRewardedAd?.ios,
+              ? configResponse
+                  .androidSettings.admobSettings.admobRewardedAd?.adUnitId
+              : configResponse
+                  .iosSettings.admobSettings.admobRewardedAd?.adUnitId,
         );
 
         debugPrint('Something Went Wrong Try Again');
@@ -179,13 +183,18 @@ class _SplashScreenState extends State<SplashScreen> {
         ConfigApiResponseModel.fromJson(parsedConfigData);
 
     //! Set the ad unit IDs in AdHelper
+
     AdHelper.setAdUnits(
       interstitialId: Platform.isAndroid
-          ? storedConfigResponse.admobInterstitialAd?.android
-          : storedConfigResponse.admobInterstitialAd?.ios,
+          ? storedConfigResponse
+              .androidSettings.admobSettings.admobInterstitialAd?.adUnitId
+          : storedConfigResponse
+              .iosSettings.admobSettings.admobInterstitialAd?.adUnitId,
       rewardedId: Platform.isAndroid
-          ? storedConfigResponse.admobRewardedAd?.android
-          : storedConfigResponse.admobRewardedAd?.ios,
+          ? storedConfigResponse
+              .androidSettings.admobSettings.admobRewardedAd?.adUnitId
+          : storedConfigResponse
+              .iosSettings.admobSettings.admobRewardedAd?.adUnitId,
     );
 
     Get.offAll(

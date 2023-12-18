@@ -52,7 +52,7 @@ dependencies:
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.1
   wakelock: ^0.6.2
-
+  vertical_nav_bar: ^0.0.1
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
   flutter_lints: ^2.0.0

@@ -19,11 +19,9 @@ class StoryPageModel {
 }
 
 class StoryPageApiResponse {
-  final String backgroundColor;
   final List<StoryPageModel> pages;
 
   StoryPageApiResponse({
-    required this.backgroundColor,
     required this.pages,
   });
 
@@ -38,7 +36,6 @@ class StoryPageApiResponse {
     }
 
     return StoryPageApiResponse(
-      backgroundColor: json['background_color'] ?? '',
       pages: pages,
     );
   }

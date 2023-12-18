@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "storyapp" "\0"
+            VALUE "FileDescription", "StoryBook Pro" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "storyapp" "\0"
+            VALUE "InternalName", "StoryBook Pro" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "storyapp.exe" "\0"
-            VALUE "ProductName", "storyapp" "\0"
+            VALUE "ProductName", "StoryBook Pro" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

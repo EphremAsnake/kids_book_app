@@ -283,7 +283,7 @@ class _BooksPageState extends State<BookPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.response.backgroundColor.toColor(),
+        backgroundColor: Colors.transparent,
         body: WillPopScope(
           onWillPop: () async {
             if (_listen) {
@@ -333,66 +333,74 @@ class _BooksPageState extends State<BookPage>
                     child: Stack(
                       children: [
                         //!StoryImage
-                        ImageFade(
-                            width: MediaQuery.of(context).size.width * 0.85,
+                        Padding(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).size.height * 0.2),
+                          child: ImageFade(
+                              width: MediaQuery.of(context).size.width,
 
-                            //! whenever the image changes, it will be loaded, and then faded in:
-                            image: CachedNetworkImageProvider(images[_counter]),
+                              //! whenever the image changes, it will be loaded, and then faded in:
+                              image:
+                                  CachedNetworkImageProvider(images[_counter]),
 
-                            //! slow-ish fade for loaded images:
-                            duration: const Duration(milliseconds: 900),
+                              //! slow-ish fade for loaded images:
+                              duration: const Duration(milliseconds: 900),
 
-                            //! if the image is loaded synchronously ,
-                            syncDuration: const Duration(milliseconds: 900),
-                            alignment: Alignment.center,
-                            fit: BoxFit.cover,
-                            scale: 2,
-                            placeholder: Container(
-                              color: Colors.white.withOpacity(0.7),
+                              //! if the image is loaded synchronously ,
+                              syncDuration: const Duration(milliseconds: 900),
                               alignment: Alignment.center,
-                              child: const Icon(Icons.photo,
-                                  color: Colors.transparent, size: 128.0),
-                            ),
+                              fit: BoxFit.cover,
+                              scale: 2,
+                              placeholder: Container(
+                                color: Colors.white.withOpacity(0.7),
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.photo,
+                                    color: Colors.transparent, size: 128.0),
+                              ),
 
-                            //! displayed when an error occurs:
-                            errorBuilder: (context, error) {
-                              bookplayer.stop;
-                              return Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      Strings.oppscoudntloadString,
-                                      style: TextStyle(
-                                          fontSize: 8.sp, color: Colors.blue),
-                                    ),
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                      onPressed: () {
-                                        //_incrementCounter();
-                                        _deccrementCounter();
-                                      },
-                                      child: Text(
-                                        Strings.tryAgain,
+                              //! displayed when an error occurs:
+                              errorBuilder: (context, error) {
+                                bookplayer.stop;
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        Strings.oppscoudntloadString,
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 8.sp),
+                                            fontSize: 8.sp, color: Colors.blue),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            }),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          //_incrementCounter();
+                                          _deccrementCounter();
+                                        },
+                                        child: Text(
+                                          Strings.tryAgain,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8.sp),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ),
 
                         //!Home and Page Counter
                         Visibility(
                           visible: buttonsVisiblity,
                           child: Positioned(
-                            top: MediaQuery.of(context).size.height * 0.03,
-                            left: MediaQuery.of(context).size.height * 0.037,
+                            // top: MediaQuery.of(context).size.height * 0.03,
+                            // left: MediaQuery.of(context).size.height * 0.037,
+                            top: 20.0,
+                            left: MediaQuery.of(context).size.height * 0.08,
                             child: Column(
                               children: [
                                 //!Home Button
@@ -441,8 +449,10 @@ class _BooksPageState extends State<BookPage>
                         Visibility(
                           visible: buttonsVisiblity,
                           child: Positioned(
-                            top: MediaQuery.of(context).size.height * 0.03,
-                            right: MediaQuery.of(context).size.height * 0.037,
+                            // top: MediaQuery.of(context).size.height * 0.03,
+                            // right: MediaQuery.of(context).size.height * 0.037,
+                            top: 20.0,
+                            right: MediaQuery.of(context).size.height * 0.08,
                             child: Column(
                               children: [
                                 //!Background Music
@@ -503,12 +513,8 @@ class _BooksPageState extends State<BookPage>
                           left: 0,
                           right: 0,
                           child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.95),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                              ),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
                             ),
                             height: MediaQuery.of(context).size.height * 0.2,
                             child: Center(
@@ -537,7 +543,7 @@ class _BooksPageState extends State<BookPage>
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            previousbuttonColor = Colors.blue;
+                            previousbuttonColor = Colors.black.withOpacity(0.1);
                           });
 
                           Future.delayed(const Duration(milliseconds: 500), () {
@@ -557,6 +563,7 @@ class _BooksPageState extends State<BookPage>
                           child: SvgPicture.asset(
                             'assets/previous.svg',
                             height: 55,
+                            color: Colors.blue,
                           ),
                         ),
                       ),
@@ -569,10 +576,11 @@ class _BooksPageState extends State<BookPage>
                     child: Positioned(
                       bottom: MediaQuery.of(context).size.height * 0.03,
                       right: MediaQuery.of(context).size.width * 0.035,
+                      
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            nextbuttonColor = Colors.blue;
+                            nextbuttonColor = Colors.black.withOpacity(0.1);
                           });
 
                           Future.delayed(const Duration(milliseconds: 500), () {
@@ -592,6 +600,7 @@ class _BooksPageState extends State<BookPage>
                           child: SvgPicture.asset(
                             'assets/next.svg',
                             height: 55,
+                            color: Colors.blue,
                           ),
                         ),
                       ),
@@ -609,7 +618,7 @@ class _BooksPageState extends State<BookPage>
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return ExitDialogBox(
+          return CustomDialogBox(
             title: Strings.leaveStory,
             titleColor: Colors.orange,
             descriptions: Strings.gohomeDescription,
