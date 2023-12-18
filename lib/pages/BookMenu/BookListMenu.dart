@@ -714,24 +714,24 @@ class _BookListPageState extends State<BookListPage> {
                         buttonColor = Colors.white;
                       });
                     });
-                    Get.to(SettingsPage(
-                      description: widget.configResponse.aboutApp,
-                    ));
-                    // showDialog(
-                    //   context: context,
-                    //   barrierDismissible: false,
-                    //   builder: (BuildContext context) {
-                    //     return AboutDialogBox(
-                    //       //title: 'Unlock Your Story',
-                    //       titleColor: Colors.orange,
-                    //       descriptions: widget.configResponse.aboutApp,
-                    //       secfunctionCall: () {
-                    //         //showRewardAd();
-                    //         Navigator.pop(context);
-                    //       },
-                    //     );
-                    //   },
-                    // );
+                    // Get.to(SettingsPage(
+                    //   description: widget.configResponse.aboutApp,
+                    // ));
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AboutDialogBox(
+                          //title: 'Unlock Your Story',
+                          titleColor: Colors.orange,
+                          descriptions: widget.configResponse.aboutApp,
+                          secfunctionCall: () {
+                            //showRewardAd();
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    );
                   },
                 )),
           ),
