@@ -284,7 +284,7 @@ class _BooksPageState extends State<BookPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white60,
+        backgroundColor: Colors.white.withOpacity(0.8),
         body: WillPopScope(
           onWillPop: () async {
             if (_listen) {
@@ -333,6 +333,7 @@ class _BooksPageState extends State<BookPage>
                   Center(
                     child: Stack(
                       children: [
+                        
                         //!StoryImage
                         Positioned(
                           bottom: MediaQuery.of(context).size.height * 0.2,
@@ -353,7 +354,7 @@ class _BooksPageState extends State<BookPage>
                               fit: BoxFit.fitWidth,
                               //scale: 2,
                               placeholder: Container(
-                                color: Colors.white.withOpacity(0.7),
+                                color: Colors.transparent,
                                 alignment: Alignment.center,
                                 child: const Icon(Icons.photo,
                                     color: Colors.transparent, size: 128.0),
@@ -363,32 +364,20 @@ class _BooksPageState extends State<BookPage>
                               errorBuilder: (context, error) {
                                 bookplayer.stop;
                                 return Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      // Text(
-                                      //   Strings.oppscoudntloadString,
-                                      //   style: TextStyle(
-                                      //       fontSize: 8.sp, color: Colors.blue),
-                                      // ),
-                                      TextButton(
-                                        style: TextButton.styleFrom(
-                                          backgroundColor: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          //_incrementCounter();
-                                          _deccrementCounter();
-                                        },
-                                        child: Text(
-                                          Strings.tryAgain,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 8.sp),
-                                        ),
-                                      )
-                                    ],
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                    onPressed: () {
+                                      //_incrementCounter();
+                                      _deccrementCounter();
+                                    },
+                                    child: Text(
+                                      Strings.tryAgain,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 8.sp),
+                                    ),
                                   ),
                                 );
                               }),
