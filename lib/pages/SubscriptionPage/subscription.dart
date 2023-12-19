@@ -69,13 +69,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      height: 56 ,
+                      height: 56,
                     ),
                     Text(
                       'Subscribe Now',
@@ -151,31 +151,40 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       ],
                     ),
                     const SizedBox(height: 20.0),
-                      
+                    Center(
+                      child: TextButton(
+                        onPressed: () {},
+                        child: const Text(
+                          'Restore Purchase',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                   //const SizedBox(height: 10.0),
                     Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      _launchURL(widget.termofuseUrl);
-                    },
-                    child: const Text(
-                      'Terms of Use',
-                      style: TextStyle(color: Colors.white),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      //crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            _launchURL(widget.termofuseUrl);
+                          },
+                          child: const Text(
+                            'Terms of Use',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            _launchURL(widget.privacyPolicyUrl);
+                          },
+                          child: const Text(
+                            'Privacy Policy',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _launchURL(widget.privacyPolicyUrl);
-                    },
-                    child: const Text(
-                      'Privacy Policy',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-                            ),
                   ],
                 ),
               ),
@@ -210,10 +219,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           //     ],
           //   ),
           // ),
-      
+
           Positioned(
-             top: 20.0,
-          right: MediaQuery.of(context).size.height * 0.08,
+            top: 20.0,
+            right: MediaQuery.of(context).size.height * 0.08,
             child: CircleAvatar(
               radius: MediaQuery.of(context).size.height * 0.06,
               backgroundColor: Colors.white,
