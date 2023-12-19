@@ -284,7 +284,7 @@ class _BooksPageState extends State<BookPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white60,
         body: WillPopScope(
           onWillPop: () async {
             if (_listen) {
@@ -368,11 +368,11 @@ class _BooksPageState extends State<BookPage>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        Strings.oppscoudntloadString,
-                                        style: TextStyle(
-                                            fontSize: 8.sp, color: Colors.blue),
-                                      ),
+                                      // Text(
+                                      //   Strings.oppscoudntloadString,
+                                      //   style: TextStyle(
+                                      //       fontSize: 8.sp, color: Colors.blue),
+                                      // ),
                                       TextButton(
                                         style: TextButton.styleFrom(
                                           backgroundColor: Colors.blue,
@@ -505,7 +505,8 @@ class _BooksPageState extends State<BookPage>
                                       radius:
                                           MediaQuery.of(context).size.height *
                                               0.06,
-                                      backgroundColor: Colors.white.withOpacity(.95),
+                                      backgroundColor:
+                                          Colors.white.withOpacity(.95),
                                       child: IconButton(
                                         icon: Icon(
                                           isPlaying
@@ -541,8 +542,7 @@ class _BooksPageState extends State<BookPage>
                                             55,
                                   ),
                                   child: AnimatedTextWidget(
-                                    text:
-                                        '${widget.response.pages[_counter].text} ${widget.response.pages[_counter].text} ${widget.response.pages[_counter].text} ${widget.response.pages[_counter].text}',
+                                    text: widget.response.pages[_counter].text,
                                   )),
                             ),
                           ),

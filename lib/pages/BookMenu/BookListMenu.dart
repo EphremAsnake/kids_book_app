@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
+import 'package:parental_gates/parental_gates.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
@@ -26,6 +28,8 @@ import '../../widget/dialog.dart';
 import '../Settings/settingpage.dart';
 import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
+
+import '../SubscriptionPage/subscription.dart';
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -249,10 +253,106 @@ class _BookListPageState extends State<BookListPage> {
     }
   }
 
+  bool _isMenuOpen = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.booksList.backgroundColor.toColor(),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(
+          bottom: 4.0,
+          right: (MediaQuery.of(context).size.height * 0.08) - 16,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            //!About FAB
+            Visibility(
+              visible: _isMenuOpen,
+              child: CircleAvatar(
+                radius: MediaQuery.of(context).size.height * 0.06,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AboutDialogBox(
+                          titleColor: Colors.orange,
+                          descriptions: Platform.isAndroid
+                              ? widget.configResponse.androidSettings.aboutApp
+                              : widget.configResponse.iosSettings.aboutApp,
+                          secfunctionCall: () {
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    );
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  heroTag: 'About',
+                  tooltip: 'About',
+                  backgroundColor: buttonColor,
+                  child: const Icon(Icons.privacy_tip_outlined),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            //!Settings FAB
+            Visibility(
+              visible: _isMenuOpen,
+              child: CircleAvatar(
+                radius: MediaQuery.of(context).size.height * 0.06,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Permission.getPermission(
+                      context: context,
+                      onSuccess: () {
+                        print("True");
+                      },
+                      onFail: () {
+                        print("false");
+                      },
+                    );
+                  },
+                  backgroundColor: buttonColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  heroTag: 'Settings',
+                  tooltip: 'Settings',
+                  child: const Icon(Icons.settings),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            //!FAB
+            CircleAvatar(
+              radius: MediaQuery.of(context).size.height * 0.06,
+              child: FloatingActionButton(
+                backgroundColor: buttonColor,
+                onPressed: () {
+                  setState(() {
+                    _isMenuOpen = !_isMenuOpen;
+                  });
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                tooltip: 'Toggle',
+                child: _isMenuOpen
+                    ? const Icon(Icons.close)
+                    : const Icon(Icons.expand_less_outlined),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         children: [
           //!Background Image
@@ -634,6 +734,20 @@ class _BookListPageState extends State<BookListPage> {
                                                                 () {
                                                               Navigator.pop(
                                                                   context);
+                                                              Permission
+                                                                  .getPermission(
+                                                                context:
+                                                                    context,
+                                                                onSuccess: () {
+                                                                  debugPrint(
+                                                                      "True");
+                                                                  openSubscriptionPage();
+                                                                },
+                                                                onFail: () {
+                                                                  debugPrint(
+                                                                      "false");
+                                                                },
+                                                              );
                                                             },
                                                           );
                                                         },
@@ -695,46 +809,47 @@ class _BookListPageState extends State<BookListPage> {
                 })),
           ),
 
-          //!About
-          Positioned(
-            bottom: 20.0,
-            right: MediaQuery.of(context).size.height * 0.08,
-            child: CircleAvatar(
-                radius: MediaQuery.of(context).size.height * 0.06,
-                backgroundColor: buttonColor,
-                child: IconButton(
-                  icon: const Icon(Icons.privacy_tip_outlined),
-                  onPressed: () {
-                    setState(() {
-                      buttonColor = Colors.blue;
-                    });
+          // //!About
+          // Positioned(
+          //     bottom: 20.0,
+          //     right: MediaQuery.of(context).size.height * 0.08,
+          //     child: CircleAvatar(
+          //         radius: MediaQuery.of(context).size.height * 0.06,
+          //         backgroundColor: buttonColor,
+          //         child: IconButton(
+          //             icon: const Icon(Icons.privacy_tip_outlined),
+          //             onPressed: () {
+          //               setState(() {
+          //                 buttonColor = Colors.blue;
+          //               });
 
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      setState(() {
-                        buttonColor = Colors.white;
-                      });
-                    });
-                    Get.to(SettingsPage(
-                      description: widget.configResponse.aboutApp,
-                    ));
-                    // showDialog(
-                    //   context: context,
-                    //   barrierDismissible: false,
-                    //   builder: (BuildContext context) {
-                    //     return AboutDialogBox(
-                    //       //title: 'Unlock Your Story',
-                    //       titleColor: Colors.orange,
-                    //       descriptions: widget.configResponse.aboutApp,
-                    //       secfunctionCall: () {
-                    //         //showRewardAd();
-                    //         Navigator.pop(context);
-                    //       },
-                    //     );
-                    //   },
-                    // );
-                  },
-                )),
-          ),
+          //               Future.delayed(const Duration(milliseconds: 500), () {
+          //                 setState(() {
+          //                   buttonColor = Colors.white;
+          //                 });
+          //               });
+          //               Get.to(SettingsPage(
+          //                 description: widget.configResponse.aboutApp,
+          //               ));
+          //             }))
+          //     //         // showDialog(
+          //     //         //   context: context,
+          //     //         //   barrierDismissible: false,
+          //     //         //   builder: (BuildContext context) {
+          //     //         //     return AboutDialogBox(
+          //     //         //       //title: 'Unlock Your Story',
+          //     //         //       titleColor: Colors.orange,
+          //     //         //       descriptions: widget.configResponse.aboutApp,
+          //     //         //       secfunctionCall: () {
+          //     //         //         //showRewardAd();
+          //     //         //         Navigator.pop(context);
+          //     //         //       },
+          //     //         //     );
+          //     //         //   },
+          //     //         // );
+          //     //       },
+          //     //     )),
+          //     ),
 
           //!Scroll to Top
           if (showScrollToTopButton)
@@ -794,6 +909,41 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
 
+          if (Platform.isIOS)
+            if (widget.configResponse.iosSettings.houseAd!.show != null &&
+                widget.configResponse.iosSettings.houseAd!.show!)
+              Align(
+                alignment: Alignment.topCenter,
+                child: InkWell(
+                  onTap: () {
+                    openUrlAndroid(
+                        widget.configResponse.iosSettings.houseAd!.urlId!);
+                  },
+                  child: Container(
+                      width: MediaQuery.sizeOf(context).width * 0.3,
+                      height: 25.w,
+                      decoration: BoxDecoration(
+                          color: widget
+                              .configResponse.iosSettings.houseAd!.buttonColor!
+                              .toColor(opacity: 0.95),
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12))),
+                      child: Center(
+                          child: Text(
+                        widget.configResponse.iosSettings.houseAd!.buttonText!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 8.sp,
+                            height: 1.2,
+                            color: widget.configResponse.iosSettings.houseAd!
+                                .buttonTextColor!
+                                .toColor()),
+                      ))),
+                ),
+              ),
+
           //!Loading
           if (loadingStory)
             Positioned(
@@ -835,6 +985,39 @@ class _BookListPageState extends State<BookListPage> {
         androidAppBundleId: url,
       );
     }
+  }
+
+  void openSubscriptionPage() {
+    Get.to(
+        SubscriptionPage(
+          generalSubscriptionText: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .generalSubscriptionText!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .monthSubscriptionText!,
+          monthly: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .monthSubscriptionText!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .monthSubscriptionText!,
+          yearly: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .yearSubscriptionText!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .yearSubscriptionText!,
+          termofuseUrl: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .termOfUseUrl!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .termOfUseUrl!,
+          privacyPolicyUrl: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .privacyPolicyUrl!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .privacyPolicyUrl!,
+          backgroundcolor: widget.booksList.backgroundColor,
+        ),
+        transition: Transition.leftToRight);
   }
 
   void openAppStore(String appId) async {
