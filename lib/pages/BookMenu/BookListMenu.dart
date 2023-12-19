@@ -312,6 +312,7 @@ class _BookListPageState extends State<BookListPage> {
                     Permission.getPermission(
                       context: context,
                       onSuccess: () {
+                        openSubscriptionPage();
                         print("True");
                       },
                       onFail: () {
