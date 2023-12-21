@@ -6,7 +6,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
-import 'package:parental_gates/parental_gates.dart';
+import 'package:storyapp/pages/parentalgate/parentalgate.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
@@ -258,102 +258,102 @@ class _BookListPageState extends State<BookListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.booksList.backgroundColor.toColor(),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(
-          bottom: 4.0,
-          right: (MediaQuery.of(context).size.height * 0.08) - 16,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            //!About FAB
-            Visibility(
-              visible: _isMenuOpen,
-              child: CircleAvatar(
-                radius: MediaQuery.of(context).size.height * 0.06,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AboutDialogBox(
-                          titleColor: Colors.orange,
-                          descriptions: Platform.isAndroid
-                              ? widget.configResponse.androidSettings.aboutApp
-                              : widget.configResponse.iosSettings.aboutApp,
-                          secfunctionCall: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
-                    );
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  heroTag: 'About',
-                  tooltip: 'About',
-                  backgroundColor: buttonColor,
-                  child: const Icon(Icons.privacy_tip_outlined),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
+      // floatingActionButton: Padding(
+      //   padding: EdgeInsets.only(
+      //     bottom: 4.0,
+      //     right: (MediaQuery.of(context).size.height * 0.08) - 16,
+      //   ),
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.end,
+      //     crossAxisAlignment: CrossAxisAlignment.end,
+      //     children: [
+      //       //!About FAB
+      //       Visibility(
+      //         visible: _isMenuOpen,
+      //         child: CircleAvatar(
+      //           radius: MediaQuery.of(context).size.height * 0.06,
+      //           child: FloatingActionButton(
+      //             onPressed: () {
+      //               showDialog(
+      //                 context: context,
+      //                 barrierDismissible: false,
+      //                 builder: (BuildContext context) {
+      //                   return AboutDialogBox(
+      //                     titleColor: Colors.orange,
+      //                     descriptions: Platform.isAndroid
+      //                         ? widget.configResponse.androidSettings.aboutApp
+      //                         : widget.configResponse.iosSettings.aboutApp,
+      //                     secfunctionCall: () {
+      //                       Navigator.pop(context);
+      //                     },
+      //                   );
+      //                 },
+      //               );
+      //             },
+      //             shape: RoundedRectangleBorder(
+      //               borderRadius: BorderRadius.circular(20.0),
+      //             ),
+      //             heroTag: 'About',
+      //             tooltip: 'About',
+      //             backgroundColor: buttonColor,
+      //             child: const Icon(Icons.privacy_tip_outlined),
+      //           ),
+      //         ),
+      //       ),
+      //       const SizedBox(height: 10),
 
-            //!Settings FAB
-            Visibility(
-              visible: _isMenuOpen,
-              child: CircleAvatar(
-                radius: MediaQuery.of(context).size.height * 0.06,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Permission.getPermission(
-                      context: context,
-                      onSuccess: () {
-                        openSubscriptionPage();
-                        print("True");
-                      },
-                      onFail: () {
-                        print("false");
-                      },
-                    );
-                  },
-                  backgroundColor: buttonColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  heroTag: 'Settings',
-                  tooltip: 'Settings',
-                  child: const Icon(Icons.settings),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
+      //       //!Settings FAB
+      //       Visibility(
+      //         visible: _isMenuOpen,
+      //         child: CircleAvatar(
+      //           radius: MediaQuery.of(context).size.height * 0.06,
+      //           child: FloatingActionButton(
+      //             onPressed: () {
+      //               Permission.getPermission(
+      //                 context: context,
+      //                 onSuccess: () {
+      //                   openSubscriptionPage();
+      //                   print("True");
+      //                 },
+      //                 onFail: () {
+      //                   print("false");
+      //                 },
+      //               );
+      //             },
+      //             backgroundColor: buttonColor,
+      //             shape: RoundedRectangleBorder(
+      //               borderRadius: BorderRadius.circular(20.0),
+      //             ),
+      //             heroTag: 'Settings',
+      //             tooltip: 'Settings',
+      //             child: const Icon(Icons.settings),
+      //           ),
+      //         ),
+      //       ),
+      //       const SizedBox(height: 10),
 
-            //!FAB
-            CircleAvatar(
-              radius: MediaQuery.of(context).size.height * 0.06,
-              child: FloatingActionButton(
-                backgroundColor: buttonColor,
-                onPressed: () {
-                  setState(() {
-                    _isMenuOpen = !_isMenuOpen;
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                tooltip: 'Toggle',
-                child: _isMenuOpen
-                    ? const Icon(Icons.close)
-                    : const Icon(Icons.expand_less_outlined),
-              ),
-            ),
-          ],
-        ),
-      ),
+      //       //!FAB
+      //       CircleAvatar(
+      //         radius: MediaQuery.of(context).size.height * 0.06,
+      //         child: FloatingActionButton(
+      //           backgroundColor: buttonColor,
+      //           onPressed: () {
+      //             setState(() {
+      //               _isMenuOpen = !_isMenuOpen;
+      //             });
+      //           },
+      //           shape: RoundedRectangleBorder(
+      //             borderRadius: BorderRadius.circular(20.0),
+      //           ),
+      //           tooltip: 'Toggle',
+      //           child: _isMenuOpen
+      //               ? const Icon(Icons.close)
+      //               : const Icon(Icons.expand_less_outlined),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       body: Stack(
         children: [
           //!Background Image
@@ -383,9 +383,14 @@ class _BookListPageState extends State<BookListPage> {
                       padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).size.height * 0.15,
                         top: widget.configResponse.houseAd!.show != null &&
-                                widget.configResponse.houseAd!.show!
-                            ? 25.w
-                            : 20,
+                                Platform.isAndroid
+                            ? widget.configResponse.androidSettings.houseAd!
+                                    .show!
+                                ? 25.w
+                                : 20
+                            : widget.configResponse.iosSettings.houseAd!.show!
+                                ? 25.w
+                                : 20,
                       ),
                       sliver: SliverGrid(
                         gridDelegate:
@@ -591,6 +596,9 @@ class _BookListPageState extends State<BookListPage> {
                                                       } else {
                                                         //! show interstitial ad set to False
                                                         //!Navigate To Story Page
+                                                        await BookPreferences
+                                                            .incrementBookOpened(
+                                                                book.title);
                                                         goToStoryPage(
                                                             book.path);
                                                       }
@@ -748,6 +756,10 @@ class _BookListPageState extends State<BookListPage> {
                                                                   debugPrint(
                                                                       "false");
                                                                 },
+                                                                backgroundColor: widget
+                                                                    .booksList
+                                                                    .backgroundColor
+                                                                    .toColor(),
                                                               );
                                                             },
                                                           );
@@ -811,46 +823,120 @@ class _BookListPageState extends State<BookListPage> {
           ),
 
           // //!About
-          // Positioned(
-          //     bottom: 20.0,
-          //     right: MediaQuery.of(context).size.height * 0.08,
-          //     child: CircleAvatar(
-          //         radius: MediaQuery.of(context).size.height * 0.06,
-          //         backgroundColor: buttonColor,
-          //         child: IconButton(
-          //             icon: const Icon(Icons.privacy_tip_outlined),
-          //             onPressed: () {
-          //               setState(() {
-          //                 buttonColor = Colors.blue;
-          //               });
+          Positioned(
+            bottom: 20.0,
+            right: MediaQuery.of(context).size.height * 0.08,
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                //!About FAB
+                Visibility(
+                  visible: _isMenuOpen,
+                  child: CircleAvatar(
+                    radius: MediaQuery.of(context).size.height * 0.06,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AboutDialogBox(
+                              titleColor: Colors.orange,
+                              descriptions: Platform.isAndroid
+                                  ? widget
+                                      .configResponse.androidSettings.aboutApp
+                                  : widget.configResponse.iosSettings.aboutApp,
+                              secfunctionCall: () {
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      heroTag: 'About',
+                      tooltip: 'About',
+                      backgroundColor: buttonColor,
+                      child: const Icon(Icons.privacy_tip_outlined),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
 
-          //               Future.delayed(const Duration(milliseconds: 500), () {
-          //                 setState(() {
-          //                   buttonColor = Colors.white;
-          //                 });
-          //               });
-          //               Get.to(SettingsPage(
-          //                 description: widget.configResponse.aboutApp,
-          //               ));
-          //             }))
-          //     //         // showDialog(
-          //     //         //   context: context,
-          //     //         //   barrierDismissible: false,
-          //     //         //   builder: (BuildContext context) {
-          //     //         //     return AboutDialogBox(
-          //     //         //       //title: 'Unlock Your Story',
-          //     //         //       titleColor: Colors.orange,
-          //     //         //       descriptions: widget.configResponse.aboutApp,
-          //     //         //       secfunctionCall: () {
-          //     //         //         //showRewardAd();
-          //     //         //         Navigator.pop(context);
-          //     //         //       },
-          //     //         //     );
-          //     //         //   },
-          //     //         // );
-          //     //       },
-          //     //     )),
-          //     ),
+                //!Settings FAB
+                Visibility(
+                  visible: _isMenuOpen,
+                  child: CircleAvatar(
+                    radius: MediaQuery.of(context).size.height * 0.06,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        Permission.getPermission(
+                          context: context,
+                          onSuccess: () {
+                            openSubscriptionPage();
+                            print("True");
+                          },
+                          onFail: () {
+                            print("false");
+                          },
+                          backgroundColor:
+                              widget.booksList.backgroundColor.toColor(),
+                        );
+                      },
+                      backgroundColor: buttonColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      heroTag: 'Settings',
+                      tooltip: 'Settings',
+                      child: const Icon(Icons.settings),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                //!FAB
+                CircleAvatar(
+                  radius: MediaQuery.of(context).size.height * 0.06,
+                  child: FloatingActionButton(
+                    backgroundColor: buttonColor,
+                    onPressed: () {
+                      setState(() {
+                        _isMenuOpen = !_isMenuOpen;
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    tooltip: 'Toggle',
+                    child: _isMenuOpen
+                        ? const Icon(Icons.close)
+                        : const Icon(Icons.expand_less_outlined),
+                  ),
+                ),
+              ],
+            ),
+            //         // showDialog(
+            //         //   context: context,
+            //         //   barrierDismissible: false,
+            //         //   builder: (BuildContext context) {
+            //         //     return AboutDialogBox(
+            //         //       //title: 'Unlock Your Story',
+            //         //       titleColor: Colors.orange,
+            //         //       descriptions: widget.configResponse.aboutApp,
+            //         //       secfunctionCall: () {
+            //         //         //showRewardAd();
+            //         //         Navigator.pop(context);
+            //         //       },
+            //         //     );
+            //         //   },
+            //         // );
+            //       },
+            //     )),
+          ),
 
           //!Scroll to Top
           if (showScrollToTopButton)
@@ -995,7 +1081,7 @@ class _BookListPageState extends State<BookListPage> {
               ? widget.configResponse.androidSettings.subscriptionSettings
                   .generalSubscriptionText!
               : widget.configResponse.iosSettings.subscriptionSettings
-                  .monthSubscriptionText!,
+                  .generalSubscriptionText!,
           monthly: Platform.isAndroid
               ? widget.configResponse.androidSettings.subscriptionSettings
                   .monthSubscriptionText!

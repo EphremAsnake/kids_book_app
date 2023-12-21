@@ -340,7 +340,7 @@ class _BooksPageState extends State<BookPage>
                           child: ImageFade(
                               width: MediaQuery.of(context).size.width,
                               //height: MediaQuery.of(context).size.height * 0.8,
-
+                              
                               //! whenever the image changes, it will be loaded, and then faded in:
                               image:
                                   CachedNetworkImageProvider(images[_counter]),

@@ -40,7 +40,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   @override
   Widget build(BuildContext context) {
     final BorderRadius borderRadius = BorderRadius.circular(12);
-    final double containerHeight = MediaQuery.of(context).size.height * 0.4;
+    final double containerHeight = MediaQuery.of(context).size.height * 0.3;
     final double containerWidth = MediaQuery.of(context).size.width * 0.2;
 
     return Scaffold(
