@@ -93,223 +93,221 @@ class _GetParentPermissionState extends State<GetParentPermission> {
         //   ],
         // ),
         backgroundColor: widget.bgColor,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              //!Background Image
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Image.asset(
-                  'assets/background.png',
-                  fit: BoxFit.cover,
-                ),
+        body: Stack(
+          children: [
+            //!Background Image
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Image.asset(
+                'assets/background.png',
+                fit: BoxFit.cover,
               ),
-              BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Container(
-                    color: Colors.black.withOpacity(0.4),
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                  )),
-              // Left side of the landscape layout
-              Padding(
-                padding: const EdgeInsets.only(top: 56.0),
+            ),
+            BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: Container(
-                  alignment: Alignment.center,
-                  height: MediaQuery.of(context).size.height,
+                  color: Colors.black.withOpacity(0.4),
                   width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
-                      // Left Column
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width / 2.1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // Parent permission message and current challenge
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // CustomButton(
-                                //   buttonSize: 50,
-                                //   onTap: () {
-                                //     // Speak a message to ask for parent's permission
-                                //   },
-                                //   child: const Icon(Icons.volume_up_rounded),
-                                // ),
+                  height: MediaQuery.of(context).size.height,
+                )),
+            // Left side of the landscape layout
+            Padding(
+              padding: const EdgeInsets.only(top: 56.0),
+              child: Container(
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  children: [
+                    // Left Column
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width / 2.1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // Parent permission message and current challenge
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // CustomButton(
+                              //   buttonSize: 50,
+                              //   onTap: () {
+                              //     // Speak a message to ask for parent's permission
+                              //   },
+                              //   child: const Icon(Icons.volume_up_rounded),
+                              // ),
+                              Column(
+                                children: [
+                                  Text(
+                                    "   Please enter the digit displayed below",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  // Text(
+                                  //   "To continue, tap:",
+                                  //   style: TextStyle(
+                                  //     color: Colors.white,
+                                  //     fontSize: 12,
+                                  //   ),
+                                  // ),
+                                ],
+                              )
+                            ],
+                          ),
+                          // Display the current challenge
+                          Text(
+                            numberWord.join(" , "),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          // Display user input placeholders
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              for (int i = 0; i < 3; i++)
                                 Column(
                                   children: [
-                                    Text(
-                                      "   Ask your parents",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
                                       ),
-                                    ),
-                                    Text(
-                                      "To continue, tap:",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            (ansNumber[i] ?? '').toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              height: 2,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 2.5,
+                                            width: 30,
+                                            color: Colors.white,
+                                          )
+                                        ],
                                       ),
-                                    ),
+                                    )
                                   ],
                                 )
-                              ],
-                            ),
-                            // Display the current challenge
-                            Text(
-                              numberWord.join(" , "),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                            // Display user input placeholders
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                for (int i = 0; i < 3; i++)
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              (ansNumber[i] ?? '').toString(),
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                height: 2,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Container(
-                                              height: 2.5,
-                                              width: 30,
-                                              color: Colors.white,
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )
-                              ],
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
-                      // Right Column
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width / 2.1,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // Buttons for user input
-                            for (int i = 0; i < 3; i++)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  for (int j = 1; j < 4; j++)
-                                    IgnorePointer(
-                                      ignoring: currentIndex > 3,
-                                      child: CustomButton(
-                                        child: Text(
-                                          "${(i * 3) + j}",
-                                          style: const TextStyle(
-                                            color: Colors.blue,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          setState(() {
-                                            ansNumber[currentIndex] =
-                                                (i * 3) + j;
-                                            checkSuccess();
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            // Buttons for '0' and 'back'
+                    ),
+                    // Right Column
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width / 2.1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          // Buttons for user input
+                          for (int i = 0; i < 3; i++)
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
                               children: [
-                                IgnorePointer(
-                                  ignoring: currentIndex > 3,
-                                  child: CustomButton(
-                                    child: const Text(
-                                      "0",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
+                                for (int j = 1; j < 4; j++)
+                                  IgnorePointer(
+                                    ignoring: currentIndex > 3,
+                                    child: CustomButton(
+                                      child: Text(
+                                        "${(i * 3) + j}",
+                                        style: const TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
+                                      onTap: () {
+                                        setState(() {
+                                          ansNumber[currentIndex] =
+                                              (i * 3) + j;
+                                          checkSuccess();
+                                        });
+                                      },
                                     ),
-                                    onTap: () {
-                                      setState(() {
-                                        ansNumber[currentIndex] = 0;
-                                        checkSuccess();
-                                      });
-                                    },
                                   ),
-                                ),
-                                IgnorePointer(
-                                  ignoring: currentIndex > 3,
-                                  child: CustomButton(
-                                    width: 120,
-                                    child: const Icon(
-                                      Icons.arrow_back,
+                              ],
+                            ),
+                          // Buttons for '0' and 'back'
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IgnorePointer(
+                                ignoring: currentIndex > 3,
+                                child: CustomButton(
+                                  child: const Text(
+                                    "0",
+                                    style: TextStyle(
                                       color: Colors.blue,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    onTap: () {
-                                      setState(() {
-                                        if (currentIndex > 0) {
-                                          currentIndex--;
-                                          ansNumber[currentIndex] = null;
-                                        }
-                                      });
-                                    },
                                   ),
+                                  onTap: () {
+                                    setState(() {
+                                      ansNumber[currentIndex] = 0;
+                                      checkSuccess();
+                                    });
+                                  },
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                              IgnorePointer(
+                                ignoring: currentIndex > 3,
+                                child: CustomButton(
+                                  width: 120,
+                                  child: const Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.blue,
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      if (currentIndex > 0) {
+                                        currentIndex--;
+                                        ansNumber[currentIndex] = null;
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(
-                  top: 20.0,
-                  right: MediaQuery.of(context).size.height * 0.08,
-                  child: CircleAvatar(
-                      radius: MediaQuery.of(context).size.height * 0.06,
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                          onPressed: () {
-                            // Close the screen with a failure flag
-                            Navigator.pop(context, false);
-                          },
-                          icon: const Icon(
-                            Icons.close_rounded,
-                            color: Colors.blue,
-                            size: 30,
-                          )))),
-            ],
-          ),
+            ),
+            Positioned(
+                top: 20.0,
+                right: MediaQuery.of(context).size.height * 0.08,
+                child: CircleAvatar(
+                    radius: MediaQuery.of(context).size.height * 0.06,
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                        onPressed: () {
+                          // Close the screen with a failure flag
+                          Navigator.pop(context, false);
+                        },
+                        icon: const Icon(
+                          Icons.close_rounded,
+                          color: Colors.blue,
+                          size: 30,
+                        )))),
+          ],
         ));
   }
   // //! Portrait layout
