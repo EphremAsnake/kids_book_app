@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:resize/resize.dart';
 
 // Custom widget to get parent permission
 class GetParentPermission extends StatefulWidget {
@@ -129,7 +130,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // Parent permission message and current challenge
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               // CustomButton(
@@ -141,12 +142,17 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                               // ),
                               Column(
                                 children: [
-                                  Text(
-                                    "   Please enter the digit displayed below",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: Text(
+                                      "Enter the Digits",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10.h,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   // Text(
@@ -215,8 +221,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                           // Buttons for user input
                           for (int i = 0; i < 3; i++)
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 for (int j = 1; j < 4; j++)
                                   IgnorePointer(
@@ -232,8 +237,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                       ),
                                       onTap: () {
                                         setState(() {
-                                          ansNumber[currentIndex] =
-                                              (i * 3) + j;
+                                          ansNumber[currentIndex] = (i * 3) + j;
                                           checkSuccess();
                                         });
                                       },
@@ -514,6 +518,7 @@ class CustomButton extends StatefulWidget {
   @override
   State<CustomButton> createState() => _CustomButtonState();
 }
+
 class _CustomButtonState extends State<CustomButton> {
   bool _isPressed = false;
 
@@ -557,4 +562,3 @@ class _CustomButtonState extends State<CustomButton> {
     );
   }
 }
-
