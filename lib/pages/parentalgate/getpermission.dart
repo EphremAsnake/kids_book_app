@@ -107,15 +107,15 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                 ),
               ),
               BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                color: Colors.black.withOpacity(0.4),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-              )),
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.4),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                  )),
               // Left side of the landscape layout
               Padding(
-                padding: const EdgeInsets.only(top:56.0),
+                padding: const EdgeInsets.only(top: 56.0),
                 child: Container(
                   alignment: Alignment.center,
                   height: MediaQuery.of(context).size.height,
@@ -216,7 +216,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                             // Buttons for user input
                             for (int i = 0; i < 3; i++)
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   for (int j = 1; j < 4; j++)
                                     IgnorePointer(
@@ -232,7 +233,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                         ),
                                         onTap: () {
                                           setState(() {
-                                            ansNumber[currentIndex] = (i * 3) + j;
+                                            ansNumber[currentIndex] =
+                                                (i * 3) + j;
                                             checkSuccess();
                                           });
                                         },
@@ -497,7 +499,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
 // }
 
 // Custom button widget
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final Widget child;
   final double buttonSize;
   final double? width;
@@ -512,15 +514,36 @@ class CustomButton extends StatelessWidget {
   });
 
   @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+class _CustomButtonState extends State<CustomButton> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    return GestureDetector(
+      onTapDown: (_) {
+        setState(() {
+          _isPressed = true;
+        });
+      },
+      onTapUp: (_) {
+        setState(() {
+          _isPressed = false;
+        });
+        widget.onTap();
+      },
+      onTapCancel: () {
+        setState(() {
+          _isPressed = false;
+        });
+      },
       child: Container(
         alignment: Alignment.center,
-        height: buttonSize,
-        width: width ?? buttonSize,
+        height: widget.buttonSize,
+        width: widget.width ?? widget.buttonSize,
         decoration: BoxDecoration(
-          color: const Color(0xfff7f5ec),
+          color: _isPressed ? Colors.black.withOpacity(0.1) : Colors.white,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: Colors.blue, width: 2),
           boxShadow: const [
@@ -531,8 +554,9 @@ class CustomButton extends StatelessWidget {
             )
           ],
         ),
-        child: child,
+        child: widget.child,
       ),
     );
   }
 }
+
