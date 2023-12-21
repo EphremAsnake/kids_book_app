@@ -130,7 +130,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // Parent permission message and current challenge
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               // CustomButton(
@@ -143,14 +143,14 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                               Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.0),
                                     child: Text(
-                                      "Enter the Digits",
+                                      "Enter the Digits",
                                       maxLines: 2,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 10.h,
+                                        fontSize: 20.0,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
