@@ -609,18 +609,23 @@ class _BooksPageState extends State<BookPage>
                       ),
                     ),
                   ),
+
+                  //!to load images firstly
                   Visibility(
                     visible: false,
                     child: ListView.builder(
                       itemCount: images.length,
                       itemBuilder: (context, index) {
-                        return CachedNetworkImage(
-                          imageUrl: images[index],
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                        return ImageFade(
+                          image: CachedNetworkImageProvider(images[index]),
                         );
+                        // CachedNetworkImage(
+                        //   imageUrl: images[index],
+                        //   placeholder: (context, url) =>
+                        //       const CircularProgressIndicator(),
+                        //   errorWidget: (context, url, error) =>
+                        //       const Icon(Icons.error),
+                        // );
                       },
                     ),
                   ),
