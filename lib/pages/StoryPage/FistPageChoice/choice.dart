@@ -40,7 +40,6 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
         return false;
       },
       child: Scaffold(
-        
         backgroundColor: Colors.transparent,
         body: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -54,7 +53,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     top: 20,
                     left: MediaQuery.of(context).size.width * 0.075,
                     child: CircleAvatar(
-                      radius: MediaQuery.of(context).size.height * 0.06,
+                      radius: 25,
                       backgroundColor: Colors.white,
                       child: IconButton(
                         icon:
@@ -68,8 +67,6 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 ),
                                 transition: Transition.fadeIn,
                                 duration: const Duration(seconds: 2));
-
-                           
                           } else {
                             Get.offAll(
                                 BookListPage(
@@ -79,8 +76,6 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                                 ),
                                 transition: Transition.fadeIn,
                                 duration: const Duration(seconds: 2));
-
-                         
                           }
                         },
                       ),
@@ -90,7 +85,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     top: 20,
                     right: MediaQuery.of(context).size.width * 0.075,
                     child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.height * 0.06,
+                        radius: 25,
                         backgroundColor: Colors.white,
                         child: GetBuilder<AudioController>(
                             builder: (audioController) {

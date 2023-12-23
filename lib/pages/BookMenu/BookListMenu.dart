@@ -271,7 +271,7 @@ class _BookListPageState extends State<BookListPage> {
       //       Visibility(
       //         visible: _isMenuOpen,
       //         child: CircleAvatar(
-      //           radius: MediaQuery.of(context).size.height * 0.06,
+      //           radius: 25,
       //           child: FloatingActionButton(
       //             onPressed: () {
       //               showDialog(
@@ -306,7 +306,7 @@ class _BookListPageState extends State<BookListPage> {
       //       Visibility(
       //         visible: _isMenuOpen,
       //         child: CircleAvatar(
-      //           radius: MediaQuery.of(context).size.height * 0.06,
+      //           radius: 25,
       //           child: FloatingActionButton(
       //             onPressed: () {
       //               Permission.getPermission(
@@ -334,7 +334,7 @@ class _BookListPageState extends State<BookListPage> {
 
       //       //!FAB
       //       CircleAvatar(
-      //         radius: MediaQuery.of(context).size.height * 0.06,
+      //         radius: 25,
       //         child: FloatingActionButton(
       //           backgroundColor: buttonColor,
       //           onPressed: () {
@@ -808,7 +808,7 @@ class _BookListPageState extends State<BookListPage> {
             top: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
             child: CircleAvatar(
-                radius: MediaQuery.of(context).size.height * 0.06,
+                radius: 25,
                 backgroundColor: Colors.white,
                 child: GetBuilder<AudioController>(builder: (audioController) {
                   return IconButton(
@@ -834,7 +834,8 @@ class _BookListPageState extends State<BookListPage> {
                 Visibility(
                   visible: _isMenuOpen,
                   child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.height * 0.06,
+                    backgroundColor: Colors.white,
+                    radius: 25,
                     child: FloatingActionButton(
                       onPressed: () {
                         showDialog(
@@ -870,7 +871,8 @@ class _BookListPageState extends State<BookListPage> {
                 Visibility(
                   visible: _isMenuOpen,
                   child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.height * 0.06,
+                    radius: 25,
+                    backgroundColor: Colors.white,
                     child: FloatingActionButton(
                       onPressed: () {
                         Permission.getPermission(
@@ -900,7 +902,8 @@ class _BookListPageState extends State<BookListPage> {
 
                 //!FAB
                 CircleAvatar(
-                  radius: MediaQuery.of(context).size.height * 0.06,
+                  radius: 25,
+                  backgroundColor: Colors.white,
                   child: FloatingActionButton(
                     backgroundColor: buttonColor,
                     onPressed: () {
@@ -944,7 +947,7 @@ class _BookListPageState extends State<BookListPage> {
               bottom: 20.0,
               left: MediaQuery.of(context).size.height * 0.08,
               child: CircleAvatar(
-                radius: MediaQuery.of(context).size.height * 0.06,
+                radius: 25,
                 backgroundColor: Colors.white,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_upward_outlined),
@@ -967,8 +970,19 @@ class _BookListPageState extends State<BookListPage> {
                 alignment: Alignment.topCenter,
                 child: InkWell(
                   onTap: () {
-                    openUrlAndroid(
-                        widget.configResponse.androidSettings.houseAd!.urlId!);
+                    Permission.getPermission(
+                      context: context,
+                      onSuccess: () {
+                        openUrlAndroid(widget
+                            .configResponse.androidSettings.houseAd!.urlId!);
+                        print("True");
+                      },
+                      onFail: () {
+                        print("false");
+                      },
+                      backgroundColor:
+                          widget.booksList.backgroundColor.toColor(),
+                    );
                   },
                   child: Container(
                       width: MediaQuery.sizeOf(context).width * 0.3,

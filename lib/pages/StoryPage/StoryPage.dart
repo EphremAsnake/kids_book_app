@@ -333,14 +333,13 @@ class _BooksPageState extends State<BookPage>
                   Center(
                     child: Stack(
                       children: [
-                        
                         //!StoryImage
                         Positioned(
                           bottom: MediaQuery.of(context).size.height * 0.2,
                           child: ImageFade(
                               width: MediaQuery.of(context).size.width,
                               //height: MediaQuery.of(context).size.height * 0.8,
-                              
+
                               //! whenever the image changes, it will be loaded, and then faded in:
                               image:
                                   CachedNetworkImageProvider(images[_counter]),
@@ -375,8 +374,7 @@ class _BooksPageState extends State<BookPage>
                                     child: Text(
                                       Strings.tryAgain,
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 8.sp),
+                                          color: Colors.white, fontSize: 8.sp),
                                     ),
                                   ),
                                 );
@@ -610,7 +608,22 @@ class _BooksPageState extends State<BookPage>
                         ),
                       ),
                     ),
-                  )
+                  ),
+                  Visibility(
+                    visible: false,
+                    child: ListView.builder(
+                      itemCount: images.length,
+                      itemBuilder: (context, index) {
+                        return CachedNetworkImage(
+                          imageUrl: images[index],
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -160,7 +160,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                         ),
                       ),
                     ),
-                   //const SizedBox(height: 10.0),
+                    //const SizedBox(height: 10.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       //crossAxisAlignment: CrossAxisAlignment.end,
@@ -224,7 +224,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             top: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
             child: CircleAvatar(
-              radius: MediaQuery.of(context).size.height * 0.06,
+              radius: 25,
               backgroundColor: Colors.white,
               child: IconButton(
                 icon: const Icon(Icons.home_outlined, color: Colors.blue),

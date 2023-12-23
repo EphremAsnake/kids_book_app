@@ -28,7 +28,7 @@ class AnimatedButtonWidget extends StatelessWidget {
                   width: isRow == null
                       ? MediaQuery.of(context).size.width * .3
                       : MediaQuery.of(context).size.width * .145,
-                  height: 47,
+                  height: 55,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Colors.blue,

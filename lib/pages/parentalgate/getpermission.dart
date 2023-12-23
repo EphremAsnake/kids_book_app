@@ -299,7 +299,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                 top: 20.0,
                 right: MediaQuery.of(context).size.height * 0.08,
                 child: CircleAvatar(
-                    radius: MediaQuery.of(context).size.height * 0.06,
+                    radius: 25,
                     backgroundColor: Colors.white,
                     child: IconButton(
                         onPressed: () {

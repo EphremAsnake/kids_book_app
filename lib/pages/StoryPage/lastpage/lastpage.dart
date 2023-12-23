@@ -6,12 +6,14 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
 import '../../../widget/animatedbuttonwidget.dart';
 import '../../BookMenu/BookListMenu.dart';
+import '../../parentalgate/parentalgate.dart';
 
 class LastScreen extends StatefulWidget {
   final Function replay;
@@ -85,7 +87,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                       top: 20,
                       right: MediaQuery.of(context).size.width * 0.075,
                       child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.height * 0.06,
+                        radius: 25,
                         backgroundColor: Colors.white,
                         child: IconButton(
                           icon: const Icon(Icons.close, color: Colors.blue),
@@ -147,7 +149,19 @@ class _ChoiceScreenState extends State<LastScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  shareApp();
+                                  Permission.getPermission(
+                                    context: context,
+                                    onSuccess: () {
+                                      shareApp();
+                                      print("True");
+                                    },
+                                    onFail: () {
+                                      print("false");
+                                    },
+                                    backgroundColor: widget
+                                        .booksList.backgroundColor
+                                        .toColor(),
+                                  );
                                 },
                                 child: AnimatedButtonWidget(
                                   isRow: true,
@@ -164,14 +178,41 @@ class _ChoiceScreenState extends State<LastScreen> {
                               InkWell(
                                 onTap: () {
                                   if (Platform.isAndroid) {
-                                    openUrlAndroid(widget
-                                        .configResponse
-                                        .androidSettings
-                                        .appRateAndShare!
-                                        .urlId!);
+                                    Permission.getPermission(
+                                      context: context,
+                                      onSuccess: () {
+                                        openUrlAndroid(widget
+                                            .configResponse
+                                            .androidSettings
+                                            .appRateAndShare!
+                                            .urlId!);
+                                        print("True");
+                                      },
+                                      onFail: () {
+                                        print("false");
+                                      },
+                                      backgroundColor: widget
+                                          .booksList.backgroundColor
+                                          .toColor(),
+                                    );
                                   } else {
-                                    openAppStore(widget.configResponse
-                                        .iosSettings.appRateAndShare!.urlId!);
+                                    Permission.getPermission(
+                                      context: context,
+                                      onSuccess: () {
+                                        openAppStore(widget
+                                            .configResponse
+                                            .iosSettings
+                                            .appRateAndShare!
+                                            .urlId!);
+                                        print("True");
+                                      },
+                                      onFail: () {
+                                        print("false");
+                                      },
+                                      backgroundColor: widget
+                                          .booksList.backgroundColor
+                                          .toColor(),
+                                    );
                                   }
                                 },
                                 child: AnimatedButtonWidget(
