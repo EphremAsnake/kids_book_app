@@ -7,9 +7,7 @@ import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../controller/backgroundMusicAudioController.dart';
-import '../../model/booklistModel.dart';
-import '../../model/configModel.dart';
-import '../BookMenu/BookListMenu.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class SubscriptionPage extends StatefulWidget {
   final String monthly;
@@ -36,6 +34,31 @@ class SubscriptionPage extends StatefulWidget {
 class _SubscriptionPageState extends State<SubscriptionPage> {
   Color bColor = Colors.black.withOpacity(0.3);
   AudioController backgroundaudioController = Get.put(AudioController());
+
+  Future<void> clearCachedFiles() async {
+    DefaultCacheManager cacheManager = DefaultCacheManager();
+    await cacheManager.emptyCache();
+    Get.snackbar(
+      '',
+      '',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 2),
+      isDismissible: true,
+      titleText: const Text(
+        'Success',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16.0, color: Colors.white),
+      ),
+      maxWidth: 400,
+      messageText: const Text(
+        'Cache cleared',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16.0, color: Colors.white),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +100,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     const SizedBox(
                       height: 50,
                     ),
-                    
+
                     Text(
                       widget.generalSubscriptionText,
                       textAlign: TextAlign.center,
@@ -108,6 +131,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 ),
                                 child: Center(
                                     child: Text(widget.monthly,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 9.sp,
@@ -133,6 +157,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 ),
                                 child: Center(
                                     child: Text(widget.yearly,
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 9.sp,
@@ -144,14 +169,27 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       ],
                     ),
                     const SizedBox(height: 20.0),
-                    Center(
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Restore Purchase',
-                          style: TextStyle(color: Colors.white),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Restore Purchase',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
+                        TextButton(
+                          onPressed: () {
+                            clearCachedFiles();
+                          },
+                          child: const Text(
+                            'Clear Saved Stories',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                     //const SizedBox(height: 10.0),
                     Row(

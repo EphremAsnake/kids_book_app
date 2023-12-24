@@ -743,24 +743,61 @@ class _BookListPageState extends State<BookListPage> {
                                                                 () {
                                                               Navigator.pop(
                                                                   context);
-                                                              Permission
-                                                                  .getPermission(
-                                                                context:
-                                                                    context,
-                                                                onSuccess: () {
-                                                                  debugPrint(
-                                                                      "True");
-                                                                  openSubscriptionPage();
-                                                                },
-                                                                onFail: () {
-                                                                  debugPrint(
-                                                                      "false");
-                                                                },
-                                                                backgroundColor: widget
-                                                                    .booksList
-                                                                    .backgroundColor
-                                                                    .toColor(),
-                                                              );
+                                                              if (Platform
+                                                                  .isAndroid) {
+                                                                widget
+                                                                        .configResponse
+                                                                        .androidSettings
+                                                                        .parentalGate!
+                                                                    ? Permission
+                                                                        .getPermission(
+                                                                        context:
+                                                                            context,
+                                                                        onSuccess:
+                                                                            () {
+                                                                          debugPrint(
+                                                                              "True");
+                                                                          openSubscriptionPage();
+                                                                        },
+                                                                        onFail:
+                                                                            () {
+                                                                          debugPrint(
+                                                                              "false");
+                                                                        },
+                                                                        backgroundColor: widget
+                                                                            .booksList
+                                                                            .backgroundColor
+                                                                            .toColor(),
+                                                                      )
+                                                                    : openSubscriptionPage();
+                                                              } else if (Platform
+                                                                  .isIOS) {
+                                                                widget
+                                                                        .configResponse
+                                                                        .iosSettings
+                                                                        .parentalGate!
+                                                                    ? Permission
+                                                                        .getPermission(
+                                                                        context:
+                                                                            context,
+                                                                        onSuccess:
+                                                                            () {
+                                                                          debugPrint(
+                                                                              "True");
+                                                                          openSubscriptionPage();
+                                                                        },
+                                                                        onFail:
+                                                                            () {
+                                                                          debugPrint(
+                                                                              "false");
+                                                                        },
+                                                                        backgroundColor: widget
+                                                                            .booksList
+                                                                            .backgroundColor
+                                                                            .toColor(),
+                                                                      )
+                                                                    : openSubscriptionPage();
+                                                              }
                                                             },
                                                           );
                                                         },
@@ -875,18 +912,39 @@ class _BookListPageState extends State<BookListPage> {
                     backgroundColor: Colors.white,
                     child: FloatingActionButton(
                       onPressed: () {
-                        Permission.getPermission(
-                          context: context,
-                          onSuccess: () {
-                            openSubscriptionPage();
-                            print("True");
-                          },
-                          onFail: () {
-                            print("false");
-                          },
-                          backgroundColor:
-                              widget.booksList.backgroundColor.toColor(),
-                        );
+                        if (Platform.isAndroid) {
+                          widget.configResponse.androidSettings.parentalGate!
+                              ? Permission.getPermission(
+                                  context: context,
+                                  onSuccess: () {
+                                    openSubscriptionPage();
+                                    print("True");
+                                  },
+                                  onFail: () {
+                                    print("false");
+                                  },
+                                  backgroundColor: widget
+                                      .booksList.backgroundColor
+                                      .toColor(),
+                                )
+                              : openSubscriptionPage();
+                        } else if (Platform.isIOS) {
+                          widget.configResponse.iosSettings.parentalGate!
+                              ? Permission.getPermission(
+                                  context: context,
+                                  onSuccess: () {
+                                    openSubscriptionPage();
+                                    print("True");
+                                  },
+                                  onFail: () {
+                                    print("false");
+                                  },
+                                  backgroundColor: widget
+                                      .booksList.backgroundColor
+                                      .toColor(),
+                                )
+                              : openSubscriptionPage();
+                        }
                       },
                       backgroundColor: buttonColor,
                       shape: RoundedRectangleBorder(
@@ -970,19 +1028,22 @@ class _BookListPageState extends State<BookListPage> {
                 alignment: Alignment.topCenter,
                 child: InkWell(
                   onTap: () {
-                    Permission.getPermission(
-                      context: context,
-                      onSuccess: () {
-                        openUrlAndroid(widget
+                    widget.configResponse.androidSettings.parentalGate!
+                        ? Permission.getPermission(
+                            context: context,
+                            onSuccess: () {
+                              openUrlAndroid(widget.configResponse
+                                  .androidSettings.houseAd!.urlId!);
+                              print("True");
+                            },
+                            onFail: () {
+                              print("false");
+                            },
+                            backgroundColor:
+                                widget.booksList.backgroundColor.toColor(),
+                          )
+                        : openUrlAndroid(widget
                             .configResponse.androidSettings.houseAd!.urlId!);
-                        print("True");
-                      },
-                      onFail: () {
-                        print("false");
-                      },
-                      backgroundColor:
-                          widget.booksList.backgroundColor.toColor(),
-                    );
                   },
                   child: Container(
                       width: MediaQuery.sizeOf(context).width * 0.3,
@@ -1017,19 +1078,22 @@ class _BookListPageState extends State<BookListPage> {
                 alignment: Alignment.topCenter,
                 child: InkWell(
                   onTap: () {
-                    Permission.getPermission(
-                      context: context,
-                      onSuccess: () {
-                        openUrlAndroid(
+                    widget.configResponse.iosSettings.parentalGate!
+                        ? Permission.getPermission(
+                            context: context,
+                            onSuccess: () {
+                              openUrlAndroid(widget
+                                  .configResponse.iosSettings.houseAd!.urlId!);
+                              print("True");
+                            },
+                            onFail: () {
+                              print("false");
+                            },
+                            backgroundColor:
+                                widget.booksList.backgroundColor.toColor(),
+                          )
+                        : openUrlAndroid(
                             widget.configResponse.iosSettings.houseAd!.urlId!);
-                        print("True");
-                      },
-                      onFail: () {
-                        print("false");
-                      },
-                      backgroundColor:
-                          widget.booksList.backgroundColor.toColor(),
-                    );
                   },
                   child: Container(
                       width: MediaQuery.sizeOf(context).width * 0.3,

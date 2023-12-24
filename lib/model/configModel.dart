@@ -15,10 +15,12 @@ class ConfigApiResponseModel {
 
   factory ConfigApiResponseModel.fromJson(Map<String, dynamic> json) {
     return ConfigApiResponseModel(
-      appRateAndShare: json.containsKey('android_settings') && json['android_settings'].containsKey('app_rate_share')
+      appRateAndShare: json.containsKey('android_settings') &&
+              json['android_settings'].containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['android_settings']['app_rate_share'])
           : null,
-      houseAd: json.containsKey('android_settings') && json['android_settings'].containsKey('house_ad')
+      houseAd: json.containsKey('android_settings') &&
+              json['android_settings'].containsKey('house_ad')
           ? HouseAd.fromJson(json['android_settings']['house_ad'])
           : null,
       aboutApp: json['android_settings']['about_app'] ?? '',
@@ -94,12 +96,17 @@ class AndroidSettings {
 
   factory AndroidSettings.fromJson(Map<String, dynamic> json) {
     return AndroidSettings(
-      subscriptionSettings: SubscriptionSettings.fromJson(json['subscription_settings']),
+      subscriptionSettings:
+          SubscriptionSettings.fromJson(json['subscription_settings']),
       unlockDialogText: json['unlock_dialog_text'],
       admobSettings: AdmobSettings.fromJson(json['admob_settings']),
-      appRateAndShare: json.containsKey('app_rate_share') ? AppRateAndShare.fromJson(json['app_rate_share']) : null,
-      houseAd: json.containsKey('house_ad') ? HouseAd.fromJson(json['house_ad']) : null,
-      parentalGate: json['parental_gate'],
+      appRateAndShare: json.containsKey('app_rate_share')
+          ? AppRateAndShare.fromJson(json['app_rate_share'])
+          : null,
+      houseAd: json.containsKey('house_ad')
+          ? HouseAd.fromJson(json['house_ad'])
+          : null,
+      parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'],
     );
@@ -129,11 +136,16 @@ class IOSSettings {
 
   factory IOSSettings.fromJson(Map<String, dynamic> json) {
     return IOSSettings(
-      subscriptionSettings: SubscriptionSettings.fromJson(json['subscription_settings']),
+      subscriptionSettings:
+          SubscriptionSettings.fromJson(json['subscription_settings']),
       unlockDialogText: json['unlock_dialog_text'],
       admobSettings: AdmobSettings.fromJson(json['admob_settings']),
-      appRateAndShare: json.containsKey('app_rate_share') ? AppRateAndShare.fromJson(json['app_rate_share']) : null,
-      houseAd: json.containsKey('house_ad') ? HouseAd.fromJson(json['house_ad']) : null,
+      appRateAndShare: json.containsKey('app_rate_share')
+          ? AppRateAndShare.fromJson(json['app_rate_share'])
+          : null,
+      houseAd: json.containsKey('house_ad')
+          ? HouseAd.fromJson(json['house_ad'])
+          : null,
       parentalGate: json['parental_gate'],
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'],
@@ -181,7 +193,9 @@ class AdmobSettings {
   factory AdmobSettings.fromJson(Map<String, dynamic> json) {
     return AdmobSettings(
       adsEnabled: json['ads_enabled'],
-      admobRewardedAd: json.containsKey('admob_rewarded_ad') ? AdmobRewardedAd.fromJson(json['admob_rewarded_ad']) : null,
+      admobRewardedAd: json.containsKey('admob_rewarded_ad')
+          ? AdmobRewardedAd.fromJson(json['admob_rewarded_ad'])
+          : null,
       admobInterstitialAd: json.containsKey('admob_interstitial_ad')
           ? AdmobInterstitialAd.fromJson(json['admob_interstitial_ad'])
           : null,

@@ -149,19 +149,41 @@ class _ChoiceScreenState extends State<LastScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Permission.getPermission(
-                                    context: context,
-                                    onSuccess: () {
-                                      shareApp();
-                                      print("True");
-                                    },
-                                    onFail: () {
-                                      print("false");
-                                    },
-                                    backgroundColor: widget
-                                        .booksList.backgroundColor
-                                        .toColor(),
-                                  );
+                                  if (Platform.isAndroid) {
+                                    widget.configResponse.androidSettings
+                                            .parentalGate!
+                                        ? Permission.getPermission(
+                                            context: context,
+                                            onSuccess: () {
+                                              shareApp();
+                                              print("True");
+                                            },
+                                            onFail: () {
+                                              print("false");
+                                            },
+                                            backgroundColor: widget
+                                                .booksList.backgroundColor
+                                                .toColor(),
+                                          )
+                                        : shareApp();
+                                  } else if (Platform.isIOS) {
+                                    widget.configResponse.iosSettings
+                                            .parentalGate!
+                                        ? Permission.getPermission(
+                                            context: context,
+                                            onSuccess: () {
+                                              shareApp();
+                                              print("True");
+                                            },
+                                            onFail: () {
+                                              print("false");
+                                            },
+                                            backgroundColor: widget
+                                                .booksList.backgroundColor
+                                                .toColor(),
+                                          )
+                                        : shareApp();
+                                  }
                                 },
                                 child: AnimatedButtonWidget(
                                   isRow: true,

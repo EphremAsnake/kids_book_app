@@ -128,6 +128,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                       width: MediaQuery.of(context).size.width / 2.1,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        
                         children: [
                           // Parent permission message and current challenge
                           const Row(
