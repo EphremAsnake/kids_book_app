@@ -1017,8 +1017,19 @@ class _BookListPageState extends State<BookListPage> {
                 alignment: Alignment.topCenter,
                 child: InkWell(
                   onTap: () {
-                    openUrlAndroid(
-                        widget.configResponse.iosSettings.houseAd!.urlId!);
+                    Permission.getPermission(
+                      context: context,
+                      onSuccess: () {
+                        openUrlAndroid(
+                            widget.configResponse.iosSettings.houseAd!.urlId!);
+                        print("True");
+                      },
+                      onFail: () {
+                        print("false");
+                      },
+                      backgroundColor:
+                          widget.booksList.backgroundColor.toColor(),
+                    );
                   },
                   child: Container(
                       width: MediaQuery.sizeOf(context).width * 0.3,

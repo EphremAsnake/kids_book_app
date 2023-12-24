@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +89,7 @@ class _BooksPageState extends State<BookPage>
       bookAudioUrls
           .add('${APIEndpoints.baseUrl}/${widget.folder}/${page.audio}');
     }
-
+    _preCacheImages();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //! Show the ChoiceScreen as a modal when the BooksPage is fully built and visible
       showCupertinoModalPopup(
@@ -150,6 +153,36 @@ class _BooksPageState extends State<BookPage>
         ),
       );
     }
+  }
+
+//   Future<void> preloadImages() async {
+//   for (var imageUrl in images) {
+//     await precacheImage(CachedNetworkImageProvider(imageUrl), context);
+//   }
+// }
+
+  // Future<List<File>> cacheImages(List<String> imageUrls) async {
+  //   List<File> cachedFiles = [];
+
+  //   for (String url in imageUrls) {
+  //     File cachedFile = await DefaultCacheManager().getSingleFile(url);
+  //     cachedFiles.add(cachedFile);
+  //   }
+
+  //   return cachedFiles;
+  // }
+
+  Future<void> preCacheImages(List<String> imageUrls) async {
+    final cacheManager = DefaultCacheManager();
+
+    for (String url in imageUrls) {
+      await cacheManager.downloadFile(url);
+    }
+  }
+
+  Future<void> _preCacheImages() async {
+    // Call preCacheImages with the images list you've populated
+    await preCacheImages(images);
   }
 
   Future<void> startPlaying() async {
@@ -341,8 +374,9 @@ class _BooksPageState extends State<BookPage>
                               //height: MediaQuery.of(context).size.height * 0.8,
 
                               //! whenever the image changes, it will be loaded, and then faded in:
-                              image:
-                                  CachedNetworkImageProvider(images[_counter]),
+                              image: CachedNetworkImageProvider(
+                                  images[_counter],
+                                  cacheManager: DefaultCacheManager()),
 
                               //! slow-ish fade for loaded images:
                               duration: const Duration(milliseconds: 900),
@@ -393,8 +427,7 @@ class _BooksPageState extends State<BookPage>
                               children: [
                                 //!Home Button
                                 CircleAvatar(
-                                  radius:
-                                      MediaQuery.of(context).size.height * 0.06,
+                                  radius: 25.0,
                                   backgroundColor: Colors.white,
                                   child: IconButton(
                                     icon: const Icon(Icons.home_outlined,
@@ -459,8 +492,7 @@ class _BooksPageState extends State<BookPage>
                               children: [
                                 //!Background Music
                                 CircleAvatar(
-                                    radius: MediaQuery.of(context).size.height *
-                                        0.06,
+                                    radius: 25.0,
                                     backgroundColor: Colors.white,
                                     child: GetBuilder<AudioController>(
                                         builder: (audioController) {
@@ -489,9 +521,7 @@ class _BooksPageState extends State<BookPage>
                                 //!Story Play
                                 if (_listen)
                                   CircleAvatar(
-                                      radius:
-                                          MediaQuery.of(context).size.height *
-                                              0.06,
+                                      radius: 25.0,
                                       backgroundColor:
                                           Colors.white.withOpacity(.95),
                                       child: IconButton(

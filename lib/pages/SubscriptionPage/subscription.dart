@@ -75,16 +75,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      height: 56,
+                      height: 50,
                     ),
-                    Text(
-                      'Subscribe Now',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 11.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ).paddingOnly(bottom: 10),
+                    
                     Text(
                       widget.generalSubscriptionText,
                       textAlign: TextAlign.center,
