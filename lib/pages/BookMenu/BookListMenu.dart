@@ -454,7 +454,7 @@ class _BookListPageState extends State<BookListPage> {
                                                           functionCall: () {
                                                             Navigator.pop(
                                                                 context);
-                                                            checkInternetConnection();
+                                                            //checkInternetConnection();
                                                           },
                                                           closeicon: true,
                                                         );
