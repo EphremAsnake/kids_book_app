@@ -200,41 +200,55 @@ class _ChoiceScreenState extends State<LastScreen> {
                               InkWell(
                                 onTap: () {
                                   if (Platform.isAndroid) {
-                                    Permission.getPermission(
-                                      context: context,
-                                      onSuccess: () {
-                                        openUrlAndroid(widget
+                                    widget.configResponse.androidSettings
+                                            .parentalGate!
+                                        ? Permission.getPermission(
+                                            context: context,
+                                            onSuccess: () {
+                                              openUrlAndroid(widget
+                                                  .configResponse
+                                                  .androidSettings
+                                                  .appRateAndShare!
+                                                  .urlId!);
+                                              print("True");
+                                            },
+                                            onFail: () {
+                                              print("false");
+                                            },
+                                            backgroundColor: widget
+                                                .booksList.backgroundColor
+                                                .toColor(),
+                                          )
+                                        : openUrlAndroid(widget
                                             .configResponse
                                             .androidSettings
                                             .appRateAndShare!
                                             .urlId!);
-                                        print("True");
-                                      },
-                                      onFail: () {
-                                        print("false");
-                                      },
-                                      backgroundColor: widget
-                                          .booksList.backgroundColor
-                                          .toColor(),
-                                    );
                                   } else {
-                                    Permission.getPermission(
-                                      context: context,
-                                      onSuccess: () {
-                                        openAppStore(widget
+                                    widget.configResponse.iosSettings
+                                            .parentalGate!
+                                        ? Permission.getPermission(
+                                            context: context,
+                                            onSuccess: () {
+                                              openAppStore(widget
+                                                  .configResponse
+                                                  .iosSettings
+                                                  .appRateAndShare!
+                                                  .urlId!);
+                                              print("True");
+                                            },
+                                            onFail: () {
+                                              print("false");
+                                            },
+                                            backgroundColor: widget
+                                                .booksList.backgroundColor
+                                                .toColor(),
+                                          )
+                                        : openAppStore(widget
                                             .configResponse
                                             .iosSettings
                                             .appRateAndShare!
                                             .urlId!);
-                                        print("True");
-                                      },
-                                      onFail: () {
-                                        print("false");
-                                      },
-                                      backgroundColor: widget
-                                          .booksList.backgroundColor
-                                          .toColor(),
-                                    );
                                   }
                                 },
                                 child: AnimatedButtonWidget(

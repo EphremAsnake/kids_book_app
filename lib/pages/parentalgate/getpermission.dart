@@ -118,17 +118,24 @@ class _GetParentPermissionState extends State<GetParentPermission> {
               padding: const EdgeInsets.only(top: 56.0),
               child: Container(
                 alignment: Alignment.center,
+                constraints: const BoxConstraints(
+                  maxWidth: 900,
+                  maxHeight: 420,
+                ),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
                     // Left Column
-                    SizedBox(
+                    Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width / 2.1,
+                      constraints: const BoxConstraints(
+                        maxWidth: 900,
+                        maxHeight: 420,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        
                         children: [
                           // Parent permission message and current challenge
                           const Row(
@@ -213,9 +220,13 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                       ),
                     ),
                     // Right Column
-                    SizedBox(
+                    Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width / 2.1,
+                      constraints: const BoxConstraints(
+                        maxWidth: 900,
+                        maxHeight: 420,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
