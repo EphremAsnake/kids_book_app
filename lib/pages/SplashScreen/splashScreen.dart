@@ -95,6 +95,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void fetchData() async {
+    //!Config Data
+    String storedConfigData = await getFromStorageConfig();
+    Map<String, dynamic> parsedConfigData = json.decode(storedConfigData);
+    ConfigApiResponseModel storedConfigResponse =
+        ConfigApiResponseModel.fromJson(parsedConfigData);
+
+    final String fallbackUrl = Platform.isAndroid
+        ? storedConfigResponse.androidSettings.fallbackServerUrl ?? ''
+        : storedConfigResponse.iosSettings.fallbackServerUrl ?? '';
     try {
       Response response =
           await dio.get('${APIEndpoints.baseUrl}/menu/book_list.json');
@@ -125,7 +134,53 @@ class _SplashScreenState extends State<SplashScreen> {
               duration: const Duration(seconds: 2));
         }
       } else {
-        debugPrint('Something Went Wrong Try Again');
+        debugPrint(
+            'Something Went Wrong with main server Trying with fallback server');
+        await tryFallbackUrl(fallbackUrl);
+      }
+    } catch (e) {
+      debugPrint(
+          'Something Went Wrong with main server trying with fallback server $e');
+      await tryFallbackUrl(fallbackUrl);
+    }
+  }
+
+  Future<void> tryFallbackUrl(String fallbackUrl) async {
+    String storedBookList = await getFromStorageBookList();
+    String storedConfigData = await getFromStorageBookList();
+    try {
+      Response response = await dio.get('$fallbackUrl/menu/book_list.json');
+
+      if (response.statusCode == 200) {
+        ApiResponse apiResponse = ApiResponse.fromJson(response.data);
+
+        saveToLocalStorageBookList(response.data);
+
+        // ignore: use_build_context_synchronously
+        if (configResponses == null) {
+          await fetchConfigData();
+
+          Get.offAll(
+              BookListPage(
+                booksList: apiResponse,
+                configResponse: configResponses!,
+              ),
+              transition: Transition.fade,
+              duration: const Duration(seconds: 2));
+        } else {
+          Get.offAll(
+              BookListPage(
+                booksList: apiResponse,
+                configResponse: configResponses!,
+              ),
+              transition: Transition.fade,
+              duration: const Duration(seconds: 2));
+        }
+      } else {
+        debugPrint('Something Went Wrong Try using local storage');
+        if (storedBookList != "" && storedConfigData != "") {
+          useLocalDataBoth();
+        }
       }
     } catch (e) {
       debugPrint('Something Went Wrong $e');

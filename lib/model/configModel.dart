@@ -108,7 +108,7 @@ class AndroidSettings {
           : null,
       parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
-      fallbackServerUrl: json['fallback_server_url'],
+      fallbackServerUrl: json['fallback_server_url']??'',
     );
   }
 }
@@ -148,7 +148,7 @@ class IOSSettings {
           : null,
       parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
-      fallbackServerUrl: json['fallback_server_url'],
+      fallbackServerUrl: json['fallback_server_url']??'',
     );
   }
 }
