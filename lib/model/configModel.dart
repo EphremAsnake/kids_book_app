@@ -106,7 +106,7 @@ class AndroidSettings {
       houseAd: json.containsKey('house_ad')
           ? HouseAd.fromJson(json['house_ad'])
           : null,
-      parentalGate: json['parental_gate'] ?? true,
+      parentalGate:  true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url']??'',
     );

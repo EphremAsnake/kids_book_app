@@ -972,7 +972,7 @@ class _BookListPageState extends State<BookListPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
-                    tooltip: 'Toggle',
+                    //tooltip: 'Toggle',
                     child: _isMenuOpen
                         ? const Icon(Icons.close)
                         : const Icon(Icons.expand_less_outlined),
@@ -1082,7 +1082,7 @@ class _BookListPageState extends State<BookListPage> {
                         ? Permission.getPermission(
                             context: context,
                             onSuccess: () {
-                              openUrlAndroid(widget
+                              openAppStore(widget
                                   .configResponse.iosSettings.houseAd!.urlId!);
                               print("True");
                             },
@@ -1092,7 +1092,7 @@ class _BookListPageState extends State<BookListPage> {
                             backgroundColor:
                                 widget.booksList.backgroundColor.toColor(),
                           )
-                        : openUrlAndroid(
+                        : openAppStore(
                             widget.configResponse.iosSettings.houseAd!.urlId!);
                   },
                   child: Container(

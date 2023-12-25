@@ -95,6 +95,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
         // ),
         backgroundColor: widget.bgColor,
         body: Stack(
+          alignment: Alignment.center,
           children: [
             //!Background Image
             Positioned(
@@ -119,8 +120,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
               child: Container(
                 alignment: Alignment.center,
                 constraints: const BoxConstraints(
-                  maxWidth: 900,
-                  maxHeight: 420,
+                  maxWidth: 1100,
+                  maxHeight: 620,
                 ),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -131,8 +132,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width / 2.1,
                       constraints: const BoxConstraints(
-                        maxWidth: 900,
-                        maxHeight: 420,
+                        maxWidth: 1100,
+                        maxHeight: 620,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -224,8 +225,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width / 2.1,
                       constraints: const BoxConstraints(
-                        maxWidth: 900,
-                        maxHeight: 420,
+                        maxWidth: 1100,
+                        maxHeight: 620,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
