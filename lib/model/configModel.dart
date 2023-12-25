@@ -106,7 +106,7 @@ class AndroidSettings {
       houseAd: json.containsKey('house_ad')
           ? HouseAd.fromJson(json['house_ad'])
           : null,
-      parentalGate: json['parental_gate'] ?? true,
+      parentalGate: json['parental gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'],
     );
@@ -146,7 +146,7 @@ class IOSSettings {
       houseAd: json.containsKey('house_ad')
           ? HouseAd.fromJson(json['house_ad'])
           : null,
-      parentalGate: json['parental_gate'],
+      parentalGate: json['parental gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'],
     );
