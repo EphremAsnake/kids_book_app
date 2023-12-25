@@ -98,7 +98,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      height: 50,
+                      height: 10,
                     ),
 
                     Text(
