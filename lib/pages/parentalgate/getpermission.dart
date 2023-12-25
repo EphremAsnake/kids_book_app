@@ -115,29 +115,24 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                   height: MediaQuery.of(context).size.height,
                 )),
             // Left side of the landscape layout
-            Padding(
-              padding: const EdgeInsets.only(top: 56.0),
-              child: Container(
-                alignment: Alignment.center,
-                constraints: const BoxConstraints(
-                  maxWidth: 1100,
-                  maxHeight: 620,
-                ),
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  children: [
-                    // Left Column
-                    Container(
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  // Left Column
+                  Spacer(),
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width / 2.1,
-                      constraints: const BoxConstraints(
-                        maxWidth: 1100,
-                        maxHeight: 620,
-                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          SizedBox(),
+                          if (MediaQuery.of(context).size.height > 800)
+                            SizedBox(),
                           // Parent permission message and current challenge
                           const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -217,20 +212,23 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 )
                             ],
                           ),
+                          SizedBox(),
+                          if (MediaQuery.of(context).size.height > 800)
+                            SizedBox(),
                         ],
                       ),
                     ),
-                    // Right Column
-                    Container(
+                  ),
+                  // Right Column
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width / 2.1,
-                      constraints: const BoxConstraints(
-                        maxWidth: 1100,
-                        maxHeight: 620,
-                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          SizedBox(),
                           // Buttons for user input
                           for (int i = 0; i < 3; i++)
                             Row(
@@ -258,6 +256,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                   ),
                               ],
                             ),
+
                           // Buttons for '0' and 'back'
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -300,12 +299,14 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          SizedBox(),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Spacer()
+                ],
               ),
             ),
             Positioned(
@@ -327,191 +328,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
           ],
         ));
   }
-  // //! Portrait layout
-  // return SafeArea(
-  //   child: Stack(
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.symmetric(
-  //           vertical: 30,
-  //         ),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //           children: [
-  //             // Top part of portrait layout
-  //             Expanded(
-  //               flex: 1,
-  //               child: Column(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                 children: [
-  //                   // Parent permission message and current challenge
-  //                   Row(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       CustomButton(
-  //                         buttonSize: 50,
-  //                         onTap: () {},
-  //                         child: const Icon(Icons.volume_up_rounded),
-  //                       ),
-  //                       const Column(
-  //                         children: [
-  //                           Text(
-  //                             "   Ask your parents",
-  //                             style: TextStyle(
-  //                               color: Colors.blue,
-  //                               fontSize: 20,
-  //                               fontWeight: FontWeight.bold,
-  //                             ),
-  //                           ),
-  //                           Text(
-  //                             "To continue, tap:",
-  //                             style: TextStyle(
-  //                               color: Colors.blue,
-  //                               fontSize: 12,
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       )
-  //                     ],
-  //                   ),
-  //                   // Display the current challenge
-  //                   Text(
-  //                     numberWord.join(" , "),
-  //                     style: const TextStyle(
-  //                       color: Colors.blue,
-  //                       fontSize: 18,
-  //                     ),
-  //                   ),
-  //                   // Display user input placeholders
-  //                   Row(
-  //                     mainAxisAlignment: MainAxisAlignment.center,
-  //                     children: [
-  //                       for (int i = 0; i < 4; i++)
-  //                         Column(
-  //                           children: [
-  //                             Padding(
-  //                               padding: const EdgeInsets.symmetric(
-  //                                 horizontal: 10,
-  //                               ),
-  //                               child: Column(
-  //                                 children: [
-  //                                   Text(
-  //                                     (ansNumber[i] ?? '').toString(),
-  //                                     style: const TextStyle(
-  //                                       color: Colors.blue,
-  //                                       fontSize: 20,
-  //                                       height: 2,
-  //                                       fontWeight: FontWeight.bold,
-  //                                     ),
-  //                                   ),
-  //                                   Container(
-  //                                     height: 2.5,
-  //                                     width: 30,
-  //                                     color: Colors.blue,
-  //                                   )
-  //                                 ],
-  //                               ),
-  //                             )
-  //                           ],
-  //                         )
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             // Bottom part of portrait layout
-  //             Expanded(
-  //               flex: 1,
-  //               child: Column(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                 children: [
-  //                   // Buttons for user input
-  //                   for (int i = 0; i < 3; i++)
-  //                     Row(
-  //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                       children: [
-  //                         for (int j = 1; j < 4; j++)
-  //                           IgnorePointer(
-  //                             ignoring: currentIndex > 3,
-  //                             child: CustomButton(
-  //                               child: Text(
-  //                                 "${(i * 3) + j}",
-  //                                 style: const TextStyle(
-  //                                   color: Colors.blue,
-  //                                   fontSize: 20,
-  //                                   fontWeight: FontWeight.bold,
-  //                                 ),
-  //                               ),
-  //                               onTap: () {
-  //                                 setState(() {
-  //                                   ansNumber[currentIndex] = (i * 3) + j;
-  //                                   checkSuccess();
-  //                                 });
-  //                               },
-  //                             ),
-  //                           ),
-  //                       ],
-  //                     ),
-  //                   // Buttons for '0' and 'back'
-  //                   Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                     children: [
-  //                       IgnorePointer(
-  //                         ignoring: currentIndex > 3,
-  //                         child: CustomButton(
-  //                           child: const Text(
-  //                             "0",
-  //                             style: TextStyle(
-  //                               color: Colors.blue,
-  //                               fontSize: 20,
-  //                               fontWeight: FontWeight.bold,
-  //                             ),
-  //                           ),
-  //                           onTap: () {
-  //                             setState(() {
-  //                               ansNumber[currentIndex] = 0;
-  //                               checkSuccess();
-  //                             });
-  //                           },
-  //                         ),
-  //                       ),
-  //                       IgnorePointer(
-  //                         ignoring: currentIndex > 3,
-  //                         child: CustomButton(
-  //                           width: 120,
-  //                           child: const Icon(
-  //                             Icons.arrow_back,
-  //                             color: Colors.blue,
-  //                           ),
-  //                           onTap: () {
-  //                             setState(() {
-  //                               if (currentIndex > 0) {
-  //                                 currentIndex--;
-  //                                 ansNumber[currentIndex] = null;
-  //                               }
-  //                             });
-  //                           },
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  // );
 }
-//             return const Center(
-//               child: Text('Rotate the Screen to see the parental gate'),
-//             );
-//           },
-//         ));
-//   }
-// }
 
 // Custom button widget
 class CustomButton extends StatefulWidget {
