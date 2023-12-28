@@ -30,6 +30,7 @@ import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
 
 import '../SubscriptionPage/subscription.dart';
+import '../SubscriptionPage/test.dart';
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -1164,6 +1165,7 @@ class _BookListPageState extends State<BookListPage> {
   }
 
   void openSubscriptionPage() {
+    //Get.to(SubscriptionTest());
     Get.to(
         SubscriptionPage(
           generalSubscriptionText: Platform.isAndroid
@@ -1233,6 +1235,11 @@ class _BookListPageState extends State<BookListPage> {
                 ),
                 fadeInDuration: const Duration(milliseconds: 2000),
                 fit: BoxFit.cover,
+                imageErrorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.transparent,
+                  );
+                },
               ),
             ),
             //! Overlay for the title
@@ -1283,45 +1290,45 @@ class _BookListPageState extends State<BookListPage> {
   }
 }
 
-class BookOpeningPageRoute extends PageRouteBuilder {
-  final Widget page;
+// class BookOpeningPageRoute extends PageRouteBuilder {
+//   final Widget page;
 
-  BookOpeningPageRoute({required this.page})
-      : super(
-          transitionDuration: const Duration(seconds: 1),
-          pageBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) =>
-              page,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) {
-            var begin = Matrix4.identity()
-              ..setEntry(3, 2, 0.002)
-              ..rotateY(-0.5); // Adjust the angle if needed
+//   BookOpeningPageRoute({required this.page})
+//       : super(
+//           transitionDuration: const Duration(seconds: 1),
+//           pageBuilder: (
+//             BuildContext context,
+//             Animation<double> animation,
+//             Animation<double> secondaryAnimation,
+//           ) =>
+//               page,
+//           transitionsBuilder: (
+//             BuildContext context,
+//             Animation<double> animation,
+//             Animation<double> secondaryAnimation,
+//             Widget child,
+//           ) {
+//             var begin = Matrix4.identity()
+//               ..setEntry(3, 2, 0.002)
+//               ..rotateY(-0.5); // Adjust the angle if needed
 
-            var end = Matrix4.identity()
-              ..setEntry(3, 2, 0.002)
-              ..rotateY(0);
+//             var end = Matrix4.identity()
+//               ..setEntry(3, 2, 0.002)
+//               ..rotateY(0);
 
-            var tween = Matrix4Tween(begin: begin, end: end);
+//             var tween = Matrix4Tween(begin: begin, end: end);
 
-            return AnimatedBuilder(
-              animation: animation,
-              builder: (context, child) {
-                return Transform(
-                  transform: tween.evaluate(animation),
-                  alignment: Alignment.center,
-                  child: child,
-                );
-              },
-              child: child,
-            );
-          },
-        );
-}
+//             return AnimatedBuilder(
+//               animation: animation,
+//               builder: (context, child) {
+//                 return Transform(
+//                   transform: tween.evaluate(animation),
+//                   alignment: Alignment.center,
+//                   child: child,
+//                 );
+//               },
+//               child: child,
+//             );
+//           },
+//         );
+// }

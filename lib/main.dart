@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/pages/SubscriptionPage/iap_services.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 import 'controller/backgroundMusicAudioController.dart';
 import 'pages/SplashScreen/splashScreen.dart';
@@ -22,7 +28,7 @@ void main() async {
 
   Wakelock.enable();
   Get.put(AudioController());
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 Future<void> _initGoogleMobileAds() async {
@@ -32,8 +38,29 @@ Future<void> _initGoogleMobileAds() async {
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// ignore: must_be_immutable
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+
+    _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
+      IAPService().listenToPurchaseUpdated(purchaseDetailsList);
+    }, onDone: () {
+      _iapSubscription.cancel();
+    }, onError: (error) {
+      _iapSubscription.cancel();
+    }) as StreamSubscription<List<PurchaseDetails>>;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -2,12 +2,18 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:logger/logger.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+
+const List<String> _productIds = <String>[
+  'month_subscription',
+  'yearly_subscription',
+];
 
 class SubscriptionPage extends StatefulWidget {
   final String monthly;
@@ -32,6 +38,45 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  bool _isAvailable = false;
+  String? _notice;
+  bool gotproducts = false;
+  List<ProductDetails> _products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initStoreInfo();
+  }
+
+  Future<void> initStoreInfo() async {
+    final bool isAvailable = await _inAppPurchase.isAvailable();
+    setState(() {
+      _isAvailable = isAvailable;
+    });
+
+    if (!_isAvailable) {
+      setState(() {
+        _notice = 'no upgrade at this time';
+      });
+
+      return;
+    }
+
+    setState(() {
+      _notice = 'there is connection';
+    });
+
+    ProductDetailsResponse productDetailsResponse =
+        await _inAppPurchase.queryProductDetails(_productIds.toSet());
+
+    setState(() {
+      _products = productDetailsResponse.productDetails;
+      gotproducts = true;
+    });
+  }
+
   Color bColor = Colors.black.withOpacity(0.3);
   AudioController backgroundaudioController = Get.put(AudioController());
 
@@ -69,6 +114,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return Scaffold(
       backgroundColor: widget.backgroundcolor.toColor(),
       body: Stack(
+        alignment: Alignment.center,
         children: [
           // //!Background Image
           Positioned(
@@ -87,140 +133,180 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
               )),
-          SizedBox(
-            height: MediaQuery.sizeOf(context).height,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
+          _products.isNotEmpty
+              ? SizedBox(
+                  height: MediaQuery.sizeOf(context).height,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
 
-                    Text(
-                      widget.generalSubscriptionText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                          Text(
+                            widget.generalSubscriptionText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          // if (_notice != null)
+                          //   Text(
+                          //     '$_notice ${_products.length}',
+                          //     textAlign: TextAlign.center,
+                          //     style: TextStyle(
+                          //       fontSize: 10.sp,
+                          //       color: Colors.white,
+                          //       fontWeight: FontWeight.bold,
+                          //     ),
+                          //   ),
+                          const SizedBox(height: 20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: borderRadius,
+                                child: Material(
+                                  borderRadius: borderRadius,
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      final PurchaseParam monthlyPurchaseParam =
+                                          PurchaseParam(
+                                              productDetails: _products[0]);
+                                      InAppPurchase.instance.buyNonConsumable(
+                                          purchaseParam: monthlyPurchaseParam);
+                                    },
+                                    child: Container(
+                                      height: containerHeight,
+                                      width: containerWidth,
+                                      decoration: BoxDecoration(
+                                        borderRadius: borderRadius,
+                                        color: bColor,
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                              '${_products[0].price}/month',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 9.sp,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10.0),
+                              ClipRRect(
+                                borderRadius: borderRadius,
+                                child: Material(
+                                  borderRadius: borderRadius,
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
+                                      final PurchaseParam yearlyPurchaseParam =
+                                          PurchaseParam(
+                                              productDetails: _products[1]);
+                                      InAppPurchase.instance.buyNonConsumable(
+                                          purchaseParam: yearlyPurchaseParam);
+                                    },
+                                    child: Container(
+                                      height: containerHeight,
+                                      width: containerWidth,
+                                      decoration: BoxDecoration(
+                                        borderRadius: borderRadius,
+                                        color: bColor,
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                              '${_products[1].price}/year',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 9.sp,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  'Restore Purchase',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  clearCachedFiles();
+                                },
+                                child: const Text(
+                                  'Clear Saved Stories',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                          //const SizedBox(height: 10.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            //crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  _launchURL(widget.termofuseUrl);
+                                },
+                                child: const Text(
+                                  'Terms of Use',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  _launchURL(widget.privacyPolicyUrl);
+                                },
+                                child: const Text(
+                                  'Privacy Policy',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(_products[0].description),
+                          Text(_products[1].price),
+                          //  ListView.builder(
+                          //     itemCount: _products.length,
+                          //     itemBuilder: ((context, index) {
+                          //       return ListTile(
+                          //         title: Text(_products[index].description),
+                          //         trailing: Text(_products[index].price),
+                          //       );
+                          //     })),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: borderRadius,
-                          child: Material(
-                            borderRadius: borderRadius,
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                height: containerHeight,
-                                width: containerWidth,
-                                decoration: BoxDecoration(
-                                  borderRadius: borderRadius,
-                                  color: bColor,
-                                ),
-                                child: Center(
-                                    child: Text(widget.monthly,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 9.sp,
-                                            fontWeight: FontWeight.bold))),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10.0),
-                        ClipRRect(
-                          borderRadius: borderRadius,
-                          child: Material(
-                            borderRadius: borderRadius,
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                height: containerHeight,
-                                width: containerWidth,
-                                decoration: BoxDecoration(
-                                  borderRadius: borderRadius,
-                                  color: bColor,
-                                ),
-                                child: Center(
-                                    child: Text(widget.yearly,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 9.sp,
-                                            fontWeight: FontWeight.bold))),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Restore Purchase',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            clearCachedFiles();
-                          },
-                          child: const Text(
-                            'Clear Saved Stories',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    //const SizedBox(height: 10.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      //crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            _launchURL(widget.termofuseUrl);
-                          },
-                          child: const Text(
-                            'Terms of Use',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            _launchURL(widget.privacyPolicyUrl);
-                          },
-                          child: const Text(
-                            'Privacy Policy',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-            ),
-          ),
           // Positioned(
           //   bottom: 20,
           //   left: 0,

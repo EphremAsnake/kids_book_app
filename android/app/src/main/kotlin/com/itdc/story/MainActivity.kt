@@ -1,4 +1,4 @@
-package com.example.storyapp
+package com.itdc.story
 
 import io.flutter.embedding.android.FlutterActivity
 
