@@ -1194,6 +1194,16 @@ class _BookListPageState extends State<BookListPage> {
               : widget.configResponse.iosSettings.subscriptionSettings
                   .privacyPolicyUrl!,
           backgroundcolor: widget.booksList.backgroundColor,
+          monthlyProductId: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .monthSubscriptionProductID!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .monthSubscriptionProductID!,
+          yearlyProductId: Platform.isAndroid
+              ? widget.configResponse.androidSettings.subscriptionSettings
+                  .yearSubscriptionProductID!
+              : widget.configResponse.iosSettings.subscriptionSettings
+                  .yearSubscriptionProductID!,
         ),
         transition: Transition.leftToRight);
   }

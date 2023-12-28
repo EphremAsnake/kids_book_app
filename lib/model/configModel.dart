@@ -108,7 +108,7 @@ class AndroidSettings {
           : null,
       parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
-      fallbackServerUrl: json['fallback_server_url']??'',
+      fallbackServerUrl: json['fallback_server_url'] ?? '',
     );
   }
 }
@@ -148,7 +148,7 @@ class IOSSettings {
           : null,
       parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
-      fallbackServerUrl: json['fallback_server_url']??'',
+      fallbackServerUrl: json['fallback_server_url'] ?? '',
     );
   }
 }
@@ -157,6 +157,8 @@ class SubscriptionSettings {
   String? generalSubscriptionText;
   String? monthSubscriptionText;
   String? yearSubscriptionText;
+  String? monthSubscriptionProductID;
+  String? yearSubscriptionProductID;
   String? termOfUseUrl;
   String? privacyPolicyUrl;
 
@@ -164,6 +166,8 @@ class SubscriptionSettings {
     this.generalSubscriptionText,
     this.monthSubscriptionText,
     this.yearSubscriptionText,
+    this.monthSubscriptionProductID,
+    this.yearSubscriptionProductID,
     this.termOfUseUrl,
     this.privacyPolicyUrl,
   });
@@ -173,6 +177,8 @@ class SubscriptionSettings {
       generalSubscriptionText: json['general_subscription_text'],
       monthSubscriptionText: json['month_subscription_text'],
       yearSubscriptionText: json['year_subscription_text'],
+      monthSubscriptionProductID: json['month_subscription_id'],
+      yearSubscriptionProductID: json['year_subscription_id'],
       termOfUseUrl: json['term_of_use_url'],
       privacyPolicyUrl: json['privacy_policy_url'],
     );

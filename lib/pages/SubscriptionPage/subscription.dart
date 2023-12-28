@@ -10,11 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-const List<String> _productIds = <String>[
-  'month_subscription',
-  'yearly_subscription',
-];
-
 class SubscriptionPage extends StatefulWidget {
   final String monthly;
   final String yearly;
@@ -22,6 +17,8 @@ class SubscriptionPage extends StatefulWidget {
   final String privacyPolicyUrl;
   final String generalSubscriptionText;
   final String backgroundcolor;
+  final String monthlyProductId;
+  final String yearlyProductId;
 
   const SubscriptionPage({
     super.key,
@@ -31,6 +28,8 @@ class SubscriptionPage extends StatefulWidget {
     required this.privacyPolicyUrl,
     required this.generalSubscriptionText,
     required this.backgroundcolor,
+    required this.monthlyProductId,
+    required this.yearlyProductId,
   });
 
   @override
@@ -39,6 +38,13 @@ class SubscriptionPage extends StatefulWidget {
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+
+  // final List<String> _productIds = <String>[
+  //   'month_subscription',
+  //   'yearly_subscription',
+  // ];
+
+  late List<String> _productIds;
   bool _isAvailable = false;
   String? _notice;
   bool gotproducts = false;
@@ -47,6 +53,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   @override
   void initState() {
     super.initState();
+    _productIds = [widget.monthlyProductId, widget.yearlyProductId];
     initStoreInfo();
   }
 
@@ -194,7 +201,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       ),
                                       child: Center(
                                           child: Text(
-                                              '${_products[0].price}/month',
+                                              '${_products[0].price}${widget.monthly}',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -228,7 +235,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       ),
                                       child: Center(
                                           child: Text(
-                                              '${_products[1].price}/year',
+                                              '${_products[1].price}${widget.yearly}',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.white,
