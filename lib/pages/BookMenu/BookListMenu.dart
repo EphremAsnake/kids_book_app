@@ -450,7 +450,7 @@ class _BookListPageState extends State<BookListPage> {
                                 builder: (context, snapshot) {
                                   bool bookstatus =
                                       isSubscribedMonthly || isSubscribedYearly
-                                          ? false
+                                          ? true
                                           : snapshot.data ?? false;
                                   int rewardedCountLimit = Platform.isAndroid
                                       ? widget
