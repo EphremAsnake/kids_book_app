@@ -21,6 +21,8 @@ class IAPService {
       if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
         _handleSuccessfulPurchase(purchaseDetails);
+      } else if (purchaseDetails.status == PurchaseStatus.canceled) {
+        updateSubscriptionStatus(false, false);
       }
 
       if (purchaseDetails.pendingCompletePurchase) {
