@@ -45,21 +45,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
+  //late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
 
   @override
   void initState() {
     super.initState();
 
-    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+    // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
 
-    _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
-      IAPService().listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _iapSubscription.cancel();
-    }, onError: (error) {
-      _iapSubscription.cancel();
-    }) as StreamSubscription<List<PurchaseDetails>>;
+    // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
+    //   IAPService().listenToPurchaseUpdated(purchaseDetailsList);
+    // }, onDone: () {
+    //   _iapSubscription.cancel();
+    // }, onError: (error) {
+    //   _iapSubscription.cancel();
+    // }) as StreamSubscription<List<PurchaseDetails>>;
   }
 
   @override

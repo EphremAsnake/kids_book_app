@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
@@ -29,6 +31,7 @@ import '../Settings/settingpage.dart';
 import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
 
+import '../SubscriptionPage/iap_services.dart';
 import '../SubscriptionPage/subscription.dart';
 import '../SubscriptionPage/test.dart';
 
@@ -52,6 +55,8 @@ class BookListPage extends StatefulWidget {
 class _BookListPageState extends State<BookListPage> {
   final ScrollController _scrollController = ScrollController();
 
+  late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
+
   late AudioController audioController;
   late List<Future<bool>> lockStatusList;
 
@@ -73,7 +78,27 @@ class _BookListPageState extends State<BookListPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.fromlocal == null) {}
+    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+
+    _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
+      IAPService(
+              monthlyProductId: Platform.isAndroid
+                  ? widget.configResponse.androidSettings.subscriptionSettings
+                      .monthSubscriptionProductID!
+                  : widget.configResponse.iosSettings.subscriptionSettings
+                      .monthSubscriptionProductID!,
+              yearlyProductId: Platform.isAndroid
+                  ? widget.configResponse.androidSettings.subscriptionSettings
+                      .yearSubscriptionProductID!
+                  : widget.configResponse.iosSettings.subscriptionSettings
+                      .yearSubscriptionProductID!)
+          .listenToPurchaseUpdated(purchaseDetailsList);
+    }, onDone: () {
+      _iapSubscription.cancel();
+    }, onError: (error) {
+      _iapSubscription.cancel();
+    }) as StreamSubscription<List<PurchaseDetails>>;
+
     initcalls();
     fetchAdIds();
   }
