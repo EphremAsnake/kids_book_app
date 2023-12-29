@@ -32,6 +32,7 @@ import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
 
 import '../SubscriptionPage/iap_services.dart';
+import '../SubscriptionPage/status/subscriptionstatus.dart';
 import '../SubscriptionPage/subscription.dart';
 import '../SubscriptionPage/test.dart';
 
@@ -73,11 +74,26 @@ class _BookListPageState extends State<BookListPage> {
 
   bool adsEnabled = true;
 
+  //!check Sub
+  bool isSubscribedMonthly = false;
+  bool isSubscribedYearly = false;
+
   //!ad
   late AdController adController;
+
+  Future<void> loadSubscriptionStatus() async {
+    final Map<String, bool> subscriptionStatus =
+        await SubscriptionStatus.getSubscriptionStatus();
+    setState(() {
+      isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
+      isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
     final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
 
     _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
@@ -99,6 +115,7 @@ class _BookListPageState extends State<BookListPage> {
       _iapSubscription.cancel();
     }) as StreamSubscription<List<PurchaseDetails>>;
 
+    loadSubscriptionStatus();
     initcalls();
     fetchAdIds();
   }
@@ -431,7 +448,10 @@ class _BookListPageState extends State<BookListPage> {
                             return FutureBuilder<bool>(
                                 future: lockStatusList[index],
                                 builder: (context, snapshot) {
-                                  bool bookstatus = snapshot.data ?? false;
+                                  bool bookstatus =
+                                      isSubscribedMonthly || isSubscribedYearly
+                                          ? false
+                                          : snapshot.data ?? false;
                                   int rewardedCountLimit = Platform.isAndroid
                                       ? widget
                                               .configResponse
@@ -487,7 +507,9 @@ class _BookListPageState extends State<BookListPage> {
                                                       });
                                                 } else {
                                                   getSelectedStory(book.path);
-                                                  if (index == 0) {
+                                                  if (index == 0 ||
+                                                      isSubscribedMonthly ||
+                                                      isSubscribedYearly) {
                                                     //!Navigate to Story Page for First index Without Ad
                                                     getSelectedStory(book.path,
                                                         goto: true);
