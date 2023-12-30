@@ -213,6 +213,7 @@ class _BookListPageState extends State<BookListPage> {
   @override
   void dispose() {
     super.dispose();
+    _iapSubscription.cancel();
   }
 
   Future<bool> getLockStatus(String bookTitle) async {
