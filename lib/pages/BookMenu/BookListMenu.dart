@@ -1229,7 +1229,7 @@ class _BookListPageState extends State<BookListPage> {
   void openSubscriptionPage() {
     //Get.to(SubscriptionTest());
     Get.to(
-        SubscriptionPages(
+        SubscriptionPage(
           generalSubscriptionText: Platform.isAndroid
               ? widget.configResponse.androidSettings.subscriptionSettings
                   .generalSubscriptionText!

@@ -11,8 +11,9 @@ import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-
+import 'package:badges/badges.dart' as badges;
 import '../../controller/subscriptionController.dart';
+import 'status/subscriptionstatus.dart';
 
 class SubscriptionPage extends StatefulWidget {
   final String monthly;
@@ -47,6 +48,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   //   'month_subscription',
   //   'yearly_subscription',
   // ];
+  Future<void> loadSubscriptionStatus() async {
+    final Map<String, bool> subscriptionStatus =
+        await SubscriptionStatus.getSubscriptionStatus();
+    setState(() {
+      isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
+      isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
+    });
+  }
 
   late List<String> _productIds;
   bool _isAvailable = false;
@@ -57,13 +66,21 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
 
+  //!check Sub
   bool isSubscribedMonthly = false;
   bool isSubscribedYearly = false;
   @override
   void initState() {
     super.initState();
     _productIds = [widget.monthlyProductId, widget.yearlyProductId];
+    loadSubscriptionStatus();
     initStoreInfo();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscriptionController.hideProgress();
   }
 
   Future<void> initStoreInfo() async {
@@ -135,9 +152,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       child: Scaffold(
           backgroundColor: widget.backgroundcolor.toColor(),
           body: Obx(() {
-            isSubscribedMonthly =
-                subscriptionController.isUserSubscribedMonthly;
-            isSubscribedYearly = subscriptionController.isUserSubscribedYearly;
+            // isSubscribedMonthly =
+            //     subscriptionController.isUserSubscribedMonthly;
+            // isSubscribedYearly = subscriptionController.isUserSubscribedYearly;
 
             return Stack(
               alignment: Alignment.center,
@@ -159,7 +176,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
                     )),
-                _products.isNotEmpty
+                _products.isEmpty
                     ? SizedBox(
                         height: MediaQuery.sizeOf(context).height,
                         child: NestedScrollView(
@@ -174,7 +191,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                           body: SingleChildScrollView(
                             physics: const BouncingScrollPhysics(),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const SizedBox(
@@ -182,28 +199,32 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 ),
 
                                 Text(
-                                  widget.generalSubscriptionText,
+                                  isSubscribedMonthly
+                                      ? 'You are Subscribed to monthly package'
+                                      : isSubscribedYearly
+                                          ? 'You are Subscribed to yearly package'
+                                          : widget.generalSubscriptionText,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: 9.sp,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
 
-                                Text(
-                                  isSubscribedMonthly
-                                      ? 'You are Subscribed to monthly package'
-                                      : isSubscribedYearly
-                                          ? 'You are Subscribed to yearly package'
-                                          : 'You are not Subscribed',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 10.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                // Text(
+                                //   isSubscribedMonthly
+                                //       ? 'You are Subscribed to monthly package'
+                                //       : isSubscribedYearly
+                                //           ? 'You are Subscribed to yearly package'
+                                //           : 'You are not Subscribed',
+                                //   textAlign: TextAlign.center,
+                                //   style: TextStyle(
+                                //     fontSize: 10.sp,
+                                //     color: Colors.white,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
 
                                 // if (_notice != null)
                                 //   Text(
@@ -289,105 +310,279 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 //     ),
                                 //   ],
                                 // ),
-
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // ListView.builder(
-                                    //     shrinkWrap: true,
-                                    //     physics:
-                                    //         const NeverScrollableScrollPhysics(),
-                                    //     itemCount: _products.length,
-                                    //     itemBuilder: ((context, index) {
-                                    //       String text = index == 0
-                                    //           ? widget.monthly
-                                    //           : widget.yearly;
-                                    //       return Center(
-                                    //         child: ListTile(
-                                    //           title: Text(
-                                    //             '${_products[index].price} $text',
-                                    //             style: TextStyle(
-                                    //               fontSize: 10.sp,
-                                    //               color: Colors.white,
-                                    //               fontWeight: FontWeight.bold,
-                                    //             ),
-                                    //           ),
-                                    //           leading: Transform.scale(
-                                    //             scale: 2,
-                                    //             child: MSHCheckbox(
-                                    //               value:
-                                    //                   index == _selectedValue,
-                                    //               colorConfig: MSHColorConfig
-                                    //                   .fromCheckedUncheckedDisabled(
-                                    //                 checkedColor: Colors.blue,
-                                    //               ),
-                                    //               style:
-                                    //                   MSHCheckboxStyle.stroke,
-                                    //               onChanged: (value) {
-                                    //                 setState(() {
-                                    //                   _selectedValue = index;
-                                    //                 });
-                                    //               },
-                                    //               // activeColor: Colors
-                                    //               //     .green, // Change the color as needed
-                                    //             ),
-                                    //           ),
-                                    //         ),
-                                    //       );
-                                    //     })),
-                                    const SizedBox(height: 20.0),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Perform purchase based on the selected value (_selectedValue)
-                                        if (_selectedValue == 0) {
-                                          late PurchaseParam
-                                              monthlyPurchaseParam;
-                                          if (Platform.isAndroid) {
-                                            monthlyPurchaseParam =
-                                                GooglePlayPurchaseParam(
-                                                    productDetails:
-                                                        _products[0],
-                                                    changeSubscriptionParam:
-                                                        null);
-                                          } else {
-                                            monthlyPurchaseParam =
-                                                PurchaseParam(
-                                              productDetails: _products[0],
-                                            );
-                                          }
-
-                                          InAppPurchase.instance
-                                              .buyNonConsumable(
-                                            purchaseParam: monthlyPurchaseParam,
-                                          );
-                                        } else if (_selectedValue == 1) {
-                                          late PurchaseParam
-                                              yearlyPurchaseParam;
-
-                                          if (Platform.isAndroid) {
-                                            yearlyPurchaseParam =
-                                                GooglePlayPurchaseParam(
-                                                    productDetails:
-                                                        _products[1],
-                                                    changeSubscriptionParam:
-                                                        null);
-                                          } else {
-                                            yearlyPurchaseParam = PurchaseParam(
-                                              productDetails: _products[1],
-                                            );
-                                          }
-
-                                          InAppPurchase.instance
-                                              .buyNonConsumable(
-                                            purchaseParam: yearlyPurchaseParam,
+                                    InkWell(
+                                      onTap: () {
+                                        subscriptionController.showProgress();
+                                        late PurchaseParam monthlyPurchaseParam;
+                                        if (Platform.isAndroid) {
+                                          monthlyPurchaseParam =
+                                              GooglePlayPurchaseParam(
+                                                  productDetails: _products[0],
+                                                  changeSubscriptionParam:
+                                                      null);
+                                        } else {
+                                          monthlyPurchaseParam = PurchaseParam(
+                                            productDetails: _products[0],
                                           );
                                         }
+
+                                        InAppPurchase.instance.buyNonConsumable(
+                                          purchaseParam: monthlyPurchaseParam,
+                                        );
                                       },
-                                      child: Text('Purchase'),
+                                      child: Container(
+                                        height: 55,
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.5,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Color(0xFFD2894E),
+                                              Color(0xFFC66C40)
+                                            ],
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 25.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(
+                                                '1 MONTH',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  // fontSize: 9.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                _products.isNotEmpty
+                                                    ? '${_products[0].price}${widget.monthly}'
+                                                    : '\$10.0/month',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  // fontSize: 9.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20.0),
+                                    InkWell(
+                                      onTap: () {
+                                        subscriptionController.showProgress();
+                                        late PurchaseParam yearlyPurchaseParam;
+
+                                        if (Platform.isAndroid) {
+                                          yearlyPurchaseParam =
+                                              GooglePlayPurchaseParam(
+                                                  productDetails: _products[1],
+                                                  changeSubscriptionParam:
+                                                      null);
+                                        } else {
+                                          yearlyPurchaseParam = PurchaseParam(
+                                            productDetails: _products[1],
+                                          );
+                                        }
+
+                                        InAppPurchase.instance.buyNonConsumable(
+                                          purchaseParam: yearlyPurchaseParam,
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 55,
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.5,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Color(0xFFD2894E),
+                                              Color(0xFFC66C40)
+                                            ],
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 25.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    '1 YEAR',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      // fontSize: 9.sp,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                      decoration: BoxDecoration(
+                                                          color: const Color
+                                                              .fromARGB(255,
+                                                              240, 193, 91),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20)),
+                                                      child: const Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    3.0),
+                                                        child: Text('Save 50%'),
+                                                      )),
+                                                ],
+                                              ),
+                                              Text(
+                                                _products.isNotEmpty
+                                                    ? '${_products[1].price}${widget.yearly}'
+                                                    : '\$20.0/year',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  // fontSize: 9.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
+                                // Column(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   crossAxisAlignment: CrossAxisAlignment.center,
+                                //   children: [
+                                //     ListView.builder(
+                                //         shrinkWrap: true,
+                                //         physics:
+                                //             const NeverScrollableScrollPhysics(),
+                                //         itemCount: _products.length,
+                                //         itemBuilder: ((context, index) {
+                                //           String text = index == 0
+                                //               ? widget.monthly
+                                //               : widget.yearly;
+                                //           return Center(
+                                //             child: ListTile(
+                                //               title: Text(
+                                //                 '${_products[index].price} $text',
+                                //                 style: TextStyle(
+                                //                   fontSize: 10.sp,
+                                //                   color: Colors.white,
+                                //                   fontWeight: FontWeight.bold,
+                                //                 ),
+                                //               ),
+                                //               leading: Transform.scale(
+                                //                 scale: 2,
+                                //                 child: MSHCheckbox(
+                                //                   value:
+                                //                       index == _selectedValue,
+                                //                   colorConfig: MSHColorConfig
+                                //                       .fromCheckedUncheckedDisabled(
+                                //                     checkedColor: Colors.blue,
+                                //                   ),
+                                //                   style:
+                                //                       MSHCheckboxStyle.stroke,
+                                //                   onChanged: (value) {
+                                //                     setState(() {
+                                //                       _selectedValue = index;
+                                //                     });
+                                //                   },
+                                //                   // activeColor: Colors
+                                //                   //     .green, // Change the color as needed
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //           );
+                                //         })),
+                                //     const SizedBox(height: 20.0),
+                                //     ElevatedButton(
+                                //       onPressed: () {
+                                //         // Perform purchase based on the selected value (_selectedValue)
+                                //         if (_selectedValue == 0) {
+                                //           late PurchaseParam
+                                //               monthlyPurchaseParam;
+                                //           if (Platform.isAndroid) {
+                                //             monthlyPurchaseParam =
+                                //                 GooglePlayPurchaseParam(
+                                //                     productDetails:
+                                //                         _products[0],
+                                //                     changeSubscriptionParam:
+                                //                         null);
+                                //           } else {
+                                //             monthlyPurchaseParam =
+                                //                 PurchaseParam(
+                                //               productDetails: _products[0],
+                                //             );
+                                //           }
+
+                                //           InAppPurchase.instance
+                                //               .buyNonConsumable(
+                                //             purchaseParam: monthlyPurchaseParam,
+                                //           );
+                                //         } else if (_selectedValue == 1) {
+                                //           late PurchaseParam
+                                //               yearlyPurchaseParam;
+
+                                //           if (Platform.isAndroid) {
+                                //             yearlyPurchaseParam =
+                                //                 GooglePlayPurchaseParam(
+                                //                     productDetails:
+                                //                         _products[1],
+                                //                     changeSubscriptionParam:
+                                //                         null);
+                                //           } else {
+                                //             yearlyPurchaseParam = PurchaseParam(
+                                //               productDetails: _products[1],
+                                //             );
+                                //           }
+
+                                //           InAppPurchase.instance
+                                //               .buyNonConsumable(
+                                //             purchaseParam: yearlyPurchaseParam,
+                                //           );
+                                //         }
+                                //       },
+                                //       child: Text('Purchase'),
+                                //     ),
+                                //   ],
+                                // ),
 
                                 const SizedBox(height: 20.0),
                                 Row(
@@ -440,21 +635,21 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     ),
                                   ],
                                 ),
-                                Text(_products[0].description),
-                                Text(_products[1].price),
+                                // Text(_products[0].description),
+                                // Text(_products[1].price),
 
-                                ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: _products.length,
-                                    itemBuilder: ((context, index) {
-                                      return ListTile(
-                                        title:
-                                            Text(_products[index].description),
-                                        trailing: Text(_products[index].price),
-                                      );
-                                    })),
+                                // ListView.builder(
+                                //     shrinkWrap: true,
+                                //     physics:
+                                //         const NeverScrollableScrollPhysics(),
+                                //     itemCount: _products.length,
+                                //     itemBuilder: ((context, index) {
+                                //       return ListTile(
+                                //         title:
+                                //             Text(_products[index].description),
+                                //         trailing: Text(_products[index].price),
+                                //       );
+                                //     })),
                               ],
                             ),
                           ),
@@ -463,6 +658,16 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     : const Center(
                         child: CircularProgressIndicator(),
                       ),
+
+                Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    child: Visibility(
+                        visible: subscriptionController.isLoading.value,
+                        child:
+                            const Center(child: CircularProgressIndicator()))),
                 // Positioned(
                 //   bottom: 20,
                 //   left: 0,
