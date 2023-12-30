@@ -122,7 +122,7 @@ class IAPService {
   }
 
   Future<void> checkSubscriptionAvailabilty() async {
-    await InAppPurchase.instance.restorePurchases();
+    //await InAppPurchase.instance.restorePurchases();
 
     InAppPurchase.instance.purchaseStream.listen((List<PurchaseDetails> list) {
       if (list.isNotEmpty) {
