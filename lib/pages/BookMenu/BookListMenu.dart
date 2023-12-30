@@ -115,6 +115,20 @@ class _BookListPageState extends State<BookListPage> {
       _iapSubscription.cancel();
     }) as StreamSubscription<List<PurchaseDetails>>;
 
+    //!Check Subscription Availability
+    IAPService(
+            monthlyProductId: Platform.isAndroid
+                ? widget.configResponse.androidSettings.subscriptionSettings
+                    .monthSubscriptionProductID!
+                : widget.configResponse.iosSettings.subscriptionSettings
+                    .monthSubscriptionProductID!,
+            yearlyProductId: Platform.isAndroid
+                ? widget.configResponse.androidSettings.subscriptionSettings
+                    .yearSubscriptionProductID!
+                : widget.configResponse.iosSettings.subscriptionSettings
+                    .yearSubscriptionProductID!)
+        .checkSubscriptionAvailabilty();
+
     loadSubscriptionStatus();
     initcalls();
     fetchAdIds();

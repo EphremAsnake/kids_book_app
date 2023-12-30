@@ -396,7 +396,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        InAppPurchase.instance
+                                            .restorePurchases();
+                                      },
                                       child: const Text(
                                         'Restore Purchase',
                                         style: TextStyle(color: Colors.white),
