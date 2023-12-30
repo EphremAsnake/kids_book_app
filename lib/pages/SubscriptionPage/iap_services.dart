@@ -28,27 +28,28 @@ class IAPService {
       } else if (purchaseDetails.status == PurchaseStatus.canceled) {
         //updateSubscriptionStatus(false, false);
         subscriptionController.hideProgress();
-      }else if(purchaseDetails.status == PurchaseStatus.error){
+      } else if (purchaseDetails.status == PurchaseStatus.error) {
         Get.snackbar(
-        '',
-        '',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.yellow,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
-        isDismissible: true,
-        titleText: const Text(
-          'Failure',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-        maxWidth: 400,
-        messageText: const Text(
-          'Something Went Wrong',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-      );
+          '',
+          '',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.yellow,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          isDismissible: true,
+          titleText: const Text(
+            'Failure',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+          maxWidth: 400,
+          messageText: const Text(
+            'Something Went Wrong',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+        );
+        subscriptionController.hideProgress();
       }
 
       if (purchaseDetails.pendingCompletePurchase) {

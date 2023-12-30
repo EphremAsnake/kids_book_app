@@ -13,6 +13,9 @@ import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:badges/badges.dart' as badges;
 import '../../controller/subscriptionController.dart';
+import '../../model/booklistModel.dart';
+import '../../model/configModel.dart';
+import '../BookMenu/BookListMenu.dart';
 import 'status/subscriptionstatus.dart';
 
 class SubscriptionPage extends StatefulWidget {
@@ -24,6 +27,8 @@ class SubscriptionPage extends StatefulWidget {
   final String backgroundcolor;
   final String monthlyProductId;
   final String yearlyProductId;
+  final ApiResponse booksList;
+  final ConfigApiResponseModel configResponse;
 
   const SubscriptionPage({
     super.key,
@@ -35,6 +40,8 @@ class SubscriptionPage extends StatefulWidget {
     required this.backgroundcolor,
     required this.monthlyProductId,
     required this.yearlyProductId,
+    required this.booksList,
+    required this.configResponse,
   });
 
   @override
@@ -146,7 +153,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+        Get.offAll(
+            BookListPage(
+              booksList: widget.booksList,
+              configResponse: widget.configResponse,
+            ),
+            transition: Transition.fadeIn,
+            duration: const Duration(seconds: 2));
         return false;
       },
       child: Scaffold(
@@ -707,7 +720,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     child: IconButton(
                       icon: const Icon(Icons.home_outlined, color: Colors.blue),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Get.offAll(
+                            BookListPage(
+                              booksList: widget.booksList,
+                              configResponse: widget.configResponse,
+                            ),
+                            transition: Transition.fadeIn,
+                            duration: const Duration(seconds: 2));
                       },
                     ),
                   ),

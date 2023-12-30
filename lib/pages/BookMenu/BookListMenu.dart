@@ -1266,6 +1266,8 @@ class _BookListPageState extends State<BookListPage> {
                   .yearSubscriptionProductID!
               : widget.configResponse.iosSettings.subscriptionSettings
                   .yearSubscriptionProductID!,
+          booksList: widget.booksList,
+          configResponse: widget.configResponse,
         ),
         transition: Transition.leftToRight);
   }
