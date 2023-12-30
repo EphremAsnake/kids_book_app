@@ -176,7 +176,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
                     )),
-                _products.isEmpty
+                _products.isNotEmpty
                     ? SizedBox(
                         height: MediaQuery.sizeOf(context).height,
                         child: NestedScrollView(
