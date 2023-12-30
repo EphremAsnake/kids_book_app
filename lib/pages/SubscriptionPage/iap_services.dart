@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:logger/logger.dart';
@@ -24,10 +25,31 @@ class IAPService {
       if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
         _handleSuccessfulPurchase(purchaseDetails);
+      } else if (purchaseDetails.status == PurchaseStatus.canceled) {
+        //updateSubscriptionStatus(false, false);
+        subscriptionController.hideProgress();
+      }else if(purchaseDetails.status == PurchaseStatus.error){
+        Get.snackbar(
+        '',
+        '',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.yellow,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+        isDismissible: true,
+        titleText: const Text(
+          'Failure',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
+        maxWidth: 400,
+        messageText: const Text(
+          'Something Went Wrong',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
+      );
       }
-      //  else if (purchaseDetails.status == PurchaseStatus.canceled) {
-      //   updateSubscriptionStatus(false, false);
-      // }
 
       if (purchaseDetails.pendingCompletePurchase) {
         await InAppPurchase.instance.completePurchase(purchaseDetails);
@@ -44,11 +66,53 @@ class IAPService {
       logger.e('Monthly Subsccccc');
       subscriptionController.setUserSubscription(true, false);
       updateSubscriptionStatus(true, false);
+      Get.snackbar(
+        '',
+        '',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+        isDismissible: true,
+        titleText: const Text(
+          'Success',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
+        maxWidth: 400,
+        messageText: const Text(
+          'You have Successfully Subscribed to Monthly Package  Thank You!',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
+      );
+      subscriptionController.hideProgress();
     }
     if (purchaseDetails.productID == yearlyProductId) {
       logger.e('Yearly Subsccccc');
       subscriptionController.setUserSubscription(false, true);
       updateSubscriptionStatus(false, true);
+      Get.snackbar(
+        '',
+        '',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+        isDismissible: true,
+        titleText: const Text(
+          'Success',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
+        maxWidth: 400,
+        messageText: const Text(
+          'You have Successfully Subscribed to Yearly Package Thank You!',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16.0, color: Colors.white),
+        ),
+      );
+      subscriptionController.hideProgress();
     }
   }
 

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:logger/logger.dart';
-import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -295,48 +294,48 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: _products.length,
-                                        itemBuilder: ((context, index) {
-                                          String text = index == 0
-                                              ? widget.monthly
-                                              : widget.yearly;
-                                          return Center(
-                                            child: ListTile(
-                                              title: Text(
-                                                '${_products[index].price} $text',
-                                                style: TextStyle(
-                                                  fontSize: 10.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              leading: Transform.scale(
-                                                scale: 2,
-                                                child: MSHCheckbox(
-                                                  value:
-                                                      index == _selectedValue,
-                                                  colorConfig: MSHColorConfig
-                                                      .fromCheckedUncheckedDisabled(
-                                                    checkedColor: Colors.blue,
-                                                  ),
-                                                  style:
-                                                      MSHCheckboxStyle.stroke,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _selectedValue = index;
-                                                    });
-                                                  },
-                                                  // activeColor: Colors
-                                                  //     .green, // Change the color as needed
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        })),
+                                    // ListView.builder(
+                                    //     shrinkWrap: true,
+                                    //     physics:
+                                    //         const NeverScrollableScrollPhysics(),
+                                    //     itemCount: _products.length,
+                                    //     itemBuilder: ((context, index) {
+                                    //       String text = index == 0
+                                    //           ? widget.monthly
+                                    //           : widget.yearly;
+                                    //       return Center(
+                                    //         child: ListTile(
+                                    //           title: Text(
+                                    //             '${_products[index].price} $text',
+                                    //             style: TextStyle(
+                                    //               fontSize: 10.sp,
+                                    //               color: Colors.white,
+                                    //               fontWeight: FontWeight.bold,
+                                    //             ),
+                                    //           ),
+                                    //           leading: Transform.scale(
+                                    //             scale: 2,
+                                    //             child: MSHCheckbox(
+                                    //               value:
+                                    //                   index == _selectedValue,
+                                    //               colorConfig: MSHColorConfig
+                                    //                   .fromCheckedUncheckedDisabled(
+                                    //                 checkedColor: Colors.blue,
+                                    //               ),
+                                    //               style:
+                                    //                   MSHCheckboxStyle.stroke,
+                                    //               onChanged: (value) {
+                                    //                 setState(() {
+                                    //                   _selectedValue = index;
+                                    //                 });
+                                    //               },
+                                    //               // activeColor: Colors
+                                    //               //     .green, // Change the color as needed
+                                    //             ),
+                                    //           ),
+                                    //         ),
+                                    //       );
+                                    //     })),
                                     const SizedBox(height: 20.0),
                                     ElevatedButton(
                                       onPressed: () {

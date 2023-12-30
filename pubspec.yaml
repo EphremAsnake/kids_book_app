@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   audioplayers: ^5.2.1
+  badges: ^3.1.2
   cached_network_image: ^3.3.0
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
@@ -50,7 +51,6 @@ dependencies:
   just_audio: ^0.9.36
   logger: ^2.0.2+1
   lottie: ^2.7.0
-  msh_checkbox: ^2.0.1
   open_store: ^0.5.0
   resize: ^1.0.0
   shared_preferences: ^2.2.2

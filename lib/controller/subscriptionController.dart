@@ -11,4 +11,14 @@ class SubscriptionController extends GetxController {
 
   bool get isUserSubscribedMonthly => isSubscribedMonthly.value;
   bool get isUserSubscribedYearly => isSubscribedYearly.value;
+
+  var isLoading = false.obs;
+
+  void showProgress() {
+    isLoading.value = true;
+  }
+
+  void hideProgress() {
+    isLoading.value = false;
+  }
 }
