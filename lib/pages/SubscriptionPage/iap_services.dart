@@ -170,20 +170,21 @@ class IAPService {
       });
       if (historyPurchaseDetails.isNotEmpty) {
         for (var purchase in historyPurchaseDetails) {
+          logger.e('status: ${purchase.status}');
           logger.e('transaction date: ${purchase.transactionDate}');
 
           int timestampMilliseconds =
               int.tryParse(purchase.transactionDate ?? '1') ?? 0;
-          
+
           logger.e('timestampMilliseconds: $timestampMilliseconds');
-          
+
           DateTime transactionDateTime =
               DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
-          
+
           logger.e('transactionDateTime: $transactionDateTime');
-          
+
           Duration difference = DateTime.now().difference(transactionDateTime);
-          
+
           logger.e('difference: $difference');
 
           if (difference.inMinutes <= (monthduration + grace).inMinutes &&
