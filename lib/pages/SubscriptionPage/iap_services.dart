@@ -163,45 +163,51 @@ class IAPService {
     //await InAppPurchase.instance.restorePurchases();
 
     if (Platform.isIOS) {
-      List<PurchaseDetails> historyPurchaseDetails = [];
+      // List<PurchaseDetails> historyPurchaseDetails = [];
+      // InAppPurchase.instance.purchaseStream
+      //     .listen((List<PurchaseDetails> list) {
+      //   historyPurchaseDetails.addAll(list);
+      // });
       InAppPurchase.instance.purchaseStream
-          .listen((List<PurchaseDetails> list) {
-        historyPurchaseDetails.addAll(list);
-      });
-      if (historyPurchaseDetails.isNotEmpty) {
-        for (var purchase in historyPurchaseDetails) {
-          logger.e('status: ${purchase.status}');
-          logger.e('transaction date: ${purchase.transactionDate}');
+          .listen((List<PurchaseDetails> historyPurchaseDetails) {
+        if (historyPurchaseDetails.isNotEmpty) {
+          for (var purchase in historyPurchaseDetails) {
+            logger.e('status: ${purchase.status}');
+            logger.e('transaction date: ${purchase.transactionDate}');
 
-          int timestampMilliseconds =
-              int.tryParse(purchase.transactionDate ?? '1') ?? 0;
+            int timestampMilliseconds =
+                int.tryParse(purchase.transactionDate ?? '1') ?? 0;
 
-          logger.e('timestampMilliseconds: $timestampMilliseconds');
+            logger.e('timestampMilliseconds: $timestampMilliseconds');
 
-          DateTime transactionDateTime =
-              DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+            DateTime transactionDateTime =
+                DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
-          logger.e('transactionDateTime: $transactionDateTime');
+            logger.e('transactionDateTime: $transactionDateTime');
 
-          Duration difference = DateTime.now().difference(transactionDateTime);
+            Duration difference =
+                DateTime.now().difference(transactionDateTime);
 
-          logger.e('difference: $difference');
+            logger.e('difference: $difference');
 
-          if (difference.inMinutes <= (monthduration + grace).inMinutes &&
-              purchase.productID == monthlyProductId) {
-            updateSubscriptionStatus(true, false);
-            subscriptionController.hideProgress();
-          } else if (difference.inMinutes <= (yearduration + grace).inMinutes &&
-              purchase.productID == yearlyProductId) {
-            updateSubscriptionStatus(false, true);
-            subscriptionController.hideProgress();
-          } else {
-            updateSubscriptionStatus(false, false);
+            if (difference.inMinutes <= (monthduration + grace).inMinutes &&
+                purchase.productID == monthlyProductId) {
+              updateSubscriptionStatus(true, false);
+              subscriptionController.hideProgress();
+            } else if (difference.inMinutes <=
+                    (yearduration + grace).inMinutes &&
+                purchase.productID == yearlyProductId) {
+              updateSubscriptionStatus(false, true);
+              subscriptionController.hideProgress();
+            } else {
+              updateSubscriptionStatus(false, false);
+            }
           }
+        } else {
+          logger.e(' List is empty');
+          updateSubscriptionStatus(false, false);
         }
-      } else {
-        updateSubscriptionStatus(false, false);
-      }
+      });
     } else if (Platform.isAndroid) {
       InAppPurchase.instance.purchaseStream
           .listen((List<PurchaseDetails> list) {
