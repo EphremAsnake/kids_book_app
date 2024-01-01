@@ -75,19 +75,44 @@ class _BookListPageState extends State<BookListPage> {
   bool adsEnabled = true;
 
   //!check Sub
-  bool isSubscribedMonthly = false;
-  bool isSubscribedYearly = false;
+  // bool isSubscribedMonthly = false;
+  // bool isSubscribedYearly = false;
 
   //!ad
   late AdController adController;
+  final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
+  // Future<void> loadSubscriptionStatus() async {
+  //   final Map<String, bool> subscriptionStatus =
+  //       await SubscriptionStatus.getSubscriptionStatus();
+  //   setState(() {
+  //     isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
+  //     isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
+  //   });
+  // }
 
-  Future<void> loadSubscriptionStatus() async {
-    final Map<String, bool> subscriptionStatus =
-        await SubscriptionStatus.getSubscriptionStatus();
-    setState(() {
-      isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
-      isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
-    });
+  void checkSubscriptionValidity() async {
+    DateTime? storedPurchaseDate =
+        await subscriptionStatus.getStoredPurchaseDate();
+
+    if (storedPurchaseDate != null) {
+      logger.e('Stored Purchase Date: $storedPurchaseDate');
+
+      bool isActive =
+          subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
+      logger.e('Is Subscription Active: $isActive');
+      if (isActive) {
+        if (subscriptionStatus.isMonthly.value) {
+          subscriptionStatus.saveSubscriptionStatus(true, false);
+        } else if (subscriptionStatus.isYearly.value) {
+          subscriptionStatus.saveSubscriptionStatus(false, true);
+        }
+      } else {
+        logger.e('Subscription Expired or other issue found.');
+        subscriptionStatus.saveSubscriptionStatus(false, false);
+      }
+    } else {
+      logger.e('No stored purchase date found.');
+    }
   }
 
   @override
@@ -129,7 +154,7 @@ class _BookListPageState extends State<BookListPage> {
                     .yearSubscriptionProductID!)
         .checkSubscriptionAvailabilty();
 
-    loadSubscriptionStatus();
+    // loadSubscriptionStatus();
     initcalls();
     fetchAdIds();
   }
@@ -464,7 +489,8 @@ class _BookListPageState extends State<BookListPage> {
                                 future: lockStatusList[index],
                                 builder: (context, snapshot) {
                                   bool bookstatus =
-                                      isSubscribedMonthly || isSubscribedYearly
+                                      subscriptionStatus.isMonthly.value ||
+                                              subscriptionStatus.isYearly.value
                                           ? true
                                           : snapshot.data ?? false;
                                   int rewardedCountLimit = Platform.isAndroid
@@ -523,8 +549,10 @@ class _BookListPageState extends State<BookListPage> {
                                                 } else {
                                                   getSelectedStory(book.path);
                                                   if (index == 0 ||
-                                                      isSubscribedMonthly ||
-                                                      isSubscribedYearly) {
+                                                      subscriptionStatus
+                                                          .isMonthly.value ||
+                                                      subscriptionStatus
+                                                          .isYearly.value) {
                                                     //!Navigate to Story Page for First index Without Ad
                                                     getSelectedStory(book.path,
                                                         goto: true);

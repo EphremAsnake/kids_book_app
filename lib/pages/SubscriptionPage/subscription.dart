@@ -55,14 +55,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   //   'month_subscription',
   //   'yearly_subscription',
   // ];
-  Future<void> loadSubscriptionStatus() async {
-    final Map<String, bool> subscriptionStatus =
-        await SubscriptionStatus.getSubscriptionStatus();
-    setState(() {
-      isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
-      isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
-    });
-  }
+  // Future<void> loadSubscriptionStatus() async {
+  //   final Map<String, bool> subscriptionStatus =
+  //       await SubscriptionStatus.getSubscriptionStatus();
+  //   setState(() {
+  //     isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
+  //     isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
+  //   });
+  // }
 
   late List<String> _productIds;
   bool _isAvailable = false;
@@ -72,15 +72,15 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   int _selectedValue = 1;
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
-
+  final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
   //!check Sub
-  bool isSubscribedMonthly = false;
-  bool isSubscribedYearly = false;
+  // bool isSubscribedMonthly = false;
+  // bool isSubscribedYearly = false;
   @override
   void initState() {
     super.initState();
     _productIds = [widget.monthlyProductId, widget.yearlyProductId];
-    loadSubscriptionStatus();
+    //loadSubscriptionStatus();
     initStoreInfo();
   }
 
@@ -211,19 +211,32 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                   height: 10,
                                 ),
 
-                                Text(
-                                  isSubscribedMonthly
-                                      ? 'You are Subscribed to monthly package'
-                                      : isSubscribedYearly
-                                          ? 'You are Subscribed to yearly package'
-                                          : widget.generalSubscriptionText,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 9.sp,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                                Obx(() => Text(
+                                      subscriptionStatus.isMonthly.value
+                                          ? 'You are Subscribed to monthly package'
+                                          : subscriptionStatus.isYearly.value
+                                              ? 'You are Subscribed to yearly package'
+                                              : widget.generalSubscriptionText,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 9.sp,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                                // Text(
+                                //   subscriptionStatus.isMonthly.value
+                                //       ? 'You are Subscribed to monthly package'
+                                //       : subscriptionStatus.isYearly.value
+                                //           ? 'You are Subscribed to yearly package'
+                                //           : widget.generalSubscriptionText,
+                                //   textAlign: TextAlign.center,
+                                //   style: TextStyle(
+                                //     fontSize: 9.sp,
+                                //     color: Colors.white,
+                                //     fontWeight: FontWeight.bold,
+                                //   ),
+                                // ),
 
                                 // Text(
                                 //   isSubscribedMonthly

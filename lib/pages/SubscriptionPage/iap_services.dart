@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'dart:io' show Platform;
-
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import '../../controller/subscriptionController.dart';
 import 'status/subscriptionstatus.dart';
 
@@ -19,13 +21,15 @@ class IAPService {
 
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
-
+  final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
   Logger logger = Logger();
 
   void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailList) {
+    // ignore: avoid_function_literals_in_foreach_calls
     purchaseDetailList.forEach((PurchaseDetails purchaseDetails) async {
       if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
+        // String transactionReceipt = purchaseDetails.verificationData
         _handleSuccessfulPurchase(purchaseDetails);
       } else if (purchaseDetails.status == PurchaseStatus.canceled) {
         //updateSubscriptionStatus(false, false);
@@ -67,6 +71,12 @@ class IAPService {
     if (purchaseDetails.productID == monthlyProductId) {
       //DateTime expiryDate = purchaseDate.add(Duration(days: 30));
       logger.e('Monthly Subsccccc');
+      int timestampMilliseconds =
+          int.tryParse(purchaseDetails.transactionDate!) ?? 0;
+
+      DateTime transactionDateTime =
+          DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+      subscriptionStatus.storePurchaseDate(transactionDateTime, 'monthly');
       subscriptionController.setUserSubscription(true, false);
       updateSubscriptionStatus(true, false);
       Get.snackbar(
@@ -93,7 +103,15 @@ class IAPService {
     }
     if (purchaseDetails.productID == yearlyProductId) {
       logger.e('Yearly Subsccccc');
+
+      int timestampMilliseconds =
+          int.tryParse(purchaseDetails.transactionDate!) ?? 0;
+
+      DateTime transactionDateTime =
+          DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+
       subscriptionController.setUserSubscription(false, true);
+      subscriptionStatus.storePurchaseDate(transactionDateTime, 'yearly');
       updateSubscriptionStatus(false, true);
       Get.snackbar(
         '',
@@ -120,7 +138,7 @@ class IAPService {
   }
 
   Future<void> updateSubscriptionStatus(bool isMonthly, bool isYearly) async {
-    await SubscriptionStatus.saveSubscriptionStatus(isMonthly, isYearly);
+    await subscriptionStatus.saveSubscriptionStatus(isMonthly, isYearly);
   }
 
   //!old checker
@@ -160,6 +178,7 @@ class IAPService {
       [Duration monthduration = const Duration(minutes: 4),
       Duration yearduration = const Duration(minutes: 10),
       Duration grace = const Duration(days: 0)]) async {
+    logger.e('Test Test');
     //await InAppPurchase.instance.restorePurchases();
 
     if (Platform.isIOS) {
@@ -190,17 +209,21 @@ class IAPService {
 
             logger.e('difference: $difference');
 
-            if (difference.inMinutes <= (monthduration + grace).inMinutes &&
-                purchase.productID == monthlyProductId) {
+            if (purchase.productID == monthlyProductId) {
               updateSubscriptionStatus(true, false);
+              subscriptionStatus.storePurchaseDate(
+                  transactionDateTime, 'monthly');
+              subscriptionController.setUserSubscription(true, false);
               subscriptionController.hideProgress();
-            } else if (difference.inMinutes <=
-                    (yearduration + grace).inMinutes &&
-                purchase.productID == yearlyProductId) {
+            } else if (purchase.productID == yearlyProductId) {
               updateSubscriptionStatus(false, true);
+              subscriptionStatus.storePurchaseDate(
+                  transactionDateTime, 'yearly');
+              subscriptionController.setUserSubscription(false, true);
               subscriptionController.hideProgress();
             } else {
               updateSubscriptionStatus(false, false);
+              subscriptionController.setUserSubscription(false, false);
             }
           }
         } else {
@@ -235,6 +258,25 @@ class IAPService {
   }
 }
 
+
+
+// Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
+
+//     if (Platform.isAndroid) {
+//       final localDataVerification = json.decode(purchaseDetails.verificationData.localVerificationData) as Map<String, dynamic>;
+//       final orderId = localDataVerification['orderId'] as String;
+//       final productId = localDataVerification['productId'] as String;
+//       final packageName = localDataVerification['packageName'] as String;
+//       final token = localDataVerification['purchaseToken'] as String;
+//     } else if (Platform.isIOS) {
+//       final appStorePurchaseDetails = purchaseDetails as AppStorePurchaseDetails;
+//       final paymentToken = appStorePurchaseDetails.verificationData.localVerificationData;
+//       final transitionId = appStorePurchaseDetails.skPaymentTransaction.originalTransaction?.transactionIdentifier;
+//       final storeId = purchaseDetails.productID;
+//     }
+
+//     return Future<bool>.value(true);
+//   }
 // Future<void> handleExpiredPurchases() async {
 //   final prefs = await SharedPreferences.getInstance();
 

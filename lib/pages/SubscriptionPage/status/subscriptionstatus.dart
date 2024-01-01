@@ -1,27 +1,93 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+// //! Constants for keys used in SharedPreferences
+// const String monthlySubscriptionKey = 'isSubscribedMonthly';
+// const String yearlySubscriptionKey = 'isSubscribedYearly';
+
+// class SubscriptionStatus {
+//   //! Function to save subscription status locally
+//   static Future<void> saveSubscriptionStatus(
+//       bool isMonthly, bool isYearly) async {
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+//     await prefs.setBool(monthlySubscriptionKey, isMonthly);
+//     await prefs.setBool(yearlySubscriptionKey, isYearly);
+//   }
+
+//   //! Function to retrieve subscription status from local storage
+//   static Future<Map<String, bool>> getSubscriptionStatus() async {
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+//     final bool isMonthly = prefs.getBool(monthlySubscriptionKey) ?? false;
+//     final bool isYearly = prefs.getBool(yearlySubscriptionKey) ?? false;
+
+//     return {
+//       monthlySubscriptionKey: isMonthly,
+//       yearlySubscriptionKey: isYearly,
+//     };
+//   }
+// }
+
+import 'package:get/get.dart';
+
 //! Constants for keys used in SharedPreferences
 const String monthlySubscriptionKey = 'isSubscribedMonthly';
 const String yearlySubscriptionKey = 'isSubscribedYearly';
 
-class SubscriptionStatus {
+class SubscriptionStatus extends GetxController {
+  @override
+  void onInit() {
+    getSubscriptionStatus();
+    super.onInit();
+  }
+
+  RxBool isMonthly = false.obs;
+  RxBool isYearly = false.obs;
+
   //! Function to save subscription status locally
-  static Future<void> saveSubscriptionStatus(
-      bool isMonthly, bool isYearly) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(monthlySubscriptionKey, isMonthly);
-    await prefs.setBool(yearlySubscriptionKey, isYearly);
+  Future<void> saveSubscriptionStatus(bool monthly, bool yearly) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(monthlySubscriptionKey, monthly);
+    await prefs.setBool(yearlySubscriptionKey, yearly);
+    // Update reactive variables
+    isMonthly.value = monthly;
+    isYearly.value = yearly;
+  }
+
+  Future<void> storePurchaseDate(
+      DateTime purchaseDate, String purchasetype) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('purchase_date', purchaseDate.toIso8601String());
+    //prefs.setString('purchase_type', purchasetype);
+  }
+
+  Future<DateTime?> getStoredPurchaseDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? storedPurchaseDate = prefs.getString('purchase_date');
+    if (storedPurchaseDate != null) {
+      return DateTime.parse(storedPurchaseDate);
+    }
+    return null;
   }
 
   //! Function to retrieve subscription status from local storage
-  static Future<Map<String, bool>> getSubscriptionStatus() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool isMonthly = prefs.getBool(monthlySubscriptionKey) ?? false;
-    final bool isYearly = prefs.getBool(yearlySubscriptionKey) ?? false;
+  Future<void> getSubscriptionStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    isMonthly.value = prefs.getBool(monthlySubscriptionKey) ?? false;
+    isYearly.value = prefs.getBool(yearlySubscriptionKey) ?? false;
+  }
 
-    return {
-      monthlySubscriptionKey: isMonthly,
-      yearlySubscriptionKey: isYearly,
-    };
+  //!
+  DateTime getExpirationDate(DateTime purchaseDate) {
+    int subscriptionDurationInDays = isMonthly.value ? 4 : 10;
+    return purchaseDate.add(Duration(minutes: subscriptionDurationInDays));
+  }
+
+  bool isSubscriptionActive(DateTime purchaseDate) {
+    DateTime expirationDate = getExpirationDate(purchaseDate);
+    DateTime currentDate = DateTime.now();
+
+    // Add a grace period if needed
+    // expirationDate = expirationDate.add(Duration(days: gracePeriodDays));
+
+    return currentDate.isBefore(expirationDate);
   }
 }
