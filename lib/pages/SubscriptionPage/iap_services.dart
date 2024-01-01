@@ -170,6 +170,8 @@ class IAPService {
       });
       if (historyPurchaseDetails.isNotEmpty) {
         for (var purchase in historyPurchaseDetails) {
+          logger.e('transaction date: ${purchase.transactionDate}');
+
           int timestampMilliseconds =
               int.tryParse(purchase.transactionDate ?? '1') ?? 0;
           DateTime transactionDateTime =
