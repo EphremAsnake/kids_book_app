@@ -174,9 +174,18 @@ class IAPService {
 
           int timestampMilliseconds =
               int.tryParse(purchase.transactionDate ?? '1') ?? 0;
+          
+          logger.e('timestampMilliseconds: $timestampMilliseconds');
+          
           DateTime transactionDateTime =
               DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+          
+          logger.e('transactionDateTime: $transactionDateTime');
+          
           Duration difference = DateTime.now().difference(transactionDateTime);
+          
+          logger.e('difference: $difference');
+
           if (difference.inMinutes <= (monthduration + grace).inMinutes &&
               purchase.productID == monthlyProductId) {
             updateSubscriptionStatus(true, false);
