@@ -76,7 +76,7 @@ class _SubscriptionPageState extends State<SubscriptionPages> {
     loadSubscriptionStatus();
     initStoreInfo();
   }
-
+  
   @override
   void dispose() {
     super.dispose();

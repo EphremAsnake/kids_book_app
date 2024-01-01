@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'dart:io' show Platform;
 
 import '../../controller/subscriptionController.dart';
 import 'status/subscriptionstatus.dart';
@@ -121,38 +123,99 @@ class IAPService {
     await SubscriptionStatus.saveSubscriptionStatus(isMonthly, isYearly);
   }
 
-  Future<void> checkSubscriptionAvailabilty() async {
+  //!old checker
+  // Future<void> checkSubscriptionAvailabilty() async {
+  //   //await InAppPurchase.instance.restorePurchases();
+
+  //   InAppPurchase.instance.purchaseStream.listen((List<PurchaseDetails> list) {
+  //     if (list.isNotEmpty) {
+  //       int i = 0;
+  //       for (var purchase in list) {
+  //         String productId = purchase.productID;
+  //         _handleSuccessfulPurchase(list[i]);
+  //         i++;
+  //         print('Product ID: $productId');
+  //       }
+  //     } else {
+  //       updateSubscriptionStatus(false, false);
+  //     }
+  //   });
+
+  //   InAppPurchase.instance.purchaseStream.listen((list) {
+  //     if (list.isNotEmpty) {
+  //       int i = 0;
+  //       for (var element in list) {
+  //         list[i].verificationData.localVerificationData
+  //       }
+  //     } else {
+
+  //     }
+  //   });
+  // }
+  //}
+
+  // TODO: NEW WAY OF CHEKING SUBSCRIPTION STATUS
+
+  Future<void> checkSubscriptionAvailabilty(
+      [Duration monthduration = const Duration(days: 30),
+      Duration yearduration = const Duration(days: 30),
+      Duration grace = const Duration(days: 0)]) async {
     //await InAppPurchase.instance.restorePurchases();
 
-    InAppPurchase.instance.purchaseStream.listen((List<PurchaseDetails> list) {
-      if (list.isNotEmpty) {
-        int i = 0;
-        for (var purchase in list) {
-          String productId = purchase.productID;
-          _handleSuccessfulPurchase(list[i]);
-          i++;
-          print('Product ID: $productId');
+    if (Platform.isIOS) {
+      List<PurchaseDetails> historyPurchaseDetails = [];
+      InAppPurchase.instance.purchaseStream
+          .listen((List<PurchaseDetails> list) {
+        historyPurchaseDetails.addAll(list);
+      });
+      if (historyPurchaseDetails.isNotEmpty) {
+        for (var purchase in historyPurchaseDetails) {
+          int timestampMilliseconds =
+              int.tryParse(purchase.transactionDate ?? '1') ?? 0;
+          DateTime transactionDateTime =
+              DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+          Duration difference = DateTime.now().difference(transactionDateTime);
+          if (difference.inMinutes <= (monthduration + grace).inMinutes &&
+              purchase.productID == monthlyProductId) {
+            updateSubscriptionStatus(true, false);
+            subscriptionController.hideProgress();
+          } else if (difference.inMinutes <= (yearduration + grace).inMinutes &&
+              purchase.productID == yearlyProductId) {
+            updateSubscriptionStatus(false, true);
+            subscriptionController.hideProgress();
+          } else {
+            updateSubscriptionStatus(false, false);
+          }
         }
       } else {
         updateSubscriptionStatus(false, false);
       }
-    });
+    } else if (Platform.isAndroid) {
+      InAppPurchase.instance.purchaseStream
+          .listen((List<PurchaseDetails> list) {
+        if (list.isNotEmpty) {
+          // int i = 0;
+          for (var purchase in list) {
+            //! String productId = purchase.productID;
+            if (purchase.productID == monthlyProductId) {
+              updateSubscriptionStatus(true, false);
+              subscriptionController.hideProgress();
+            } else if (purchase.productID == yearlyProductId) {
+              updateSubscriptionStatus(false, true);
+              subscriptionController.hideProgress();
+            }
 
-    //   InAppPurchase.instance.purchaseStream.listen((list) {
-    //     if (list.isNotEmpty) {
-    //       int i = 0;
-    //       for (var element in list) {
-    //         list[i].verificationData.localVerificationData
-    //       }
-    //     } else {
-
-    //     }
-    //   });
-    // }
+            // i++;
+          }
+        } else {
+          updateSubscriptionStatus(false, false);
+        }
+      });
+    }
+    throw PlatformException(
+        code: Platform.operatingSystem, message: "platform not supported");
   }
 }
-
-
 
 // Future<void> handleExpiredPurchases() async {
 //   final prefs = await SharedPreferences.getInstance();
