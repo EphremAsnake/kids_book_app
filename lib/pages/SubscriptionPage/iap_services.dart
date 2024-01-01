@@ -157,8 +157,8 @@ class IAPService {
   // TODO: NEW WAY OF CHEKING SUBSCRIPTION STATUS
 
   Future<void> checkSubscriptionAvailabilty(
-      [Duration monthduration = const Duration(minutes: 3),
-      Duration yearduration = const Duration(minutes: 5),
+      [Duration monthduration = const Duration(minutes: 4),
+      Duration yearduration = const Duration(minutes: 10),
       Duration grace = const Duration(days: 0)]) async {
     //await InAppPurchase.instance.restorePurchases();
 
