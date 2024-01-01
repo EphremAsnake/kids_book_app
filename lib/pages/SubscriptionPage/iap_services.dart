@@ -176,7 +176,7 @@ class IAPService {
             logger.e('transaction date: ${purchase.transactionDate}');
 
             int timestampMilliseconds =
-                int.tryParse(purchase.transactionDate ?? '1') ?? 0;
+                int.tryParse(purchase.transactionDate!) ?? 0;
 
             logger.e('timestampMilliseconds: $timestampMilliseconds');
 
