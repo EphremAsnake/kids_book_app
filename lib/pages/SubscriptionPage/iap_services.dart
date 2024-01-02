@@ -30,11 +30,17 @@ class IAPService {
       if (purchaseDetails.status == PurchaseStatus.purchased) {
         // String transactionReceipt = purchaseDetails.verificationData
         _handleSuccessfulPurchase(purchaseDetails);
+
+        //!Handle Restore
       } else if (purchaseDetails.status == PurchaseStatus.restored) {
-        _handleSuccessfulPurchase(purchaseDetails, isrestorepurchase: true);
+        _handleRestorePurchase(purchaseDetails);
+
+        //!Handle Cancel
       } else if (purchaseDetails.status == PurchaseStatus.canceled) {
         //updateSubscriptionStatus(false, false);
         subscriptionController.hideProgress();
+
+        //!Handle Error
       } else if (purchaseDetails.status == PurchaseStatus.error) {
         Get.snackbar(
           '',
@@ -67,19 +73,112 @@ class IAPService {
     });
   }
 
+  // void checkSubscriptionValidity() async {
+  //   DateTime? storedPurchaseDate =
+  //       await subscriptionStatus.getStoredPurchaseDate();
+
+  //   if (storedPurchaseDate != null) {
+  //     logger.e('Stored Purchase Date: $storedPurchaseDate');
+
+  //     bool isActive =
+  //         subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
+  //     logger.e('Is Subscription Active: $isActive');
+  //     if (isActive) {
+  //       if (subscriptionStatus.isMonthly.value) {
+  //         subscriptionStatus.saveSubscriptionStatus(true, false);
+  //       } else if (subscriptionStatus.isYearly.value) {
+  //         subscriptionStatus.saveSubscriptionStatus(false, true);
+  //       }
+  //     } else {
+  //       logger.e('Subscription Expired or other issue found.');
+  //       subscriptionStatus.saveSubscriptionStatus(false, false);
+  //     }
+  //   } else {
+  //     logger.e('No stored purchase date found.');
+  //   }
+  // }
+
+  Future<void> _handleRestorePurchase(
+    PurchaseDetails purchaseDetails,
+  ) async {
+    // TODO: Monthly Restore
+
+    if (purchaseDetails.productID == monthlyProductId) {
+      //!Get transaction time
+      int timestampMilliseconds =
+          int.tryParse(purchaseDetails.transactionDate!) ?? 0;
+
+      DateTime transactionDateTime =
+          DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+
+      subscriptionStatus.storePurchaseDate(transactionDateTime, 'monthly');
+
+      //!get Stored Last Purchase Date
+      DateTime? storedPurchaseDate =
+          await subscriptionStatus.getStoredPurchaseDate();
+
+      //!Check If Stored Last Purchase Date is not null
+      if (storedPurchaseDate != null) {
+        //!Check If the Subscription is Active
+        bool isActive =
+            subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
+
+        if (isActive) {
+          subscriptionStatus.saveSubscriptionStatus(true, false);
+        } else {
+          subscriptionStatus.saveSubscriptionStatus(false, false);
+        }
+      }
+    }
+
+    // TODO: Yearly Restore
+
+    else if (purchaseDetails.productID == yearlyProductId) {
+      //!Get transaction time
+      int timestampMilliseconds =
+          int.tryParse(purchaseDetails.transactionDate!) ?? 0;
+
+      DateTime transactionDateTime =
+          DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+
+      //!Store the transaction date // purchased date
+      subscriptionStatus.storePurchaseDate(transactionDateTime, 'yearly');
+
+      //!get Stored Last Purchase Date
+      DateTime? storedPurchaseDate =
+          await subscriptionStatus.getStoredPurchaseDate();
+
+      //!Check If Stored Last Purchase Date is not null
+      if (storedPurchaseDate != null) {
+        //!Check If the Subscription is Active
+        bool isActive =
+            subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
+
+        if (isActive) {
+          subscriptionStatus.saveSubscriptionStatus(false, true);
+        } else {
+          subscriptionStatus.saveSubscriptionStatus(false, false);
+        }
+      }
+    } else {
+      subscriptionStatus.saveSubscriptionStatus(false, false);
+    }
+  }
+
   void _handleSuccessfulPurchase(PurchaseDetails purchaseDetails,
       {bool? isrestorepurchase}) {
-    //DateTime purchaseDate = DateTime.now();
     if (purchaseDetails.productID == monthlyProductId) {
-      //DateTime expiryDate = purchaseDate.add(Duration(days: 30));
       logger.e('Monthly Subsccccc');
       int timestampMilliseconds =
           int.tryParse(purchaseDetails.transactionDate!) ?? 0;
 
       DateTime transactionDateTime =
           DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+
       subscriptionStatus.storePurchaseDate(transactionDateTime, 'monthly');
-      subscriptionController.setUserSubscription(true, false);
+
+      //subscriptionController.setUserSubscription(true, false);
+
       updateSubscriptionStatus(true, false);
       if (isrestorepurchase == null) {
         Get.snackbar(
@@ -114,7 +213,7 @@ class IAPService {
       DateTime transactionDateTime =
           DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
-      subscriptionController.setUserSubscription(false, true);
+      //subscriptionController.setUserSubscription(false, true);
       subscriptionStatus.storePurchaseDate(transactionDateTime, 'yearly');
       updateSubscriptionStatus(false, true);
       if (isrestorepurchase == null) {
@@ -180,118 +279,116 @@ class IAPService {
 
   // TODO: NEW WAY OF CHEKING SUBSCRIPTION STATUS
 
-  Future<void> checkSubscriptionAvailabilty(
-      [Duration monthduration = const Duration(minutes: 4),
-      Duration yearduration = const Duration(minutes: 10),
-      Duration grace = const Duration(days: 0)]) async {
-    logger.e('Test Test');
-    //await InAppPurchase.instance.restorePurchases();
+//   Future<void> checkSubscriptionAvailabilty(
+//       [Duration monthduration = const Duration(minutes: 4),
+//       Duration yearduration = const Duration(minutes: 10),
+//       Duration grace = const Duration(days: 0)]) async {
+//     logger.e('Test Test');
+//     //await InAppPurchase.instance.restorePurchases();
 
-    if (Platform.isIOS) {
-      // List<PurchaseDetails> historyPurchaseDetails = [];
-      // InAppPurchase.instance.purchaseStream
-      //     .listen((List<PurchaseDetails> list) {
-      //   historyPurchaseDetails.addAll(list);
-      // });
-      InAppPurchase.instance.purchaseStream
-          .listen((List<PurchaseDetails> historyPurchaseDetails) {
-        if (historyPurchaseDetails.isNotEmpty) {
-          for (var purchase in historyPurchaseDetails) {
-            logger.e('status: ${purchase.status}');
-            logger.e('transaction date: ${purchase.transactionDate}');
+//     if (Platform.isIOS) {
+//       // List<PurchaseDetails> historyPurchaseDetails = [];
+//       // InAppPurchase.instance.purchaseStream
+//       //     .listen((List<PurchaseDetails> list) {
+//       //   historyPurchaseDetails.addAll(list);
+//       // });
+//       InAppPurchase.instance.purchaseStream
+//           .listen((List<PurchaseDetails> historyPurchaseDetails) {
+//         if (historyPurchaseDetails.isNotEmpty) {
+//           for (var purchase in historyPurchaseDetails) {
+//             logger.e('status: ${purchase.status}');
+//             logger.e('transaction date: ${purchase.transactionDate}');
 
-            int timestampMilliseconds =
-                int.tryParse(purchase.transactionDate!) ?? 0;
+//             int timestampMilliseconds =
+//                 int.tryParse(purchase.transactionDate!) ?? 0;
 
-            logger.e('timestampMilliseconds: $timestampMilliseconds');
+//             logger.e('timestampMilliseconds: $timestampMilliseconds');
 
-            DateTime transactionDateTime =
-                DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+//             DateTime transactionDateTime =
+//                 DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
-            logger.e('transactionDateTime: $transactionDateTime');
+//             logger.e('transactionDateTime: $transactionDateTime');
 
-            Duration difference =
-                DateTime.now().difference(transactionDateTime);
+//             Duration difference =
+//                 DateTime.now().difference(transactionDateTime);
 
-            logger.e('difference: $difference');
+//             logger.e('difference: $difference');
 
-            if (purchase.productID == monthlyProductId) {
-              updateSubscriptionStatus(true, false);
-              subscriptionStatus.storePurchaseDate(
-                  transactionDateTime, 'monthly');
-              subscriptionController.setUserSubscription(true, false);
-              subscriptionController.hideProgress();
-            } else if (purchase.productID == yearlyProductId) {
-              updateSubscriptionStatus(false, true);
-              subscriptionStatus.storePurchaseDate(
-                  transactionDateTime, 'yearly');
-              subscriptionController.setUserSubscription(false, true);
-              subscriptionController.hideProgress();
-            } else {
-              updateSubscriptionStatus(false, false);
-              subscriptionController.setUserSubscription(false, false);
-            }
-          }
-        } else {
-          logger.e(' List is empty');
-          updateSubscriptionStatus(false, false);
-          subscriptionController.setUserSubscription(false, false);
-        }
-      });
-    } else if (Platform.isAndroid) {
-      InAppPurchase.instance.purchaseStream
-          .listen((List<PurchaseDetails> list) {
-        if (list.isNotEmpty) {
-          // int i = 0;
-          for (var purchase in list) {
-            logger.e('status: ${purchase.status}');
-            logger.e('transaction date: ${purchase.transactionDate}');
+//             if (purchase.productID == monthlyProductId) {
+//               updateSubscriptionStatus(true, false);
+//               subscriptionStatus.storePurchaseDate(
+//                   transactionDateTime, 'monthly');
+//               subscriptionController.setUserSubscription(true, false);
+//               subscriptionController.hideProgress();
+//             } else if (purchase.productID == yearlyProductId) {
+//               updateSubscriptionStatus(false, true);
+//               subscriptionStatus.storePurchaseDate(
+//                   transactionDateTime, 'yearly');
+//               subscriptionController.setUserSubscription(false, true);
+//               subscriptionController.hideProgress();
+//             } else {
+//               updateSubscriptionStatus(false, false);
+//               subscriptionController.setUserSubscription(false, false);
+//             }
+//           }
+//         } else {
+//           logger.e(' List is empty');
+//           updateSubscriptionStatus(false, false);
+//           subscriptionController.setUserSubscription(false, false);
+//         }
+//       });
+//     } else if (Platform.isAndroid) {
+//       InAppPurchase.instance.purchaseStream
+//           .listen((List<PurchaseDetails> list) {
+//         if (list.isNotEmpty) {
+//           // int i = 0;
+//           for (var purchase in list) {
+//             logger.e('status: ${purchase.status}');
+//             logger.e('transaction date: ${purchase.transactionDate}');
 
-            int timestampMilliseconds =
-                int.tryParse(purchase.transactionDate!) ?? 0;
+//             int timestampMilliseconds =
+//                 int.tryParse(purchase.transactionDate!) ?? 0;
 
-            logger.e('timestampMilliseconds: $timestampMilliseconds');
+//             logger.e('timestampMilliseconds: $timestampMilliseconds');
 
-            DateTime transactionDateTime =
-                DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+//             DateTime transactionDateTime =
+//                 DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
-            logger.e('transactionDateTime: $transactionDateTime');
+//             logger.e('transactionDateTime: $transactionDateTime');
 
-            Duration difference =
-                DateTime.now().difference(transactionDateTime);
+//             Duration difference =
+//                 DateTime.now().difference(transactionDateTime);
 
-            logger.e('difference: $difference');
-            //! String productId = purchase.productID;
-            if (purchase.productID == monthlyProductId) {
-              updateSubscriptionStatus(true, false);
-              subscriptionStatus.storePurchaseDate(
-                  transactionDateTime, 'monthly');
-              subscriptionController.setUserSubscription(true, false);
-              subscriptionController.hideProgress();
-            } else if (purchase.productID == yearlyProductId) {
-              updateSubscriptionStatus(false, true);
-              subscriptionStatus.storePurchaseDate(
-                  transactionDateTime, 'yearly');
-              subscriptionController.setUserSubscription(false, true);
-              subscriptionController.hideProgress();
-            } else {
-              updateSubscriptionStatus(false, false);
-              subscriptionController.setUserSubscription(false, false);
-            }
+//             logger.e('difference: $difference');
+//             //! String productId = purchase.productID;
+//             if (purchase.productID == monthlyProductId) {
+//               updateSubscriptionStatus(true, false);
+//               subscriptionStatus.storePurchaseDate(
+//                   transactionDateTime, 'monthly');
+//               subscriptionController.setUserSubscription(true, false);
+//               subscriptionController.hideProgress();
+//             } else if (purchase.productID == yearlyProductId) {
+//               updateSubscriptionStatus(false, true);
+//               subscriptionStatus.storePurchaseDate(
+//                   transactionDateTime, 'yearly');
+//               subscriptionController.setUserSubscription(false, true);
+//               subscriptionController.hideProgress();
+//             } else {
+//               updateSubscriptionStatus(false, false);
+//               subscriptionController.setUserSubscription(false, false);
+//             }
 
-            // i++;
-          }
-        } else {
-          updateSubscriptionStatus(false, false);
-        }
-      });
-    }
-    throw PlatformException(
-        code: Platform.operatingSystem, message: "platform not supported");
-  }
-}
-
-
+//             // i++;
+//           }
+//         } else {
+//           updateSubscriptionStatus(false, false);
+//         }
+//       });
+//     }
+//     throw PlatformException(
+//         code: Platform.operatingSystem, message: "platform not supported");
+//   }
+// }
 
 // Future<bool> verifyPurchase(PurchaseDetails purchaseDetails) async {
 
@@ -331,3 +428,4 @@ class IAPService {
 //     prefs.setBool('isSubscribed', isSubscriptionActive);
 //   }
 //  }
+}

@@ -93,30 +93,30 @@ class _BookListPageState extends State<BookListPage> {
     await InAppPurchase.instance.restorePurchases();
   }
 
-  void checkSubscriptionValidity() async {
-    DateTime? storedPurchaseDate =
-        await subscriptionStatus.getStoredPurchaseDate();
+  // void checkSubscriptionValidity() async {
+  //   DateTime? storedPurchaseDate =
+  //       await subscriptionStatus.getStoredPurchaseDate();
 
-    if (storedPurchaseDate != null) {
-      logger.e('Stored Purchase Date: $storedPurchaseDate');
+  //   if (storedPurchaseDate != null) {
+  //     logger.e('Stored Purchase Date: $storedPurchaseDate');
 
-      bool isActive =
-          subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
-      logger.e('Is Subscription Active: $isActive');
-      if (isActive) {
-        if (subscriptionStatus.isMonthly.value) {
-          subscriptionStatus.saveSubscriptionStatus(true, false);
-        } else if (subscriptionStatus.isYearly.value) {
-          subscriptionStatus.saveSubscriptionStatus(false, true);
-        }
-      } else {
-        logger.e('Subscription Expired or other issue found.');
-        subscriptionStatus.saveSubscriptionStatus(false, false);
-      }
-    } else {
-      logger.e('No stored purchase date found.');
-    }
-  }
+  //     bool isActive =
+  //         subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
+  //     logger.e('Is Subscription Active: $isActive');
+  //     if (isActive) {
+  //       if (subscriptionStatus.isMonthly.value) {
+  //         subscriptionStatus.saveSubscriptionStatus(true, false);
+  //       } else if (subscriptionStatus.isYearly.value) {
+  //         subscriptionStatus.saveSubscriptionStatus(false, true);
+  //       }
+  //     } else {
+  //       logger.e('Subscription Expired or other issue found.');
+  //       subscriptionStatus.saveSubscriptionStatus(false, false);
+  //     }
+  //   } else {
+  //     logger.e('No stored purchase date found.');
+  //   }
+  // }
 
   @override
   void initState() {
@@ -144,21 +144,21 @@ class _BookListPageState extends State<BookListPage> {
     }) as StreamSubscription<List<PurchaseDetails>>;
 
     //!Check Subscription Availability
-    IAPService(
-            monthlyProductId: Platform.isAndroid
-                ? widget.configResponse.androidSettings.subscriptionSettings
-                    .monthSubscriptionProductID!
-                : widget.configResponse.iosSettings.subscriptionSettings
-                    .monthSubscriptionProductID!,
-            yearlyProductId: Platform.isAndroid
-                ? widget.configResponse.androidSettings.subscriptionSettings
-                    .yearSubscriptionProductID!
-                : widget.configResponse.iosSettings.subscriptionSettings
-                    .yearSubscriptionProductID!)
-        .checkSubscriptionAvailabilty();
+    // IAPService(
+    //         monthlyProductId: Platform.isAndroid
+    //             ? widget.configResponse.androidSettings.subscriptionSettings
+    //                 .monthSubscriptionProductID!
+    //             : widget.configResponse.iosSettings.subscriptionSettings
+    //                 .monthSubscriptionProductID!,
+    //         yearlyProductId: Platform.isAndroid
+    //             ? widget.configResponse.androidSettings.subscriptionSettings
+    //                 .yearSubscriptionProductID!
+    //             : widget.configResponse.iosSettings.subscriptionSettings
+    //                 .yearSubscriptionProductID!)
+    //     .checkSubscriptionAvailabilty();
 
     // loadSubscriptionStatus();
-    checkSubscriptionValidity();
+    //checkSubscriptionValidity();
     restorepurchase();
     initcalls();
     fetchAdIds();
@@ -1174,47 +1174,22 @@ class _BookListPageState extends State<BookListPage> {
                 alignment: Alignment.topCenter,
                 child: InkWell(
                   onTap: () {
-                    //!Check Subscription Availability
-                    IAPService(
-                            monthlyProductId: Platform.isAndroid
-                                ? widget
-                                    .configResponse
-                                    .androidSettings
-                                    .subscriptionSettings
-                                    .monthSubscriptionProductID!
-                                : widget
-                                    .configResponse
-                                    .iosSettings
-                                    .subscriptionSettings
-                                    .monthSubscriptionProductID!,
-                            yearlyProductId: Platform.isAndroid
-                                ? widget
-                                    .configResponse
-                                    .androidSettings
-                                    .subscriptionSettings
-                                    .yearSubscriptionProductID!
-                                : widget
-                                    .configResponse
-                                    .iosSettings
-                                    .subscriptionSettings
-                                    .yearSubscriptionProductID!)
-                        .checkSubscriptionAvailabilty();
-                    // widget.configResponse.iosSettings.parentalGate!
-                    //     ? Permission.getPermission(
-                    //         context: context,
-                    //         onSuccess: () {
-                    //           openAppStore(widget
-                    //               .configResponse.iosSettings.houseAd!.urlId!);
-                    //           print("True");
-                    //         },
-                    //         onFail: () {
-                    //           print("false");
-                    //         },
-                    //         backgroundColor:
-                    //             widget.booksList.backgroundColor.toColor(),
-                    //       )
-                    //     : openAppStore(
-                    //         widget.configResponse.iosSettings.houseAd!.urlId!);
+                    widget.configResponse.iosSettings.parentalGate!
+                        ? Permission.getPermission(
+                            context: context,
+                            onSuccess: () {
+                              openAppStore(widget
+                                  .configResponse.iosSettings.houseAd!.urlId!);
+                              print("True");
+                            },
+                            onFail: () {
+                              print("false");
+                            },
+                            backgroundColor:
+                                widget.booksList.backgroundColor.toColor(),
+                          )
+                        : openAppStore(
+                            widget.configResponse.iosSettings.houseAd!.urlId!);
                   },
                   child: Container(
                       width: MediaQuery.sizeOf(context).width * 0.3,

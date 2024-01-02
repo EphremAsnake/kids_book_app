@@ -85,7 +85,6 @@ class SubscriptionStatus extends GetxController {
     DateTime expirationDate = getExpirationDate(purchaseDate);
     DateTime currentDate = DateTime.now();
 
-    // Add a grace period if needed
     // expirationDate = expirationDate.add(Duration(days: gracePeriodDays));
 
     return currentDate.isBefore(expirationDate);
