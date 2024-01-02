@@ -292,10 +292,19 @@ class IAPService {
       //     .listen((List<PurchaseDetails> list) {
       //   historyPurchaseDetails.addAll(list);
       // });
+      List<PurchaseDetails> allPurchases = [];
+
       InAppPurchase.instance.purchaseStream
           .listen((List<PurchaseDetails> historyPurchaseDetails) {
         if (historyPurchaseDetails.isNotEmpty) {
-          var lastPurchase = historyPurchaseDetails.last;
+          for (var purchase in historyPurchaseDetails) {
+            allPurchases.add(purchase);
+          }
+
+          var lastPurchase = allPurchases.last;
+
+          logger.e('All Purchases List Length: ${allPurchases.length}');
+
           logger.e('last purchase status: ${lastPurchase.status}');
           logger.e(
               'last purchase transaction date: ${lastPurchase.transactionDate}');
@@ -311,7 +320,7 @@ class IAPService {
 
           Duration difference = DateTime.now().difference(transactionDateTime);
 
-          logger.e('last purchase difference: $difference');
+          logger.e('last purchase difference: ${difference.inMinutes}');
 
           if (lastPurchase.productID == monthlyProductId) {
             if (difference <= monthduration) {
@@ -393,7 +402,6 @@ class IAPService {
         } else {
           logger.e(' List is empty');
           updateSubscriptionStatus(false, false);
-          subscriptionController.setUserSubscription(false, false);
         }
       });
     } else if (Platform.isAndroid) {
