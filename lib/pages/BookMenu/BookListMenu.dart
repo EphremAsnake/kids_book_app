@@ -89,6 +89,9 @@ class _BookListPageState extends State<BookListPage> {
   //     isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
   //   });
   // }
+  Future<void> restorepurchase() async {
+    await InAppPurchase.instance.restorePurchases();
+  }
 
   void checkSubscriptionValidity() async {
     DateTime? storedPurchaseDate =
@@ -156,6 +159,7 @@ class _BookListPageState extends State<BookListPage> {
 
     // loadSubscriptionStatus();
     checkSubscriptionValidity();
+    restorepurchase();
     initcalls();
     fetchAdIds();
   }

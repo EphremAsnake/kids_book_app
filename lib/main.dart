@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    restorepurchase();
+    //restorepurchase();
     // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
 
     // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
@@ -62,9 +62,9 @@ class _MyAppState extends State<MyApp> {
     // }) as StreamSubscription<List<PurchaseDetails>>;
   }
 
-  Future<void> restorepurchase() async {
-    await InAppPurchase.instance.restorePurchases();
-  }
+  // Future<void> restorepurchase() async {
+  //   await InAppPurchase.instance.restorePurchases();
+  // }
 
   @override
   Widget build(BuildContext context) {

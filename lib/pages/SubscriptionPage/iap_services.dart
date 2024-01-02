@@ -235,6 +235,7 @@ class IAPService {
         } else {
           logger.e(' List is empty');
           updateSubscriptionStatus(false, false);
+          subscriptionController.setUserSubscription(false, false);
         }
       });
     } else if (Platform.isAndroid) {
@@ -243,13 +244,39 @@ class IAPService {
         if (list.isNotEmpty) {
           // int i = 0;
           for (var purchase in list) {
+            logger.e('status: ${purchase.status}');
+            logger.e('transaction date: ${purchase.transactionDate}');
+
+            int timestampMilliseconds =
+                int.tryParse(purchase.transactionDate!) ?? 0;
+
+            logger.e('timestampMilliseconds: $timestampMilliseconds');
+
+            DateTime transactionDateTime =
+                DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+
+            logger.e('transactionDateTime: $transactionDateTime');
+
+            Duration difference =
+                DateTime.now().difference(transactionDateTime);
+
+            logger.e('difference: $difference');
             //! String productId = purchase.productID;
             if (purchase.productID == monthlyProductId) {
               updateSubscriptionStatus(true, false);
+              subscriptionStatus.storePurchaseDate(
+                  transactionDateTime, 'monthly');
+              subscriptionController.setUserSubscription(true, false);
               subscriptionController.hideProgress();
             } else if (purchase.productID == yearlyProductId) {
               updateSubscriptionStatus(false, true);
+              subscriptionStatus.storePurchaseDate(
+                  transactionDateTime, 'yearly');
+              subscriptionController.setUserSubscription(false, true);
               subscriptionController.hideProgress();
+            } else {
+              updateSubscriptionStatus(false, false);
+              subscriptionController.setUserSubscription(false, false);
             }
 
             // i++;
