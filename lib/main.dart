@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
+    restorepurchase();
     // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
 
     // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
@@ -60,6 +60,10 @@ class _MyAppState extends State<MyApp> {
     // }, onError: (error) {
     //   _iapSubscription.cancel();
     // }) as StreamSubscription<List<PurchaseDetails>>;
+  }
+
+  Future<void> restorepurchase() async {
+    await InAppPurchase.instance.restorePurchases();
   }
 
   @override
