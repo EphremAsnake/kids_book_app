@@ -27,10 +27,11 @@ class IAPService {
   void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailList) {
     // ignore: avoid_function_literals_in_foreach_calls
     purchaseDetailList.forEach((PurchaseDetails purchaseDetails) async {
-      if (purchaseDetails.status == PurchaseStatus.purchased ||
-          purchaseDetails.status == PurchaseStatus.restored) {
+      if (purchaseDetails.status == PurchaseStatus.purchased) {
         // String transactionReceipt = purchaseDetails.verificationData
         _handleSuccessfulPurchase(purchaseDetails);
+      } else if (purchaseDetails.status == PurchaseStatus.restored) {
+        _handleSuccessfulPurchase(purchaseDetails, isrestorepurchase: true);
       } else if (purchaseDetails.status == PurchaseStatus.canceled) {
         //updateSubscriptionStatus(false, false);
         subscriptionController.hideProgress();
@@ -66,7 +67,8 @@ class IAPService {
     });
   }
 
-  void _handleSuccessfulPurchase(PurchaseDetails purchaseDetails) {
+  void _handleSuccessfulPurchase(PurchaseDetails purchaseDetails,
+      {bool? isrestorepurchase}) {
     //DateTime purchaseDate = DateTime.now();
     if (purchaseDetails.productID == monthlyProductId) {
       //DateTime expiryDate = purchaseDate.add(Duration(days: 30));
@@ -79,26 +81,28 @@ class IAPService {
       subscriptionStatus.storePurchaseDate(transactionDateTime, 'monthly');
       subscriptionController.setUserSubscription(true, false);
       updateSubscriptionStatus(true, false);
-      Get.snackbar(
-        '',
-        '',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
-        isDismissible: true,
-        titleText: const Text(
-          'Success',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-        maxWidth: 400,
-        messageText: const Text(
-          'You have Successfully Subscribed to Monthly Package  Thank You!',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-      );
+      if (isrestorepurchase == null) {
+        Get.snackbar(
+          '',
+          '',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          isDismissible: true,
+          titleText: const Text(
+            'Success',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+          maxWidth: 400,
+          messageText: const Text(
+            'You have Successfully Subscribed to Monthly Package  Thank You!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+        );
+      }
       subscriptionController.hideProgress();
     }
     if (purchaseDetails.productID == yearlyProductId) {
@@ -113,26 +117,28 @@ class IAPService {
       subscriptionController.setUserSubscription(false, true);
       subscriptionStatus.storePurchaseDate(transactionDateTime, 'yearly');
       updateSubscriptionStatus(false, true);
-      Get.snackbar(
-        '',
-        '',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
-        isDismissible: true,
-        titleText: const Text(
-          'Success',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-        maxWidth: 400,
-        messageText: const Text(
-          'You have Successfully Subscribed to Yearly Package Thank You!',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.0, color: Colors.white),
-        ),
-      );
+      if (isrestorepurchase == null) {
+        Get.snackbar(
+          '',
+          '',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 2),
+          isDismissible: true,
+          titleText: const Text(
+            'Success',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+          maxWidth: 400,
+          messageText: const Text(
+            'You have Successfully Subscribed to Yearly Package Thank You!',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.0, color: Colors.white),
+          ),
+        );
+      }
       subscriptionController.hideProgress();
     }
   }

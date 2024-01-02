@@ -155,6 +155,7 @@ class _BookListPageState extends State<BookListPage> {
         .checkSubscriptionAvailabilty();
 
     // loadSubscriptionStatus();
+    checkSubscriptionValidity();
     initcalls();
     fetchAdIds();
   }
