@@ -540,8 +540,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                     : '1 YEAR',
                                                 _products[index].id ==
                                                         widget.monthlyProductId
-                                                    ? 'Month'
-                                                    : 'Year',
+                                                    ? widget.monthly
+                                                    : widget.yearly,
                                                 index,
                                                 isYear: _products[index].id ==
                                                         widget.monthlyProductId
@@ -750,7 +750,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: InkWell(
           onTap: () {
-            subscriptionController.showProgress();
+              subscriptionController.showProgress();
             late PurchaseParam purchaseParam;
             if (Platform.isAndroid) {
               purchaseParam = GooglePlayPurchaseParam(

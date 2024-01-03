@@ -159,7 +159,7 @@ class _BookListPageState extends State<BookListPage> {
 
     // loadSubscriptionStatus();
     //checkSubscriptionValidity();
-    restorepurchase();
+    //restorepurchase();
     initcalls();
     fetchAdIds();
   }
