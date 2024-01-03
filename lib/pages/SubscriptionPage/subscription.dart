@@ -336,281 +336,273 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 //     ),
                                 //   ],
                                 // ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        subscriptionController.showProgress();
-                                        late PurchaseParam monthlyPurchaseParam;
-                                        if (Platform.isAndroid) {
-                                          monthlyPurchaseParam =
-                                              GooglePlayPurchaseParam(
-                                                  productDetails: _products[0],
-                                                  changeSubscriptionParam:
-                                                      null);
-                                        } else {
-                                          monthlyPurchaseParam = PurchaseParam(
-                                            productDetails: _products[0],
-                                          );
-                                        }
-
-                                        InAppPurchase.instance.buyNonConsumable(
-                                          purchaseParam: monthlyPurchaseParam,
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 55,
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.5,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          gradient: const LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              Color(0xFFD2894E),
-                                              Color(0xFFC66C40)
-                                            ],
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 25.0),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                '1 MONTH',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  // fontSize: 9.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                _products.isNotEmpty
-                                                    ? '${_products[0].price}${widget.monthly}'
-                                                    : '\$10.0/month',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  // fontSize: 9.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20.0),
-                                    InkWell(
-                                      onTap: () {
-                                        subscriptionController.showProgress();
-                                        late PurchaseParam yearlyPurchaseParam;
-
-                                        if (Platform.isAndroid) {
-                                          yearlyPurchaseParam =
-                                              GooglePlayPurchaseParam(
-                                                  productDetails: _products[1],
-                                                  changeSubscriptionParam:
-                                                      null);
-                                        } else {
-                                          yearlyPurchaseParam = PurchaseParam(
-                                            productDetails: _products[1],
-                                          );
-                                        }
-
-                                        InAppPurchase.instance.buyNonConsumable(
-                                          purchaseParam: yearlyPurchaseParam,
-                                        );
-                                      },
-                                      child: Container(
-                                        height: 55,
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.5,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(40),
-                                          gradient: const LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              Color(0xFFD2894E),
-                                              Color(0xFFC66C40)
-                                            ],
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 25.0),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                    '1 YEAR',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      // fontSize: 9.sp,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                      decoration: BoxDecoration(
-                                                          color: const Color
-                                                              .fromARGB(255,
-                                                              240, 193, 91),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      20)),
-                                                      child: const Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    3.0),
-                                                        child: Text('Save 50%'),
-                                                      )),
-                                                ],
-                                              ),
-                                              Text(
-                                                _products.isNotEmpty
-                                                    ? '${_products[1].price}${widget.yearly}'
-                                                    : '\$20.0/year',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  // fontSize: 9.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                //!plan
                                 // Column(
                                 //   mainAxisAlignment: MainAxisAlignment.center,
                                 //   crossAxisAlignment: CrossAxisAlignment.center,
                                 //   children: [
-                                //     ListView.builder(
-                                //         shrinkWrap: true,
-                                //         physics:
-                                //             const NeverScrollableScrollPhysics(),
-                                //         itemCount: _products.length,
-                                //         itemBuilder: ((context, index) {
-                                //           String text = index == 0
-                                //               ? widget.monthly
-                                //               : widget.yearly;
-                                //           return Center(
-                                //             child: ListTile(
-                                //               title: Text(
-                                //                 '${_products[index].price} $text',
+                                //     InkWell(
+                                //       onTap: () {
+                                //         subscriptionController.showProgress();
+                                //         late PurchaseParam monthlyPurchaseParam;
+                                //         if (Platform.isAndroid) {
+                                //           monthlyPurchaseParam =
+                                //               GooglePlayPurchaseParam(
+                                //                   productDetails: _products[0],
+                                //                   changeSubscriptionParam:
+                                //                       null);
+                                //         } else {
+                                //           monthlyPurchaseParam = PurchaseParam(
+                                //             productDetails: _products[0],
+                                //           );
+                                //         }
+
+                                //         InAppPurchase.instance.buyNonConsumable(
+                                //           purchaseParam: monthlyPurchaseParam,
+                                //         );
+                                //       },
+                                //       child: Container(
+                                //         height: 55,
+                                //         width:
+                                //             MediaQuery.sizeOf(context).width *
+                                //                 0.5,
+                                //         decoration: BoxDecoration(
+                                //           borderRadius:
+                                //               BorderRadius.circular(40),
+                                //           gradient: const LinearGradient(
+                                //             begin: Alignment.topLeft,
+                                //             end: Alignment.bottomRight,
+                                //             colors: [
+                                //               Color(0xFFD2894E),
+                                //               Color(0xFFC66C40)
+                                //             ],
+                                //           ),
+                                //         ),
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.symmetric(
+                                //               horizontal: 25.0),
+                                //           child: Row(
+                                //             crossAxisAlignment:
+                                //                 CrossAxisAlignment.center,
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             children: [
+                                //               const Text(
+                                //                 '1 MONTH',
+                                //                 textAlign: TextAlign.center,
                                 //                 style: TextStyle(
-                                //                   fontSize: 10.sp,
+                                //                   // fontSize: 9.sp,
                                 //                   color: Colors.white,
                                 //                   fontWeight: FontWeight.bold,
                                 //                 ),
                                 //               ),
-                                //               leading: Transform.scale(
-                                //                 scale: 2,
-                                //                 child: MSHCheckbox(
-                                //                   value:
-                                //                       index == _selectedValue,
-                                //                   colorConfig: MSHColorConfig
-                                //                       .fromCheckedUncheckedDisabled(
-                                //                     checkedColor: Colors.blue,
-                                //                   ),
-                                //                   style:
-                                //                       MSHCheckboxStyle.stroke,
-                                //                   onChanged: (value) {
-                                //                     setState(() {
-                                //                       _selectedValue = index;
-                                //                     });
-                                //                   },
-                                //                   // activeColor: Colors
-                                //                   //     .green, // Change the color as needed
+                                //               Text(
+                                //                 _products.isNotEmpty
+                                //                     ? '${_products[0].price}${widget.monthly}'
+                                //                     : '\$10.0/month',
+                                //                 textAlign: TextAlign.center,
+                                //                 style: const TextStyle(
+                                //                   // fontSize: 9.sp,
+                                //                   color: Colors.white,
+                                //                   fontWeight: FontWeight.bold,
                                 //                 ),
                                 //               ),
-                                //             ),
-                                //           );
-                                //         })),
+                                //             ],
+                                //           ),
+                                //         ),
+                                //       ),
+                                //     ),
                                 //     const SizedBox(height: 20.0),
-                                //     ElevatedButton(
-                                //       onPressed: () {
-                                //         // Perform purchase based on the selected value (_selectedValue)
-                                //         if (_selectedValue == 0) {
-                                //           late PurchaseParam
-                                //               monthlyPurchaseParam;
-                                //           if (Platform.isAndroid) {
-                                //             monthlyPurchaseParam =
-                                //                 GooglePlayPurchaseParam(
-                                //                     productDetails:
-                                //                         _products[0],
-                                //                     changeSubscriptionParam:
-                                //                         null);
-                                //           } else {
-                                //             monthlyPurchaseParam =
-                                //                 PurchaseParam(
-                                //               productDetails: _products[0],
-                                //             );
-                                //           }
+                                //     InkWell(
+                                //       onTap: () {
+                                //         subscriptionController.showProgress();
+                                //         late PurchaseParam yearlyPurchaseParam;
 
-                                //           InAppPurchase.instance
-                                //               .buyNonConsumable(
-                                //             purchaseParam: monthlyPurchaseParam,
-                                //           );
-                                //         } else if (_selectedValue == 1) {
-                                //           late PurchaseParam
-                                //               yearlyPurchaseParam;
-
-                                //           if (Platform.isAndroid) {
-                                //             yearlyPurchaseParam =
-                                //                 GooglePlayPurchaseParam(
-                                //                     productDetails:
-                                //                         _products[1],
-                                //                     changeSubscriptionParam:
-                                //                         null);
-                                //           } else {
-                                //             yearlyPurchaseParam = PurchaseParam(
-                                //               productDetails: _products[1],
-                                //             );
-                                //           }
-
-                                //           InAppPurchase.instance
-                                //               .buyNonConsumable(
-                                //             purchaseParam: yearlyPurchaseParam,
+                                //         if (Platform.isAndroid) {
+                                //           yearlyPurchaseParam =
+                                //               GooglePlayPurchaseParam(
+                                //                   productDetails: _products[1],
+                                //                   changeSubscriptionParam:
+                                //                       null);
+                                //         } else {
+                                //           yearlyPurchaseParam = PurchaseParam(
+                                //             productDetails: _products[1],
                                 //           );
                                 //         }
+
+                                //         InAppPurchase.instance.buyNonConsumable(
+                                //           purchaseParam: yearlyPurchaseParam,
+                                //         );
                                 //       },
-                                //       child: Text('Purchase'),
+                                //       child: Container(
+                                //         height: 55,
+                                //         width:
+                                //             MediaQuery.sizeOf(context).width *
+                                //                 0.5,
+                                //         decoration: BoxDecoration(
+                                //           borderRadius:
+                                //               BorderRadius.circular(40),
+                                //           gradient: const LinearGradient(
+                                //             begin: Alignment.topLeft,
+                                //             end: Alignment.bottomRight,
+                                //             colors: [
+                                //               Color(0xFFD2894E),
+                                //               Color(0xFFC66C40)
+                                //             ],
+                                //           ),
+                                //         ),
+                                //         child: Padding(
+                                //           padding: const EdgeInsets.symmetric(
+                                //               horizontal: 25.0),
+                                //           child: Row(
+                                //             crossAxisAlignment:
+                                //                 CrossAxisAlignment.center,
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.spaceBetween,
+                                //             children: [
+                                //               Column(
+                                //                 mainAxisAlignment:
+                                //                     MainAxisAlignment.center,
+                                //                 crossAxisAlignment:
+                                //                     CrossAxisAlignment.start,
+                                //                 children: [
+                                //                   const Text(
+                                //                     '1 YEAR',
+                                //                     textAlign: TextAlign.center,
+                                //                     style: TextStyle(
+                                //                       // fontSize: 9.sp,
+                                //                       color: Colors.white,
+                                //                       fontWeight:
+                                //                           FontWeight.bold,
+                                //                     ),
+                                //                   ),
+                                //                   Container(
+                                //                       decoration: BoxDecoration(
+                                //                           color: const Color
+                                //                               .fromARGB(255,
+                                //                               240, 193, 91),
+                                //                           borderRadius:
+                                //                               BorderRadius
+                                //                                   .circular(
+                                //                                       20)),
+                                //                       child: const Padding(
+                                //                         padding: EdgeInsets
+                                //                             .symmetric(
+                                //                                 horizontal:
+                                //                                     3.0),
+                                //                         child: Text('Save 50%'),
+                                //                       )),
+                                //                 ],
+                                //               ),
+                                //               Text(
+                                //                 _products.isNotEmpty
+                                //                     ? '${_products[1].price}${widget.yearly}'
+                                //                     : '\$20.0/year',
+                                //                 textAlign: TextAlign.center,
+                                //                 style: const TextStyle(
+                                //                   // fontSize: 9.sp,
+                                //                   color: Colors.white,
+                                //                   fontWeight: FontWeight.bold,
+                                //                 ),
+                                //               ),
+                                //             ],
+                                //           ),
+                                //         ),
+                                //       ),
                                 //     ),
                                 //   ],
                                 // ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: _products.length,
+                                        itemBuilder: ((context, index) {
+                                          // String text = index == 0
+                                          //     ? widget.monthly
+                                          //     : widget.yearly;
 
-                                const SizedBox(height: 20.0),
+                                          //!BuildContext context, String price, String leadingName, String perText,{bool? isYear}
+                                          return SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.5,
+                                            child: subTypeContainer(
+                                                context,
+                                                _products[index].price,
+                                                _products[index].id ==
+                                                        widget.monthlyProductId
+                                                    ? '1 MONTH'
+                                                    : '1 YEAR',
+                                                _products[index].id ==
+                                                        widget.monthlyProductId
+                                                    ? 'Month'
+                                                    : 'Year',
+                                                index,
+                                                isYear: _products[index].id ==
+                                                        widget.monthlyProductId
+                                                    ? null
+                                                    : true),
+                                          );
+                                        })),
+                                    //const SizedBox(height: 20.0),
+                                    // ElevatedButton(
+                                    //   onPressed: () {
+                                    //     // Perform purchase based on the selected value (_selectedValue)
+                                    //     if (_selectedValue == 0) {
+                                    //       late PurchaseParam
+                                    //           monthlyPurchaseParam;
+                                    //       if (Platform.isAndroid) {
+                                    //         monthlyPurchaseParam =
+                                    //             GooglePlayPurchaseParam(
+                                    //                 productDetails:
+                                    //                     _products[0],
+                                    //                 changeSubscriptionParam:
+                                    //                     null);
+                                    //       } else {
+                                    //         monthlyPurchaseParam =
+                                    //             PurchaseParam(
+                                    //           productDetails: _products[0],
+                                    //         );
+                                    //       }
+
+                                    //       InAppPurchase.instance
+                                    //           .buyNonConsumable(
+                                    //         purchaseParam: monthlyPurchaseParam,
+                                    //       );
+                                    //     } else if (_selectedValue == 1) {
+                                    //       late PurchaseParam
+                                    //           yearlyPurchaseParam;
+
+                                    //       if (Platform.isAndroid) {
+                                    //         yearlyPurchaseParam =
+                                    //             GooglePlayPurchaseParam(
+                                    //                 productDetails:
+                                    //                     _products[1],
+                                    //                 changeSubscriptionParam:
+                                    //                     null);
+                                    //       } else {
+                                    //         yearlyPurchaseParam = PurchaseParam(
+                                    //           productDetails: _products[1],
+                                    //         );
+                                    //       }
+
+                                    //       InAppPurchase.instance
+                                    //           .buyNonConsumable(
+                                    //         purchaseParam: yearlyPurchaseParam,
+                                    //       );
+                                    //     }
+                                    //   },
+                                    //   child: Text('Purchase'),
+                                    // ),
+                                  ],
+                                ),
+
+                                const SizedBox(height: 10.0),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -747,6 +739,92 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               ],
             );
           })),
+    );
+  }
+
+  Center subTypeContainer(BuildContext context, String price,
+      String leadingName, String perText, int index,
+      {bool? isYear}) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: InkWell(
+          onTap: () {
+            late PurchaseParam purchaseParam;
+            if (Platform.isAndroid) {
+              purchaseParam = GooglePlayPurchaseParam(
+                  productDetails: _products[index],
+                  changeSubscriptionParam: null);
+            } else {
+              purchaseParam = PurchaseParam(
+                productDetails: _products[index],
+              );
+            }
+
+            InAppPurchase.instance.buyNonConsumable(
+              purchaseParam: purchaseParam,
+            );
+          },
+          child: Container(
+            height: 55,
+            width: MediaQuery.sizeOf(context).width * 0.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.transparent, Color(0xFFC66C40)],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        leadingName,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          // fontSize: 9.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5.0,
+                      ),
+                      if (isYear != null)
+                        Container(
+                            decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 240, 193, 91),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 3.0),
+                              child: Text('Save 50%'),
+                            )),
+                    ],
+                  ),
+                  Text(
+                    '$price/$perText',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      // fontSize: 9.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

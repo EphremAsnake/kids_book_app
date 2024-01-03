@@ -297,8 +297,28 @@ class IAPService {
       InAppPurchase.instance.purchaseStream
           .listen((List<PurchaseDetails> historyPurchaseDetails) {
         if (historyPurchaseDetails.isNotEmpty) {
-          for (var purchase in historyPurchaseDetails) {
-            allPurchases.add(purchase);
+          allPurchases.clear();
+          allPurchases.addAll(historyPurchaseDetails);
+          allPurchases.sort((a, b) {
+            int timestampA = int.tryParse(a.transactionDate!) ?? 0;
+            int timestampB = int.tryParse(b.transactionDate!) ?? 0;
+
+            DateTime dateTimeA =
+                DateTime.fromMillisecondsSinceEpoch(timestampA);
+            DateTime dateTimeB =
+                DateTime.fromMillisecondsSinceEpoch(timestampB);
+
+            return dateTimeA.compareTo(dateTimeB);
+          });
+
+          for (var purchase in allPurchases) {
+            int timestampMilliseconds =
+                int.tryParse(purchase.transactionDate!) ?? 0;
+            DateTime transactionDateTime =
+                DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+            // logger.e(
+            //     'Transaction Date not converted: ${purchase.transactionDate}');
+            // logger.e('Transaction Date: $transactionDateTime');
           }
 
           var lastPurchase = allPurchases.last;
@@ -317,13 +337,14 @@ class IAPService {
               DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
           logger.e('last purchase transactionDateTime: $transactionDateTime');
+          logger.e('Now time: ${DateTime.now()}');
 
           Duration difference = DateTime.now().difference(transactionDateTime);
 
           logger.e('last purchase difference: ${difference.inMinutes}');
 
           if (lastPurchase.productID == monthlyProductId) {
-            if (difference <= monthduration) {
+            if (difference.inMinutes <= monthduration.inMinutes) {
               updateSubscriptionStatus(true, false);
               subscriptionStatus.storePurchaseDate(
                   transactionDateTime, 'monthly');
