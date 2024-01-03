@@ -43,6 +43,8 @@ class AudioController extends GetxController with WidgetsBindingObserver {
       } else {
         _backgrounMusicPlayer.stop();
       }
+    } else {
+      _backgrounMusicPlayer.stop();
     }
   }
 

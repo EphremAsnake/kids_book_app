@@ -179,29 +179,29 @@ class IAPService {
 
       //subscriptionController.setUserSubscription(true, false);
 
-      updateSubscriptionStatus(true, false);
-      if (isrestorepurchase == null) {
-        Get.snackbar(
-          '',
-          '',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-          isDismissible: true,
-          titleText: const Text(
-            'Success',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
-          ),
-          maxWidth: 400,
-          messageText: const Text(
-            'You have Successfully Subscribed to Monthly Package  Thank You!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
-          ),
-        );
-      }
+      //updateSubscriptionStatus(true, false);
+      // if (isrestorepurchase == null) {
+      //   Get.snackbar(
+      //     '',
+      //     '',
+      //     snackPosition: SnackPosition.BOTTOM,
+      //     backgroundColor: Colors.green,
+      //     colorText: Colors.white,
+      //     duration: const Duration(seconds: 2),
+      //     isDismissible: true,
+      //     titleText: const Text(
+      //       'Success',
+      //       textAlign: TextAlign.center,
+      //       style: TextStyle(fontSize: 16.0, color: Colors.white),
+      //     ),
+      //     maxWidth: 400,
+      //     messageText: const Text(
+      //       'You have Successfully Subscribed to Monthly Package  Thank You!',
+      //       textAlign: TextAlign.center,
+      //       style: TextStyle(fontSize: 16.0, color: Colors.white),
+      //     ),
+      //   );
+      // }
       subscriptionController.hideProgress();
     }
     if (purchaseDetails.productID == yearlyProductId) {
@@ -215,29 +215,29 @@ class IAPService {
 
       //subscriptionController.setUserSubscription(false, true);
       subscriptionStatus.storePurchaseDate(transactionDateTime, 'yearly');
-      updateSubscriptionStatus(false, true);
-      if (isrestorepurchase == null) {
-        Get.snackbar(
-          '',
-          '',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 2),
-          isDismissible: true,
-          titleText: const Text(
-            'Success',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
-          ),
-          maxWidth: 400,
-          messageText: const Text(
-            'You have Successfully Subscribed to Yearly Package Thank You!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
-          ),
-        );
-      }
+      // updateSubscriptionStatus(false, true);
+      // if (isrestorepurchase == null) {
+      //   Get.snackbar(
+      //     '',
+      //     '',
+      //     snackPosition: SnackPosition.BOTTOM,
+      //     backgroundColor: Colors.green,
+      //     colorText: Colors.white,
+      //     duration: const Duration(seconds: 2),
+      //     isDismissible: true,
+      //     titleText: const Text(
+      //       'Success',
+      //       textAlign: TextAlign.center,
+      //       style: TextStyle(fontSize: 16.0, color: Colors.white),
+      //     ),
+      //     maxWidth: 400,
+      //     messageText: const Text(
+      //       'You have Successfully Subscribed to Yearly Package Thank You!',
+      //       textAlign: TextAlign.center,
+      //       style: TextStyle(fontSize: 16.0, color: Colors.white),
+      //     ),
+      //   );
+      // }
       subscriptionController.hideProgress();
     }
   }

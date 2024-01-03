@@ -622,7 +622,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         clearCachedFiles();
                                       },
                                       child: const Text(
-                                        'Clear Saved Stories',
+                                        'Clear Cache',
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
@@ -750,6 +750,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: InkWell(
           onTap: () {
+            subscriptionController.showProgress();
             late PurchaseParam purchaseParam;
             if (Platform.isAndroid) {
               purchaseParam = GooglePlayPurchaseParam(
