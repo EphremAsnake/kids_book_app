@@ -33,6 +33,7 @@ class IAPService {
 
         //!Handle Restore
       } else if (purchaseDetails.status == PurchaseStatus.restored) {
+        logger.e('Restore Called');
         _handleSuccessfulPurchase(purchaseDetails, isrestorepurchase: true);
 
         //!Handle Cancel
@@ -168,6 +169,16 @@ class IAPService {
   void _handleSuccessfulPurchase(PurchaseDetails purchaseDetails,
       {bool? isrestorepurchase}) {
     if (purchaseDetails.productID == monthlyProductId) {
+      if (Platform.isAndroid) {
+        int timestampMilliseconds =
+            int.tryParse(purchaseDetails.transactionDate!) ?? 0;
+
+        DateTime transactionDateTime =
+            DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+        subscriptionStatus.storePurchaseDateAndroid(
+            transactionDateTime, 'monthly');
+        updateSubscriptionStatus(true, false);
+      }
       logger.e('Monthly Subsccccc');
       int timestampMilliseconds =
           int.tryParse(purchaseDetails.transactionDate!) ?? 0;
@@ -206,7 +217,16 @@ class IAPService {
     }
     if (purchaseDetails.productID == yearlyProductId) {
       logger.e('Yearly Subsccccc');
+      if (Platform.isAndroid) {
+        int timestampMilliseconds =
+            int.tryParse(purchaseDetails.transactionDate!) ?? 0;
 
+        DateTime transactionDateTime =
+            DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+        subscriptionStatus.storePurchaseDateAndroid(
+            transactionDateTime, 'yearly');
+        updateSubscriptionStatus(false, true);
+      }
       int timestampMilliseconds =
           int.tryParse(purchaseDetails.transactionDate!) ?? 0;
 
@@ -283,7 +303,6 @@ class IAPService {
       [Duration monthduration = const Duration(minutes: 4),
       Duration yearduration = const Duration(minutes: 10),
       Duration grace = const Duration(days: 0)]) async {
-    logger.e('Test Test');
     //await InAppPurchase.instance.restorePurchases();
 
     if (Platform.isIOS) {
@@ -311,15 +330,15 @@ class IAPService {
             return dateTimeA.compareTo(dateTimeB);
           });
 
-          for (var purchase in allPurchases) {
-            int timestampMilliseconds =
-                int.tryParse(purchase.transactionDate!) ?? 0;
-            DateTime transactionDateTime =
-                DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
-            // logger.e(
-            //     'Transaction Date not converted: ${purchase.transactionDate}');
-            // logger.e('Transaction Date: $transactionDateTime');
-          }
+          // for (var purchase in allPurchases) {
+          //   int timestampMilliseconds =
+          //       int.tryParse(purchase.transactionDate!) ?? 0;
+          //   DateTime transactionDateTime =
+          //       DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+          //   // logger.e(
+          //   //     'Transaction Date not converted: ${purchase.transactionDate}');
+          //   // logger.e('Transaction Date: $transactionDateTime');
+          // }
 
           var lastPurchase = allPurchases.last;
 
@@ -426,10 +445,40 @@ class IAPService {
         }
       });
     } else if (Platform.isAndroid) {
+      DateTime? storedPurchaseDateAndroid =
+          await subscriptionStatus.getStoredPurchaseDateAndroid();
+
+      String? storedSubType =
+          await subscriptionStatus.getStoredPurchaseTypeAndroid();
+      if (storedPurchaseDateAndroid != null) {
+        // int timestampMilliseconds =
+        //     int.tryParse(storedPurchaseDateAndroid) ?? 0;
+
+        // DateTime transactionDateTime =
+        //     DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
+        Duration differenceA =
+            DateTime.now().difference(storedPurchaseDateAndroid);
+        if (storedSubType != null && storedSubType == 'monthly') {
+          if (differenceA.inMinutes <= monthduration.inMinutes) {
+            updateSubscriptionStatus(true, false);
+          } else {
+            updateSubscriptionStatus(false, false);
+          }
+        } else if (storedSubType != null && storedSubType == 'yearly') {
+          if (differenceA.inMinutes <= yearduration.inMinutes) {
+            updateSubscriptionStatus(false, true);
+          } else {
+            updateSubscriptionStatus(false, false);
+          }
+        } else {
+          updateSubscriptionStatus(false, false);
+        }
+      }
+
       InAppPurchase.instance.purchaseStream
           .listen((List<PurchaseDetails> list) {
         if (list.isNotEmpty) {
-          // int i = 0;
+          logger.e('List Not Empty');
           for (var purchase in list) {
             logger.e('status: ${purchase.status}');
             logger.e('transaction date: ${purchase.transactionDate}');
@@ -469,9 +518,11 @@ class IAPService {
             // i++;
           }
         } else {
+          logger.e('List is Empty');
           updateSubscriptionStatus(false, false);
         }
       });
+      //updateSubscriptionStatus(false, false);
     }
     throw PlatformException(
         code: Platform.operatingSystem, message: "platform not supported");

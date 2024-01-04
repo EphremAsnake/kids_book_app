@@ -59,6 +59,31 @@ class SubscriptionStatus extends GetxController {
     //prefs.setString('purchase_type', purchasetype);
   }
 
+  Future<void> storePurchaseDateAndroid(
+      DateTime purchaseDate, String purchasetype) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('purchase_date_android', purchaseDate.toIso8601String());
+    prefs.setString('purchase_type_Android', purchasetype);
+  }
+
+  Future<DateTime?> getStoredPurchaseDateAndroid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? storedPurchaseDate = prefs.getString('purchase_date_android');
+    if (storedPurchaseDate != null) {
+      return DateTime.parse(storedPurchaseDate);
+    }
+    return null;
+  }
+
+  Future<String?> getStoredPurchaseTypeAndroid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? storedPurchaseType = prefs.getString('purchase_type_Android');
+    if (storedPurchaseType != null) {
+      return storedPurchaseType;
+    }
+    return null;
+  }
+
   Future<DateTime?> getStoredPurchaseDate() async {
     final prefs = await SharedPreferences.getInstance();
     final String? storedPurchaseDate = prefs.getString('purchase_date');

@@ -150,12 +150,13 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 20.0),
                                     child: Text(
-                                      "Enter the Digits",
+                                      "Ask Your Parents\nEnter the Digits",
                                       maxLines: 2,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.normal,
                                       ),
                                     ),
                                   ),
@@ -175,6 +176,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                             numberWord.join(" , "),
                             style: const TextStyle(
                               color: Colors.white,
+                              fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
                           ),

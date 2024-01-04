@@ -76,9 +76,12 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   //!check Sub
   // bool isSubscribedMonthly = false;
   // bool isSubscribedYearly = false;
+  late AudioController audioController;
+
   @override
   void initState() {
     super.initState();
+    audioController = Get.find<AudioController>();
     _productIds = [widget.monthlyProductId, widget.yearlyProductId];
     //loadSubscriptionStatus();
     initStoreInfo();
@@ -725,13 +728,24 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     child: IconButton(
                       icon: const Icon(Icons.home_outlined, color: Colors.blue),
                       onPressed: () {
-                        Get.offAll(
-                            BookListPage(
-                              booksList: widget.booksList,
-                              configResponse: widget.configResponse,
-                            ),
-                            transition: Transition.fadeIn,
-                            duration: const Duration(seconds: 2));
+                        if (audioController.isPlaying) {
+                          Get.offAll(
+                              BookListPage(
+                                booksList: widget.booksList,
+                                configResponse: widget.configResponse,
+                              ),
+                              transition: Transition.fadeIn,
+                              duration: const Duration(seconds: 2));
+                        } else {
+                          Get.offAll(
+                              BookListPage(
+                                booksList: widget.booksList,
+                                configResponse: widget.configResponse,
+                                isbackgroundsilent: true,
+                              ),
+                              transition: Transition.fadeIn,
+                              duration: const Duration(seconds: 2));
+                        }
                       },
                     ),
                   ),
@@ -750,7 +764,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: InkWell(
           onTap: () {
-              subscriptionController.showProgress();
+            subscriptionController.showProgress();
             late PurchaseParam purchaseParam;
             if (Platform.isAndroid) {
               purchaseParam = GooglePlayPurchaseParam(
@@ -775,42 +789,42 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.transparent, Color(0xFFC66C40)],
+                colors: [Color(0xFFC66C40), Colors.transparent],
               ),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        leadingName,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          // fontSize: 9.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      if (isYear != null)
-                        Container(
-                            decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 240, 193, 91),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 3.0),
-                              child: Text('Save 50%'),
-                            )),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     // Text(
+                  //     //   leadingName,
+                  //     //   textAlign: TextAlign.center,
+                  //     //   style: const TextStyle(
+                  //     //     // fontSize: 9.sp,
+                  //     //     color: Colors.white,
+                  //     //     fontWeight: FontWeight.bold,
+                  //     //   ),
+                  //     // ),
+                  //     // const SizedBox(
+                  //     //   width: 5.0,
+                  //     // ),
+                  //     if (isYear != null)
+                  //       Container(
+                  //           decoration: BoxDecoration(
+                  //               color: const Color.fromARGB(255, 240, 193, 91),
+                  //               borderRadius: BorderRadius.circular(5)),
+                  //           child: const Padding(
+                  //             padding: EdgeInsets.symmetric(horizontal: 3.0),
+                  //             child: Text('Save 50%'),
+                  //           )),
+                  //   ],
+                  // ),
                   Text(
                     '$price/$perText',
                     textAlign: TextAlign.center,
@@ -820,6 +834,18 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(
+                    width: 5.0,
+                  ),
+                  if (isYear != null)
+                    Container(
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 240, 193, 91),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 3.0),
+                          child: Text('Save 50%'),
+                        )),
                 ],
               ),
             ),
