@@ -796,7 +796,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.center,
@@ -828,8 +828,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   Text(
                     '$price/$perText',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      // fontSize: 9.sp,
+                    style: TextStyle(
+                      fontSize: 8.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
