@@ -6,6 +6,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
 import 'package:resize/resize.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
@@ -35,14 +36,22 @@ class LastScreen extends StatefulWidget {
 class _ChoiceScreenState extends State<LastScreen> {
   AudioController backgroundaudioController = Get.put(AudioController());
 
-  Future<void> shareApp() async {
+  // Future<void> shareApp() async {
+  //   //! Share the app link and message using the share dialog
+  //   await FlutterShare.share(
+  //     title: 'Share App',
+  //     text: Platform.isAndroid
+  //         ? widget.configResponse.androidSettings.appRateAndShare!.share
+  //         : widget.configResponse.iosSettings.appRateAndShare!.share,
+  //   );
+  // }
+  void shareApp() {
     //! Share the app link and message using the share dialog
-    await FlutterShare.share(
-      title: 'Share App',
-      text: Platform.isAndroid
-          ? widget.configResponse.androidSettings.appRateAndShare!.share
-          : widget.configResponse.iosSettings.appRateAndShare!.share,
-    );
+    final shareMessage = Platform.isAndroid
+        ? widget.configResponse.androidSettings.appRateAndShare?.share ?? ""
+        : widget.configResponse.iosSettings.appRateAndShare?.share ?? "";
+
+    Share.share(shareMessage);
   }
 
   void openUrlAndroid(String url) async {
