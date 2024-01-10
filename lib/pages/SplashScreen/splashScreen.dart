@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import '../../model/booklistModel.dart';
@@ -13,6 +14,7 @@ import '../../services/apiEndpoints.dart';
 import '../../utils/adhelper.dart';
 import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
+import '../SubscriptionPage/iap_services.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -117,6 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (configResponses == null) {
           await fetchConfigData();
 
+          checkAvailabiltyFunction(configResponses!);
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -125,6 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
               transition: Transition.fade,
               duration: const Duration(seconds: 2));
         } else {
+          checkAvailabiltyFunction(configResponses!);
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -160,6 +164,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (configResponses == null) {
           await fetchConfigData();
 
+          checkAvailabiltyFunction(configResponses!);
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -168,6 +173,7 @@ class _SplashScreenState extends State<SplashScreen> {
               transition: Transition.fade,
               duration: const Duration(seconds: 2));
         } else {
+          checkAvailabiltyFunction(configResponses!);
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -224,6 +230,24 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
+  Future<void> checkAvailabiltyFunction(
+      ConfigApiResponseModel consfigresponse) async {
+    await InAppPurchase.instance.restorePurchases();
+    //!Check Subscription Availability
+    IAPService(
+            monthlyProductId: Platform.isAndroid
+                ? consfigresponse.androidSettings.subscriptionSettings
+                    .monthSubscriptionProductID!
+                : consfigresponse.iosSettings.subscriptionSettings
+                    .monthSubscriptionProductID!,
+            yearlyProductId: Platform.isAndroid
+                ? consfigresponse.androidSettings.subscriptionSettings
+                    .yearSubscriptionProductID!
+                : consfigresponse.iosSettings.subscriptionSettings
+                    .yearSubscriptionProductID!)
+        .checkSubscriptionAvailabilty();
+  }
+
   void useLocalDataBoth() async {
     //!BookList
     String storedBookList = await getFromStorageBookList();
@@ -251,6 +275,8 @@ class _SplashScreenState extends State<SplashScreen> {
           : storedConfigResponse
               .iosSettings.admobSettings.admobRewardedAd?.adUnitId,
     );
+
+    checkAvailabiltyFunction(storedConfigResponse);
 
     Get.offAll(
         BookListPage(
