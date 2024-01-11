@@ -23,6 +23,7 @@ import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../model/storyPage.dart';
 import '../../services/apiEndpoints.dart';
+import '../../utils/Constants/dimention.dart';
 import '../../utils/adhelper.dart';
 import '../../utils/admanager.dart';
 import '../../widget/aboutdialog.dart';
@@ -35,7 +36,6 @@ import 'package:get/get.dart' hide Response;
 import '../SubscriptionPage/iap_services.dart';
 import '../SubscriptionPage/status/subscriptionstatus.dart';
 import '../SubscriptionPage/subscription.dart';
-import '../SubscriptionPage/test.dart';
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -942,46 +942,22 @@ class _BookListPageState extends State<BookListPage> {
             top: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
             child: CircleAvatar(
-              backgroundColor: AppColors.backgroundColor,
-              radius: 25,
-              child: GetBuilder<AudioController>(builder: (audioController) {
-                return FloatingActionButton(
-                  onPressed: () {
-                    audioController.toggleAudio();
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      side: const BorderSide(
-                          width: 2, color: AppColors.bordercolorColor)),
-                  heroTag: 'Background Music',
-                  tooltip: 'Background Music',
-                  backgroundColor: buttonColor,
-                  child: Icon(
-                    audioController.isPlaying
-                        ? Icons.music_note_outlined
-                        : Icons.music_off_outlined,
-                    color: AppColors.iconColor,
-                  ),
-                );
-              }),
-            ),
-
-            // CircleAvatar(
-            //     radius: 25,
-            //     backgroundColor: AppColors.backgroundColor,
-            //     child: GetBuilder<AudioController>(builder: (audioController) {
-            //       return IconButton(
-            //         icon: Icon(
-            //           audioController.isPlaying
-            //               ? Icons.music_note_outlined
-            //               : Icons.music_off_outlined,
-            //           color: AppColors.iconColor,
-            //         ),
-            //         onPressed: () {
-            //           audioController.toggleAudio();
-            //         },
-            //       );
-            //     })),
+                radius: 25,
+                backgroundColor: AppColors.backgroundColor,
+                child: GetBuilder<AudioController>(builder: (audioController) {
+                  return IconButton(
+                    iconSize: IconSizes.medium,
+                    icon: Icon(
+                      audioController.isPlaying
+                          ? Icons.music_note_outlined
+                          : Icons.music_off_outlined,
+                      color: AppColors.iconColor,
+                    ),
+                    onPressed: () {
+                      audioController.toggleAudio();
+                    },
+                  );
+                })),
           ),
 
           // //!About
@@ -1018,13 +994,13 @@ class _BookListPageState extends State<BookListPage> {
                         );
                       },
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(
-                              width: 2, color: AppColors.bordercolorColor)),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
                       heroTag: 'About',
                       tooltip: 'About',
                       backgroundColor: buttonColor,
                       child: const Icon(
+                        size: IconSizes.medium,
                         Icons.privacy_tip_outlined,
                         color: AppColors.iconColor,
                       ),
@@ -1077,12 +1053,12 @@ class _BookListPageState extends State<BookListPage> {
                       },
                       backgroundColor: buttonColor,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          side: BorderSide(
-                              width: 2, color: AppColors.bordercolorColor)),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
                       heroTag: 'Settings',
                       tooltip: 'Settings',
                       child: const Icon(
+                        size: IconSizes.medium,
                         Icons.settings,
                         color: AppColors.iconColor,
                       ),
@@ -1103,13 +1079,16 @@ class _BookListPageState extends State<BookListPage> {
                       });
                     },
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        side: BorderSide(
-                            width: 2, color: AppColors.bordercolorColor)),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
                     //tooltip: 'Toggle',
                     child: _isMenuOpen
-                        ? const Icon(Icons.close, color: AppColors.iconColor)
+                        ? const Icon(
+                            size: IconSizes.medium,
+                            Icons.close,
+                            color: AppColors.iconColor)
                         : const Icon(
+                            size: IconSizes.medium,
                             Icons.expand_less_outlined,
                             color: AppColors.iconColor,
                           ),
@@ -1145,6 +1124,7 @@ class _BookListPageState extends State<BookListPage> {
                 radius: 25,
                 backgroundColor: AppColors.backgroundColor,
                 child: IconButton(
+                  iconSize: IconSizes.medium,
                   icon: const Icon(
                     Icons.arrow_upward_outlined,
                     color: AppColors.iconColor,

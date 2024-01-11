@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/Constants/colors.dart';
+
 class CustomDialogBox extends StatefulWidget {
   final String? title, descriptions, text, text2;
   final Color? titleColor;
@@ -105,7 +107,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                       child: InkWell(
                         onTap: () {
                           setState(() {
-                            buttonColor = Colors.blue;
+                            buttonColor = AppColors.backgroundColor;
                           });
 
                           Future.delayed(const Duration(milliseconds: 10), () {
@@ -144,7 +146,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          buttonColor = Colors.blue;
+                          buttonColor = AppColors.backgroundColor;
                         });
 
                         Future.delayed(const Duration(milliseconds: 10), () {

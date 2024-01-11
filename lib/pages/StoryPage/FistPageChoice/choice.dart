@@ -9,6 +9,8 @@ import 'package:storyapp/utils/Constants/AllStrings.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
+import '../../../utils/Constants/colors.dart';
+import '../../../utils/Constants/dimention.dart';
 import '../../../widget/animatedbuttonwidget.dart';
 import '../../BookMenu/BookListMenu.dart';
 
@@ -54,10 +56,11 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     left: MediaQuery.of(context).size.width * 0.075,
                     child: CircleAvatar(
                       radius: 25,
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColors.backgroundColor,
                       child: IconButton(
-                        icon:
-                            const Icon(Icons.home_outlined, color: Colors.blue),
+                        iconSize: IconSizes.medium,
+                        icon: const Icon(Icons.home_outlined,
+                            color: AppColors.iconColor),
                         onPressed: () {
                           if (backgroundaudioController.isPlaying) {
                             Get.offAll(
@@ -86,17 +89,18 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     right: MediaQuery.of(context).size.width * 0.075,
                     child: CircleAvatar(
                         radius: 25,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.backgroundColor,
                         child: GetBuilder<AudioController>(
                             builder: (audioController) {
                           return IconButton(
+                            iconSize: IconSizes.medium,
                             icon: GetBuilder<AudioController>(
                               builder: (audioController) {
                                 return Icon(
                                   audioController.isPlaying
                                       ? Icons.music_note_outlined
                                       : Icons.music_off_outlined,
-                                  color: Colors.blue,
+                                  color: AppColors.iconColor,
                                 );
                               },
                             ),

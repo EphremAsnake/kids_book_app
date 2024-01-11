@@ -12,6 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
+import '../../../utils/Constants/colors.dart';
+import '../../../utils/Constants/dimention.dart';
 import '../../../widget/animatedbuttonwidget.dart';
 import '../../BookMenu/BookListMenu.dart';
 import '../../parentalgate/parentalgate.dart';
@@ -97,9 +99,11 @@ class _ChoiceScreenState extends State<LastScreen> {
                       right: MediaQuery.of(context).size.width * 0.075,
                       child: CircleAvatar(
                         radius: 25,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.backgroundColor,
                         child: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.blue),
+                          iconSize: IconSizes.medium,
+                          icon: const Icon(Icons.close,
+                              color: AppColors.iconColor),
                           onPressed: () => widget.close(),
                         ),
                       ),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/utils/Constants/colors.dart';
 
 class AnimatedButtonWidget extends StatelessWidget {
   final Duration buttonDelayDuration;
@@ -31,7 +32,7 @@ class AnimatedButtonWidget extends StatelessWidget {
                   height: 55,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(50)),
                   child: AnimatedTextWidget(
                     buttonPlayDuration: buttonPlayDuration,
@@ -75,7 +76,7 @@ class AnimatedTextWidget extends StatelessWidget {
           if (icon != null)
             Icon(
               icon,
-              color: Colors.white,
+              color: AppColors.iconColor,
             ),
           const SizedBox(
             width: 5,
@@ -84,7 +85,7 @@ class AnimatedTextWidget extends StatelessWidget {
               maxLines: 1,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 10.sp)),
         ],

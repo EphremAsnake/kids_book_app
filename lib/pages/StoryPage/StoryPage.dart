@@ -17,6 +17,8 @@ import '../../services/apiEndpoints.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
+import '../../utils/Constants/colors.dart';
+import '../../utils/Constants/dimention.dart';
 import '../../widget/animatedtextwidget.dart';
 import '../../widget/dialog.dart';
 import '../BookMenu/BookListMenu.dart';
@@ -317,7 +319,7 @@ class _BooksPageState extends State<BookPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.8),
+        backgroundColor: Colors.white,
         body: WillPopScope(
           onWillPop: () async {
             if (_listen) {
@@ -399,7 +401,8 @@ class _BooksPageState extends State<BookPage>
                                 return Center(
                                   child: TextButton(
                                     style: TextButton.styleFrom(
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor:
+                                          AppColors.backgroundColor,
                                     ),
                                     onPressed: () {
                                       //_incrementCounter();
@@ -428,10 +431,11 @@ class _BooksPageState extends State<BookPage>
                                 //!Home Button
                                 CircleAvatar(
                                   radius: 25.0,
-                                  backgroundColor: Colors.white,
+                                  backgroundColor: AppColors.backgroundColor,
                                   child: IconButton(
+                                    iconSize: IconSizes.medium,
                                     icon: const Icon(Icons.home_outlined,
-                                        color: Colors.blue),
+                                        color: AppColors.iconColor),
                                     onPressed: () async {
                                       if (_listen) {
                                         if (bookplayer.playing) {
@@ -463,13 +467,13 @@ class _BooksPageState extends State<BookPage>
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(.95),
+                                    color: AppColors.backgroundColor,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
                                     '${_counter + 1}/${widget.response.pages.length}',
                                     style: const TextStyle(
-                                      color: Colors.blue,
+                                      color: AppColors.pageCounterTextColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -493,17 +497,18 @@ class _BooksPageState extends State<BookPage>
                                 //!Background Music
                                 CircleAvatar(
                                     radius: 25.0,
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: AppColors.backgroundColor,
                                     child: GetBuilder<AudioController>(
                                         builder: (audioController) {
                                       return IconButton(
+                                        iconSize: IconSizes.medium,
                                         icon: GetBuilder<AudioController>(
                                           builder: (audioController) {
                                             return Icon(
                                               audioController.isPlaying
                                                   ? Icons.music_note_outlined
                                                   : Icons.music_off_outlined,
-                                              color: Colors.blue,
+                                              color: AppColors.iconColor,
                                             );
                                           },
                                         ),
@@ -523,13 +528,14 @@ class _BooksPageState extends State<BookPage>
                                   CircleAvatar(
                                       radius: 25.0,
                                       backgroundColor:
-                                          Colors.white.withOpacity(.95),
+                                          AppColors.backgroundColor,
                                       child: IconButton(
+                                        iconSize: IconSizes.medium,
                                         icon: Icon(
                                           isPlaying
                                               ? Icons.pause
                                               : Icons.play_arrow_outlined,
-                                          color: Colors.blue,
+                                          color: AppColors.iconColor,
                                         ),
                                         onPressed: () {
                                           togglePlayback();
@@ -597,7 +603,7 @@ class _BooksPageState extends State<BookPage>
                           child: SvgPicture.asset(
                             'assets/previous.svg',
                             height: 55,
-                            color: Colors.blue,
+                            color: AppColors.navigationbuttonsColor,
                           ),
                         ),
                       ),
@@ -633,7 +639,7 @@ class _BooksPageState extends State<BookPage>
                           child: SvgPicture.asset(
                             'assets/next.svg',
                             height: 55,
-                            color: Colors.blue,
+                            color: AppColors.navigationbuttonsColor,
                           ),
                         ),
                       ),

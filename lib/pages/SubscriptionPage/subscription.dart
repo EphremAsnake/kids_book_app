@@ -15,6 +15,8 @@ import 'package:badges/badges.dart' as badges;
 import '../../controller/subscriptionController.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
+import '../../utils/Constants/colors.dart';
+import '../../utils/Constants/dimention.dart';
 import '../BookMenu/BookListMenu.dart';
 import 'status/subscriptionstatus.dart';
 
@@ -724,9 +726,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   right: MediaQuery.of(context).size.height * 0.08,
                   child: CircleAvatar(
                     radius: 25,
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppColors.backgroundColor,
                     child: IconButton(
-                      icon: const Icon(Icons.home_outlined, color: Colors.blue),
+                      iconSize: IconSizes.medium,
+                      icon: const Icon(Icons.home_outlined,
+                          color: AppColors.iconColor),
                       onPressed: () {
                         if (audioController.isPlaying) {
                           Get.offAll(
