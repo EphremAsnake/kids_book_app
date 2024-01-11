@@ -10,6 +10,7 @@ import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
+import 'package:storyapp/utils/Constants/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class _BookListPageState extends State<BookListPage> {
   String folderName = '';
 
   bool musicForAd = false;
-  Color buttonColor = Colors.white;
+  Color buttonColor = AppColors.backgroundColor;
   Logger logger = Logger();
   bool loadingStory = false;
 
@@ -941,18 +942,46 @@ class _BookListPageState extends State<BookListPage> {
             top: 20.0,
             right: MediaQuery.of(context).size.height * 0.08,
             child: CircleAvatar(
-                radius: 25,
-                backgroundColor: Colors.white,
-                child: GetBuilder<AudioController>(builder: (audioController) {
-                  return IconButton(
-                    icon: Icon(audioController.isPlaying
+              backgroundColor: AppColors.backgroundColor,
+              radius: 25,
+              child: GetBuilder<AudioController>(builder: (audioController) {
+                return FloatingActionButton(
+                  onPressed: () {
+                    audioController.toggleAudio();
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      side: const BorderSide(
+                          width: 2, color: AppColors.bordercolorColor)),
+                  heroTag: 'Background Music',
+                  tooltip: 'Background Music',
+                  backgroundColor: buttonColor,
+                  child: Icon(
+                    audioController.isPlaying
                         ? Icons.music_note_outlined
-                        : Icons.music_off_outlined),
-                    onPressed: () {
-                      audioController.toggleAudio();
-                    },
-                  );
-                })),
+                        : Icons.music_off_outlined,
+                    color: AppColors.iconColor,
+                  ),
+                );
+              }),
+            ),
+
+            // CircleAvatar(
+            //     radius: 25,
+            //     backgroundColor: AppColors.backgroundColor,
+            //     child: GetBuilder<AudioController>(builder: (audioController) {
+            //       return IconButton(
+            //         icon: Icon(
+            //           audioController.isPlaying
+            //               ? Icons.music_note_outlined
+            //               : Icons.music_off_outlined,
+            //           color: AppColors.iconColor,
+            //         ),
+            //         onPressed: () {
+            //           audioController.toggleAudio();
+            //         },
+            //       );
+            //     })),
           ),
 
           // //!About
@@ -967,7 +996,7 @@ class _BookListPageState extends State<BookListPage> {
                 Visibility(
                   visible: _isMenuOpen,
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppColors.backgroundColor,
                     radius: 25,
                     child: FloatingActionButton(
                       onPressed: () {
@@ -989,12 +1018,16 @@ class _BookListPageState extends State<BookListPage> {
                         );
                       },
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
+                          borderRadius: BorderRadius.circular(20.0),
+                          side: BorderSide(
+                              width: 2, color: AppColors.bordercolorColor)),
                       heroTag: 'About',
                       tooltip: 'About',
                       backgroundColor: buttonColor,
-                      child: const Icon(Icons.privacy_tip_outlined),
+                      child: const Icon(
+                        Icons.privacy_tip_outlined,
+                        color: AppColors.iconColor,
+                      ),
                     ),
                   ),
                 ),
@@ -1005,7 +1038,7 @@ class _BookListPageState extends State<BookListPage> {
                   visible: _isMenuOpen,
                   child: CircleAvatar(
                     radius: 25,
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppColors.backgroundColor,
                     child: FloatingActionButton(
                       onPressed: () {
                         if (Platform.isAndroid) {
@@ -1044,11 +1077,15 @@ class _BookListPageState extends State<BookListPage> {
                       },
                       backgroundColor: buttonColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
+                          borderRadius: BorderRadius.circular(20.0),
+                          side: BorderSide(
+                              width: 2, color: AppColors.bordercolorColor)),
                       heroTag: 'Settings',
                       tooltip: 'Settings',
-                      child: const Icon(Icons.settings),
+                      child: const Icon(
+                        Icons.settings,
+                        color: AppColors.iconColor,
+                      ),
                     ),
                   ),
                 ),
@@ -1057,7 +1094,7 @@ class _BookListPageState extends State<BookListPage> {
                 //!FAB
                 CircleAvatar(
                   radius: 25,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.backgroundColor,
                   child: FloatingActionButton(
                     backgroundColor: buttonColor,
                     onPressed: () {
@@ -1066,12 +1103,16 @@ class _BookListPageState extends State<BookListPage> {
                       });
                     },
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
+                        borderRadius: BorderRadius.circular(20.0),
+                        side: BorderSide(
+                            width: 2, color: AppColors.bordercolorColor)),
                     //tooltip: 'Toggle',
                     child: _isMenuOpen
-                        ? const Icon(Icons.close)
-                        : const Icon(Icons.expand_less_outlined),
+                        ? const Icon(Icons.close, color: AppColors.iconColor)
+                        : const Icon(
+                            Icons.expand_less_outlined,
+                            color: AppColors.iconColor,
+                          ),
                   ),
                 ),
               ],
@@ -1102,9 +1143,12 @@ class _BookListPageState extends State<BookListPage> {
               left: MediaQuery.of(context).size.height * 0.08,
               child: CircleAvatar(
                 radius: 25,
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.backgroundColor,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_upward_outlined),
+                  icon: const Icon(
+                    Icons.arrow_upward_outlined,
+                    color: AppColors.iconColor,
+                  ),
                   onPressed: () {
                     _scrollController.animateTo(
                       0,
