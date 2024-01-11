@@ -1411,7 +1411,7 @@ class _BookListPageState extends State<BookListPage> {
                   color: Colors.black.withOpacity(0.5),
                   width: double.infinity,
                   height: double.infinity,
-                  child: const Icon(Icons.lock, color: Colors.white, size: 30),
+                  child: const Icon(Icons.lock, color: AppColors.iconColor, size: IconSizes.medium),
                 ),
               )
           ],
