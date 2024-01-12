@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
@@ -23,14 +24,52 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   Dio dio = Dio();
   ConfigApiResponseModel? configResponses;
+  late AnimationController animationController;
+  late Animation<double> animation;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  // startTime() async {
+  //   var duration = const Duration(seconds: 5);
 
+  //   return Timer(duration, checkFirstSeenAndNavigate);
+  // }
   @override
   void initState() {
     super.initState();
     checkInternetConnection();
+    inimethods();
+  }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void inimethods() {
+    animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+
+    animation.addListener(() => setState(() {}));
+    animationController.forward();
+
+    //startTime();
+
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 10800),
+        vsync: this,
+        value: 0,
+        lowerBound: 0,
+        upperBound: 1);
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+
+    _controller.forward();
   }
 
   void saveToLocalStorageBookList(data) async {
@@ -119,22 +158,22 @@ class _SplashScreenState extends State<SplashScreen> {
           await fetchConfigData();
 
           checkAvailabiltyFunction(configResponses!);
-          Get.offAll(
-              BookListPage(
-                booksList: apiResponse,
-                configResponse: configResponses!,
-              ),
-              transition: Transition.fade,
-              duration: const Duration(seconds: 2));
+          // Get.offAll(
+          //     BookListPage(
+          //       booksList: apiResponse,
+          //       configResponse: configResponses!,
+          //     ),
+          //     transition: Transition.fade,
+          //     duration: const Duration(seconds: 2));
         } else {
           checkAvailabiltyFunction(configResponses!);
-          Get.offAll(
-              BookListPage(
-                booksList: apiResponse,
-                configResponse: configResponses!,
-              ),
-              transition: Transition.fade,
-              duration: const Duration(seconds: 2));
+          // Get.offAll(
+          //     BookListPage(
+          //       booksList: apiResponse,
+          //       configResponse: configResponses!,
+          //     ),
+          //     transition: Transition.fade,
+          //     duration: const Duration(seconds: 2));
         }
       } else {
         debugPrint(
@@ -265,12 +304,37 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff4bebfa),
-      body: Center(
-        child: Lottie.asset(
-          'assets/book.json',
-          fit: BoxFit.cover,
-          repeat: true,
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Container(
+              width: animation.value * 450,
+              height: animation.value * 150,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/appicon.png"),
+                    fit: BoxFit.contain),
+              ),
+            ),
+          ),
+          SizedBox(height: 5,),
+          SizedBox(height: 10, child: CircularProgressIndicator())
+          // Center(
+          //   child: Container(
+          //     width: animation.value * 450,
+          //     height: animation.value * 100,
+          //     child: Center(
+          //       child: Lottie.asset(
+          //         'assets/book.json',
+          //         fit: BoxFit.cover,
+          //         repeat: true,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+        ],
       ),
     );
   }
