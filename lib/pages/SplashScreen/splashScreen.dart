@@ -158,22 +158,22 @@ class _SplashScreenState extends State<SplashScreen>
           await fetchConfigData();
 
           checkAvailabiltyFunction(configResponses!);
-          // Get.offAll(
-          //     BookListPage(
-          //       booksList: apiResponse,
-          //       configResponse: configResponses!,
-          //     ),
-          //     transition: Transition.fade,
-          //     duration: const Duration(seconds: 2));
+          Get.offAll(
+              BookListPage(
+                booksList: apiResponse,
+                configResponse: configResponses!,
+              ),
+              transition: Transition.fade,
+              duration: const Duration(seconds: 2));
         } else {
           checkAvailabiltyFunction(configResponses!);
-          // Get.offAll(
-          //     BookListPage(
-          //       booksList: apiResponse,
-          //       configResponse: configResponses!,
-          //     ),
-          //     transition: Transition.fade,
-          //     duration: const Duration(seconds: 2));
+          Get.offAll(
+              BookListPage(
+                booksList: apiResponse,
+                configResponse: configResponses!,
+              ),
+              transition: Transition.fade,
+              duration: const Duration(seconds: 2));
         }
       } else {
         debugPrint(
