@@ -79,6 +79,6 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   }
 
   void audioVolumeDown() {
-    _backgrounMusicPlayer.setVolume(0.3);
+    _backgrounMusicPlayer.setVolume(0.2);
   }
 }

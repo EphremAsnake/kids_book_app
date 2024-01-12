@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:lottie/lottie.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
@@ -32,11 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> animation;
   late AnimationController _controller;
   late Animation<double> _animation;
-  // startTime() async {
-  //   var duration = const Duration(seconds: 5);
 
-  //   return Timer(duration, checkFirstSeenAndNavigate);
-  // }
   @override
   void initState() {
     super.initState();
@@ -58,8 +53,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     animation.addListener(() => setState(() {}));
     animationController.forward();
-
-    //startTime();
 
     _controller = AnimationController(
         duration: const Duration(milliseconds: 10800),
@@ -308,7 +301,9 @@ class _SplashScreenState extends State<SplashScreen>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Center(
             child: Container(
               width: animation.value * 450,
@@ -320,24 +315,11 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ),
-          
-          Padding(
-            padding: const EdgeInsets.only(bottom:10.0),
-            child: SizedBox(height: 10,width: 10, child: CircularProgressIndicator()),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 10.0),
+            child: SizedBox(
+                height: 10, width: 10, child: CircularProgressIndicator()),
           ),
-          // Center(
-          //   child: Container(
-          //     width: animation.value * 450,
-          //     height: animation.value * 100,
-          //     child: Center(
-          //       child: Lottie.asset(
-          //         'assets/book.json',
-          //         fit: BoxFit.cover,
-          //         repeat: true,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
