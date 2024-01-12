@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/utils/Constants/AllStrings.dart';
 
 import '../../utils/Constants/colors.dart';
 import '../../utils/Constants/dimention.dart';
@@ -136,7 +137,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 20.0),
                                     child: Text(
-                                      "Ask Your Parents\nEnter the Digits",
+                                      Strings.askYourParents,
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(

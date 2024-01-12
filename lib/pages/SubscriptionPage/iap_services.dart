@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'dart:io' show Platform;
 import '../../controller/subscriptionController.dart';
 import 'status/subscriptionstatus.dart';
@@ -38,18 +39,18 @@ class IAPService {
           '',
           '',
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.yellow,
-          colorText: Colors.white,
+          backgroundColor: Colors.white,
+          colorText: Colors.blue,
           duration: const Duration(seconds: 2),
           isDismissible: true,
           titleText: const Text(
-            'Failure',
+            Strings.failure,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16.0, color: Colors.white),
           ),
           maxWidth: 400,
           messageText: const Text(
-            'Something Went Wrong',
+            Strings.unableToCompletePurchaseMessage,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16.0, color: Colors.white),
           ),

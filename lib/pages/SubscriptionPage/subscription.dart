@@ -6,6 +6,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:resize/resize.dart';
+import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/backgroundMusicAudioController.dart';
@@ -172,9 +173,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
                                 Obx(() => Text(
                                       subscriptionStatus.isMonthly.value
-                                          ? 'You are Subscribed to monthly package'
+                                          ? Strings.youareSubscribedtoMonthlypackage
                                           : subscriptionStatus.isYearly.value
-                                              ? 'You are Subscribed to yearly package'
+                                              ? Strings.youareSubscribedtoYearlypackage
                                               : widget.generalSubscriptionText,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -230,7 +231,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                             .restorePurchases();
                                       },
                                       child: const Text(
-                                        'Restore Purchase',
+                                        Strings.restorePurchase,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
@@ -239,7 +240,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         clearCachedFiles();
                                       },
                                       child: const Text(
-                                        'Clear Cache',
+                                        Strings.clearCache,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
@@ -255,7 +256,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         _launchURL(widget.termofuseUrl);
                                       },
                                       child: const Text(
-                                        'Terms of Use',
+                                        Strings.termsofUse,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
@@ -264,7 +265,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         _launchURL(widget.privacyPolicyUrl);
                                       },
                                       child: const Text(
-                                        'Privacy Policy',
+                                        Strings.privacyPolicy,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
@@ -389,7 +390,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             borderRadius: BorderRadius.circular(5)),
                         child: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 3.0),
-                          child: Text('Save 50%'),
+                          child: Text(Strings.save50),
                         )),
                 ],
               ),

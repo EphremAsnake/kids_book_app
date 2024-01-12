@@ -34,4 +34,26 @@ class Strings {
       "Watch a short ad to unlock this story for";
   static const String sessions = "Sessions";
   static const String watchAd = "Watch Ad";
+
+  //!parental Gate Strings
+
+  static const String askYourParents = "Ask Your Parents\nEnter the Digits";
+
+  //!Subscription Page Strings
+
+  static const String save50 = "Save 50%";
+
+  static const String privacyPolicy = "Privacy Policy";
+  static const String termsofUse = "Terms of Use";
+  static const String clearCache = "Clear Cache";
+  static const String restorePurchase = "Restore Purchase";
+  static const String youareSubscribedtoMonthlypackage =
+      "You are Subscribed to monthly package";
+  static const String youareSubscribedtoYearlypackage =
+      "You are Subscribed to yearly package";
+
+  //!failed to Subscribe Snackbar Message
+  static const String failure = "Failure";
+  static const String unableToCompletePurchaseMessage = "Something Went Wrong";
+
 }
