@@ -306,8 +306,9 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: const Color(0xff4bebfa),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          SizedBox(height: 5,),
           Center(
             child: Container(
               width: animation.value * 450,
@@ -319,8 +320,11 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ),
-          SizedBox(height: 5,),
-          SizedBox(height: 10, child: CircularProgressIndicator())
+          
+          Padding(
+            padding: const EdgeInsets.only(bottom:10.0),
+            child: SizedBox(height: 10,width: 10, child: CircularProgressIndicator()),
+          ),
           // Center(
           //   child: Container(
           //     width: animation.value * 450,
