@@ -530,7 +530,7 @@ class _BookListPageState extends State<BookListPage> {
                                                       });
                                                 } else {
                                                   getSelectedStory(book.path);
-                                                  if (index == 0 ||
+                                                  if (!book.locked ||
                                                       subscriptionStatus
                                                           .isMonthly.value ||
                                                       subscriptionStatus
@@ -649,7 +649,7 @@ class _BookListPageState extends State<BookListPage> {
                                                         );
                                                       },
                                                     );
-                                                  }
+                                                  } else {}
                                                 }
                                               }
                                             },
