@@ -15,21 +15,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/colorConvet.dart';
-import '../../controller/adController.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../model/storyPage.dart';
 import '../../services/apiEndpoints.dart';
 import '../../utils/Constants/dimention.dart';
-import '../../utils/adhelper.dart';
-import '../../utils/admanager.dart';
 import '../../widget/aboutdialog.dart';
 import '../../widget/choice.dart';
 import '../../widget/dialog.dart';
 import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
-
 import '../SubscriptionPage/iap_services.dart';
 import '../SubscriptionPage/status/subscriptionstatus.dart';
 import '../SubscriptionPage/subscription.dart';
@@ -76,7 +72,6 @@ class _BookListPageState extends State<BookListPage> {
   // bool isSubscribedYearly = false;
 
   //!ad
-  late AdController adController;
   final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
   // Future<void> loadSubscriptionStatus() async {
   //   final Map<String, bool> subscriptionStatus =
@@ -163,14 +158,7 @@ class _BookListPageState extends State<BookListPage> {
 
   //!usage
   Future<void> fetchAdIds() async {
-    String? rewardedAdId = AdHelper.getRewardedAdUnitId();
-    String? interstitialAdId = AdHelper.getInterstitalAdUnitId();
-
     //! Initialize AdController with fetched ad IDs
-    adController = Get.put(AdController(
-      rewardedAdUnitId: rewardedAdId,
-      interstitialAdUnitId: interstitialAdId,
-    ));
   }
 
   void initcalls() {
@@ -258,8 +246,6 @@ class _BookListPageState extends State<BookListPage> {
   }
 
   Future<bool> getLockStatus(String bookTitle) async {
-    bool isWatched = await BookPreferences.getBookWatched(bookTitle);
-    int openedCount = await BookPreferences.getBookOpenedCount(bookTitle);
     int rewardedCountLimit = Platform.isAndroid
         ? widget.configResponse.androidSettings.admobSettings.admobRewardedAd!
                 .rewardedCount ??
@@ -268,11 +254,7 @@ class _BookListPageState extends State<BookListPage> {
                 .rewardedCount ??
             3;
 
-    if (isWatched && openedCount <= rewardedCountLimit) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 
   void goToStoryPage(String folder) {
@@ -557,341 +539,116 @@ class _BookListPageState extends State<BookListPage> {
                                                     getSelectedStory(book.path,
                                                         goto: true);
                                                   } else if (book.locked ==
-                                                      false) {
-                                                    //!check if show interstitialad is true
-                                                    if ((Platform.isAndroid &&
-                                                            widget
-                                                                    .configResponse
-                                                                    .androidSettings
-                                                                    .admobSettings
-                                                                    .admobInterstitialAd
-                                                                    ?.showInterstitial ==
-                                                                true) ||
-                                                        (Platform.isIOS &&
-                                                            widget
-                                                                    .configResponse
-                                                                    .iosSettings
-                                                                    .admobSettings
-                                                                    .admobInterstitialAd
-                                                                    ?.showInterstitial ==
-                                                                true)) {
-                                                      adController
-                                                          .showInterstitialAd(
-                                                              () async {
-                                                        goToStoryPage(
-                                                            book.path);
-                                                      }, () {});
-                                                    } else {
-                                                      //!Interstitial ad show Set to False Navigate to Story Page
-                                                      getSelectedStory(
-                                                          book.path,
-                                                          goto: true);
-                                                    }
-                                                  } else {
-                                                    bool isWatched =
-                                                        await BookPreferences
-                                                            .getBookWatched(
-                                                                book.title);
-                                                    int openedCount =
-                                                        await BookPreferences
-                                                            .getBookOpenedCount(
-                                                                book.title);
+                                                      true) {
+                                                    //!show reward ad if available for locked books
+                                                    final isAndroid =
+                                                        Platform.isAndroid;
 
-                                                    //!check if book finished it's session if so reset or lock it again
+                                                    final unlockMessage = isAndroid
+                                                        ? widget
+                                                                .configResponse
+                                                                .androidSettings
+                                                                .unlockDialogText ??
+                                                            ""
+                                                        : widget
+                                                                .configResponse
+                                                                .iosSettings
+                                                                .unlockDialogText ??
+                                                            "";
 
-                                                    if (isWatched &&
-                                                        openedCount >=
-                                                            rewardedCountLimit) {
-                                                      await BookPreferences
-                                                          .resetBookData(
-                                                              book.title);
-                                                    }
-
-                                                    //! For Locked Books
-                                                    //!check if reward ad has been seen and if user has sessions left if so open story page
-
-                                                    if (isWatched &&
-                                                        openedCount <=
-                                                            rewardedCountLimit) {
-                                                      //!check if show interstitialad is true
-                                                      if ((Platform.isAndroid &&
+                                                    final subscriptionMessage = isAndroid
+                                                        ? widget
+                                                                .configResponse
+                                                                .androidSettings
+                                                                .subscriptionSettings
+                                                                .generalSubscriptionText ??
+                                                            ""
+                                                        : widget
+                                                                .configResponse
+                                                                .iosSettings
+                                                                .subscriptionSettings
+                                                                .generalSubscriptionText ??
+                                                            "";
+                                                    // ignore: use_build_context_synchronously
+                                                    showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return CustomDialogBox(
+                                                          title: Strings
+                                                              .unloackStory,
+                                                          titleColor:
+                                                              Colors.orange,
+                                                          descriptions: unlockMessage
+                                                                  .isNotEmpty
+                                                              ? unlockMessage
+                                                              : subscriptionMessage,
+                                                          text: null,
+                                                          text2: "Subscribe",
+                                                          functionCall: () {},
+                                                          secfunctionCall: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            if (Platform
+                                                                .isAndroid) {
                                                               widget
                                                                       .configResponse
                                                                       .androidSettings
-                                                                      .admobSettings
-                                                                      .admobInterstitialAd
-                                                                      ?.showInterstitial ==
-                                                                  true) ||
-                                                          (Platform.isIOS &&
+                                                                      .parentalGate!
+                                                                  ? Permission
+                                                                      .getPermission(
+                                                                      context:
+                                                                          context,
+                                                                      onSuccess:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "True");
+                                                                        openSubscriptionPage();
+                                                                      },
+                                                                      onFail:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "false");
+                                                                      },
+                                                                      backgroundColor: widget
+                                                                          .booksList
+                                                                          .backgroundColor
+                                                                          .toColor(),
+                                                                    )
+                                                                  : openSubscriptionPage();
+                                                            } else if (Platform
+                                                                .isIOS) {
                                                               widget
                                                                       .configResponse
                                                                       .iosSettings
-                                                                      .admobSettings
-                                                                      .admobInterstitialAd
-                                                                      ?.showInterstitial ==
-                                                                  true)) {
-                                                        //!Check If Interstitial Ad is available
-                                                        if (adController
-                                                            .interstitialAdLoaded
-                                                            .value) {
-                                                          adController
-                                                              .showInterstitialAd(
-                                                                  () async {
-                                                            //!Increment Count of Book Opened
-                                                            await BookPreferences
-                                                                .incrementBookOpened(
-                                                                    book.title);
-
-                                                            //!Navigate To Story Page
-                                                            goToStoryPage(
-                                                                book.path);
-                                                          }, () async {
-                                                            Get.snackbar(
-                                                                '$isWatched    $openedCount    $rewardedCountLimit',
-                                                                Strings
-                                                                    .storyTryagain,
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .orange);
-                                                          });
-                                                        } else {
-                                                          //!try to load Interstitial Ad Again
-
-                                                          //!try to show again
-                                                          if (adController
-                                                              .interstitialAdLoaded
-                                                              .value) {
-                                                            adController
-                                                                .showInterstitialAd(
-                                                                    () async {
-                                                              //!Increment Count of Book Opened
-                                                              await BookPreferences
-                                                                  .incrementBookOpened(
-                                                                      book.title);
-
-                                                              //!Navigate To Story Page
-                                                              goToStoryPage(
-                                                                  book.path);
-                                                            }, () {});
-                                                          } else {
-                                                            //!We tried to load and show interstial ad 2 times but got nothing so just open the story and Increment the book Opened Count
-                                                            await BookPreferences
-                                                                .incrementBookOpened(
-                                                                    book.title);
-
-                                                            //!Navigate to Story Page
-                                                            goToStoryPage(
-                                                                book.path);
-                                                          }
-                                                        }
-                                                      } else {
-                                                        //! show interstitial ad set to False
-                                                        //!Navigate To Story Page
-                                                        await BookPreferences
-                                                            .incrementBookOpened(
-                                                                book.title);
-                                                        goToStoryPage(
-                                                            book.path);
-                                                      }
-                                                    } else {
-                                                      //!show reward ad if available for locked books
-                                                      final isAndroid =
-                                                          Platform.isAndroid;
-
-                                                      final unlockMessage = isAndroid
-                                                          ? widget
-                                                                  .configResponse
-                                                                  .androidSettings
-                                                                  .unlockDialogText ??
-                                                              ""
-                                                          : widget
-                                                                  .configResponse
-                                                                  .iosSettings
-                                                                  .unlockDialogText ??
-                                                              "";
-
-                                                      final subscriptionMessage = isAndroid
-                                                          ? widget
-                                                                  .configResponse
-                                                                  .androidSettings
-                                                                  .subscriptionSettings
-                                                                  .generalSubscriptionText ??
-                                                              ""
-                                                          : widget
-                                                                  .configResponse
-                                                                  .iosSettings
-                                                                  .subscriptionSettings
-                                                                  .generalSubscriptionText ??
-                                                              "";
-                                                      // ignore: use_build_context_synchronously
-                                                      showDialog(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return CustomDialogBox(
-                                                            title: Strings
-                                                                .unloackStory,
-                                                            titleColor:
-                                                                Colors.orange,
-                                                            descriptions: unlockMessage
-                                                                    .isNotEmpty
-                                                                ? unlockMessage
-                                                                : subscriptionMessage,
-                                                            text: adsEnabled
-                                                                ? Strings
-                                                                    .watchAd
-                                                                : null,
-                                                            text2: "Subscribe",
-                                                            functionCall:
-                                                                adsEnabled
-                                                                    ? () async {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        if (adController
-                                                                            .rewardedAdLoaded
-                                                                            .value) {
-                                                                          if (audioController
-                                                                              .isPlaying) {
-                                                                            setState(() {
-                                                                              musicForAd = true;
-                                                                            });
-                                                                            audioController.toggleAudio();
-                                                                          }
-
-                                                                          adController.showRewardedAd(
-                                                                              //! onUserEarnedReward  Reward
-                                                                              () async {
-                                                                            if (musicForAd) {
-                                                                              audioController.toggleAudio();
-                                                                              setState(() {
-                                                                                musicForAd = false;
-                                                                              });
-                                                                            }
-
-                                                                            //!---! Chnage State of the book to Reward Ad watched and Book Opened
-
-                                                                            await BookPreferences.setBookWatched(book.title,
-                                                                                true);
-                                                                            await BookPreferences.incrementBookOpened(book.title);
-
-                                                                            //! Call setState to trigger a rebuild of the GridView item
-                                                                            setState(() {});
-                                                                          },
-                                                                              //!onContentClosed   Reward
-                                                                              () async {
-                                                                            goToStoryPage(book.path);
-                                                                          });
-                                                                        } else {
-                                                                          adController
-                                                                              .loadRewardAd();
-                                                                          //!check if show interstitialad is true
-                                                                          if ((Platform.isAndroid && widget.configResponse.androidSettings.admobSettings.admobInterstitialAd?.showInterstitial == true) ||
-                                                                              (Platform.isIOS && widget.configResponse.iosSettings.admobSettings.admobInterstitialAd?.showInterstitial == true)) {
-                                                                            //!Check If Interstitial Ad is available
-                                                                            if (adController.interstitialAdLoaded.value) {
-                                                                              adController.showInterstitialAd(() async {
-                                                                                //!---! Chnage State of the book to Reward Ad watched and Book Opened
-
-                                                                                await BookPreferences.setBookWatched(book.title, true);
-                                                                                await BookPreferences.incrementBookOpened(book.title);
-
-                                                                                //! Call setState to trigger a rebuild of the GridView item
-                                                                                setState(() {});
-                                                                                goToStoryPage(book.path);
-                                                                              }, () {});
-                                                                            } else {
-                                                                              //!try to load Interstitial Ad Again
-
-                                                                              //!try to show again
-                                                                              if (adController.interstitialAdLoaded.value) {
-                                                                                adController.showInterstitialAd(() async {
-                                                                                  //!---! Chnage State of the book to Reward Ad watched and Book Opened
-
-                                                                                  await BookPreferences.setBookWatched(book.title, true);
-                                                                                  await BookPreferences.incrementBookOpened(book.title);
-
-                                                                                  //! Call setState to trigger a rebuild of the GridView item
-                                                                                  setState(() {});
-                                                                                  goToStoryPage(book.path);
-                                                                                }, () {});
-                                                                              } else {
-                                                                                //! Both Reward ad and interstitial ad failed so show dialog
-                                                                              }
-                                                                            }
-                                                                          } else {
-                                                                            //! show interstitial ad set to False
-                                                                            //!Navigate To Story Page
-                                                                            goToStoryPage(book.path);
-                                                                          }
-                                                                        }
-                                                                      }
-                                                                    : () {},
-                                                            secfunctionCall:
-                                                                () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              if (Platform
-                                                                  .isAndroid) {
-                                                                widget
-                                                                        .configResponse
-                                                                        .androidSettings
-                                                                        .parentalGate!
-                                                                    ? Permission
-                                                                        .getPermission(
-                                                                        context:
-                                                                            context,
-                                                                        onSuccess:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "True");
-                                                                          openSubscriptionPage();
-                                                                        },
-                                                                        onFail:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "false");
-                                                                        },
-                                                                        backgroundColor: widget
-                                                                            .booksList
-                                                                            .backgroundColor
-                                                                            .toColor(),
-                                                                      )
-                                                                    : openSubscriptionPage();
-                                                              } else if (Platform
-                                                                  .isIOS) {
-                                                                widget
-                                                                        .configResponse
-                                                                        .iosSettings
-                                                                        .parentalGate!
-                                                                    ? Permission
-                                                                        .getPermission(
-                                                                        context:
-                                                                            context,
-                                                                        onSuccess:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "True");
-                                                                          openSubscriptionPage();
-                                                                        },
-                                                                        onFail:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "false");
-                                                                        },
-                                                                        backgroundColor: widget
-                                                                            .booksList
-                                                                            .backgroundColor
-                                                                            .toColor(),
-                                                                      )
-                                                                    : openSubscriptionPage();
-                                                              }
-                                                            },
-                                                          );
-                                                        },
-                                                      );
-                                                    }
+                                                                      .parentalGate!
+                                                                  ? Permission
+                                                                      .getPermission(
+                                                                      context:
+                                                                          context,
+                                                                      onSuccess:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "True");
+                                                                        openSubscriptionPage();
+                                                                      },
+                                                                      onFail:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "false");
+                                                                      },
+                                                                      backgroundColor: widget
+                                                                          .booksList
+                                                                          .backgroundColor
+                                                                          .toColor(),
+                                                                    )
+                                                                  : openSubscriptionPage();
+                                                            }
+                                                          },
+                                                        );
+                                                      },
+                                                    );
                                                   }
                                                 }
                                               }

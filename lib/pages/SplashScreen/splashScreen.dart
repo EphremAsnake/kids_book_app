@@ -11,7 +11,6 @@ import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
 import '../../services/apiEndpoints.dart';
-import '../../utils/adhelper.dart';
 import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
 import '../SubscriptionPage/iap_services.dart';
@@ -210,18 +209,6 @@ class _SplashScreenState extends State<SplashScreen> {
         });
 
         //! Set the ad unit IDs in AdHelper
-        AdHelper.setAdUnits(
-          interstitialId: Platform.isAndroid
-              ? configResponse
-                  .androidSettings.admobSettings.admobInterstitialAd?.adUnitId
-              : configResponse
-                  .iosSettings.admobSettings.admobInterstitialAd?.adUnitId,
-          rewardedId: Platform.isAndroid
-              ? configResponse
-                  .androidSettings.admobSettings.admobRewardedAd?.adUnitId
-              : configResponse
-                  .iosSettings.admobSettings.admobRewardedAd?.adUnitId,
-        );
 
         debugPrint('Something Went Wrong Try Again');
       }
@@ -262,19 +249,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ConfigApiResponseModel.fromJson(parsedConfigData);
 
     //! Set the ad unit IDs in AdHelper
-
-    AdHelper.setAdUnits(
-      interstitialId: Platform.isAndroid
-          ? storedConfigResponse
-              .androidSettings.admobSettings.admobInterstitialAd?.adUnitId
-          : storedConfigResponse
-              .iosSettings.admobSettings.admobInterstitialAd?.adUnitId,
-      rewardedId: Platform.isAndroid
-          ? storedConfigResponse
-              .androidSettings.admobSettings.admobRewardedAd?.adUnitId
-          : storedConfigResponse
-              .iosSettings.admobSettings.admobRewardedAd?.adUnitId,
-    );
 
     checkAvailabiltyFunction(storedConfigResponse);
 
