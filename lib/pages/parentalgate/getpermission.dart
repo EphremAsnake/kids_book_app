@@ -79,24 +79,6 @@ class _GetParentPermissionState extends State<GetParentPermission> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0,
-        //   automaticallyImplyLeading: false,
-        //   actions: [
-        //     IconButton(
-        //iconSize: IconSizes.medium,
-        //         onPressed: () {
-        //           // Close the screen with a failure flag
-        //           Navigator.pop(context, false);
-        //         },
-        //         icon: const Icon(
-        //           Icons.close_rounded,
-        //           color: AppColors.backgroundColor,
-        //           size: 30,
-        //         ))
-        //   ],
-        // ),
         backgroundColor: widget.bgColor,
         body: Stack(
           alignment: Alignment.center,
@@ -247,7 +229,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                       child: Text(
                                         "${(i * 3) + j}",
                                         style: const TextStyle(
-                                          color: AppColors.backgroundColor,
+                                          color: AppColors.iconColor,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -273,7 +255,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                   child: const Text(
                                     "0",
                                     style: TextStyle(
-                                      color: AppColors.backgroundColor,
+                                      color: AppColors.iconColor,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -292,7 +274,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                   width: 120,
                                   child: const Icon(
                                     Icons.arrow_back,
-                                    color: AppColors.backgroundColor,
+                                    color: AppColors.iconColor,
                                   ),
                                   onTap: () {
                                     setState(() {
@@ -385,7 +367,7 @@ class _CustomButtonState extends State<CustomButton> {
         decoration: BoxDecoration(
           color: _isPressed ? Colors.black.withOpacity(0.1) : Colors.white,
           borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: AppColors.backgroundColor, width: 2),
+          border: Border.all(color: AppColors.iconColor, width: 2),
           boxShadow: const [
             BoxShadow(
               color: Color.fromARGB(255, 0, 53, 97),

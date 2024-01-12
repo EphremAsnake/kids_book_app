@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:just_audio/just_audio.dart';
@@ -11,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
-import 'package:storyapp/utils/colorConvet.dart';
 import '../../../model/storyPage.dart';
 import '../../services/apiEndpoints.dart';
 import '../../controller/backgroundMusicAudioController.dart';
@@ -156,23 +153,6 @@ class _BooksPageState extends State<BookPage>
       );
     }
   }
-
-//   Future<void> preloadImages() async {
-//   for (var imageUrl in images) {
-//     await precacheImage(CachedNetworkImageProvider(imageUrl), context);
-//   }
-// }
-
-  // Future<List<File>> cacheImages(List<String> imageUrls) async {
-  //   List<File> cachedFiles = [];
-
-  //   for (String url in imageUrls) {
-  //     File cachedFile = await DefaultCacheManager().getSingleFile(url);
-  //     cachedFiles.add(cachedFile);
-  //   }
-
-  //   return cachedFiles;
-  // }
 
   Future<void> preCacheImages(List<String> imageUrls) async {
     final cacheManager = DefaultCacheManager();
@@ -445,14 +425,6 @@ class _BooksPageState extends State<BookPage>
                                             isPl = true;
                                           });
                                         }
-                                        // else {
-                                        //   bookplayer.seek(Duration.zero);
-                                        //   bookplayer.play();
-                                        //   setState(() {
-                                        //     isPlaying = true;
-                                        //   });
-                                        // }
-                                        //togglePlayback();
                                       }
                                       await exitDialog(context);
                                     },
@@ -645,26 +617,6 @@ class _BooksPageState extends State<BookPage>
                       ),
                     ),
                   ),
-
-                  //!to load images firstly
-                  // Visibility(
-                  //   visible: false,
-                  //   child: ListView.builder(
-                  //     itemCount: images.length,
-                  //     itemBuilder: (context, index) {
-                  //       return ImageFade(
-                  //         image: CachedNetworkImageProvider(images[index]),
-                  //       );
-                  //       // CachedNetworkImage(
-                  //       //   imageUrl: images[index],
-                  //       //   placeholder: (context, url) =>
-                  //       //       const CircularProgressIndicator(),
-                  //       //   errorWidget: (context, url, error) =>
-                  //       //       const Icon(Icons.error),
-                  //       // );
-                  //     },
-                  //   ),
-                  // ),
                 ],
               ),
             ),

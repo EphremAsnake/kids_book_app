@@ -89,14 +89,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
-  badges:
-    dependency: "direct main"
-    description:
-      name: badges
-      sha256: a7b6bbd60dce418df0db3058b53f9d083c22cdb5132a052145dc267494df0b84
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -286,14 +278,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
-  flutter_expandable_fab:
-    dependency: "direct main"
-    description:
-      name: flutter_expandable_fab
-      sha256: "2aa5735bebcdbc49f43bcb32a29f9f03a9b7029212b8cd9837ae332ab2edf647"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -310,14 +294,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
-  flutter_share:
-    dependency: "direct main"
-    description:
-      name: flutter_share
-      sha256: ae12c1cea13b35926a109824ffac601531e40cb94ad53eeae58625eceb3eaaaa
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_staggered_animations:
     dependency: "direct main"
     description:
@@ -941,14 +917,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  vertical_nav_bar:
-    dependency: "direct main"
-    description:
-      name: vertical_nav_bar
-      sha256: "402628dc518bde6c1be3281f57208fcda5ba7464374766443dd11620bbf6d8d3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   wakelock:
     dependency: "direct main"
     description:

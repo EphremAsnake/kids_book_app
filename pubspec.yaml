@@ -29,7 +29,6 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   audioplayers: ^5.2.1
-  badges: ^3.1.2
   cached_network_image: ^3.3.0
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
@@ -38,8 +37,6 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.3.0
   flutter_cache_manager: ^3.3.1
-  flutter_expandable_fab: ^2.0.0
-  flutter_share: ^2.0.0
   flutter_staggered_animations: ^1.1.1
   flutter_svg: ^2.0.9
   flutter_swipe_detector: ^2.0.0
@@ -56,7 +53,6 @@ dependencies:
   share_plus: ^6.3.4
   shared_preferences: ^2.2.2
   url_launcher: ^6.2.1
-  vertical_nav_bar: ^0.0.1
   wakelock: ^0.6.2
 
 dev_dependencies:

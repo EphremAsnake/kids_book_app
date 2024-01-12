@@ -32,7 +32,7 @@ class AnimatedButtonWidget extends StatelessWidget {
                   height: 55,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: AppColors.backgroundColor,
+                      color: AppColors.iconColor,
                       borderRadius: BorderRadius.circular(50)),
                   child: AnimatedTextWidget(
                     buttonPlayDuration: buttonPlayDuration,
@@ -76,7 +76,7 @@ class AnimatedTextWidget extends StatelessWidget {
           if (icon != null)
             Icon(
               icon,
-              color: AppColors.iconColor,
+              color: Colors.white,
             ),
           const SizedBox(
             width: 5,
@@ -85,7 +85,7 @@ class AnimatedTextWidget extends StatelessWidget {
               maxLines: 1,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: AppColors.textColor,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 10.sp)),
         ],

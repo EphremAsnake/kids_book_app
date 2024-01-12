@@ -3,10 +3,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
@@ -29,7 +27,6 @@ import '../../utils/admanager.dart';
 import '../../widget/aboutdialog.dart';
 import '../../widget/choice.dart';
 import '../../widget/dialog.dart';
-import '../Settings/settingpage.dart';
 import '../StoryPage/StoryPage.dart';
 import 'package:get/get.dart' hide Response;
 
@@ -70,7 +67,6 @@ class _BookListPageState extends State<BookListPage> {
 
   bool musicForAd = false;
   Color buttonColor = AppColors.backgroundColor;
-  Logger logger = Logger();
   bool loadingStory = false;
 
   bool adsEnabled = true;
@@ -310,7 +306,6 @@ class _BookListPageState extends State<BookListPage> {
         });
         StoryPageApiResponse storyPageresponse =
             StoryPageApiResponse.fromJson(sResponse.data);
-        logger.e(storyPageresponse);
         singlestoryPageResponse = storyPageresponse;
         folderName = folder;
 
@@ -326,7 +321,6 @@ class _BookListPageState extends State<BookListPage> {
               transition: Transition.circularReveal,
               duration: const Duration(seconds: 2));
         }
-        logger.e(singlestoryPageResponse!.pages[0].image.toString());
       } else {
         setState(() {
           loadingStory = false;
@@ -790,8 +784,6 @@ class _BookListPageState extends State<BookListPage> {
                                                                             goToStoryPage(book.path);
                                                                           });
                                                                         } else {
-                                                                          logger
-                                                                              .e('false value for: ${adController.rewardedAdLoaded.value} \n');
                                                                           adController
                                                                               .loadRewardAd();
                                                                           //!check if show interstitialad is true
@@ -1096,23 +1088,6 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ],
             ),
-            //         // showDialog(
-            //         //   context: context,
-            //         //   barrierDismissible: false,
-            //         //   builder: (BuildContext context) {
-            //         //     return AboutDialogBox(
-            //         //       //title: 'Unlock Your Story',
-            //         //       titleColor: Colors.orange,
-            //         //       descriptions: widget.configResponse.aboutApp,
-            //         //       secfunctionCall: () {
-            //         //         //showRewardAd();
-            //         //         Navigator.pop(context);
-            //         //       },
-            //         //     );
-            //         //   },
-            //         // );
-            //       },
-            //     )),
           ),
 
           //!Scroll to Top
@@ -1411,7 +1386,7 @@ class _BookListPageState extends State<BookListPage> {
                   color: Colors.black.withOpacity(0.5),
                   width: double.infinity,
                   height: double.infinity,
-                  child: const Icon(Icons.lock, color: AppColors.iconColor, size: IconSizes.medium),
+                  child: const Icon(Icons.lock, color: Colors.white, size: 30),
                 ),
               )
           ],
@@ -1420,46 +1395,3 @@ class _BookListPageState extends State<BookListPage> {
     );
   }
 }
-
-// class BookOpeningPageRoute extends PageRouteBuilder {
-//   final Widget page;
-
-//   BookOpeningPageRoute({required this.page})
-//       : super(
-//           transitionDuration: const Duration(seconds: 1),
-//           pageBuilder: (
-//             BuildContext context,
-//             Animation<double> animation,
-//             Animation<double> secondaryAnimation,
-//           ) =>
-//               page,
-//           transitionsBuilder: (
-//             BuildContext context,
-//             Animation<double> animation,
-//             Animation<double> secondaryAnimation,
-//             Widget child,
-//           ) {
-//             var begin = Matrix4.identity()
-//               ..setEntry(3, 2, 0.002)
-//               ..rotateY(-0.5); // Adjust the angle if needed
-
-//             var end = Matrix4.identity()
-//               ..setEntry(3, 2, 0.002)
-//               ..rotateY(0);
-
-//             var tween = Matrix4Tween(begin: begin, end: end);
-
-//             return AnimatedBuilder(
-//               animation: animation,
-//               builder: (context, child) {
-//                 return Transform(
-//                   transform: tween.evaluate(animation),
-//                   alignment: Alignment.center,
-//                   child: child,
-//                 );
-//               },
-//               child: child,
-//             );
-//           },
-//         );
-// }
