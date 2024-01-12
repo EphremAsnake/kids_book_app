@@ -76,7 +76,6 @@ class HouseAd {
 class AndroidSettings {
   SubscriptionSettings subscriptionSettings;
   String? unlockDialogText;
-  AdmobSettings admobSettings;
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   bool? parentalGate;
@@ -86,7 +85,6 @@ class AndroidSettings {
   AndroidSettings({
     required this.subscriptionSettings,
     this.unlockDialogText,
-    required this.admobSettings,
     this.appRateAndShare,
     this.houseAd,
     this.parentalGate,
@@ -99,7 +97,7 @@ class AndroidSettings {
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
       unlockDialogText: json['unlock_dialog_text'],
-      admobSettings: AdmobSettings.fromJson(json['admob_settings']),
+      
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
@@ -116,7 +114,6 @@ class AndroidSettings {
 class IOSSettings {
   SubscriptionSettings subscriptionSettings;
   String? unlockDialogText;
-  AdmobSettings admobSettings;
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   bool? parentalGate;
@@ -126,7 +123,6 @@ class IOSSettings {
   IOSSettings({
     required this.subscriptionSettings,
     this.unlockDialogText,
-    required this.admobSettings,
     this.appRateAndShare,
     this.houseAd,
     this.parentalGate,
@@ -139,7 +135,7 @@ class IOSSettings {
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
       unlockDialogText: json['unlock_dialog_text'],
-      admobSettings: AdmobSettings.fromJson(json['admob_settings']),
+     
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
@@ -181,64 +177,6 @@ class SubscriptionSettings {
       yearSubscriptionProductID: json['year_subscription_id'],
       termOfUseUrl: json['term_of_use_url'],
       privacyPolicyUrl: json['privacy_policy_url'],
-    );
-  }
-}
-
-class AdmobSettings {
-  bool? adsEnabled;
-  AdmobRewardedAd? admobRewardedAd;
-  AdmobInterstitialAd? admobInterstitialAd;
-
-  AdmobSettings({
-    this.adsEnabled,
-    this.admobRewardedAd,
-    this.admobInterstitialAd,
-  });
-
-  factory AdmobSettings.fromJson(Map<String, dynamic> json) {
-    return AdmobSettings(
-      adsEnabled: json['ads_enabled'],
-      admobRewardedAd: json.containsKey('admob_rewarded_ad')
-          ? AdmobRewardedAd.fromJson(json['admob_rewarded_ad'])
-          : null,
-      admobInterstitialAd: json.containsKey('admob_interstitial_ad')
-          ? AdmobInterstitialAd.fromJson(json['admob_interstitial_ad'])
-          : null,
-    );
-  }
-}
-
-class AdmobRewardedAd {
-  String? adUnitId;
-  int? rewardedCount;
-
-  AdmobRewardedAd({
-    this.adUnitId,
-    this.rewardedCount,
-  });
-
-  factory AdmobRewardedAd.fromJson(Map<String, dynamic> json) {
-    return AdmobRewardedAd(
-      adUnitId: json['ad_unit_id'],
-      rewardedCount: json['rewarded_count'],
-    );
-  }
-}
-
-class AdmobInterstitialAd {
-  String? adUnitId;
-  bool? showInterstitial;
-
-  AdmobInterstitialAd({
-    this.adUnitId,
-    this.showInterstitial,
-  });
-
-  factory AdmobInterstitialAd.fromJson(Map<String, dynamic> json) {
-    return AdmobInterstitialAd(
-      adUnitId: json['ad_unit_id'],
-      showInterstitial: json['show_interstitial'],
     );
   }
 }

@@ -180,12 +180,6 @@ class _BookListPageState extends State<BookListPage> {
         showScrollToTopButton = _scrollController.offset > 0;
       });
     });
-
-    setState(() {
-      adsEnabled = Platform.isAndroid
-          ? widget.configResponse.androidSettings.admobSettings.adsEnabled!
-          : widget.configResponse.iosSettings.admobSettings.adsEnabled!;
-    });
   }
 
   Future<void> checkInternetConnection() async {
@@ -246,14 +240,6 @@ class _BookListPageState extends State<BookListPage> {
   }
 
   Future<bool> getLockStatus(String bookTitle) async {
-    int rewardedCountLimit = Platform.isAndroid
-        ? widget.configResponse.androidSettings.admobSettings.admobRewardedAd!
-                .rewardedCount ??
-            3
-        : widget.configResponse.iosSettings.admobSettings.admobRewardedAd!
-                .rewardedCount ??
-            3;
-
     return false;
   }
 
@@ -475,21 +461,7 @@ class _BookListPageState extends State<BookListPage> {
                                               subscriptionStatus.isYearly.value
                                           ? true
                                           : snapshot.data ?? false;
-                                  int rewardedCountLimit = Platform.isAndroid
-                                      ? widget
-                                              .configResponse
-                                              .androidSettings
-                                              .admobSettings
-                                              .admobRewardedAd!
-                                              .rewardedCount ??
-                                          3
-                                      : widget
-                                              .configResponse
-                                              .iosSettings
-                                              .admobSettings
-                                              .admobRewardedAd!
-                                              .rewardedCount ??
-                                          3;
+
                                   return AnimationConfiguration.staggeredList(
                                     position: index,
                                     duration: const Duration(milliseconds: 500),

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:resize/resize.dart';
 import 'package:wakelock/wakelock.dart';
@@ -13,7 +12,6 @@ import 'utils/Constants/AllStrings.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await _initGoogleMobileAds();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
       overlays: []);
   SystemChrome.setPreferredOrientations([
@@ -24,13 +22,6 @@ void main() async {
   Wakelock.enable();
   Get.put(AudioController());
   runApp(MyApp());
-}
-
-Future<void> _initGoogleMobileAds() async {
-  await MobileAds.instance.initialize();
-  await MobileAds.instance.updateRequestConfiguration(
-    RequestConfiguration(testDeviceIds: ['E8B8069F86DB9F7CFC536F078FB104C1']),
-  );
 }
 
 // ignore: must_be_immutable
