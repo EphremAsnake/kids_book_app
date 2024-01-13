@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:storyapp/utils/colorConvet.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
@@ -37,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     checkInternetConnection();
     inimethods();
+    forbackgroundcolor();
   }
 
   @override
@@ -293,24 +295,37 @@ class _SplashScreenState extends State<SplashScreen>
         duration: const Duration(seconds: 2));
   }
 
+  String storedBookListfor = '';
+  ApiResponse? storedBookListResponsefor;
+  Future<void> forbackgroundcolor() async {
+    storedBookListfor = await getFromStorageBookList();
+
+    Map<String, dynamic> parsedBookListData = json.decode(storedBookListfor);
+    setState(() {
+      storedBookListResponsefor = ApiResponse.fromJson(parsedBookListData);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff4bebfa),
+      backgroundColor: storedBookListfor != ""
+          ? storedBookListResponsefor!.backgroundColor.toColor()
+          : Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Center(
             child: Container(
-              width: animation.value * 450,
-              height: animation.value * 150,
+              width: 450,
+              height: 150,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/appicon.png"),
+                    image: AssetImage("assets/splashlogo.png"),
                     fit: BoxFit.contain),
               ),
             ),
@@ -318,7 +333,9 @@ class _SplashScreenState extends State<SplashScreen>
           const Padding(
             padding: EdgeInsets.only(bottom: 10.0),
             child: SizedBox(
-                height: 10, width: 10, child: CircularProgressIndicator()),
+                height: 10,
+                width: 10,
+                child: CircularProgressIndicator(color: Colors.white)),
           ),
         ],
       ),
