@@ -418,13 +418,13 @@ class _BooksPageState extends State<BookPage>
                                         color: AppColors.iconColor),
                                     onPressed: () async {
                                       if (_listen) {
-                                        if (bookplayer.playing) {
+                                        //if (bookplayer.playing) {
                                           bookplayer.pause();
                                           setState(() {
                                             isPlaying = false;
                                             isPl = true;
                                           });
-                                        }
+                                       // }
                                       }
                                       await exitDialog(context);
                                     },
@@ -631,7 +631,7 @@ class _BooksPageState extends State<BookPage>
         builder: (BuildContext context) {
           return CustomDialogBox(
             title: Strings.leaveStory,
-            titleColor: Colors.orange,
+            titleColor: AppColors.iconColor,
             descriptions: Strings.gohomeDescription,
             text: Strings.leave,
             text2: Strings.stay,

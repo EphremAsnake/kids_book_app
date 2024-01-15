@@ -456,7 +456,7 @@ class _BookListPageState extends State<BookListPage> {
                                                           title: Strings
                                                               .unloackStory,
                                                           titleColor:
-                                                              Colors.orange,
+                                                              AppColors.iconColor,
                                                           descriptions: unlockMessage
                                                                   .isNotEmpty
                                                               ? unlockMessage
@@ -607,7 +607,7 @@ class _BookListPageState extends State<BookListPage> {
                           barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AboutDialogBox(
-                              titleColor: Colors.orange,
+                              titleColor: AppColors.iconColor,
                               descriptions: Platform.isAndroid
                                   ? widget
                                       .configResponse.androidSettings.aboutApp

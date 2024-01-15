@@ -33,7 +33,7 @@ class AnimatedButtonWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: AppColors.iconColor,
-                      borderRadius: BorderRadius.circular(50)),
+                      borderRadius: BorderRadius.circular(12)),
                   child: AnimatedTextWidget(
                     buttonPlayDuration: buttonPlayDuration,
                     buttonDelayDuration: buttonDelayDuration,
