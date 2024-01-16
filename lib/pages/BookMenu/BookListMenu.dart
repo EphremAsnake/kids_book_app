@@ -456,7 +456,7 @@ class _BookListPageState extends State<BookListPage> {
                                                           title: Strings
                                                               .unloackStory,
                                                           titleColor:
-                                                              AppColors.iconColor,
+                                                              Colors.orange,
                                                           descriptions: unlockMessage
                                                                   .isNotEmpty
                                                               ? unlockMessage

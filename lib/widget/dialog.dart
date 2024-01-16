@@ -122,7 +122,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                           width: MediaQuery.of(context).size.width * .15,
                           decoration: BoxDecoration(
                               color: buttonColor,
-                              borderRadius: BorderRadius.circular(12)),
+                              borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Text(
                               widget.text!,
