@@ -372,7 +372,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$price/$perText',
+                    '$price$perText',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 8.sp,
