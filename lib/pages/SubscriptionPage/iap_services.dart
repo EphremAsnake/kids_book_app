@@ -216,6 +216,8 @@ class IAPService {
                   transactionDateTime, 'monthly');
               subscriptionController.hideProgress();
             } else {
+              logger.e(
+                  "Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -226,6 +228,8 @@ class IAPService {
                   transactionDateTime, 'yearly');
               subscriptionController.hideProgress();
             } else {
+              logger.e(
+                  "Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
