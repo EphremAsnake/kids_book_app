@@ -178,8 +178,8 @@ class IAPService {
   // TODO: NEW WAY OF CHEKING SUBSCRIPTION STATUS
 
   Future<void> checkSubscriptionAvailabilty(
-      [Duration monthduration = const Duration(days: 1),
-      Duration yearduration = const Duration(days: 2),
+      [Duration monthduration = const Duration(minutes: 4),
+      Duration yearduration = const Duration(minutes: 10),
       Duration grace = const Duration(days: 0)]) async {
     if (Platform.isIOS) {
       List<PurchaseDetails> allPurchases = [];
@@ -297,7 +297,7 @@ class IAPService {
               ),
               maxWidth: 400,
               messageText: const Text(
-                'Id: 33, product id doesn\'t match',
+                'Id: 25, product id doesn\'t match',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.0,
@@ -323,7 +323,7 @@ class IAPService {
             ),
             maxWidth: 400,
             messageText: const Text(
-              'List is Empty',
+              'Id: 26: List is Empty',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16.0,
