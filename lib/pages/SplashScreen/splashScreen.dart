@@ -311,7 +311,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       backgroundColor: storedBookListfor != ""
           ? storedBookListResponsefor!.backgroundColor.toColor()
-          : Colors.white,
+          : const Color(0xff2668ad),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
