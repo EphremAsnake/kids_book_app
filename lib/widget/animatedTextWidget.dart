@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:resize/resize.dart';
 
 class AnimatedTextWidget extends StatefulWidget {
@@ -64,10 +65,9 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
             overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: TextStyle(
+            style: GoogleFonts.nunito(
               color: Colors.black,
               fontSize: 8.sp,
-              fontFamily: 'CustomFont',
               fontWeight: FontWeight.bold,
             ),
           ),

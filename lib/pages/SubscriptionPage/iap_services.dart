@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -42,13 +43,12 @@ class IAPService {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           isDismissible: true,
-          titleText: const Text(
+          titleText:  Text(
             Strings.failure,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: GoogleFonts.nunito(
               fontSize: 16.0,
               color: Colors.white,
-              fontFamily: 'CustomFont',
             ),
           ),
           maxWidth: 400,
@@ -58,7 +58,6 @@ class IAPService {
             style: TextStyle(
               fontSize: 16.0,
               color: Colors.white,
-              fontFamily: 'CustomFont',
             ),
           ),
         );
@@ -178,8 +177,8 @@ class IAPService {
   // TODO: NEW WAY OF CHEKING SUBSCRIPTION STATUS
 
   Future<void> checkSubscriptionAvailabilty(
-      [Duration monthduration = const Duration(minutes: 4),
-      Duration yearduration = const Duration(minutes: 10),
+      [Duration monthduration = const Duration(days: 1),
+      Duration yearduration = const Duration(days: 2),
       Duration grace = const Duration(days: 0)]) async {
     if (Platform.isIOS) {
       List<PurchaseDetails> allPurchases = [];
@@ -194,28 +193,6 @@ class IAPService {
             int? timestampB = int.tryParse(b.transactionDate!);
 
             if (timestampA == null || timestampB == null) {
-              Get.snackbar(
-                '',
-                '',
-                snackPosition: SnackPosition.TOP,
-                backgroundColor: Colors.deepOrange,
-                colorText: Colors.white,
-                duration: const Duration(seconds: 2),
-                isDismissible: true,
-                titleText: const Text(
-                  'Error',
-                ),
-                maxWidth: 400,
-                messageText: const Text(
-                  'Id: 55, Timestamp value is Null',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                    fontFamily: 'CustomFont',
-                  ),
-                ),
-              );
               return 0;
             }
             DateTime dateTimeA =
@@ -247,28 +224,6 @@ class IAPService {
                   transactionDateTime, 'monthly');
               subscriptionController.hideProgress();
             } else {
-              Get.snackbar(
-                '',
-                '',
-                snackPosition: SnackPosition.TOP,
-                backgroundColor: Colors.deepOrange,
-                colorText: Colors.white,
-                duration: const Duration(seconds: 2),
-                isDismissible: true,
-                titleText: const Text(
-                  'Lock',
-                ),
-                maxWidth: 400,
-                messageText: Text(
-                  'Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                    fontFamily: 'CustomFont',
-                  ),
-                ),
-              );
               // logger.e(
               //     "Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
@@ -281,82 +236,17 @@ class IAPService {
                   transactionDateTime, 'yearly');
               subscriptionController.hideProgress();
             } else {
-              Get.snackbar(
-                '',
-                '',
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.deepPurple,
-                colorText: Colors.white,
-                duration: const Duration(seconds: 2),
-                isDismissible: true,
-                titleText: const Text(
-                  'Lock',
-                ),
-                maxWidth: 400,
-                messageText: Text(
-                  'Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                    fontFamily: 'CustomFont',
-                  ),
-                ),
-              );
               // logger.e(
               //     "Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
           } else {
-            Get.snackbar(
-              '',
-              '',
-              snackPosition: SnackPosition.TOP,
-              backgroundColor: Colors.teal,
-              colorText: Colors.white,
-              duration: const Duration(seconds: 2),
-              isDismissible: true,
-              titleText: const Text(
-                'Lock',
-              ),
-              maxWidth: 400,
-              messageText: const Text(
-                'Id: 25, product id doesn\'t match',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontFamily: 'CustomFont',
-                ),
-              ),
-            );
             updateSubscriptionStatus(false, false);
           }
         } else {
           // logger.e("List is Empty");
-          Get.snackbar(
-            '',
-            '',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.lime,
-            colorText: Colors.white,
-            duration: const Duration(seconds: 2),
-            isDismissible: true,
-            titleText: const Text(
-              'Lock',
-            ),
-            maxWidth: 400,
-            messageText: const Text(
-              'Id: 26: List is Empty',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.white,
-                fontFamily: 'CustomFont',
-              ),
-            ),
-          );
+
           updateSubscriptionStatus(false, false);
         }
       });

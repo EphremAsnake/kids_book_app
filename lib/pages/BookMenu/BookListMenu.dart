@@ -535,8 +535,10 @@ class _BookListPageState extends State<BookListPage> {
                           widget.booksList.bookListEndText!,
                           maxLines: 2,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 14.sp,fontFamily: 'CustomFont',fontWeight: FontWeight.bold),
+                          style: GoogleFonts.nunito(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold),
                         )),
                       ),
                     SliverPadding(
@@ -777,9 +779,8 @@ class _BookListPageState extends State<BookListPage> {
                           widget.configResponse.androidSettings.houseAd!
                               .buttonText!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: GoogleFonts.nunito(
                               fontWeight: FontWeight.bold,
-                              fontFamily: 'CustomFont',
                               fontSize: 8.sp,
                               height: 1.2,
                               color: widget.configResponse.androidSettings
@@ -828,10 +829,9 @@ class _BookListPageState extends State<BookListPage> {
                           widget
                               .configResponse.iosSettings.houseAd!.buttonText!,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: GoogleFonts.nunito(
                               fontWeight: FontWeight.bold,
                               fontSize: 8.sp,
-                              fontFamily: 'CustomFont',
                               height: 1.2,
                               color: widget.configResponse.iosSettings.houseAd!
                                   .buttonTextColor!
@@ -995,9 +995,8 @@ class _BookListPageState extends State<BookListPage> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.visible,
                       maxLines: 3,
-                      style: TextStyle(
+                      style: GoogleFonts.nunito(
                           height: 1,
-                          fontFamily: 'CustomFont',
                           color: Colors.white,
                           fontSize: 6.sp,
                           fontWeight: FontWeight.bold),
@@ -1006,7 +1005,7 @@ class _BookListPageState extends State<BookListPage> {
                 ),
               ),
             ),
-            
+
             if (book.locked && !(monthlysubStatus || yearlysubStatus))
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),

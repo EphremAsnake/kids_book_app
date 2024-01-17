@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -105,13 +106,19 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       titleText: const Text(
         'Success',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'CustomFont',),
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.white,
+        ),
       ),
       maxWidth: 400,
       messageText: const Text(
         'Cache cleared',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'CustomFont',),
+        style: TextStyle(
+          fontSize: 16.0,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -173,16 +180,17 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
                                 Obx(() => Text(
                                       subscriptionStatus.isMonthly.value
-                                          ? Strings.youareSubscribedtoMonthlypackage
+                                          ? Strings
+                                              .youareSubscribedtoMonthlypackage
                                           : subscriptionStatus.isYearly.value
-                                              ? Strings.youareSubscribedtoYearlypackage
+                                              ? Strings
+                                                  .youareSubscribedtoYearlypackage
                                               : widget.generalSubscriptionText,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: GoogleFonts.nunito(
                                         fontSize: 9.sp,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontFamily: 'CustomFont',
                                       ),
                                     )),
 
@@ -231,18 +239,23 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         InAppPurchase.instance
                                             .restorePurchases();
                                       },
-                                      child: const Text(
+                                      child:  Text(
                                         Strings.restorePurchase,
-                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
+                                        style: GoogleFonts.nunito(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         clearCachedFiles();
                                       },
-                                      child: const Text(
+                                      child:  Text(
                                         Strings.clearCache,
-                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
+                                        style: GoogleFonts.nunito(
+                                          color: Colors.white,
+                                          
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -256,18 +269,22 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       onPressed: () {
                                         _launchURL(widget.termofuseUrl);
                                       },
-                                      child: const Text(
+                                      child:  Text(
                                         Strings.termsofUse,
-                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
+                                        style: GoogleFonts.nunito(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         _launchURL(widget.privacyPolicyUrl);
                                       },
-                                      child: const Text(
+                                      child:  Text(
                                         Strings.privacyPolicy,
-                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
+                                        style: GoogleFonts.nunito(
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -375,10 +392,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   Text(
                     '$price$perText',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: GoogleFonts.nunito(
                       fontSize: 8.sp,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,fontFamily: 'CustomFont',
+                      fontWeight: FontWeight.bold,
+                      
                     ),
                   ),
                   const SizedBox(

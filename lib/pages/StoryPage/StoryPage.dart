@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -390,8 +391,10 @@ class _BooksPageState extends State<BookPage>
                                     },
                                     child: Text(
                                       Strings.tryAgain,
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 8.sp,fontFamily: 'CustomFont',),
+                                      style: GoogleFonts.nunito(
+                                        color: Colors.white,
+                                        fontSize: 8.sp,
+                                      ),
                                     ),
                                   ),
                                 );
@@ -419,12 +422,12 @@ class _BooksPageState extends State<BookPage>
                                     onPressed: () async {
                                       if (_listen) {
                                         //if (bookplayer.playing) {
-                                          bookplayer.pause();
-                                          setState(() {
-                                            isPlaying = false;
-                                            isPl = true;
-                                          });
-                                       // }
+                                        bookplayer.pause();
+                                        setState(() {
+                                          isPlaying = false;
+                                          isPl = true;
+                                        });
+                                        // }
                                       }
                                       await exitDialog(context);
                                     },

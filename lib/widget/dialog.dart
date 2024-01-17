@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/Constants/colors.dart';
 
@@ -79,8 +80,8 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         maxLines: 2,
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 23,fontFamily: 'CustomFont',
+                        style: GoogleFonts.nunito(
+                            fontSize: 23,
                             fontWeight: FontWeight.bold,
                             color: widget.titleColor),
                       ),
@@ -92,7 +93,10 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: const TextStyle(fontSize: 14, color: Color(0xff3E3E3E),fontFamily: 'CustomFont',),
+                style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  color: Color(0xff3E3E3E),
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -126,10 +130,9 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                           child: Center(
                             child: Text(
                               widget.text!.toUpperCase(),
-                              style: const TextStyle(
+                              style: GoogleFonts.nunito(
                                   fontSize: 20,
                                   color: Colors.white,
-                                  fontFamily: 'CustomFont',
                                   fontWeight: FontWeight.w500),
                               textAlign: TextAlign.center,
                             ),
@@ -166,10 +169,9 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         child: Center(
                           child: Text(
                             widget.text2!.toUpperCase(),
-                            style: const TextStyle(
+                            style: GoogleFonts.nunito(
                                 fontSize: 20,
                                 color: Colors.white,
-                                fontFamily: 'CustomFont',
                                 fontWeight: FontWeight.w500),
                             textAlign: TextAlign.center,
                           ),

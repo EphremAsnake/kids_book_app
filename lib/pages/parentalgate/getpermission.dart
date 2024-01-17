@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 
@@ -108,7 +109,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
               child: Row(
                 children: [
                   // Left Column
-                  Spacer(),
+                  const Spacer(),
                   Expanded(
                     flex: 2,
                     child: SizedBox(
@@ -117,11 +118,11 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(),
+                          const SizedBox(),
                           if (MediaQuery.of(context).size.height > 800)
-                            SizedBox(),
+                            const SizedBox(),
                           // Parent permission message and current challenge
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               // CustomButton(
@@ -134,14 +135,13 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                               Column(
                                 children: [
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
                                     child: Text(
                                       Strings.askYourParents,
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'CustomFont',
+                                      style: GoogleFonts.nunito(
                                         color: Colors.white,
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.normal,
@@ -164,7 +164,6 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                             numberWord.join(" , "),
                             style: const TextStyle(
                               color: Colors.white,
-                              
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -203,9 +202,9 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 )
                             ],
                           ),
-                          SizedBox(),
+                          const SizedBox(),
                           if (MediaQuery.of(context).size.height > 800)
-                            SizedBox(),
+                            const SizedBox(),
                         ],
                       ),
                     ),
@@ -219,7 +218,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(),
+                          const SizedBox(),
                           // Buttons for user input
                           for (int i = 0; i < 3; i++)
                             Row(
@@ -291,12 +290,12 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                               ),
                             ],
                           ),
-                          SizedBox(),
+                          const SizedBox(),
                         ],
                       ),
                     ),
                   ),
-                  Spacer()
+                  const Spacer()
                 ],
               ),
             ),

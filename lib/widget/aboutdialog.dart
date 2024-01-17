@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:resize/resize.dart';
 
 class AboutDialogBox extends StatefulWidget {
@@ -58,7 +59,11 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
               children: <Widget>[
                 Text(
                   widget.descriptions!,
-                  style: TextStyle(fontSize: 8.sp, color: Colors.black,fontFamily: 'CustomFont',),
+                  style: GoogleFonts.nunito(
+                    fontSize: 8.sp,
+                    color: Colors.black,
+                   
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(

@@ -24,7 +24,7 @@ class AnimatedButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.center,
       children: [
         Positioned(
           child: Container(
@@ -86,11 +86,10 @@ class AnimatedTextWidget extends StatelessWidget {
           Text(text.toUpperCase(),
               maxLines: 1,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: GoogleFonts.nunito(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 10.sp,
-                fontFamily: 'CustomFont',
               )),
         ],
       ),
