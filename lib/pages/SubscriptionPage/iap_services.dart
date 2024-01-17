@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-import 'package:logger/logger.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'dart:io' show Platform;
 import '../../controller/subscriptionController.dart';
@@ -19,7 +18,6 @@ class IAPService {
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
   final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
-  Logger logger = Logger();
   void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailList) {
     // ignore: avoid_function_literals_in_foreach_calls
     purchaseDetailList.forEach((PurchaseDetails purchaseDetails) async {
@@ -57,7 +55,11 @@ class IAPService {
           messageText: const Text(
             Strings.unableToCompletePurchaseMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'CustomFont',),
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.white,
+              fontFamily: 'CustomFont',
+            ),
           ),
         );
         subscriptionController.hideProgress();
@@ -207,9 +209,9 @@ class IAPService {
           DateTime transactionDateTime =
               DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
-          //! LOG LIST
-          logger.e(
-              "List Is Not Empty \n\n Last Purchase Details: \n productID: ${lastPurchase.productID} \n Last Transaction DateTime: ${transactionDateTime}\n ");
+          // //! LOG LIST
+          // logger.e(
+          //     "List Is Not Empty \n\n Last Purchase Details: \n productID: ${lastPurchase.productID} \n Last Transaction DateTime: ${transactionDateTime}\n ");
 
           Duration difference = DateTime.now().difference(transactionDateTime);
 
@@ -220,8 +222,8 @@ class IAPService {
                   transactionDateTime, 'monthly');
               subscriptionController.hideProgress();
             } else {
-              logger.e(
-                  "Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
+              // logger.e(
+              //     "Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -232,8 +234,8 @@ class IAPService {
                   transactionDateTime, 'yearly');
               subscriptionController.hideProgress();
             } else {
-              logger.e(
-                  "Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
+              // logger.e(
+              //     "Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -241,7 +243,7 @@ class IAPService {
             updateSubscriptionStatus(false, false);
           }
         } else {
-          logger.e("List is Empty");
+          // logger.e("List is Empty");
           updateSubscriptionStatus(false, false);
         }
       });
