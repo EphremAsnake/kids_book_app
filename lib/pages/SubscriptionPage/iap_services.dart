@@ -190,9 +190,34 @@ class IAPService {
           allPurchases.clear();
           allPurchases.addAll(historyPurchaseDetails);
           allPurchases.sort((a, b) {
-            int timestampA = int.tryParse(a.transactionDate!) ?? 0;
-            int timestampB = int.tryParse(b.transactionDate!) ?? 0;
+            int? timestampA = int.tryParse(a.transactionDate!);
+            int? timestampB = int.tryParse(b.transactionDate!);
 
+            if (timestampA == null || timestampB == null) {
+              Get.snackbar(
+                '',
+                '',
+                snackPosition: SnackPosition.TOP,
+                backgroundColor: Colors.deepOrange,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 2),
+                isDismissible: true,
+                titleText: const Text(
+                  'Error',
+                ),
+                maxWidth: 400,
+                messageText: const Text(
+                  'Id: 55, Timestamp value is Null',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
+                    fontFamily: 'CustomFont',
+                  ),
+                ),
+              );
+              return 0;
+            }
             DateTime dateTimeA =
                 DateTime.fromMillisecondsSinceEpoch(timestampA);
             DateTime dateTimeB =
