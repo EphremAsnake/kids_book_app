@@ -80,7 +80,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: 23,fontFamily: 'CustomFont',
                             fontWeight: FontWeight.bold,
                             color: widget.titleColor),
                       ),
@@ -92,7 +92,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: const TextStyle(fontSize: 14, color: Color(0xff3E3E3E)),
+                style: const TextStyle(fontSize: 14, color: Color(0xff3E3E3E),fontFamily: 'CustomFont',),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -125,10 +125,11 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                               borderRadius: BorderRadius.circular(15)),
                           child: Center(
                             child: Text(
-                              widget.text!,
+                              widget.text!.toUpperCase(),
                               style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
+                                  fontFamily: 'CustomFont',
                                   fontWeight: FontWeight.w500),
                               textAlign: TextAlign.center,
                             ),
@@ -164,10 +165,11 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                             borderRadius: BorderRadius.circular(12)),
                         child: Center(
                           child: Text(
-                            widget.text2!,
+                            widget.text2!.toUpperCase(),
                             style: const TextStyle(
                                 fontSize: 20,
                                 color: Colors.white,
+                                fontFamily: 'CustomFont',
                                 fontWeight: FontWeight.w500),
                             textAlign: TextAlign.center,
                           ),

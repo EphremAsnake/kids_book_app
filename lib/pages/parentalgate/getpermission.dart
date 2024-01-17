@@ -141,6 +141,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontFamily: 'CustomFont',
                                         color: Colors.white,
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.normal,
@@ -163,6 +164,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                             numberWord.join(" , "),
                             style: const TextStyle(
                               color: Colors.white,
+                              
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),

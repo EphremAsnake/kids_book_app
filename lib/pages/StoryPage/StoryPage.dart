@@ -391,7 +391,7 @@ class _BooksPageState extends State<BookPage>
                                     child: Text(
                                       Strings.tryAgain,
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 8.sp),
+                                          color: Colors.white, fontSize: 8.sp,fontFamily: 'CustomFont',),
                                     ),
                                   ),
                                 );

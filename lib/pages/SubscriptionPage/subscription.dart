@@ -105,13 +105,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       titleText: const Text(
         'Success',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0, color: Colors.white),
+        style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'CustomFont',),
       ),
       maxWidth: 400,
       messageText: const Text(
         'Cache cleared',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0, color: Colors.white),
+        style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'CustomFont',),
       ),
     );
   }
@@ -182,6 +182,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         fontSize: 9.sp,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'CustomFont',
                                       ),
                                     )),
 
@@ -232,7 +233,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.restorePurchase,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
                                       ),
                                     ),
                                     TextButton(
@@ -241,7 +242,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.clearCache,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
                                       ),
                                     ),
                                   ],
@@ -257,7 +258,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.termsofUse,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
                                       ),
                                     ),
                                     TextButton(
@@ -266,7 +267,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.privacyPolicy,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: Colors.white,fontFamily: 'CustomFont',),
                                       ),
                                     ),
                                   ],
@@ -377,7 +378,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     style: TextStyle(
                       fontSize: 8.sp,
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,fontFamily: 'CustomFont',
                     ),
                   ),
                   const SizedBox(

@@ -54,6 +54,6 @@ class Strings {
 
   //!failed to Subscribe Snackbar Message
   static const String failure = "Failure";
-  static const String unableToCompletePurchaseMessage = "Something Went Wrong";
+  static const String unableToCompletePurchaseMessage = "Unable to complete subscription purchase. Check your internet or payment details";
 
 }

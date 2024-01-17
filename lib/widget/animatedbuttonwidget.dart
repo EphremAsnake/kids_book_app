@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/colors.dart';
 
@@ -81,13 +83,15 @@ class AnimatedTextWidget extends StatelessWidget {
           const SizedBox(
             width: 5,
           ),
-          Text(text,
+          Text(text.toUpperCase(),
               maxLines: 1,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10.sp)),
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 10.sp,
+                fontFamily: 'CustomFont',
+              )),
         ],
       ),
     ).animate().scaleXY(

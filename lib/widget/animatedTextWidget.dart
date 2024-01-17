@@ -67,6 +67,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
             style: TextStyle(
               color: Colors.black,
               fontSize: 8.sp,
+              fontFamily: 'CustomFont',
               fontWeight: FontWeight.bold,
             ),
           ),

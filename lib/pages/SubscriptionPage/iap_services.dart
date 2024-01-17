@@ -47,13 +47,17 @@ class IAPService {
           titleText: const Text(
             Strings.failure,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.white,
+              fontFamily: 'CustomFont',
+            ),
           ),
           maxWidth: 400,
           messageText: const Text(
             Strings.unableToCompletePurchaseMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
+            style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'CustomFont',),
           ),
         );
         subscriptionController.hideProgress();
