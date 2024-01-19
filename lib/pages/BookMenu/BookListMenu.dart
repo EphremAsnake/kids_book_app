@@ -535,7 +535,8 @@ class _BookListPageState extends State<BookListPage> {
                           widget.booksList.bookListEndText!,
                           maxLines: 2,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.nunito(
+                          style: TextStyle(
+                              fontFamily: 'Customfont',
                               color: Colors.white,
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold),
@@ -779,7 +780,8 @@ class _BookListPageState extends State<BookListPage> {
                           widget.configResponse.androidSettings.houseAd!
                               .buttonText!,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.nunito(
+                          style: TextStyle(
+                              fontFamily: 'Customfont',
                               fontWeight: FontWeight.bold,
                               fontSize: 8.sp,
                               height: 1.2,
@@ -829,7 +831,8 @@ class _BookListPageState extends State<BookListPage> {
                           widget
                               .configResponse.iosSettings.houseAd!.buttonText!,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.nunito(
+                          style: TextStyle(
+                              fontFamily: 'Customfont',
                               fontWeight: FontWeight.bold,
                               fontSize: 8.sp,
                               height: 1.2,
@@ -995,7 +998,8 @@ class _BookListPageState extends State<BookListPage> {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.visible,
                       maxLines: 3,
-                      style: GoogleFonts.nunito(
+                      style: TextStyle(
+                          fontFamily: 'Customfont',
                           height: 1,
                           color: Colors.white,
                           fontSize: 6.sp,

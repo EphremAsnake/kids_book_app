@@ -43,10 +43,11 @@ class IAPService {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           isDismissible: true,
-          titleText:  Text(
+          titleText: Text(
             Strings.failure,
             textAlign: TextAlign.center,
-            style: GoogleFonts.nunito(
+            style: TextStyle(
+              fontFamily: 'Customfont',
               fontSize: 16.0,
               color: Colors.white,
             ),

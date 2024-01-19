@@ -86,7 +86,8 @@ class AnimatedTextWidget extends StatelessWidget {
           Text(text.toUpperCase(),
               maxLines: 1,
               textAlign: TextAlign.center,
-              style: GoogleFonts.nunito(
+              style: TextStyle(
+                fontFamily: 'Customfont',
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 10.sp,

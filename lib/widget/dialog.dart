@@ -80,7 +80,8 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         maxLines: 2,
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.nunito(
+                        style: TextStyle(
+                            fontFamily: 'Customfont',
                             fontSize: 23,
                             fontWeight: FontWeight.bold,
                             color: widget.titleColor),
@@ -93,7 +94,8 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: GoogleFonts.nunito(
+                style: TextStyle(
+                  fontFamily: 'Customfont',
                   fontSize: 14,
                   color: Color(0xff3E3E3E),
                 ),
@@ -130,7 +132,8 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                           child: Center(
                             child: Text(
                               widget.text!.toUpperCase(),
-                              style: GoogleFonts.nunito(
+                              style: TextStyle(
+                                  fontFamily: 'Customfont',
                                   fontSize: 20,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
@@ -169,7 +172,8 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         child: Center(
                           child: Text(
                             widget.text2!.toUpperCase(),
-                            style: GoogleFonts.nunito(
+                            style: TextStyle(
+                                fontFamily: 'Customfont',
                                 fontSize: 20,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),

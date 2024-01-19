@@ -65,7 +65,8 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
             overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: GoogleFonts.nunito(
+            style: TextStyle(
+              fontFamily: 'Customfont',
               color: Colors.black,
               fontSize: 8.sp,
               fontWeight: FontWeight.bold,

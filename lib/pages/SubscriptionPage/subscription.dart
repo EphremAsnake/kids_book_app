@@ -187,7 +187,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                   .youareSubscribedtoYearlypackage
                                               : widget.generalSubscriptionText,
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.nunito(
+                                      style: TextStyle(
+                                        fontFamily: 'Customfont',
                                         fontSize: 9.sp,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -239,9 +240,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         InAppPurchase.instance
                                             .restorePurchases();
                                       },
-                                      child:  Text(
+                                      child: Text(
                                         Strings.restorePurchase,
-                                        style: GoogleFonts.nunito(
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
                                           color: Colors.white,
                                         ),
                                       ),
@@ -250,11 +252,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       onPressed: () {
                                         clearCachedFiles();
                                       },
-                                      child:  Text(
+                                      child: Text(
                                         Strings.clearCache,
-                                        style: GoogleFonts.nunito(
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
                                           color: Colors.white,
-                                          
                                         ),
                                       ),
                                     ),
@@ -269,9 +271,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       onPressed: () {
                                         _launchURL(widget.termofuseUrl);
                                       },
-                                      child:  Text(
+                                      child: Text(
                                         Strings.termsofUse,
-                                        style: GoogleFonts.nunito(
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
                                           color: Colors.white,
                                         ),
                                       ),
@@ -280,9 +283,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       onPressed: () {
                                         _launchURL(widget.privacyPolicyUrl);
                                       },
-                                      child:  Text(
+                                      child: Text(
                                         Strings.privacyPolicy,
-                                        style: GoogleFonts.nunito(
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
                                           color: Colors.white,
                                         ),
                                       ),
@@ -392,11 +396,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   Text(
                     '$price$perText',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.nunito(
+                    style: TextStyle(
+                      fontFamily: 'Customfont',
                       fontSize: 8.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      
                     ),
                   ),
                   const SizedBox(

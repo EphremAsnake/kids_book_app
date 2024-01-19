@@ -141,7 +141,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                       Strings.askYourParents,
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.nunito(
+                                      style: TextStyle(
+                                        fontFamily: 'Customfont',
                                         color: Colors.white,
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.normal,

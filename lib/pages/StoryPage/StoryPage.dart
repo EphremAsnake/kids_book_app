@@ -391,7 +391,8 @@ class _BooksPageState extends State<BookPage>
                                     },
                                     child: Text(
                                       Strings.tryAgain,
-                                      style: GoogleFonts.nunito(
+                                      style: TextStyle(
+                                        fontFamily: 'Customfont',
                                         color: Colors.white,
                                         fontSize: 8.sp,
                                       ),
