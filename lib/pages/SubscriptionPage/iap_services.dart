@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -18,7 +19,6 @@ class IAPService {
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
   final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
-
   void listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailList) {
     // ignore: avoid_function_literals_in_foreach_calls
     purchaseDetailList.forEach((PurchaseDetails purchaseDetails) async {
@@ -39,20 +39,27 @@ class IAPService {
           '',
           '',
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.white,
-          colorText: Colors.blue,
+          backgroundColor: Colors.blue,
+          colorText: Colors.white,
           duration: const Duration(seconds: 2),
           isDismissible: true,
           titleText: const Text(
             Strings.failure,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
+            style: TextStyle(
+              fontFamily: 'Customfont',
+              fontSize: 16.0,
+              color: Colors.white,
+            ),
           ),
           maxWidth: 400,
           messageText: const Text(
             Strings.unableToCompletePurchaseMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0, color: Colors.white),
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.white,
+            ),
           ),
         );
         subscriptionController.hideProgress();
@@ -171,8 +178,8 @@ class IAPService {
   // TODO: NEW WAY OF CHEKING SUBSCRIPTION STATUS
 
   Future<void> checkSubscriptionAvailabilty(
-      [Duration monthduration = const Duration(minutes: 4),
-      Duration yearduration = const Duration(minutes: 10),
+      [Duration monthduration = const Duration(days: 1),
+      Duration yearduration = const Duration(days: 2),
       Duration grace = const Duration(days: 0)]) async {
     if (Platform.isIOS) {
       List<PurchaseDetails> allPurchases = [];
@@ -183,9 +190,12 @@ class IAPService {
           allPurchases.clear();
           allPurchases.addAll(historyPurchaseDetails);
           allPurchases.sort((a, b) {
-            int timestampA = int.tryParse(a.transactionDate!) ?? 0;
-            int timestampB = int.tryParse(b.transactionDate!) ?? 0;
+            int? timestampA = int.tryParse(a.transactionDate!);
+            int? timestampB = int.tryParse(b.transactionDate!);
 
+            if (timestampA == null || timestampB == null) {
+              return 0;
+            }
             DateTime dateTimeA =
                 DateTime.fromMillisecondsSinceEpoch(timestampA);
             DateTime dateTimeB =
@@ -202,6 +212,10 @@ class IAPService {
           DateTime transactionDateTime =
               DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
+          // //! LOG LIST
+          // logger.e(
+          //     "List Is Not Empty \n\n Last Purchase Details: \n productID: ${lastPurchase.productID} \n Last Transaction DateTime: ${transactionDateTime}\n ");
+
           Duration difference = DateTime.now().difference(transactionDateTime);
 
           if (lastPurchase.productID == monthlyProductId) {
@@ -211,6 +225,8 @@ class IAPService {
                   transactionDateTime, 'monthly');
               subscriptionController.hideProgress();
             } else {
+              // logger.e(
+              //     "Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -221,6 +237,8 @@ class IAPService {
                   transactionDateTime, 'yearly');
               subscriptionController.hideProgress();
             } else {
+              // logger.e(
+              //     "Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -228,6 +246,8 @@ class IAPService {
             updateSubscriptionStatus(false, false);
           }
         } else {
+          // logger.e("List is Empty");
+
           updateSubscriptionStatus(false, false);
         }
       });

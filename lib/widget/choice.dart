@@ -75,6 +75,7 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            fontFamily: 'Customfont',
                             fontSize: 23,
                             fontWeight: FontWeight.bold,
                             color: widget.titleColor),
@@ -87,7 +88,10 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: const TextStyle(fontSize: 14, color: Color(0xff3E3E3E)),
+                style: const TextStyle(
+                    fontFamily: 'Customfont',
+                    fontSize: 14,
+                    color: Color(0xff3E3E3E)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -118,6 +122,7 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                         child: Text(
                           widget.text!,
                           style: const TextStyle(
+                              fontFamily: 'Customfont',
                               fontSize: 20,
                               color: Colors.white,
                               fontWeight: FontWeight.w500),
@@ -125,12 +130,10 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                         ),
                       ),
                     ),
-                  )
-                  ),
+                  )),
             ],
           ),
         ),
-       
         if (widget.closeicon == null)
           Positioned(
             right: 0,

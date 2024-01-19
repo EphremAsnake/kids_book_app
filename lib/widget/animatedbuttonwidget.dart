@@ -33,7 +33,7 @@ class AnimatedButtonWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: AppColors.iconColor,
-                      borderRadius: BorderRadius.circular(50)),
+                      borderRadius: BorderRadius.circular(15)),
                   child: AnimatedTextWidget(
                     buttonPlayDuration: buttonPlayDuration,
                     buttonDelayDuration: buttonDelayDuration,
@@ -81,10 +81,11 @@ class AnimatedTextWidget extends StatelessWidget {
           const SizedBox(
             width: 5,
           ),
-          Text(text,
+          Text(text.toUpperCase(),
               maxLines: 1,
               textAlign: TextAlign.center,
               style: TextStyle(
+                  fontFamily: 'Customfont',
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 10.sp)),

@@ -105,13 +105,15 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       titleText: const Text(
         'Success',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0, color: Colors.white),
+        style: TextStyle(
+            fontFamily: 'Customfont', fontSize: 16.0, color: Colors.white),
       ),
       maxWidth: 400,
       messageText: const Text(
         'Cache cleared',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16.0, color: Colors.white),
+        style: TextStyle(
+            fontFamily: 'Customfont', fontSize: 16.0, color: Colors.white),
       ),
     );
   }
@@ -173,12 +175,15 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
                                 Obx(() => Text(
                                       subscriptionStatus.isMonthly.value
-                                          ? Strings.youareSubscribedtoMonthlypackage
+                                          ? Strings
+                                              .youareSubscribedtoMonthlypackage
                                           : subscriptionStatus.isYearly.value
-                                              ? Strings.youareSubscribedtoYearlypackage
+                                              ? Strings
+                                                  .youareSubscribedtoYearlypackage
                                               : widget.generalSubscriptionText,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontFamily: 'Customfont',
                                         fontSize: 9.sp,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -232,7 +237,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.restorePurchase,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            fontFamily: 'Customfont',
+                                            color: Colors.white),
                                       ),
                                     ),
                                     TextButton(
@@ -241,7 +248,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.clearCache,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            fontFamily: 'Customfont',
+                                            color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -257,7 +266,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.termsofUse,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            fontFamily: 'Customfont',
+                                            color: Colors.white),
                                       ),
                                     ),
                                     TextButton(
@@ -266,7 +277,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       },
                                       child: const Text(
                                         Strings.privacyPolicy,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            fontFamily: 'Customfont',
+                                            color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -375,6 +388,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     '$price/$perText',
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      fontFamily: 'Customfont',
                       fontSize: 8.sp,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

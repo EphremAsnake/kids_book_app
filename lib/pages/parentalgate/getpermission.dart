@@ -141,6 +141,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                       maxLines: 2,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
+                                        fontFamily: 'Customfont',
                                         color: Colors.white,
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.normal,
@@ -150,6 +151,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                   // Text(
                                   //   "To continue, tap:",
                                   //   style: TextStyle(
+                                  // fontFamily: 'Customfont',
                                   //     color: Colors.white,
                                   //     fontSize: 12,
                                   //   ),
@@ -162,6 +164,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                           Text(
                             numberWord.join(" , "),
                             style: const TextStyle(
+                              fontFamily: 'Customfont',
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -183,6 +186,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                           Text(
                                             (ansNumber[i] ?? '').toString(),
                                             style: const TextStyle(
+                                              fontFamily: 'Customfont',
                                               color: Colors.white,
                                               fontSize: 20,
                                               height: 2,
@@ -230,6 +234,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                       child: Text(
                                         "${(i * 3) + j}",
                                         style: const TextStyle(
+                                          fontFamily: 'Customfont',
                                           color: AppColors.iconColor,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -256,6 +261,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                   child: const Text(
                                     "0",
                                     style: TextStyle(
+                                      fontFamily: 'Customfont',
                                       color: AppColors.iconColor,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,

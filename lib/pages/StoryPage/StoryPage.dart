@@ -391,7 +391,9 @@ class _BooksPageState extends State<BookPage>
                                     child: Text(
                                       Strings.tryAgain,
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 8.sp),
+                                          fontFamily: 'Customfont',
+                                          color: Colors.white,
+                                          fontSize: 8.sp),
                                     ),
                                   ),
                                 );
@@ -445,6 +447,7 @@ class _BooksPageState extends State<BookPage>
                                   child: Text(
                                     '${_counter + 1}/${widget.response.pages.length}',
                                     style: const TextStyle(
+                                      fontFamily: 'Customfont',
                                       color: AppColors.pageCounterTextColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -631,7 +634,7 @@ class _BooksPageState extends State<BookPage>
         builder: (BuildContext context) {
           return CustomDialogBox(
             title: Strings.leaveStory,
-            titleColor: Colors.orange,
+            titleColor: AppColors.iconColor,
             descriptions: Strings.gohomeDescription,
             text: Strings.leave,
             text2: Strings.stay,

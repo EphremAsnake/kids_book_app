@@ -80,6 +80,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         overflow: TextOverflow.visible,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            fontFamily: 'Customfont',
                             fontSize: 23,
                             fontWeight: FontWeight.bold,
                             color: widget.titleColor),
@@ -92,7 +93,10 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: const TextStyle(fontSize: 14, color: Color(0xff3E3E3E)),
+                style: const TextStyle(
+                    fontFamily: 'Customfont',
+                    fontSize: 14,
+                    color: Color(0xff3E3E3E)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -125,11 +129,13 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                               borderRadius: BorderRadius.circular(12)),
                           child: Center(
                             child: Text(
-                              widget.text!,
+                              widget.text!.toUpperCase(),
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
+                                fontFamily: 'Customfont',
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -164,11 +170,13 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                             borderRadius: BorderRadius.circular(12)),
                         child: Center(
                           child: Text(
-                            widget.text2!,
+                            widget.text2!.toUpperCase(),
                             style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
+                              fontFamily: 'Customfont',
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),

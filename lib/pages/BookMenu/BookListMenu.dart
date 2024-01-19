@@ -915,8 +915,11 @@ class _BookListPageState extends State<BookListPage> {
                         widget.booksList.bookListEndText!,
                         maxLines: 2,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.rubikBubbles(
-                            color: Colors.white, fontSize: 14.sp),
+                        style: TextStyle(
+                            fontFamily: 'Customfont',
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold),
                       )),
                     ),
                   SliverPadding(
@@ -973,7 +976,7 @@ class _BookListPageState extends State<BookListPage> {
                           barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AboutDialogBox(
-                              titleColor: Colors.orange,
+                              titleColor: AppColors.iconColor,
                               descriptions: Platform.isAndroid
                                   ? widget
                                       .configResponse.androidSettings.aboutApp
@@ -1156,6 +1159,7 @@ class _BookListPageState extends State<BookListPage> {
                             .buttonText!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            fontFamily: 'Customfont',
                             fontWeight: FontWeight.bold,
                             fontSize: 8.sp,
                             height: 1.2,
@@ -1205,6 +1209,7 @@ class _BookListPageState extends State<BookListPage> {
                         widget.configResponse.iosSettings.houseAd!.buttonText!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            fontFamily: 'Customfont',
                             fontWeight: FontWeight.bold,
                             fontSize: 8.sp,
                             height: 1.2,
@@ -1369,6 +1374,7 @@ class _BookListPageState extends State<BookListPage> {
                       overflow: TextOverflow.visible,
                       maxLines: 3,
                       style: TextStyle(
+                          fontFamily: 'Customfont',
                           height: 1,
                           color: Colors.white,
                           fontSize: 6.sp,
