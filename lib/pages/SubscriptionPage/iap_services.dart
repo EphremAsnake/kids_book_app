@@ -43,7 +43,7 @@ class IAPService {
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           isDismissible: true,
-          titleText: Text(
+          titleText: const Text(
             Strings.failure,
             textAlign: TextAlign.center,
             style: TextStyle(

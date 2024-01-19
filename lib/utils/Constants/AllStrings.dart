@@ -5,7 +5,7 @@ class Strings {
 
   static const String noInternet = "Oops! No Internet!";
   static const String noInternetDescription =
-      "It seems we lost our magical connection! 🌟📶\nCheck your internet and try again.";
+      "It seems we lost our magical connection!\nCheck your internet and try again.";
 
   static const String readMySelf = "Read Myself";
   static const String readtoMe = "Read to Me";

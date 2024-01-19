@@ -94,7 +94,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Customfont',
                   fontSize: 14,
                   color: Color(0xff3E3E3E),
@@ -132,11 +132,11 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                           child: Center(
                             child: Text(
                               widget.text!.toUpperCase(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontFamily: 'Customfont',
                                   fontSize: 20,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w500),
+                                  fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -172,11 +172,11 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         child: Center(
                           child: Text(
                             widget.text2!.toUpperCase(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Customfont',
                                 fontSize: 20,
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500),
+                                fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                         ),
