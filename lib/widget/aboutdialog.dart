@@ -59,9 +59,10 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
                 Text(
                   widget.descriptions!,
                   style: TextStyle(
-                      fontFamily: 'Customfont',
-                      fontSize: 8.sp,
-                      color: Colors.black),
+                    fontFamily: 'StoryText',
+                    color: Colors.black,
+                    fontSize: 8.sp,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(
