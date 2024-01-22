@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import '../services/apiEndpoints.dart';
+import 'package:just_audio_cache/just_audio_cache.dart';
 
 class AudioController extends GetxController with WidgetsBindingObserver {
   final AudioPlayer _backgrounMusicPlayer = AudioPlayer();
@@ -24,7 +25,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       if (wasPlayingBeforeInterruption) {
@@ -40,11 +41,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
 
         _backgrounMusicPlayer.pause();
         update();
-      } else {
-        _backgrounMusicPlayer.stop();
       }
-    } else {
-      _backgrounMusicPlayer.stop();
     }
   }
 
@@ -60,7 +57,8 @@ class AudioController extends GetxController with WidgetsBindingObserver {
 
   void startAudio(String audioUrl, {bool? backgroundMusicPause}) async {
     try {
-      await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$audioUrl');
+      await _backgrounMusicPlayer.dynamicSet(
+          url: '${APIEndpoints.menuUrl}$audioUrl');
     } catch (e) {
       debugPrint("Error loading audio source: $e");
     }

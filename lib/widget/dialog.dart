@@ -96,7 +96,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                 widget.descriptions!,
                 style: const TextStyle(
                   fontFamily: 'Customfont',
-                  fontSize: 14,
+                  fontSize: 17,
                   color: Color(0xff3E3E3E),
                 ),
                 textAlign: TextAlign.center,
