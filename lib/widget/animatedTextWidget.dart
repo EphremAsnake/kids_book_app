@@ -65,10 +65,10 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
             textAlign: TextAlign.center,
             maxLines: 2,
             style: TextStyle(
-              fontFamily: 'Customfont',
+              fontFamily: 'StoryText',
               color: Colors.black,
               fontSize: 8.sp,
-              fontWeight: FontWeight.bold,
+              //fontWeight: FontWeight.bold,
             ),
           ),
         );
