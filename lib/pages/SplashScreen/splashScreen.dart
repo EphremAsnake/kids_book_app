@@ -315,7 +315,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Center(
             child: Container(
               width: 450,
-              height: 150,
+              height: 250,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/splashlogo.png"),
