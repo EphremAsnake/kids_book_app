@@ -153,12 +153,6 @@ class _BookListPageState extends State<BookListPage> {
     //checkSubscriptionValidity();
     //restorepurchase();
     initcalls();
-    fetchAdIds();
-  }
-
-  //!usage
-  Future<void> fetchAdIds() async {
-    //! Initialize AdController with fetched ad IDs
   }
 
   void initcalls() {

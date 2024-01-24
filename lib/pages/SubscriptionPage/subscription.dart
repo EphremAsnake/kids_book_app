@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/colorConvet.dart';
@@ -19,6 +20,7 @@ import '../../utils/Constants/colors.dart';
 import '../../utils/Constants/dimention.dart';
 import '../BookMenu/BookListMenu.dart';
 import 'status/subscriptionstatus.dart';
+import 'package:just_audio_cache/just_audio_cache.dart';
 
 class SubscriptionPage extends StatefulWidget {
   final String monthly;
@@ -93,6 +95,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   AudioController backgroundaudioController = Get.put(AudioController());
 
   Future<void> clearCachedFiles() async {
+    audioController.clearCache();
     DefaultCacheManager cacheManager = DefaultCacheManager();
     await cacheManager.emptyCache();
     Get.snackbar(

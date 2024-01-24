@@ -182,6 +182,7 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
+  
   Future<void> tryFallbackUrl(String fallbackUrl) async {
     String storedBookList = await getFromStorageBookList();
     String storedConfigData = await getFromStorageBookList();
@@ -198,6 +199,7 @@ class _SplashScreenState extends State<SplashScreen>
           await fetchConfigData();
 
           checkAvailabiltyFunction(configResponses!);
+          
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -322,7 +324,7 @@ class _SplashScreenState extends State<SplashScreen>
           Center(
             child: Container(
               width: 450,
-              height: 150,
+              height: 250,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/splashlogo.png"),

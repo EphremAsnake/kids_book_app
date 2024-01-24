@@ -36,6 +36,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
       }
     } else if (state == AppLifecycleState.paused) {
       wasPlayingBeforeInterruption = _backgrounMusicPlayer.playing;
+
       if (_backgrounMusicPlayer.playing) {
         isPlaying = false;
 
@@ -78,5 +79,9 @@ class AudioController extends GetxController with WidgetsBindingObserver {
 
   void audioVolumeDown() {
     _backgrounMusicPlayer.setVolume(0.2);
+  }
+
+  void clearCache() {
+    _backgrounMusicPlayer.clearCache();
   }
 }
