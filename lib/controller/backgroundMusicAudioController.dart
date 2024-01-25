@@ -78,8 +78,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
       backgroundAudioUrl = '${APIEndpoints.menuUrl}$audioUrl';
       update();
       await _backgrounMusicPlayer.dynamicSet(
-          url: '${APIEndpoints.menuUrl}$audioUrl',
-          path: (await _openDir()).path);
+          url: '${APIEndpoints.menuUrl}$audioUrl');
     } catch (e) {
       debugPrint("Error loading audio source: $e");
     }
@@ -103,9 +102,8 @@ class AudioController extends GetxController with WidgetsBindingObserver {
 
   Future<void> clearCache() async {
     //_backgrounMusicPlayer.getCachedPath();
-    //_backgrounMusicPlayer.clearCache(path: (await _openDir()).path);
-    deleteDirectory(Directory('/data/user/0/com.itdc.story/app_flutter/background_audio_cache'));
-
+    _backgrounMusicPlayer.clearCache();
+    //deleteDirectory(Directory('/data/user/0/com.itdc.story/app_flutter/background_audio_cache'));
   }
 
   void deleteDirectory(Directory directory) {
