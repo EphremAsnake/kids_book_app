@@ -48,6 +48,8 @@ dependencies:
   just_audio_cache: ^0.1.2
   logger: ^2.0.2+1
   open_store: ^0.5.0
+  path_provider: ^2.1.2
+  recase: ^4.1.0
   resize: ^1.0.0
   share_plus: ^6.3.4
   shared_preferences: ^2.2.2
