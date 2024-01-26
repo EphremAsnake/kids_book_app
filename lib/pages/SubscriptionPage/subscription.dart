@@ -8,6 +8,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:resize/resize.dart';
+import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -146,15 +147,18 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               alignment: Alignment.center,
               children: [
                 // //!Background Image
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Image.asset(
-                    'assets/background.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 0,
+                //   left: 0,
+                //   right: 0,
+                //   child: Image.asset(
+                //     'assets/background.png',
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
+                const StarsView(
+              fps: 60,
+            ),
                 BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                     child: Container(
