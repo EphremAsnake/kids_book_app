@@ -6,6 +6,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:open_store/open_store.dart';
+import 'package:starsview/starsview.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/Constants/colors.dart';
@@ -307,14 +308,17 @@ class _BookListPageState extends State<BookListPage> {
         body: Stack(
           children: [
             //!Background Image
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Image.asset(
-                'assets/background.png',
-                fit: BoxFit.cover,
-              ),
+            // Positioned(
+            //   bottom: 0,
+            //   left: 0,
+            //   right: 0,
+            //   child: Image.asset(
+            //     'assets/background.png',
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
+            const StarsView(
+              fps: 60,
             ),
 
             //!BookList GridView
