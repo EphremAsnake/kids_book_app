@@ -157,8 +157,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 //   ),
                 // ),
                 const StarsView(
-              fps: 60,
-            ),
+                  fps: 60,
+                ),
                 BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                     child: Container(
