@@ -304,13 +304,13 @@ class _BookListPageState extends State<BookListPage> {
   Widget build(BuildContext context) {
     return GetBuilder<SubscriptionStatus>(builder: (subscriptionStatus) {
       return Scaffold(
-        backgroundColor: widget.booksList.backgroundColor.toColor(),
+        backgroundColor: AppColors.primaryColor,
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [widget.booksList.backgroundColor.toColor(), Colors.redAccent], // Your gradient colors
+              colors: [AppColors.primaryColor, AppColors.secondaryColor],
             ),
           ),
           child: Stack(
@@ -485,10 +485,9 @@ class _BookListPageState extends State<BookListPage> {
                                                                       debugPrint(
                                                                           "false");
                                                                     },
-                                                                    backgroundColor: widget
-                                                                        .booksList
-                                                                        .backgroundColor
-                                                                        .toColor(),
+                                                                    backgroundColor:
+                                                                        AppColors
+                                                                            .primaryColor,
                                                                   )
                                                                 : openSubscriptionPage();
                                                           } else if (Platform
@@ -511,10 +510,9 @@ class _BookListPageState extends State<BookListPage> {
                                                                       debugPrint(
                                                                           "false");
                                                                     },
-                                                                    backgroundColor: widget
-                                                                        .booksList
-                                                                        .backgroundColor
-                                                                        .toColor(),
+                                                                    backgroundColor:
+                                                                        AppColors
+                                                                            .primaryColor,
                                                                   )
                                                                 : openSubscriptionPage();
                                                           }
@@ -659,9 +657,7 @@ class _BookListPageState extends State<BookListPage> {
                                       onFail: () {
                                         print("false");
                                       },
-                                      backgroundColor: widget
-                                          .booksList.backgroundColor
-                                          .toColor(),
+                                      backgroundColor: AppColors.primaryColor,
                                     )
                                   : openSubscriptionPage();
                             } else if (Platform.isIOS) {
@@ -675,9 +671,7 @@ class _BookListPageState extends State<BookListPage> {
                                       onFail: () {
                                         print("false");
                                       },
-                                      backgroundColor: widget
-                                          .booksList.backgroundColor
-                                          .toColor(),
+                                      backgroundColor: AppColors.primaryColor,
                                     )
                                   : openSubscriptionPage();
                             }
@@ -774,8 +768,7 @@ class _BookListPageState extends State<BookListPage> {
                                 onFail: () {
                                   print("false");
                                 },
-                                backgroundColor:
-                                    widget.booksList.backgroundColor.toColor(),
+                                backgroundColor: AppColors.primaryColor,
                               )
                             : openUrlAndroid(widget.configResponse
                                 .androidSettings.houseAd!.urlId!);
@@ -825,8 +818,7 @@ class _BookListPageState extends State<BookListPage> {
                                 onFail: () {
                                   print("false");
                                 },
-                                backgroundColor:
-                                    widget.booksList.backgroundColor.toColor(),
+                                backgroundColor: AppColors.primaryColor,
                               )
                             : openAppStore(widget
                                 .configResponse.iosSettings.houseAd!.urlId!);
@@ -932,7 +924,7 @@ class _BookListPageState extends State<BookListPage> {
                   .privacyPolicyUrl!
               : widget.configResponse.iosSettings.subscriptionSettings
                   .privacyPolicyUrl!,
-          backgroundcolor: widget.booksList.backgroundColor,
+          backgroundcolor: AppColors.primaryColor,
           monthlyProductId: Platform.isAndroid
               ? widget.configResponse.androidSettings.subscriptionSettings
                   .monthSubscriptionProductID!

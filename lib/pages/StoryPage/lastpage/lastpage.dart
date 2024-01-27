@@ -159,14 +159,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                                             context: context,
                                             onSuccess: () {
                                               shareApp();
-                                              print("True");
                                             },
-                                            onFail: () {
-                                              print("false");
-                                            },
-                                            backgroundColor: widget
-                                                .booksList.backgroundColor
-                                                .toColor(),
+                                            onFail: () {},
+                                            backgroundColor:
+                                                AppColors.primaryColor,
                                           )
                                         : shareApp();
                                   } else if (Platform.isIOS) {
@@ -176,14 +172,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                                             context: context,
                                             onSuccess: () {
                                               shareApp();
-                                              print("True");
                                             },
-                                            onFail: () {
-                                              print("false");
-                                            },
-                                            backgroundColor: widget
-                                                .booksList.backgroundColor
-                                                .toColor(),
+                                            onFail: () {},
+                                            backgroundColor:
+                                                AppColors.primaryColor,
                                           )
                                         : shareApp();
                                   }
@@ -213,14 +205,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                                                   .androidSettings
                                                   .appRateAndShare!
                                                   .urlId!);
-                                              print("True");
                                             },
-                                            onFail: () {
-                                              print("false");
-                                            },
-                                            backgroundColor: widget
-                                                .booksList.backgroundColor
-                                                .toColor(),
+                                            onFail: () {},
+                                            backgroundColor:
+                                                AppColors.primaryColor,
                                           )
                                         : openUrlAndroid(widget
                                             .configResponse
@@ -238,14 +226,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                                                   .iosSettings
                                                   .appRateAndShare!
                                                   .urlId!);
-                                              print("True");
                                             },
-                                            onFail: () {
-                                              print("false");
-                                            },
-                                            backgroundColor: widget
-                                                .booksList.backgroundColor
-                                                .toColor(),
+                                            onFail: () {},
+                                            backgroundColor:
+                                                AppColors.primaryColor,
                                           )
                                         : openAppStore(widget
                                             .configResponse

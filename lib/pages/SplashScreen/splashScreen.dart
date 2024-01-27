@@ -12,6 +12,7 @@ import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
 import '../../services/apiEndpoints.dart';
+import '../../utils/Constants/colors.dart';
 import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
 import '../SubscriptionPage/iap_services.dart';
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     checkInternetConnection();
     inimethods();
-    forbackgroundcolor();
+    //forbackgroundcolor();
   }
 
   @override
@@ -297,23 +298,21 @@ class _SplashScreenState extends State<SplashScreen>
         duration: const Duration(seconds: 2));
   }
 
-  String storedBookListfor = '';
-  ApiResponse? storedBookListResponsefor;
-  Future<void> forbackgroundcolor() async {
-    storedBookListfor = await getFromStorageBookList();
+  // String storedBookListfor = '';
+  // ApiResponse? storedBookListResponsefor;
+  // Future<void> forbackgroundcolor() async {
+  //   storedBookListfor = await getFromStorageBookList();
 
-    Map<String, dynamic> parsedBookListData = json.decode(storedBookListfor);
-    setState(() {
-      storedBookListResponsefor = ApiResponse.fromJson(parsedBookListData);
-    });
-  }
+  //   Map<String, dynamic> parsedBookListData = json.decode(storedBookListfor);
+  //   setState(() {
+  //     storedBookListResponsefor = ApiResponse.fromJson(parsedBookListData);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: storedBookListfor != ""
-          ? storedBookListResponsefor!.backgroundColor.toColor()
-          : const Color(0xff2668ad),
+      backgroundColor: AppColors.primaryColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
