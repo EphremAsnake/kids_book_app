@@ -167,6 +167,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   const StarsView(
                     fps: 60,
                   ),
+                  
+                  //!blury background
                   BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Container(
@@ -174,6 +176,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                       )),
+
                   _products.isNotEmpty
                       ? SizedBox(
                           height: MediaQuery.sizeOf(context).height,
