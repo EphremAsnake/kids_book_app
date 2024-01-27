@@ -27,13 +27,11 @@ class BookList {
 class ApiResponse {
   final List<BookList> books;
   final String backgroundMusic;
-  final String backgroundColor;
   final String? bookListEndText;
 
   ApiResponse({
     required this.books,
     required this.backgroundMusic,
-    required this.backgroundColor,
     this.bookListEndText,
   });
 
@@ -43,7 +41,6 @@ class ApiResponse {
           .map((bookJson) => BookList.fromJson(bookJson))
           .toList(),
       backgroundMusic: json['background_music'] ?? '',
-      backgroundColor: json['background_menu_color'] ?? '',
       bookListEndText: json['bookListEndText'],
     );
   }

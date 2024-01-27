@@ -6,6 +6,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:resize/resize.dart';
+import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +26,7 @@ class SubscriptionPage extends StatefulWidget {
   final String termofuseUrl;
   final String privacyPolicyUrl;
   final String generalSubscriptionText;
-  final String backgroundcolor;
+  final Color backgroundcolor;
   final String monthlyProductId;
   final String yearlyProductId;
   final ApiResponse booksList;
@@ -132,211 +133,229 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: widget.backgroundcolor.toColor(),
+          backgroundColor: widget.backgroundcolor,
           body: Obx(() {
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                // //!Background Image
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Image.asset(
-                    'assets/background.png',
-                    fit: BoxFit.cover,
-                  ),
+            return Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [AppColors.primaryColor, AppColors.secondaryColor],
                 ),
-                BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.4),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                    )),
-                _products.isNotEmpty
-                    ? SizedBox(
-                        height: MediaQuery.sizeOf(context).height,
-                        child: NestedScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          headerSliverBuilder:
-                              (BuildContext context, bool innerBoxIsScrolled) {
-                            return <Widget>[];
-                          },
-                          body: SingleChildScrollView(
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // //!Background Image
+                  // Positioned(
+                  //   bottom: 0,
+                  //   left: 0,
+                  //   right: 0,
+                  //   child: Image.asset(
+                  //     'assets/background.png',
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  // ),
+                  const StarsView(
+                    fps: 60,
+                  ),
+                  BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.4),
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                      )),
+                  _products.isNotEmpty
+                      ? SizedBox(
+                          height: MediaQuery.sizeOf(context).height,
+                          child: NestedScrollView(
                             physics: const BouncingScrollPhysics(),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                            headerSliverBuilder: (BuildContext context,
+                                bool innerBoxIsScrolled) {
+                              return <Widget>[];
+                            },
+                            body: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
 
-                                Obx(() => Text(
-                                      subscriptionStatus.isMonthly.value
-                                          ? Strings
-                                              .youareSubscribedtoMonthlypackage
-                                          : subscriptionStatus.isYearly.value
-                                              ? Strings
-                                                  .youareSubscribedtoYearlypackage
-                                              : widget.generalSubscriptionText,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontFamily: 'Customfont',
-                                        fontSize: 9.sp,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )),
+                                  Obx(() => Text(
+                                        subscriptionStatus.isMonthly.value
+                                            ? Strings
+                                                .youareSubscribedtoMonthlypackage
+                                            : subscriptionStatus.isYearly.value
+                                                ? Strings
+                                                    .youareSubscribedtoYearlypackage
+                                                : widget
+                                                    .generalSubscriptionText,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
+                                          fontSize: 9.sp,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )),
 
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: _products.length,
-                                        itemBuilder: ((context, index) {
-                                          return SizedBox(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.5,
-                                            child: subTypeContainer(
-                                                context,
-                                                _products[index].price,
-                                                _products[index].id ==
-                                                        widget.monthlyProductId
-                                                    ? '1 MONTH'
-                                                    : '1 YEAR',
-                                                _products[index].id ==
-                                                        widget.monthlyProductId
-                                                    ? widget.monthly
-                                                    : widget.yearly,
-                                                index,
-                                                isYear: _products[index].id ==
-                                                        widget.monthlyProductId
-                                                    ? null
-                                                    : true),
-                                          );
-                                        })),
-                                  ],
-                                ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: _products.length,
+                                          itemBuilder: ((context, index) {
+                                            return SizedBox(
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width *
+                                                  0.5,
+                                              child: subTypeContainer(
+                                                  context,
+                                                  _products[index].price,
+                                                  _products[index].id ==
+                                                          widget
+                                                              .monthlyProductId
+                                                      ? '1 MONTH'
+                                                      : '1 YEAR',
+                                                  _products[index].id ==
+                                                          widget
+                                                              .monthlyProductId
+                                                      ? widget.monthly
+                                                      : widget.yearly,
+                                                  index,
+                                                  isYear: _products[index].id ==
+                                                          widget
+                                                              .monthlyProductId
+                                                      ? null
+                                                      : true),
+                                            );
+                                          })),
+                                    ],
+                                  ),
 
-                                const SizedBox(height: 10.0),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        InAppPurchase.instance
-                                            .restorePurchases();
-                                      },
-                                      child: const Text(
-                                        Strings.restorePurchase,
-                                        style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white),
+                                  const SizedBox(height: 10.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          InAppPurchase.instance
+                                              .restorePurchases();
+                                        },
+                                        child: const Text(
+                                          Strings.restorePurchase,
+                                          style: TextStyle(
+                                              fontFamily: 'Customfont',
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        clearCachedFiles();
-                                      },
-                                      child: const Text(
-                                        Strings.clearCache,
-                                        style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white),
+                                      TextButton(
+                                        onPressed: () {
+                                          clearCachedFiles();
+                                        },
+                                        child: const Text(
+                                          Strings.clearCache,
+                                          style: TextStyle(
+                                              fontFamily: 'Customfont',
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                //const SizedBox(height: 10.0),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  //crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        _launchURL(widget.termofuseUrl);
-                                      },
-                                      child: const Text(
-                                        Strings.termsofUse,
-                                        style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white),
+                                    ],
+                                  ),
+                                  //const SizedBox(height: 10.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    //crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          _launchURL(widget.termofuseUrl);
+                                        },
+                                        child: const Text(
+                                          Strings.termsofUse,
+                                          style: TextStyle(
+                                              fontFamily: 'Customfont',
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        _launchURL(widget.privacyPolicyUrl);
-                                      },
-                                      child: const Text(
-                                        Strings.privacyPolicy,
-                                        style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white),
+                                      TextButton(
+                                        onPressed: () {
+                                          _launchURL(widget.privacyPolicyUrl);
+                                        },
+                                        child: const Text(
+                                          Strings.privacyPolicy,
+                                          style: TextStyle(
+                                              fontFamily: 'Customfont',
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
+                        )
+                      : const Center(
+                          child: CircularProgressIndicator(),
                         ),
-                      )
-                    : const Center(
-                        child: CircularProgressIndicator(),
+
+                  Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      child: Visibility(
+                          visible: subscriptionController.isLoading.value,
+                          child: const Center(
+                              child: CircularProgressIndicator()))),
+
+                  Positioned(
+                    top: 20.0,
+                    right: MediaQuery.of(context).size.height * 0.08,
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: AppColors.backgroundColor,
+                      child: IconButton(
+                        iconSize: IconSizes.medium,
+                        icon: const Icon(Icons.home_outlined,
+                            color: AppColors.iconColor),
+                        onPressed: () {
+                          if (audioController.isPlaying) {
+                            Get.offAll(
+                                BookListPage(
+                                  booksList: widget.booksList,
+                                  configResponse: widget.configResponse,
+                                ),
+                                transition: Transition.fadeIn,
+                                duration: const Duration(seconds: 2));
+                          } else {
+                            Get.offAll(
+                                BookListPage(
+                                  booksList: widget.booksList,
+                                  configResponse: widget.configResponse,
+                                  isbackgroundsilent: true,
+                                ),
+                                transition: Transition.fadeIn,
+                                duration: const Duration(seconds: 2));
+                          }
+                        },
                       ),
-
-                Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    child: Visibility(
-                        visible: subscriptionController.isLoading.value,
-                        child:
-                            const Center(child: CircularProgressIndicator()))),
-
-                Positioned(
-                  top: 20.0,
-                  right: MediaQuery.of(context).size.height * 0.08,
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: AppColors.backgroundColor,
-                    child: IconButton(
-                      iconSize: IconSizes.medium,
-                      icon: const Icon(Icons.home_outlined,
-                          color: AppColors.iconColor),
-                      onPressed: () {
-                        if (audioController.isPlaying) {
-                          Get.offAll(
-                              BookListPage(
-                                booksList: widget.booksList,
-                                configResponse: widget.configResponse,
-                              ),
-                              transition: Transition.fadeIn,
-                              duration: const Duration(seconds: 2));
-                        } else {
-                          Get.offAll(
-                              BookListPage(
-                                booksList: widget.booksList,
-                                configResponse: widget.configResponse,
-                                isbackgroundsilent: true,
-                              ),
-                              transition: Transition.fadeIn,
-                              duration: const Duration(seconds: 2));
-                        }
-                      },
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           })),
     );
