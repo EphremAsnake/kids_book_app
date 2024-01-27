@@ -170,9 +170,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   
                   //!blury background
                   BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                       child: Container(
-                        color: Colors.black.withOpacity(0.4),
+                        color: Colors.black.withOpacity(0.3),
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                       )),
@@ -264,7 +264,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                           InAppPurchase.instance
                                               .restorePurchases();
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           Strings.restorePurchase,
                                           style: TextStyle(
                                             fontFamily: 'Customfont',
@@ -276,7 +276,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         onPressed: () {
                                           clearCachedFiles();
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           Strings.clearCache,
                                           style: TextStyle(
                                             fontFamily: 'Customfont',
@@ -295,7 +295,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         onPressed: () {
                                           _launchURL(widget.termofuseUrl);
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           Strings.termsofUse,
                                           style: TextStyle(
                                             fontFamily: 'Customfont',
@@ -307,7 +307,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         onPressed: () {
                                           _launchURL(widget.privacyPolicyUrl);
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           Strings.privacyPolicy,
                                           style: TextStyle(
                                             fontFamily: 'Customfont',

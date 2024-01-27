@@ -372,164 +372,172 @@ class _BookListPageState extends State<BookListPage> {
                                   child: SlideAnimation(
                                     verticalOffset: 50.0,
                                     child: FadeInAnimation(
-                                      child: InkWell(
-                                          onTap: () async {
-                                            if (!loadingStory) {
-                                              final connectivityResult =
-                                                  await (Connectivity()
-                                                      .checkConnectivity());
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            onTap: () async {
+                                              if (!loadingStory) {
+                                                final connectivityResult =
+                                                    await (Connectivity()
+                                                        .checkConnectivity());
 
-                                              if (connectivityResult ==
-                                                  ConnectivityResult.none) {
-                                                // ignore: use_build_context_synchronously
-                                                showDialog(
-                                                    context: context,
-                                                    barrierDismissible: false,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return ChoiceDialogBox(
-                                                        title:
-                                                            Strings.noInternet,
-                                                        titleColor: const Color(
-                                                            0xffED1E54),
-                                                        descriptions: Strings
-                                                            .noInternetDescription,
-                                                        text: Strings.ok,
-                                                        functionCall: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          //checkInternetConnection();
-                                                        },
-                                                        closeicon: true,
-                                                      );
-                                                    });
-                                              } else {
-                                                getSelectedStory(book.path);
-                                                if (!book.locked ||
-                                                    subscriptionStatus
-                                                        .isMonthly.value ||
-                                                    subscriptionStatus
-                                                        .isYearly.value) {
-                                                  //!Navigate to Story Page for First index Without Ad
-                                                  getSelectedStory(book.path,
-                                                      goto: true);
-                                                } else if (book.locked ==
-                                                    true) {
-                                                  //!show reward ad if available for locked books
-                                                  final isAndroid =
-                                                      Platform.isAndroid;
-
-                                                  final unlockMessage = isAndroid
-                                                      ? widget
-                                                              .configResponse
-                                                              .androidSettings
-                                                              .unlockDialogText ??
-                                                          ""
-                                                      : widget
-                                                              .configResponse
-                                                              .iosSettings
-                                                              .unlockDialogText ??
-                                                          "";
-
-                                                  final subscriptionMessage = isAndroid
-                                                      ? widget
-                                                              .configResponse
-                                                              .androidSettings
-                                                              .subscriptionSettings
-                                                              .generalSubscriptionText ??
-                                                          ""
-                                                      : widget
-                                                              .configResponse
-                                                              .iosSettings
-                                                              .subscriptionSettings
-                                                              .generalSubscriptionText ??
-                                                          "";
+                                                if (connectivityResult ==
+                                                    ConnectivityResult.none) {
                                                   // ignore: use_build_context_synchronously
                                                   showDialog(
-                                                    context: context,
-                                                    barrierDismissible: false,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return CustomDialogBox(
-                                                        title: Strings
-                                                            .unloackStory,
-                                                        titleColor:
-                                                            Colors.orange,
-                                                        descriptions: unlockMessage
-                                                                .isNotEmpty
-                                                            ? unlockMessage
-                                                            : subscriptionMessage,
-                                                        text: null,
-                                                        text2: "Subscribe",
-                                                        functionCall: () {},
-                                                        secfunctionCall: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          if (Platform
-                                                              .isAndroid) {
-                                                            widget
-                                                                    .configResponse
-                                                                    .androidSettings
-                                                                    .parentalGate!
-                                                                ? Permission
-                                                                    .getPermission(
-                                                                    context:
-                                                                        context,
-                                                                    onSuccess:
-                                                                        () {
-                                                                      debugPrint(
-                                                                          "True");
-                                                                      openSubscriptionPage();
-                                                                    },
-                                                                    onFail: () {
-                                                                      debugPrint(
-                                                                          "false");
-                                                                    },
-                                                                    backgroundColor:
-                                                                        AppColors
-                                                                            .primaryColor,
-                                                                  )
-                                                                : openSubscriptionPage();
-                                                          } else if (Platform
-                                                              .isIOS) {
-                                                            widget
-                                                                    .configResponse
-                                                                    .iosSettings
-                                                                    .parentalGate!
-                                                                ? Permission
-                                                                    .getPermission(
-                                                                    context:
-                                                                        context,
-                                                                    onSuccess:
-                                                                        () {
-                                                                      debugPrint(
-                                                                          "True");
-                                                                      openSubscriptionPage();
-                                                                    },
-                                                                    onFail: () {
-                                                                      debugPrint(
-                                                                          "false");
-                                                                    },
-                                                                    backgroundColor:
-                                                                        AppColors
-                                                                            .primaryColor,
-                                                                  )
-                                                                : openSubscriptionPage();
-                                                          }
-                                                        },
-                                                      );
-                                                    },
-                                                  );
-                                                } else {}
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return ChoiceDialogBox(
+                                                          title: Strings
+                                                              .noInternet,
+                                                          titleColor:
+                                                              const Color(
+                                                                  0xffED1E54),
+                                                          descriptions: Strings
+                                                              .noInternetDescription,
+                                                          text: Strings.ok,
+                                                          functionCall: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            //checkInternetConnection();
+                                                          },
+                                                          closeicon: true,
+                                                        );
+                                                      });
+                                                } else {
+                                                  getSelectedStory(book.path);
+                                                  if (!book.locked ||
+                                                      subscriptionStatus
+                                                          .isMonthly.value ||
+                                                      subscriptionStatus
+                                                          .isYearly.value) {
+                                                    //!Navigate to Story Page for First index Without Ad
+                                                    getSelectedStory(book.path,
+                                                        goto: true);
+                                                  } else if (book.locked ==
+                                                      true) {
+                                                    //!show reward ad if available for locked books
+                                                    final isAndroid =
+                                                        Platform.isAndroid;
+
+                                                    final unlockMessage = isAndroid
+                                                        ? widget
+                                                                .configResponse
+                                                                .androidSettings
+                                                                .unlockDialogText ??
+                                                            ""
+                                                        : widget
+                                                                .configResponse
+                                                                .iosSettings
+                                                                .unlockDialogText ??
+                                                            "";
+
+                                                    final subscriptionMessage = isAndroid
+                                                        ? widget
+                                                                .configResponse
+                                                                .androidSettings
+                                                                .subscriptionSettings
+                                                                .generalSubscriptionText ??
+                                                            ""
+                                                        : widget
+                                                                .configResponse
+                                                                .iosSettings
+                                                                .subscriptionSettings
+                                                                .generalSubscriptionText ??
+                                                            "";
+                                                    // ignore: use_build_context_synchronously
+                                                    showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return CustomDialogBox(
+                                                          title: Strings
+                                                              .unloackStory,
+                                                          titleColor:
+                                                              Colors.orange,
+                                                          descriptions: unlockMessage
+                                                                  .isNotEmpty
+                                                              ? unlockMessage
+                                                              : subscriptionMessage,
+                                                          text: null,
+                                                          text2: "Subscribe",
+                                                          functionCall: () {},
+                                                          secfunctionCall: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            if (Platform
+                                                                .isAndroid) {
+                                                              widget
+                                                                      .configResponse
+                                                                      .androidSettings
+                                                                      .parentalGate!
+                                                                  ? Permission
+                                                                      .getPermission(
+                                                                      context:
+                                                                          context,
+                                                                      onSuccess:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "True");
+                                                                        openSubscriptionPage();
+                                                                      },
+                                                                      onFail:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "false");
+                                                                      },
+                                                                      backgroundColor:
+                                                                          AppColors
+                                                                              .primaryColor,
+                                                                    )
+                                                                  : openSubscriptionPage();
+                                                            } else if (Platform
+                                                                .isIOS) {
+                                                              widget
+                                                                      .configResponse
+                                                                      .iosSettings
+                                                                      .parentalGate!
+                                                                  ? Permission
+                                                                      .getPermission(
+                                                                      context:
+                                                                          context,
+                                                                      onSuccess:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "True");
+                                                                        openSubscriptionPage();
+                                                                      },
+                                                                      onFail:
+                                                                          () {
+                                                                        debugPrint(
+                                                                            "false");
+                                                                      },
+                                                                      backgroundColor:
+                                                                          AppColors
+                                                                              .primaryColor,
+                                                                    )
+                                                                  : openSubscriptionPage();
+                                                            }
+                                                          },
+                                                        );
+                                                      },
+                                                    );
+                                                  } else {}
+                                                }
                                               }
-                                            }
-                                          },
-                                          child: Obx(() => buildBookCard(
-                                              book,
-                                              subscriptionStatus
-                                                  .isMonthly.value,
-                                              subscriptionStatus
-                                                  .isYearly.value))),
+                                            },
+                                            child: Obx(() => buildBookCard(
+                                                book,
+                                                subscriptionStatus
+                                                    .isMonthly.value,
+                                                subscriptionStatus
+                                                    .isYearly.value))),
+                                      ),
                                     ),
                                   ),
                                 );
@@ -1022,7 +1030,7 @@ class _BookListPageState extends State<BookListPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Container(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withOpacity(0.3),
                   width: double.infinity,
                   height: double.infinity,
                   child: const Icon(Icons.lock, color: Colors.white, size: 30),
