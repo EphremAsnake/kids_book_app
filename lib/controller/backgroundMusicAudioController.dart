@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +15,8 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   bool wasPlayingBeforeInterruption = false;
   String backgroundAudioUrl = '';
   late final Directory appDocumentsDir;
+
+  //final AudioPlayer _audioPlayer = AudioPlayer();
   @override
   void onInit() {
     super.onInit();
@@ -74,11 +78,18 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   }
 
   void startAudio(String audioUrl, {bool? backgroundMusicPause}) async {
+    final cacheManager = DefaultCacheManager();
+
     try {
-      backgroundAudioUrl = '${APIEndpoints.menuUrl}$audioUrl';
-      update();
-      await _backgrounMusicPlayer.dynamicSet(
-          url: '${APIEndpoints.menuUrl}$audioUrl');
+      //backgroundAudioUrl = '${APIEndpoints.menuUrl}$audioUrl';
+      await cacheManager.downloadFile('${APIEndpoints.menuUrl}$audioUrl');
+      File file =
+          await cacheManager.getSingleFile('${APIEndpoints.menuUrl}$audioUrl');
+      
+      await _backgrounMusicPlayer.setFilePath(file.path);
+
+      // await _backgrounMusicPlayer.dynamicSet(
+      //     url: '${APIEndpoints.menuUrl}$audioUrl');
     } catch (e) {
       debugPrint("Error loading audio source: $e");
     }
