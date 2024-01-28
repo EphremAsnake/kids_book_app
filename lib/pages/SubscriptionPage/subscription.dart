@@ -96,7 +96,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   AudioController backgroundaudioController = Get.put(AudioController());
 
   Future<void> clearCachedFiles() async {
-    audioController.clearCache();
     DefaultCacheManager cacheManager = DefaultCacheManager();
     await cacheManager.emptyCache();
     Get.snackbar(

@@ -116,26 +116,40 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () => widget.listen(),
-                          child: AnimatedButtonWidget(
-                            buttonDelayDuration:
-                                const Duration(milliseconds: 1),
-                            buttonPlayDuration: buttonPlayDuration,
-                            text: Strings.readtoMe,
-                            // icon: Icons.headphones,
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12.0),
+                            onTap: () => widget.listen(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: AnimatedButtonWidget(
+                                buttonDelayDuration:
+                                    const Duration(milliseconds: 1),
+                                buttonPlayDuration: buttonPlayDuration,
+                                text: Strings.readtoMe,
+                                // icon: Icons.headphones,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(
                           height: 50.h,
                         ),
-                        InkWell(
-                          onTap: () => widget.read(),
-                          child: AnimatedButtonWidget(
-                            buttonDelayDuration:
-                                const Duration(milliseconds: 1),
-                            buttonPlayDuration: buttonPlayDuration,
-                            text: Strings.readMySelf,
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12.0),
+                            onTap: () => widget.read(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: AnimatedButtonWidget(
+                                buttonDelayDuration:
+                                    const Duration(milliseconds: 1),
+                                buttonPlayDuration: buttonPlayDuration,
+                                text: Strings.readMySelf,
+                              ),
+                            ),
                           ),
                         ),
                       ],

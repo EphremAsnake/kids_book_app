@@ -30,11 +30,13 @@ class CustomDialogBox extends StatefulWidget {
 
 class _ChoiceDialogBoxState extends State<CustomDialogBox> {
   late Color buttonColor;
+  late Color buttonColor2;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     buttonColor = widget.titleColor!;
+    buttonColor2 = widget.titleColor!;
   }
 
   @override
@@ -111,12 +113,13 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                   if (widget.functionCall != null && widget.text != null)
                     Expanded(
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           setState(() {
-                            buttonColor = AppColors.backgroundColor;
+                            buttonColor = Colors.grey;
                           });
 
-                          Future.delayed(const Duration(milliseconds: 10), () {
+                          await Future.delayed(const Duration(milliseconds: 10),
+                              () {
                             setState(() {
                               buttonColor = widget.titleColor!;
                             });
@@ -151,14 +154,15 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
 
                   Expanded(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         setState(() {
-                          buttonColor = AppColors.backgroundColor;
+                          buttonColor2 = Colors.grey;
                         });
 
-                        Future.delayed(const Duration(milliseconds: 10), () {
+                        await Future.delayed(const Duration(milliseconds: 10),
+                            () {
                           setState(() {
-                            buttonColor = widget.titleColor!;
+                            buttonColor2 = widget.titleColor!;
                           });
                         });
                         widget.secfunctionCall!();
@@ -167,7 +171,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                         height: 47,
                         width: MediaQuery.of(context).size.width * .15,
                         decoration: BoxDecoration(
-                            color: buttonColor,
+                            color: buttonColor2,
                             borderRadius: BorderRadius.circular(12)),
                         child: Center(
                           child: Text(
