@@ -367,65 +367,72 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: InkWell(
-          onTap: () {
-            subscriptionController.showProgress();
-            late PurchaseParam purchaseParam;
-            if (Platform.isAndroid) {
-              purchaseParam = GooglePlayPurchaseParam(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12.0),
+            onTap: () {
+              subscriptionController.showProgress();
+              late PurchaseParam purchaseParam;
+              if (Platform.isAndroid) {
+                purchaseParam = GooglePlayPurchaseParam(
+                    productDetails: _products[index],
+                    changeSubscriptionParam: null);
+              } else {
+                purchaseParam = PurchaseParam(
                   productDetails: _products[index],
-                  changeSubscriptionParam: null);
-            } else {
-              purchaseParam = PurchaseParam(
-                productDetails: _products[index],
-              );
-            }
+                );
+              }
 
-            InAppPurchase.instance.buyNonConsumable(
-              purchaseParam: purchaseParam,
-            );
-          },
-          child: Container(
-            height: 55,
-            width: MediaQuery.sizeOf(context).width * 0.5,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey),
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFC66C40), Colors.transparent],
-              ),
-            ),
+              InAppPurchase.instance.buyNonConsumable(
+                purchaseParam: purchaseParam,
+              );
+            },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '$price/$perText',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Customfont',
-                      fontSize: 8.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+              padding: const EdgeInsets.all(2.0),
+              child: Container(
+                height: 55,
+                width: MediaQuery.sizeOf(context).width * 0.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFFC66C40), Colors.transparent],
                   ),
-                  const SizedBox(
-                    width: 5.0,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$price/$perText',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Customfont',
+                          fontSize: 8.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5.0,
+                      ),
+                      if (isYear != null)
+                        Container(
+                            decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 240, 193, 91),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 3.0),
+                              child: Text(Strings.save50),
+                            )),
+                    ],
                   ),
-                  if (isYear != null)
-                    Container(
-                        decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 240, 193, 91),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 3.0),
-                          child: Text(Strings.save50),
-                        )),
-                ],
+                ),
               ),
             ),
           ),
@@ -434,14 +441,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     );
   }
 
-  // Function to open URLs
-  void _launchURL(String url) async {
-    // ignore: deprecated_member_use
-    if (await canLaunch(url)) {
-      // ignore: deprecated_member_use
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  //! Function to open URLs
+  Future<void> _launchURL(String _url) async {
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
     }
   }
 }

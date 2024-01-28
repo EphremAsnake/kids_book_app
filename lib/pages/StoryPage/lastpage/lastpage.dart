@@ -105,7 +105,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(15.0),
                               onTap: () {
                                 if (backgroundaudioController.isPlaying) {
                                   Get.offAll(
@@ -144,7 +144,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(15.0),
                               onTap: () => widget.replay(),
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
@@ -167,7 +167,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                               Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(12.0),
+                                  borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
                                     if (Platform.isAndroid) {
                                       widget.configResponse.androidSettings
@@ -216,7 +216,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                               Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(12.0),
+                                  borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
                                     if (Platform.isAndroid) {
                                       widget.configResponse.androidSettings

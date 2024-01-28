@@ -119,7 +119,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(12.0),
+                            borderRadius: BorderRadius.circular(15.0),
                             onTap: () => widget.listen(),
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
@@ -139,7 +139,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
                          Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            borderRadius: BorderRadius.circular(12.0),
+                            borderRadius: BorderRadius.circular(15.0),
                             onTap: () => widget.read(),
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
