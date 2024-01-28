@@ -39,7 +39,7 @@ class IAPService {
           '',
           '',
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.blueAccent,
           colorText: Colors.white,
           duration: const Duration(seconds: 2),
           isDismissible: true,
