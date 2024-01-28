@@ -102,46 +102,60 @@ class _ChoiceScreenState extends State<LastScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              if (backgroundaudioController.isPlaying) {
-                                Get.offAll(
-                                    BookListPage(
-                                      booksList: widget.booksList,
-                                      configResponse: widget.configResponse,
-                                    ),
-                                    transition: Transition.fadeIn,
-                                    duration: const Duration(seconds: 2));
-                              } else {
-                                Get.offAll(
-                                    BookListPage(
-                                      booksList: widget.booksList,
-                                      configResponse: widget.configResponse,
-                                      isbackgroundsilent: true,
-                                    ),
-                                    transition: Transition.fadeIn,
-                                    duration: const Duration(seconds: 2));
-                              }
-                            },
-                            child: AnimatedButtonWidget(
-                              buttonDelayDuration:
-                                  const Duration(milliseconds: 1),
-                              buttonPlayDuration: buttonPlayDuration,
-                              text: 'Home ',
-                              icon: Icons.home_outlined,
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12.0),
+                              onTap: () {
+                                if (backgroundaudioController.isPlaying) {
+                                  Get.offAll(
+                                      BookListPage(
+                                        booksList: widget.booksList,
+                                        configResponse: widget.configResponse,
+                                      ),
+                                      transition: Transition.fadeIn,
+                                      duration: const Duration(seconds: 2));
+                                } else {
+                                  Get.offAll(
+                                      BookListPage(
+                                        booksList: widget.booksList,
+                                        configResponse: widget.configResponse,
+                                        isbackgroundsilent: true,
+                                      ),
+                                      transition: Transition.fadeIn,
+                                      duration: const Duration(seconds: 2));
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: AnimatedButtonWidget(
+                                  buttonDelayDuration:
+                                      const Duration(milliseconds: 1),
+                                  buttonPlayDuration: buttonPlayDuration,
+                                  text: 'Home ',
+                                  icon: Icons.home_outlined,
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(
                             height: 40.h,
                           ),
-                          InkWell(
-                            onTap: () => widget.replay(),
-                            child: AnimatedButtonWidget(
-                              buttonDelayDuration:
-                                  const Duration(milliseconds: 1),
-                              buttonPlayDuration: buttonPlayDuration,
-                              text: 'Replay',
-                              icon: Icons.replay,
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12.0),
+                              onTap: () => widget.replay(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: AnimatedButtonWidget(
+                                  buttonDelayDuration:
+                                      const Duration(milliseconds: 1),
+                                  buttonPlayDuration: buttonPlayDuration,
+                                  text: 'Replay',
+                                  icon: Icons.replay,
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -150,101 +164,115 @@ class _ChoiceScreenState extends State<LastScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  if (Platform.isAndroid) {
-                                    widget.configResponse.androidSettings
-                                            .parentalGate!
-                                        ? Permission.getPermission(
-                                            context: context,
-                                            onSuccess: () {
-                                              shareApp();
-                                            },
-                                            onFail: () {},
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          )
-                                        : shareApp();
-                                  } else if (Platform.isIOS) {
-                                    widget.configResponse.iosSettings
-                                            .parentalGate!
-                                        ? Permission.getPermission(
-                                            context: context,
-                                            onSuccess: () {
-                                              shareApp();
-                                            },
-                                            onFail: () {},
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          )
-                                        : shareApp();
-                                  }
-                                },
-                                child: AnimatedButtonWidget(
-                                  isRow: true,
-                                  buttonDelayDuration:
-                                      const Duration(milliseconds: 1),
-                                  buttonPlayDuration: buttonPlayDuration,
-                                  text: '',
-                                  icon: Icons.share,
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  onTap: () {
+                                    if (Platform.isAndroid) {
+                                      widget.configResponse.androidSettings
+                                              .parentalGate!
+                                          ? Permission.getPermission(
+                                              context: context,
+                                              onSuccess: () {
+                                                shareApp();
+                                              },
+                                              onFail: () {},
+                                              backgroundColor:
+                                                  AppColors.primaryColor,
+                                            )
+                                          : shareApp();
+                                    } else if (Platform.isIOS) {
+                                      widget.configResponse.iosSettings
+                                              .parentalGate!
+                                          ? Permission.getPermission(
+                                              context: context,
+                                              onSuccess: () {
+                                                shareApp();
+                                              },
+                                              onFail: () {},
+                                              backgroundColor:
+                                                  AppColors.primaryColor,
+                                            )
+                                          : shareApp();
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: AnimatedButtonWidget(
+                                      isRow: true,
+                                      buttonDelayDuration:
+                                          const Duration(milliseconds: 1),
+                                      buttonPlayDuration: buttonPlayDuration,
+                                      text: '',
+                                      icon: Icons.share,
+                                    ),
+                                  ),
                                 ),
                               ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * .01,
                               ),
-                              InkWell(
-                                onTap: () {
-                                  if (Platform.isAndroid) {
-                                    widget.configResponse.androidSettings
-                                            .parentalGate!
-                                        ? Permission.getPermission(
-                                            context: context,
-                                            onSuccess: () {
-                                              openUrlAndroid(widget
-                                                  .configResponse
-                                                  .androidSettings
-                                                  .appRateAndShare!
-                                                  .urlId!);
-                                            },
-                                            onFail: () {},
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          )
-                                        : openUrlAndroid(widget
-                                            .configResponse
-                                            .androidSettings
-                                            .appRateAndShare!
-                                            .urlId!);
-                                  } else {
-                                    widget.configResponse.iosSettings
-                                            .parentalGate!
-                                        ? Permission.getPermission(
-                                            context: context,
-                                            onSuccess: () {
-                                              openAppStore(widget
-                                                  .configResponse
-                                                  .iosSettings
-                                                  .appRateAndShare!
-                                                  .urlId!);
-                                            },
-                                            onFail: () {},
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          )
-                                        : openAppStore(widget
-                                            .configResponse
-                                            .iosSettings
-                                            .appRateAndShare!
-                                            .urlId!);
-                                  }
-                                },
-                                child: AnimatedButtonWidget(
-                                  isRow: true,
-                                  buttonDelayDuration:
-                                      const Duration(milliseconds: 1),
-                                  buttonPlayDuration: buttonPlayDuration,
-                                  text: '',
-                                  icon: Icons.star_border,
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  onTap: () {
+                                    if (Platform.isAndroid) {
+                                      widget.configResponse.androidSettings
+                                              .parentalGate!
+                                          ? Permission.getPermission(
+                                              context: context,
+                                              onSuccess: () {
+                                                openUrlAndroid(widget
+                                                    .configResponse
+                                                    .androidSettings
+                                                    .appRateAndShare!
+                                                    .urlId!);
+                                              },
+                                              onFail: () {},
+                                              backgroundColor:
+                                                  AppColors.primaryColor,
+                                            )
+                                          : openUrlAndroid(widget
+                                              .configResponse
+                                              .androidSettings
+                                              .appRateAndShare!
+                                              .urlId!);
+                                    } else {
+                                      widget.configResponse.iosSettings
+                                              .parentalGate!
+                                          ? Permission.getPermission(
+                                              context: context,
+                                              onSuccess: () {
+                                                openAppStore(widget
+                                                    .configResponse
+                                                    .iosSettings
+                                                    .appRateAndShare!
+                                                    .urlId!);
+                                              },
+                                              onFail: () {},
+                                              backgroundColor:
+                                                  AppColors.primaryColor,
+                                            )
+                                          : openAppStore(widget
+                                              .configResponse
+                                              .iosSettings
+                                              .appRateAndShare!
+                                              .urlId!);
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: AnimatedButtonWidget(
+                                      isRow: true,
+                                      buttonDelayDuration:
+                                          const Duration(milliseconds: 1),
+                                      buttonPlayDuration: buttonPlayDuration,
+                                      text: '',
+                                      icon: Icons.star_border,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

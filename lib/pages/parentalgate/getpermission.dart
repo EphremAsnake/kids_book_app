@@ -107,9 +107,9 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                 fps: 60,
               ),
               BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
                   child: Container(
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withOpacity(0.3),
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                   )),
