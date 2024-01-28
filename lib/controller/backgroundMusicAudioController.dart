@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import '../services/apiEndpoints.dart';
@@ -7,6 +8,7 @@ import 'package:just_audio_cache/just_audio_cache.dart';
 
 class AudioController extends GetxController with WidgetsBindingObserver {
   final AudioPlayer _backgrounMusicPlayer = AudioPlayer();
+  final DefaultCacheManager _cacheManager = DefaultCacheManager();
   bool isPlaying = false;
   bool wasPlayingBeforeInterruption = false;
   String backgroundAudioUrl = '';
@@ -17,6 +19,7 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   void onInit() {
     super.onInit();
     _backgrounMusicPlayer.setLoopMode(LoopMode.one);
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -61,8 +64,18 @@ class AudioController extends GetxController with WidgetsBindingObserver {
 
   void startAudio(String audioUrl, {bool? backgroundMusicPause}) async {
     try {
-      await _backgrounMusicPlayer.dynamicSet(
-          url: '${APIEndpoints.menuUrl}$audioUrl');
+      String fullAudioUrl = '${APIEndpoints.menuUrl}$audioUrl';
+      // await _backgrounMusicPlayer.dynamicSet(
+      //     url: '${APIEndpoints.menuUrl}$audioUrl');
+      final cachedFile = await _cacheManager.getSingleFile(fullAudioUrl);
+      if (cachedFile != null) {
+        debugPrint('Playing from cache: $fullAudioUrl');
+        await _backgrounMusicPlayer.setFilePath(cachedFile.path);
+      } else {
+        debugPrint('Downloading and caching audio: $fullAudioUrl');
+        await _cacheManager.downloadFile(fullAudioUrl);
+        await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$fullAudioUrl');
+      }
     } catch (e) {
       debugPrint("Error loading audio source: $e");
     }
@@ -83,7 +96,6 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   void audioVolumeDown() {
     _backgrounMusicPlayer.setVolume(0.2);
   }
-
 
   void deleteDirectory(Directory directory) {
     if (directory.existsSync()) {

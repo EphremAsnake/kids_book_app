@@ -141,10 +141,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                           SizedBox(
                             height: 40.h,
                           ),
-                           Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(15.0),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(15.0),
                               onTap: () => widget.replay(),
                               child: Padding(
                                 padding: const EdgeInsets.all(2.0),
@@ -164,10 +164,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                               Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(15.0),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
                                     if (Platform.isAndroid) {
                                       widget.configResponse.androidSettings
@@ -213,10 +213,10 @@ class _ChoiceScreenState extends State<LastScreen> {
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * .01,
                               ),
-                               Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(15.0),
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
                                     if (Platform.isAndroid) {
                                       widget.configResponse.androidSettings
