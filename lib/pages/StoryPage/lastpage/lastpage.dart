@@ -105,7 +105,7 @@ class _ChoiceScreenState extends State<LastScreen> {
                           Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              borderRadius: BorderRadius.circular(12.0),
+                              borderRadius: BorderRadius.circular(15.0),
                               onTap: () {
                                 if (backgroundaudioController.isPlaying) {
                                   Get.offAll(
