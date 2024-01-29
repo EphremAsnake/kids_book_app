@@ -328,6 +328,7 @@ class _BookListPageState extends State<BookListPage> {
 
   Future<void> useFromLocal(String folder) async {
     String storedStoryList = await getFromStorageStoryList(folder);
+
     Map<String, dynamic> parsedBookListData = json.decode(storedStoryList);
     StoryPageApiResponse storyPageresponse =
         StoryPageApiResponse.fromJson(parsedBookListData);
@@ -515,8 +516,37 @@ class _BookListPageState extends State<BookListPage> {
 
                                                 if (connectivityResult ==
                                                     ConnectivityResult.none) {
-                                                  // ignore: use_build_context_synchronously
-                                                  useFromLocal(book.path);
+                                                  String storedStoryList =
+                                                      await getFromStorageStoryList(
+                                                          book.path);
+                                                  if (storedStoryList != "") {
+                                                    useFromLocal(book.path);
+                                                  } else {
+                                                    // ignore: use_build_context_synchronously
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return ChoiceDialogBox(
+                                                            title: Strings
+                                                                .noInternet,
+                                                            titleColor:
+                                                                const Color(
+                                                                    0xffED1E54),
+                                                            descriptions: Strings
+                                                                .noInternetDescription,
+                                                            text: Strings.ok,
+                                                            functionCall: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              //checkInternetConnection();
+                                                            },
+                                                            closeicon: true,
+                                                          );
+                                                        });
+                                                  }
                                                 } else {
                                                   getSelectedStory(book.path);
                                                   if (!book.locked ||
