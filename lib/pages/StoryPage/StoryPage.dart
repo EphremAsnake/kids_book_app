@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
+import 'package:logger/logger.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import '../../../model/storyPage.dart';
@@ -70,6 +73,7 @@ class _BooksPageState extends State<BookPage>
   bool buttonsVisiblity = true;
 
   bool isIncrementing = false;
+  final DefaultCacheManager _cacheManager = DefaultCacheManager();
 
   @override
   void initState() {
@@ -103,6 +107,7 @@ class _BooksPageState extends State<BookPage>
           },
           listen: () async {
             startPlaying();
+            preCacheAudios(bookAudioUrls);
             Navigator.of(context).pop();
           },
           booksList: widget.booksList,
@@ -164,12 +169,45 @@ class _BooksPageState extends State<BookPage>
   }
 
   Future<void> _preCacheImages() async {
-    // Call preCacheImages with the images list you've populated
     await preCacheImages(images);
   }
 
+  Future<void> preCacheAudios(List<String> bookAudioUrls) async {
+    for (String url in bookAudioUrls) {
+      downloadAndCacheAudio(url);
+    }
+  }
+
+  // Future<void> _preCacheAudios() async {
+  //   await preCacheAudios(bookAudioUrls);
+  // }
+
+  Future<File> downloadAndCacheAudio(String url) async {
+    final file = await _cacheManager.getSingleFile(url);
+    return file;
+  }
+
+  // Future<void> cacheaudio()async {
+
+  // }
+
+  //!Start Playing
   Future<void> startPlaying() async {
-    bookplayer.setUrl(bookAudioUrls[_counter]);
+    final cachedFile =
+        await _cacheManager.getSingleFile(bookAudioUrls[_counter]);
+    try {
+      if (cachedFile != null) {
+        debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
+        await bookplayer.setFilePath(cachedFile.path);
+      } else {
+        debugPrint('Downloading and caching audio: ${bookAudioUrls[_counter]}');
+        await _cacheManager.downloadFile(bookAudioUrls[_counter]);
+        await bookplayer.setUrl(bookAudioUrls[_counter]);
+      }
+    } catch (e) {
+      print(e);
+    }
+    // bookplayer.setUrl(bookAudioUrls[_counter]);
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
       isPlaying = true;
@@ -215,7 +253,21 @@ class _BooksPageState extends State<BookPage>
       });
 
       if (_listen) {
-        bookplayer.setUrl(bookAudioUrls[_counter]);
+        final cachedFile =
+            await _cacheManager.getSingleFile(bookAudioUrls[_counter]);
+        try {
+          if (cachedFile != null) {
+            debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
+            await bookplayer.setFilePath(cachedFile.path);
+          } else {
+            debugPrint(
+                'Downloading and caching audio: ${bookAudioUrls[_counter]}');
+            await _cacheManager.downloadFile(bookAudioUrls[_counter]);
+            await bookplayer.setUrl(bookAudioUrls[_counter]);
+          }
+        } catch (e) {
+          print(e);
+        }
         await Future.delayed(const Duration(seconds: 2));
         setState(() {
           isPlaying = true;
@@ -245,7 +297,21 @@ class _BooksPageState extends State<BookPage>
       });
 
       if (_listen) {
-        bookplayer.setUrl(bookAudioUrls[_counter]);
+        final cachedFile =
+            await _cacheManager.getSingleFile(bookAudioUrls[_counter]);
+        try {
+          if (cachedFile != null) {
+            debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
+            await bookplayer.setFilePath(cachedFile.path);
+          } else {
+            debugPrint(
+                'Downloading and caching audio: ${bookAudioUrls[_counter]}');
+            await _cacheManager.downloadFile(bookAudioUrls[_counter]);
+            await bookplayer.setUrl(bookAudioUrls[_counter]);
+          }
+        } catch (e) {
+          print(e);
+        }
         await Future.delayed(const Duration(seconds: 2));
         setState(() {
           isPlaying = true;
