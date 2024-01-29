@@ -93,7 +93,10 @@ class _BooksPageState extends State<BookPage>
       bookAudioUrls
           .add('${APIEndpoints.baseUrl}/${widget.folder}/${page.audio}');
     }
+
     _preCacheImages();
+    _preCacheAudios();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //! Show the ChoiceScreen as a modal when the BooksPage is fully built and visible
       showCupertinoModalPopup(
@@ -107,7 +110,6 @@ class _BooksPageState extends State<BookPage>
           },
           listen: () async {
             startPlaying();
-            preCacheAudios(bookAudioUrls);
             Navigator.of(context).pop();
           },
           booksList: widget.booksList,
@@ -178,34 +180,24 @@ class _BooksPageState extends State<BookPage>
     }
   }
 
-  // Future<void> _preCacheAudios() async {
-  //   await preCacheAudios(bookAudioUrls);
-  // }
+  Future<void> _preCacheAudios() async {
+    await preCacheAudios(bookAudioUrls);
+  }
 
   Future<File> downloadAndCacheAudio(String url) async {
     final file = await _cacheManager.getSingleFile(url);
     return file;
   }
 
-  // Future<void> cacheaudio()async {
-
-  // }
-
   //!Start Playing
   Future<void> startPlaying() async {
     final cachedFile =
         await _cacheManager.getSingleFile(bookAudioUrls[_counter]);
     try {
-      if (cachedFile != null) {
-        debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
-        await bookplayer.setFilePath(cachedFile.path);
-      } else {
-        debugPrint('Downloading and caching audio: ${bookAudioUrls[_counter]}');
-        await _cacheManager.downloadFile(bookAudioUrls[_counter]);
-        await bookplayer.setUrl(bookAudioUrls[_counter]);
-      }
+      debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
+      await bookplayer.setFilePath(cachedFile.path);
     } catch (e) {
-      print(e);
+      debugPrint('$e');
     }
     // bookplayer.setUrl(bookAudioUrls[_counter]);
     await Future.delayed(const Duration(seconds: 1));
@@ -256,17 +248,10 @@ class _BooksPageState extends State<BookPage>
         final cachedFile =
             await _cacheManager.getSingleFile(bookAudioUrls[_counter]);
         try {
-          if (cachedFile != null) {
-            debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
-            await bookplayer.setFilePath(cachedFile.path);
-          } else {
-            debugPrint(
-                'Downloading and caching audio: ${bookAudioUrls[_counter]}');
-            await _cacheManager.downloadFile(bookAudioUrls[_counter]);
-            await bookplayer.setUrl(bookAudioUrls[_counter]);
-          }
+          debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
+          await bookplayer.setFilePath(cachedFile.path);
         } catch (e) {
-          print(e);
+          debugPrint('$e');
         }
         await Future.delayed(const Duration(seconds: 2));
         setState(() {
@@ -300,17 +285,10 @@ class _BooksPageState extends State<BookPage>
         final cachedFile =
             await _cacheManager.getSingleFile(bookAudioUrls[_counter]);
         try {
-          if (cachedFile != null) {
-            debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
-            await bookplayer.setFilePath(cachedFile.path);
-          } else {
-            debugPrint(
-                'Downloading and caching audio: ${bookAudioUrls[_counter]}');
-            await _cacheManager.downloadFile(bookAudioUrls[_counter]);
-            await bookplayer.setUrl(bookAudioUrls[_counter]);
-          }
+          debugPrint('Playing from cache: ${bookAudioUrls[_counter]}');
+          await bookplayer.setFilePath(cachedFile.path);
         } catch (e) {
-          print(e);
+          debugPrint('$e');
         }
         await Future.delayed(const Duration(seconds: 2));
         setState(() {

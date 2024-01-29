@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:open_store/open_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
@@ -255,10 +258,127 @@ class _BookListPageState extends State<BookListPage> {
     }
   }
 
+  Future<String> getFromStorageStoryList(String folder) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedData = prefs.getString('story_of_$folder');
+    //print(storedData);
+    return storedData ?? "";
+  }
+
+  void saveToLocalStorageStoryList(data, String folder) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String jsonData = json.encode(data);
+
+    //! Convert to JSON string
+    await prefs.setString('story_of_$folder', jsonData);
+  }
+
+  // bool isImageandAudioCached = false;
+  // //bool isAudiCached = false;
+
+  // //!
+  // Future<void> checkIfCached(String imageUrl, String audioUrl) async {
+  //   FileInfo? imagecachedFile =
+  //       await DefaultCacheManager().getFileFromCache(imageUrl);
+  //   FileInfo? audiocachedFile =
+  //       await DefaultCacheManager().getFileFromCache(audioUrl);
+  //   if (imagecachedFile != null || audiocachedFile != null) {
+  //     setState(() {
+  //       isImageandAudioCached = true;
+  //     });
+  //     print('File is cached: ${audiocachedFile!.file.path}');
+  //   } else {
+  //     setState(() {
+  //       isImageandAudioCached = false;
+  //     });
+  //     print('File is not cached');
+  //   }
+  // }
+
+  // checkCacheStatus(StoryPageApiResponse response, String folder) {
+  //   for (StoryPageModel page in response.pages) {
+  //     checkIfCached('${APIEndpoints.baseUrl}/$folder/${page.image}',
+  //         '${APIEndpoints.baseUrl}/$folder/${page.audio}');
+  //   }
+  // }
+
+  Future<bool> arePageFilesCached(String imageUrl, String audioUrl) async {
+    FileInfo? imageCachedFile =
+        await DefaultCacheManager().getFileFromCache(imageUrl);
+    FileInfo? audioCachedFile =
+        await DefaultCacheManager().getFileFromCache(audioUrl);
+    return imageCachedFile != null && audioCachedFile != null;
+  }
+
+  Future<bool> allFilesCached(
+      StoryPageApiResponse response, String folder) async {
+    for (int i = 0; i < response.pages.length; i++) {
+      StoryPageModel page = response.pages[i];
+      String imageUrl = '${APIEndpoints.baseUrl}/$folder/${page.image}';
+      String audioUrl = '${APIEndpoints.baseUrl}/$folder/${page.audio}';
+
+      if (!(await arePageFilesCached(imageUrl, audioUrl))) {
+        //! Not Cached
+        return false;
+      }
+    }
+    //! All files are cached,
+    return true;
+  }
+
+  Future<void> useFromLocal(String folder) async {
+    String storedStoryList = await getFromStorageStoryList(folder);
+    Map<String, dynamic> parsedBookListData = json.decode(storedStoryList);
+    StoryPageApiResponse storyPageresponse =
+        StoryPageApiResponse.fromJson(parsedBookListData);
+    singlestoryPageResponse = storyPageresponse;
+    folderName = folder;
+
+    // for (StoryPageModel page in widget.response.pages) {
+    //   images.add('${APIEndpoints.baseUrl}/${widget.folder}/${page.image}');
+    //   bookAudioUrls
+    //       .add('${APIEndpoints.baseUrl}/${widget.folder}/${page.audio}');
+    // }
+
+    //!
+
+    if (await allFilesCached(storyPageresponse, folder)) {
+      Get.offAll(
+          BookPage(
+            response: singlestoryPageResponse!,
+            folder: folder,
+            backgroundMusic: widget.booksList.backgroundMusic,
+            booksList: widget.booksList,
+            configResponse: widget.configResponse,
+          ),
+          transition: Transition.circularReveal,
+          duration: const Duration(seconds: 2));
+    } else {
+      // ignore: use_build_context_synchronously
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ChoiceDialogBox(
+              title: Strings.noInternet,
+              titleColor: const Color(0xffED1E54),
+              descriptions: Strings.noInternetDescription,
+              text: Strings.ok,
+              functionCall: () {
+                Navigator.pop(context);
+                //checkInternetConnection();
+              },
+              closeicon: true,
+            );
+          });
+    }
+  }
+
   Future<void> getSelectedStory(String folder, {bool? goto}) async {
     setState(() {
       loadingStory = true;
     });
+    String storedStoryList = await getFromStorageStoryList(folder);
     try {
       Response sResponse =
           await dio.get('${APIEndpoints.baseUrl}/$folder/book.json');
@@ -271,6 +391,9 @@ class _BookListPageState extends State<BookListPage> {
             StoryPageApiResponse.fromJson(sResponse.data);
         singlestoryPageResponse = storyPageresponse;
         folderName = folder;
+
+        //!Save to Local or Caching
+        saveToLocalStorageStoryList(sResponse.data, folder);
 
         if (goto != null) {
           Get.offAll(
@@ -285,6 +408,10 @@ class _BookListPageState extends State<BookListPage> {
               duration: const Duration(seconds: 2));
         }
       } else {
+        if (storedStoryList != "") {
+          useFromLocal(folder);
+        }
+
         setState(() {
           loadingStory = false;
         });
@@ -293,6 +420,9 @@ class _BookListPageState extends State<BookListPage> {
         showDialogss(context);
       }
     } catch (e) {
+      if (storedStoryList != "") {
+        useFromLocal(folder);
+      }
       setState(() {
         loadingStory = false;
       });
@@ -386,28 +516,7 @@ class _BookListPageState extends State<BookListPage> {
                                                 if (connectivityResult ==
                                                     ConnectivityResult.none) {
                                                   // ignore: use_build_context_synchronously
-                                                  showDialog(
-                                                      context: context,
-                                                      barrierDismissible: false,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return ChoiceDialogBox(
-                                                          title: Strings
-                                                              .noInternet,
-                                                          titleColor:
-                                                              const Color(
-                                                                  0xffED1E54),
-                                                          descriptions: Strings
-                                                              .noInternetDescription,
-                                                          text: Strings.ok,
-                                                          functionCall: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                            //checkInternetConnection();
-                                                          },
-                                                          closeicon: true,
-                                                        );
-                                                      });
+                                                  useFromLocal(book.path);
                                                 } else {
                                                   getSelectedStory(book.path);
                                                   if (!book.locked ||
