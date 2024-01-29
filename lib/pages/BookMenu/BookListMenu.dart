@@ -243,6 +243,7 @@ class _BookListPageState extends State<BookListPage> {
 
   void goToStoryPage(String folder) {
     if (folderName == folder) {
+       audioController.audioVolumeDown();
       Get.offAll(
           BookPage(
             response: singlestoryPageResponse!,
@@ -344,6 +345,7 @@ class _BookListPageState extends State<BookListPage> {
     //!
 
     if (await allFilesCached(storyPageresponse, folder)) {
+       audioController.audioVolumeDown();
       Get.offAll(
           BookPage(
             response: singlestoryPageResponse!,
@@ -397,6 +399,7 @@ class _BookListPageState extends State<BookListPage> {
         saveToLocalStorageStoryList(sResponse.data, folder);
 
         if (goto != null) {
+          audioController.audioVolumeDown();
           Get.offAll(
               BookPage(
                 response: singlestoryPageResponse!,
