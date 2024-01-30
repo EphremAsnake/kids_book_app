@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storyapp/utils/colorConvet.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
@@ -183,7 +182,6 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
-  
   Future<void> tryFallbackUrl(String fallbackUrl) async {
     String storedBookList = await getFromStorageBookList();
     String storedConfigData = await getFromStorageBookList();
@@ -200,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen>
           await fetchConfigData();
 
           checkAvailabiltyFunction(configResponses!);
-          
+
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -297,17 +295,6 @@ class _SplashScreenState extends State<SplashScreen>
         transition: Transition.zoom,
         duration: const Duration(seconds: 2));
   }
-
-  // String storedBookListfor = '';
-  // ApiResponse? storedBookListResponsefor;
-  // Future<void> forbackgroundcolor() async {
-  //   storedBookListfor = await getFromStorageBookList();
-
-  //   Map<String, dynamic> parsedBookListData = json.decode(storedBookListfor);
-  //   setState(() {
-  //     storedBookListResponsefor = ApiResponse.fromJson(parsedBookListData);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

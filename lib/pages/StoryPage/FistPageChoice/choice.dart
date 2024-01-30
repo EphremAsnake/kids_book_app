@@ -37,6 +37,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
   Widget build(BuildContext context) {
     final mainPlayDuration = 1000.ms;
     final buttonPlayDuration = mainPlayDuration - 200.ms;
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         return false;

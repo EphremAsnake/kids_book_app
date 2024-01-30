@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
 import 'package:resize/resize.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:storyapp/utils/colorConvet.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
@@ -54,20 +52,15 @@ class _ChoiceScreenState extends State<LastScreen> {
   }
 
   void openAppStore(String appId) async {
-    final String appStoreUrl =
-        'https://apps.apple.com/app/id$appId?action=write-review';
-
-    if (await canLaunch(appStoreUrl)) {
-      await launch(appStoreUrl);
-    } else {
-      throw 'Could not launch App Store';
-    }
+    //!open Playstore
+    OpenStore.instance.open(appStoreId: appId);
   }
 
   @override
   Widget build(BuildContext context) {
     final mainPlayDuration = 1000.ms;
     final buttonPlayDuration = mainPlayDuration - 200.ms;
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         widget.close();

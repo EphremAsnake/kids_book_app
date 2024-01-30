@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -212,9 +211,6 @@ class IAPService {
           DateTime transactionDateTime =
               DateTime.fromMillisecondsSinceEpoch(timestampMilliseconds);
 
-          // //! LOG LIST
-          // logger.e(
-          //     "List Is Not Empty \n\n Last Purchase Details: \n productID: ${lastPurchase.productID} \n Last Transaction DateTime: ${transactionDateTime}\n ");
 
           Duration difference = DateTime.now().difference(transactionDateTime);
 
@@ -225,8 +221,6 @@ class IAPService {
                   transactionDateTime, 'monthly');
               subscriptionController.hideProgress();
             } else {
-              // logger.e(
-              //     "Id: 23, else condition, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -237,8 +231,6 @@ class IAPService {
                   transactionDateTime, 'yearly');
               subscriptionController.hideProgress();
             } else {
-              // logger.e(
-              //     "Id: 24, else condition of year, difference in minutes: ${difference.inMinutes} monthduration inMinutes: ${monthduration.inMinutes}");
               updateSubscriptionStatus(false, false);
               subscriptionController.hideProgress();
             }
@@ -246,7 +238,6 @@ class IAPService {
             updateSubscriptionStatus(false, false);
           }
         } else {
-          // logger.e("List is Empty");
 
           updateSubscriptionStatus(false, false);
         }

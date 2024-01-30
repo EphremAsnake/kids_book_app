@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:get/get.dart';
 import 'package:image_fade/image_fade.dart';
-import 'package:logger/logger.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import '../../../model/storyPage.dart';
@@ -448,8 +445,7 @@ class _BooksPageState extends State<BookPage>
                         Visibility(
                           visible: buttonsVisiblity,
                           child: Positioned(
-                            // top: MediaQuery.of(context).size.height * 0.03,
-                            // left: MediaQuery.of(context).size.height * 0.037,
+                            
                             top: 20.0,
                             left: MediaQuery.of(context).size.height * 0.08,
                             child: Column(
@@ -506,8 +502,7 @@ class _BooksPageState extends State<BookPage>
                         Visibility(
                           visible: buttonsVisiblity,
                           child: Positioned(
-                            // top: MediaQuery.of(context).size.height * 0.03,
-                            // right: MediaQuery.of(context).size.height * 0.037,
+                            
                             top: 20.0,
                             right: MediaQuery.of(context).size.height * 0.08,
                             child: Column(

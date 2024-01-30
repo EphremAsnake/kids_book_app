@@ -2,15 +2,12 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:resize/resize.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
-import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -21,7 +18,6 @@ import '../../utils/Constants/colors.dart';
 import '../../utils/Constants/dimention.dart';
 import '../BookMenu/BookListMenu.dart';
 import 'status/subscriptionstatus.dart';
-import 'package:just_audio_cache/just_audio_cache.dart';
 
 class SubscriptionPage extends StatefulWidget {
   final String monthly;
@@ -128,6 +124,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         Get.offAll(
@@ -153,16 +150,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // //!Background Image
-                  // Positioned(
-                  //   bottom: 0,
-                  //   left: 0,
-                  //   right: 0,
-                  //   child: Image.asset(
-                  //     'assets/background.png',
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  // ),
+                  //!Background Star Animation
                   const StarsView(
                     fps: 60,
                   ),
@@ -194,7 +182,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-
                                   Obx(() => Text(
                                         subscriptionStatus.isMonthly.value
                                             ? Strings
@@ -212,7 +199,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       )),
-
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
@@ -251,7 +237,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                           })),
                                     ],
                                   ),
-
                                   const SizedBox(height: 10.0),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -285,10 +270,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       ),
                                     ],
                                   ),
-                                  //const SizedBox(height: 10.0),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       TextButton(
                                         onPressed: () {
@@ -456,16 +439,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 
   // //! Function to open URLs
-  // void _launchURL(String url) async {
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not launch $url';
-  //   }
-  // }
   Future<void> _launchURL(String _url) async {
-  if (!await launchUrl(Uri.parse(_url))) {
-    throw Exception('Could not launch $_url');
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
+    }
   }
-}
 }

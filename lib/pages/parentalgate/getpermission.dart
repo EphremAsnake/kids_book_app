@@ -2,8 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:resize/resize.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 
@@ -98,15 +96,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
             alignment: Alignment.center,
             children: [
               //!Background Image
-              // Positioned(
-              //   bottom: 0,
-              //   left: 0,
-              //   right: 0,
-              //   child: Image.asset(
-              //     'assets/background.png',
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
+              
               const StarsView(
                 fps: 60,
               ),
@@ -117,13 +107,11 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                   )),
-              // Left side of the landscape layout
               SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
                   children: [
-                    // Left Column
                     const Spacer(),
                     Expanded(
                       flex: 2,
@@ -136,17 +124,10 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                             const SizedBox(),
                             if (MediaQuery.of(context).size.height > 800)
                               const SizedBox(),
-                            // Parent permission message and current challenge
                             const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // CustomButton(
-                                //   buttonSize: 50,
-                                //   onTap: () {
-                                //     // Speak a message to ask for parent's permission
-                                //   },
-                                //   child: const Icon(Icons.volume_up_rounded),
-                                // ),
+                               
                                 Column(
                                   children: [
                                     Padding(
@@ -164,18 +145,11 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                         ),
                                       ),
                                     ),
-                                    // Text(
-                                    //   "To continue, tap:",
-                                    //   style: TextStyle(
-                                    //     color: Colors.white,
-                                    //     fontSize: 12,
-                                    //   ),
-                                    // ),
+                                    
                                   ],
                                 )
                               ],
                             ),
-                            // Display the current challenge
                             Text(
                               numberWord.join(" , "),
                               style: const TextStyle(
@@ -184,7 +158,6 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 fontSize: 18,
                               ),
                             ),
-                            // Display user input placeholders
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../utils/Constants/colors.dart';
 
 class CustomDialogBox extends StatefulWidget {
   final String? title, descriptions, text, text2;
@@ -33,7 +30,6 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
   late Color buttonColor2;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     buttonColor = widget.titleColor!;
     buttonColor2 = widget.titleColor!;

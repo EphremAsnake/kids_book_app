@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:open_store/open_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,48 +70,9 @@ class _BookListPageState extends State<BookListPage> {
 
   bool adsEnabled = true;
 
-  //!check Sub
-  // bool isSubscribedMonthly = false;
-  // bool isSubscribedYearly = false;
-
-  //!ad
-  //final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
-  // Future<void> loadSubscriptionStatus() async {
-  //   final Map<String, bool> subscriptionStatus =
-  //       await SubscriptionStatus.getSubscriptionStatus();
-  //   setState(() {
-  //     isSubscribedMonthly = subscriptionStatus[monthlySubscriptionKey] ?? false;
-  //     isSubscribedYearly = subscriptionStatus[yearlySubscriptionKey] ?? false;
-  //   });
-  // }
   Future<void> restorepurchase() async {
     await InAppPurchase.instance.restorePurchases();
   }
-
-  // void checkSubscriptionValidity() async {
-  //   DateTime? storedPurchaseDate =
-  //       await subscriptionStatus.getStoredPurchaseDate();
-
-  //   if (storedPurchaseDate != null) {
-  //     logger.e('Stored Purchase Date: $storedPurchaseDate');
-
-  //     bool isActive =
-  //         subscriptionStatus.isSubscriptionActive(storedPurchaseDate);
-  //     logger.e('Is Subscription Active: $isActive');
-  //     if (isActive) {
-  //       if (subscriptionStatus.isMonthly.value) {
-  //         subscriptionStatus.saveSubscriptionStatus(true, false);
-  //       } else if (subscriptionStatus.isYearly.value) {
-  //         subscriptionStatus.saveSubscriptionStatus(false, true);
-  //       }
-  //     } else {
-  //       logger.e('Subscription Expired or other issue found.');
-  //       subscriptionStatus.saveSubscriptionStatus(false, false);
-  //     }
-  //   } else {
-  //     logger.e('No stored purchase date found.');
-  //   }
-  // }
 
   @override
   void initState() {
@@ -153,15 +113,12 @@ class _BookListPageState extends State<BookListPage> {
                     .yearSubscriptionProductID!)
         .checkSubscriptionAvailabilty();
 
-    // loadSubscriptionStatus();
-    //checkSubscriptionValidity();
-    //restorepurchase();
     initcalls();
   }
 
   void initcalls() {
     audioController = Get.put(AudioController());
-     audioController.audioVolumeUp();
+    audioController.audioVolumeUp();
     if (widget.isbackgroundsilent == null) {
       audioController.startAudio(widget.booksList.backgroundMusic);
     } else {
@@ -244,7 +201,7 @@ class _BookListPageState extends State<BookListPage> {
 
   void goToStoryPage(String folder) {
     if (folderName == folder) {
-       audioController.audioVolumeDown();
+      audioController.audioVolumeDown();
       Get.offAll(
           BookPage(
             response: singlestoryPageResponse!,
@@ -274,35 +231,6 @@ class _BookListPageState extends State<BookListPage> {
     //! Convert to JSON string
     await prefs.setString('story_of_$folder', jsonData);
   }
-
-  // bool isImageandAudioCached = false;
-  // //bool isAudiCached = false;
-
-  // //!
-  // Future<void> checkIfCached(String imageUrl, String audioUrl) async {
-  //   FileInfo? imagecachedFile =
-  //       await DefaultCacheManager().getFileFromCache(imageUrl);
-  //   FileInfo? audiocachedFile =
-  //       await DefaultCacheManager().getFileFromCache(audioUrl);
-  //   if (imagecachedFile != null || audiocachedFile != null) {
-  //     setState(() {
-  //       isImageandAudioCached = true;
-  //     });
-  //     print('File is cached: ${audiocachedFile!.file.path}');
-  //   } else {
-  //     setState(() {
-  //       isImageandAudioCached = false;
-  //     });
-  //     print('File is not cached');
-  //   }
-  // }
-
-  // checkCacheStatus(StoryPageApiResponse response, String folder) {
-  //   for (StoryPageModel page in response.pages) {
-  //     checkIfCached('${APIEndpoints.baseUrl}/$folder/${page.image}',
-  //         '${APIEndpoints.baseUrl}/$folder/${page.audio}');
-  //   }
-  // }
 
   Future<bool> arePageFilesCached(String imageUrl, String audioUrl) async {
     FileInfo? imageCachedFile =
@@ -337,16 +265,10 @@ class _BookListPageState extends State<BookListPage> {
     singlestoryPageResponse = storyPageresponse;
     folderName = folder;
 
-    // for (StoryPageModel page in widget.response.pages) {
-    //   images.add('${APIEndpoints.baseUrl}/${widget.folder}/${page.image}');
-    //   bookAudioUrls
-    //       .add('${APIEndpoints.baseUrl}/${widget.folder}/${page.audio}');
-    // }
-
     //!
 
     if (await allFilesCached(storyPageresponse, folder)) {
-       audioController.audioVolumeDown();
+      audioController.audioVolumeDown();
       Get.offAll(
           BookPage(
             response: singlestoryPageResponse!,
@@ -370,7 +292,6 @@ class _BookListPageState extends State<BookListPage> {
               text: Strings.ok,
               functionCall: () {
                 Navigator.pop(context);
-                //checkInternetConnection();
               },
               closeicon: true,
             );
@@ -386,7 +307,6 @@ class _BookListPageState extends State<BookListPage> {
     try {
       Response sResponse =
           await dio.get('${APIEndpoints.baseUrl}/$folder/book.json');
-      //logger.e('${APIEndpoints.baseUrl}/$folder/book.json');
       if (sResponse.statusCode == 200) {
         setState(() {
           loadingStory = false;
@@ -450,16 +370,6 @@ class _BookListPageState extends State<BookListPage> {
           ),
           child: Stack(
             children: [
-              //!Background Image
-              // Positioned(
-              //   bottom: 0,
-              //   left: 0,
-              //   right: 0,
-              //   child: Image.asset(
-              //     'assets/background.png',
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
               const StarsView(
                 fps: 60,
               ),
@@ -467,7 +377,6 @@ class _BookListPageState extends State<BookListPage> {
               //!BookList GridView
               Padding(
                 padding: EdgeInsets.only(
-                  //top: 20.0,
                   left: MediaQuery.of(context).size.height * 0.25,
                   right: MediaQuery.of(context).size.height * 0.25,
                 ),
@@ -856,8 +765,6 @@ class _BookListPageState extends State<BookListPage> {
                 bottom: 20.0,
                 right: MediaQuery.of(context).size.height * 0.08,
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.end,
-                  // crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     //!About FAB
                     Visibility(
@@ -916,11 +823,8 @@ class _BookListPageState extends State<BookListPage> {
                                       context: context,
                                       onSuccess: () {
                                         openSubscriptionPage();
-                                        print("True");
                                       },
-                                      onFail: () {
-                                        print("false");
-                                      },
+                                      onFail: () {},
                                       backgroundColor: AppColors.primaryColor,
                                     )
                                   : openSubscriptionPage();
@@ -930,11 +834,8 @@ class _BookListPageState extends State<BookListPage> {
                                       context: context,
                                       onSuccess: () {
                                         openSubscriptionPage();
-                                        print("True");
                                       },
-                                      onFail: () {
-                                        print("false");
-                                      },
+                                      onFail: () {},
                                       backgroundColor: AppColors.primaryColor,
                                     )
                                   : openSubscriptionPage();
@@ -1027,11 +928,8 @@ class _BookListPageState extends State<BookListPage> {
                                 onSuccess: () {
                                   openUrlAndroid(widget.configResponse
                                       .androidSettings.houseAd!.urlId!);
-                                  print("True");
                                 },
-                                onFail: () {
-                                  print("false");
-                                },
+                                onFail: () {},
                                 backgroundColor: AppColors.primaryColor,
                               )
                             : openUrlAndroid(widget.configResponse
@@ -1077,11 +975,8 @@ class _BookListPageState extends State<BookListPage> {
                                 onSuccess: () {
                                   openAppStore(widget.configResponse.iosSettings
                                       .houseAd!.urlId!);
-                                  print("True");
                                 },
-                                onFail: () {
-                                  print("false");
-                                },
+                                onFail: () {},
                                 backgroundColor: AppColors.primaryColor,
                               )
                             : openAppStore(widget

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ChoiceDialogBox extends StatefulWidget {
   final String? title, descriptions, text;
@@ -27,7 +26,6 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
   late Color buttonColor;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     buttonColor = widget.titleColor!;
   }
@@ -89,10 +87,10 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                     ),
               Text(
                 widget.descriptions!,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Customfont',
                   fontSize: 14,
-                  color: const Color(0xff3E3E3E),
+                  color: Color(0xff3E3E3E),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -123,7 +121,7 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                       child: Center(
                         child: Text(
                           widget.text!,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Customfont',
                               fontSize: 20,
                               color: Colors.white,
