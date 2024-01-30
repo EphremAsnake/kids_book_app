@@ -76,6 +76,7 @@ class _BooksPageState extends State<BookPage>
     WidgetsBinding.instance.addObserver(this);
 
     audioController = Get.find<AudioController>();
+    audioController.audioVolumeDown();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 3000),
@@ -256,7 +257,9 @@ class _BooksPageState extends State<BookPage>
 
   @override
   void dispose() {
+    
     super.dispose();
+
     WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     if (bookplayer.playing) {
@@ -266,7 +269,6 @@ class _BooksPageState extends State<BookPage>
     }
     bookplayer.dispose();
 
-    audioController.audioVolumeUp();
   }
 
   @override

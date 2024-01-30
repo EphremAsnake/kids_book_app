@@ -120,7 +120,7 @@ class _BookListPageState extends State<BookListPage> {
   @override
   void initState() {
     super.initState();
-
+    
     final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
 
     _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
@@ -177,6 +177,7 @@ class _BookListPageState extends State<BookListPage> {
 
   void initcalls() {
     audioController = Get.put(AudioController());
+    audioController.audioVolumeUp();
     if (widget.isbackgroundsilent == null) {
       audioController.startAudio(widget.booksList.backgroundMusic);
     } else {
@@ -770,7 +771,8 @@ class _BookListPageState extends State<BookListPage> {
                                                                               () {
                                                                             debugPrint("false");
                                                                           },
-                                                                          backgroundColor: AppColors.primaryColor,
+                                                                          backgroundColor:
+                                                                              AppColors.primaryColor,
                                                                         )
                                                                       : openSubscriptionPage();
                                                                 } else if (Platform
@@ -792,7 +794,8 @@ class _BookListPageState extends State<BookListPage> {
                                                                               () {
                                                                             debugPrint("false");
                                                                           },
-                                                                          backgroundColor: AppColors.primaryColor,
+                                                                          backgroundColor:
+                                                                              AppColors.primaryColor,
                                                                         )
                                                                       : openSubscriptionPage();
                                                                 }
@@ -930,9 +933,8 @@ class _BookListPageState extends State<BookListPage> {
                                     onSuccess: () {
                                       openSubscriptionPage();
                                     },
-                                    onFail: () {
-                                    },
-                                    backgroundColor:AppColors.primaryColor,
+                                    onFail: () {},
+                                    backgroundColor: AppColors.primaryColor,
                                   )
                                 : openSubscriptionPage();
                           } else if (Platform.isIOS) {
@@ -942,8 +944,7 @@ class _BookListPageState extends State<BookListPage> {
                                     onSuccess: () {
                                       openSubscriptionPage();
                                     },
-                                    onFail: () {
-                                    },
+                                    onFail: () {},
                                     backgroundColor: AppColors.primaryColor,
                                   )
                                 : openSubscriptionPage();
@@ -1036,10 +1037,8 @@ class _BookListPageState extends State<BookListPage> {
                                 openUrlAndroid(widget.configResponse
                                     .androidSettings.houseAd!.urlId!);
                               },
-                              onFail: () {
-                              },
-                              backgroundColor:
-                                  AppColors.primaryColor,
+                              onFail: () {},
+                              backgroundColor: AppColors.primaryColor,
                             )
                           : openUrlAndroid(widget
                               .configResponse.androidSettings.houseAd!.urlId!);
@@ -1085,10 +1084,8 @@ class _BookListPageState extends State<BookListPage> {
                                 openAppStore(widget.configResponse.iosSettings
                                     .houseAd!.urlId!);
                               },
-                              onFail: () {
-                              },
-                              backgroundColor:
-                                 AppColors.primaryColor,
+                              onFail: () {},
+                              backgroundColor: AppColors.primaryColor,
                             )
                           : openAppStore(widget
                               .configResponse.iosSettings.houseAd!.urlId!);
