@@ -304,8 +304,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             ),
                           ),
                         )
-                      : const Center(
-                          child: CircularProgressIndicator(),
+                      : Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white.withOpacity(0.5),
+                          ),
                         ),
 
                   Positioned(
@@ -315,8 +317,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       top: 0,
                       child: Visibility(
                           visible: subscriptionController.isLoading.value,
-                          child: const Center(
-                              child: CircularProgressIndicator()))),
+                          child: Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.white.withOpacity(0.5),
+                          )))),
 
                   Positioned(
                     top: 20.0,
