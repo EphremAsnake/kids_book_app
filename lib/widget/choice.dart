@@ -105,7 +105,7 @@ class _ChoiceDialogBoxState extends State<ChoiceDialogBox> {
                         buttonColor = widget.titleColor!.withOpacity(0.5);
                       });
 
-                      Future.delayed(const Duration(milliseconds: 100), () {
+                      Future.delayed(const Duration(milliseconds: 30), () {
                         setState(() {
                           buttonColor = widget.titleColor!;
                         });
