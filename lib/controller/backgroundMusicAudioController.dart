@@ -4,7 +4,6 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import '../services/apiEndpoints.dart';
-import 'package:just_audio_cache/just_audio_cache.dart';
 
 class AudioController extends GetxController with WidgetsBindingObserver {
   final AudioPlayer _backgrounMusicPlayer = AudioPlayer();
@@ -14,7 +13,6 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   String backgroundAudioUrl = '';
   late final Directory appDocumentsDir;
 
-  //final AudioPlayer _audioPlayer = AudioPlayer();
   @override
   void onInit() {
     super.onInit();
@@ -97,16 +95,5 @@ class AudioController extends GetxController with WidgetsBindingObserver {
     _backgrounMusicPlayer.setVolume(0.2);
   }
 
-  void deleteDirectory(Directory directory) {
-    if (directory.existsSync()) {
-      directory.listSync().forEach((entity) {
-        if (entity is File) {
-          entity.deleteSync();
-        } else if (entity is Directory) {
-          deleteDirectory(entity);
-        }
-      });
-      directory.deleteSync();
-    }
-  }
+  
 }

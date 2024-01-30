@@ -1023,7 +1023,8 @@ class _BookListPageState extends State<BookListPage> {
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                         child: const Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(
+                              backgroundColor: Colors.white),
                         ),
                       ),
                     ))
@@ -1034,16 +1035,18 @@ class _BookListPageState extends State<BookListPage> {
     });
   }
 
+  Future<void> _launchURL(String _url) async {
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   void openUrlAndroid(String url) async {
     Uri uri = Uri.parse(url);
 
     if (uri.isAbsolute && (uri.scheme == 'http' || uri.scheme == 'https')) {
       //!The Url is a web link'
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch Url.';
-      }
+      _launchURL(url);
     } else {
       //!'The url is package name open playstore
 
