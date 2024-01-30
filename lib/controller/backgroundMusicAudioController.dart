@@ -72,7 +72,8 @@ class AudioController extends GetxController with WidgetsBindingObserver {
       } else {
         debugPrint('Downloading and caching audio: $fullAudioUrl');
         await _cacheManager.downloadFile(fullAudioUrl);
-        await _backgrounMusicPlayer.setUrl('${APIEndpoints.menuUrl}$fullAudioUrl');
+        await _backgrounMusicPlayer
+            .setUrl('${APIEndpoints.menuUrl}$fullAudioUrl');
       }
     } catch (e) {
       debugPrint("Error loading audio source: $e");
@@ -94,6 +95,4 @@ class AudioController extends GetxController with WidgetsBindingObserver {
   void audioVolumeDown() {
     _backgrounMusicPlayer.setVolume(0.2);
   }
-
-  
 }
