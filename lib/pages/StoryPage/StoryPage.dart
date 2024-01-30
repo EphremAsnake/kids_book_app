@@ -310,8 +310,6 @@ class _BooksPageState extends State<BookPage>
       //! Stop the audio player when leaving the page
     }
     bookplayer.dispose();
-
-    audioController.audioVolumeUp();
   }
 
   @override

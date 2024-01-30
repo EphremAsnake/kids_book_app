@@ -161,6 +161,7 @@ class _BookListPageState extends State<BookListPage> {
 
   void initcalls() {
     audioController = Get.put(AudioController());
+     audioController.audioVolumeUp();
     if (widget.isbackgroundsilent == null) {
       audioController.startAudio(widget.booksList.backgroundMusic);
     } else {
