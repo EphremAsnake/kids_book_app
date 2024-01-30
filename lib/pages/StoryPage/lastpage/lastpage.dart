@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
 import 'package:resize/resize.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';

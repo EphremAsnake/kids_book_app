@@ -6,8 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:lottie/lottie.dart';
-import 'package:storyapp/utils/colorConvet.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';

@@ -5,7 +5,6 @@ import 'package:starsview/starsview.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:open_store/open_store.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
@@ -120,7 +119,7 @@ class _BookListPageState extends State<BookListPage> {
   @override
   void initState() {
     super.initState();
-    
+
     final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
 
     _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
@@ -1131,7 +1130,9 @@ class _BookListPageState extends State<BookListPage> {
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
                       child: const Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                        ),
                       ),
                     ),
                   ))
@@ -1141,16 +1142,18 @@ class _BookListPageState extends State<BookListPage> {
     );
   }
 
+  Future<void> _launchURL(String _url) async {
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   void openUrlAndroid(String url) async {
     Uri uri = Uri.parse(url);
 
     if (uri.isAbsolute && (uri.scheme == 'http' || uri.scheme == 'https')) {
       //!The Url is a web link'
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch Url.';
-      }
+      _launchURL(url);
     } else {
       //!'The url is package name open playstore
 

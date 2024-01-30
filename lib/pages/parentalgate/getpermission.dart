@@ -94,15 +94,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
             alignment: Alignment.center,
             children: [
               //!Background Image
-              // Positioned(
-              //   bottom: 0,
-              //   left: 0,
-              //   right: 0,
-              //   child: Image.asset(
-              //     'assets/background.png',
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
+              
               const StarsView(
                 fps: 60,
               ),
@@ -120,7 +112,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                 child: Row(
                   children: [
                     // Left Column
-                    Spacer(),
+                    const Spacer(),
                     Expanded(
                       flex: 2,
                       child: SizedBox(
@@ -129,20 +121,14 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SizedBox(),
+                            const SizedBox(),
                             if (MediaQuery.of(context).size.height > 800)
-                              SizedBox(),
+                              const SizedBox(),
                             // Parent permission message and current challenge
                             const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // CustomButton(
-                                //   buttonSize: 50,
-                                //   onTap: () {
-                                //     // Speak a message to ask for parent's permission
-                                //   },
-                                //   child: const Icon(Icons.volume_up_rounded),
-                                // ),
+                                
                                 Column(
                                   children: [
                                     Padding(
@@ -160,14 +146,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                         ),
                                       ),
                                     ),
-                                    // Text(
-                                    //   "To continue, tap:",
-                                    //   style: TextStyle(
-                                    // fontFamily: 'Customfont',
-                                    //     color: Colors.white,
-                                    //     fontSize: 12,
-                                    //   ),
-                                    // ),
+                                    
                                   ],
                                 )
                               ],
@@ -217,9 +196,9 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                   )
                               ],
                             ),
-                            SizedBox(),
+                            const SizedBox(),
                             if (MediaQuery.of(context).size.height > 800)
-                              SizedBox(),
+                              const SizedBox(),
                           ],
                         ),
                       ),
@@ -233,7 +212,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            SizedBox(),
+                            const SizedBox(),
                             // Buttons for user input
                             for (int i = 0; i < 3; i++)
                               Row(
@@ -309,12 +288,12 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 ),
                               ],
                             ),
-                            SizedBox(),
+                            const SizedBox(),
                           ],
                         ),
                       ),
                     ),
-                    Spacer()
+                    const Spacer()
                   ],
                 ),
               ),

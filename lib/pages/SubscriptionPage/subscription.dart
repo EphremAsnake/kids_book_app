@@ -8,7 +8,6 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:resize/resize.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
-import 'package:storyapp/utils/colorConvet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

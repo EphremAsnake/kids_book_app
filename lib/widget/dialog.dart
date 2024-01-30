@@ -116,7 +116,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                             buttonColor = AppColors.backgroundColor;
                           });
 
-                          await Future.delayed(const Duration(milliseconds: 10), () {
+                          await Future.delayed(const Duration(milliseconds: 30), () {
                             setState(() {
                               buttonColor = widget.titleColor!;
                             });
@@ -157,7 +157,7 @@ class _ChoiceDialogBoxState extends State<CustomDialogBox> {
                           buttonColor2 = AppColors.backgroundColor;
                         });
 
-                        await Future.delayed(const Duration(milliseconds: 10), () {
+                        await Future.delayed(const Duration(milliseconds: 30), () {
                           setState(() {
                             buttonColor2 = widget.titleColor!;
                           });
