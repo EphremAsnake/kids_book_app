@@ -1131,7 +1131,7 @@ class _BookListPageState extends State<BookListPage> {
                       height: MediaQuery.of(context).size.height,
                       child: const Center(
                         child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
+                          color: Colors.white,
                         ),
                       ),
                     ),
