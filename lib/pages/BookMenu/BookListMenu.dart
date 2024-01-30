@@ -1129,9 +1129,9 @@ class _BookListPageState extends State<BookListPage> {
                       color: Colors.black.withOpacity(0.1),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child: const Center(
+                      child:  Center(
                         child: CircularProgressIndicator(
-                          color: Colors.white,
+                          color: Colors.white.withOpacity(0.5),
                         ),
                       ),
                     ),
