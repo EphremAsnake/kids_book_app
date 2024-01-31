@@ -53,6 +53,7 @@ dependencies:
   starsview: ^0.0.2
   url_launcher: ^6.2.1
   wakelock: ^0.6.2
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"

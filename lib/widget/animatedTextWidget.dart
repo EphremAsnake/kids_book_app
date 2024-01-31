@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class AnimatedTextWidget extends StatefulWidget {
   final String text;
@@ -59,7 +60,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
       builder: (context, child) {
         return Opacity(
           opacity: _fadeInAnimation.value,
-          child: Text(
+          child: AutoSizeText(
             widget.text,
             overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
@@ -68,7 +69,6 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
               fontFamily: 'StoryText',
               color: Colors.black,
               fontSize: 8.sp,
-              //fontWeight: FontWeight.bold,
             ),
           ),
         );
