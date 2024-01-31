@@ -94,7 +94,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               text: Strings.ok,
               functionCall: () {
                 Navigator.pop(context);
-                checkInternetConnection();
+                initStoreInfo();
+                //checkInternetConnection();
               },
               closeicon: true,
             );
