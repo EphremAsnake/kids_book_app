@@ -52,7 +52,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidgetstory>
       _animationController.forward();
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -68,7 +68,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidgetstory>
             style: TextStyle(
               fontFamily: 'StoryText',
               color: Colors.black,
-              fontSize: 10.sp,
+              fontSize: 8.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
