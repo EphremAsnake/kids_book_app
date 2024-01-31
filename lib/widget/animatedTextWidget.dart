@@ -60,16 +60,19 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidgetstory>
       builder: (context, child) {
         return Opacity(
           opacity: _fadeInAnimation.value,
-          child: AutoSizeText(
-            widget.text,
-            overflow: TextOverflow.visible,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: TextStyle(
-              fontFamily: 'StoryText',
-              color: Colors.black,
-              fontSize: 8.sp,
-              fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: AutoSizeText(
+              widget.text,
+              overflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: TextStyle(
+                fontFamily: 'StoryText',
+                color: Colors.black,
+                fontSize: 8.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         );

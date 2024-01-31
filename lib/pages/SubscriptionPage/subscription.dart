@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -16,6 +17,7 @@ import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/colors.dart';
 import '../../utils/Constants/dimention.dart';
+import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
 import 'status/subscriptionstatus.dart';
 
@@ -67,13 +69,39 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     super.initState();
     audioController = Get.find<AudioController>();
     _productIds = [widget.monthlyProductId, widget.yearlyProductId];
-    initStoreInfo();
+    checkInternetConnection();
   }
 
   @override
   void dispose() {
     super.dispose();
     subscriptionController.hideProgress();
+  }
+
+  Future<void> checkInternetConnection() async {
+    final connectivityResult = await (Connectivity().checkConnectivity());
+    setState(() {});
+    if (connectivityResult == ConnectivityResult.none) {
+      // ignore: use_build_context_synchronously
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return ChoiceDialogBox(
+              title: Strings.noInternet,
+              titleColor: const Color(0xffED1E54),
+              descriptions: Strings.noInternetDescription,
+              text: Strings.ok,
+              functionCall: () {
+                Navigator.pop(context);
+                checkInternetConnection();
+              },
+              closeicon: true,
+            );
+          });
+    } else {
+      initStoreInfo();
+    }
   }
 
   Future<void> initStoreInfo() async {
