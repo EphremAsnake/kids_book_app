@@ -577,7 +577,7 @@ class _BooksPageState extends State<BookPage>
                                                 0.035 +
                                             55,
                                   ),
-                                  child: AnimatedTextWidget(
+                                  child: AnimatedTextWidgetstory(
                                     text: widget.response.pages[_counter].text,
                                   )),
                             ),

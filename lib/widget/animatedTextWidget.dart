@@ -1,17 +1,18 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:resize/resize.dart';
 
-class AnimatedTextWidget extends StatefulWidget {
+class AnimatedTextWidgetstory extends StatefulWidget {
   final String text;
 
-  const AnimatedTextWidget({super.key, required this.text});
+  const AnimatedTextWidgetstory({super.key, required this.text});
 
   @override
   // ignore: library_private_types_in_public_api
   _AnimatedTextWidgetState createState() => _AnimatedTextWidgetState();
 }
 
-class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
+class _AnimatedTextWidgetState extends State<AnimatedTextWidgetstory>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeInAnimation;
@@ -43,7 +44,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
   }
 
   @override
-  void didUpdateWidget(covariant AnimatedTextWidget oldWidget) {
+  void didUpdateWidget(covariant AnimatedTextWidgetstory oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.text != oldWidget.text) {
@@ -51,7 +52,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
       _animationController.forward();
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -59,7 +60,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
       builder: (context, child) {
         return Opacity(
           opacity: _fadeInAnimation.value,
-          child: Text(
+          child: AutoSizeText(
             widget.text,
             overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
@@ -67,7 +68,7 @@ class _AnimatedTextWidgetState extends State<AnimatedTextWidget>
             style: TextStyle(
               fontFamily: 'StoryText',
               color: Colors.black,
-              fontSize: 8.sp,
+              fontSize: 10.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
