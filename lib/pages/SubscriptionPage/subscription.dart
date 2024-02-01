@@ -104,7 +104,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       initStoreInfo();
     }
   }
-  
+
   Future<void> initStoreInfo() async {
     await _inAppPurchase.isAvailable();
 

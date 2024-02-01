@@ -1129,7 +1129,7 @@ class _BookListPageState extends State<BookListPage> {
                       color: Colors.black.withOpacity(0.1),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child:  Center(
+                      child: Center(
                         child: CircularProgressIndicator(
                           color: Colors.white.withOpacity(0.5),
                         ),
@@ -1215,11 +1215,7 @@ class _BookListPageState extends State<BookListPage> {
 
     if (uri.isAbsolute && (uri.scheme == 'http' || uri.scheme == 'https')) {
       //!The Url is a web link'
-      if (await canLaunch(appId)) {
-        await launch(appId);
-      } else {
-        throw 'Could not launch Url.';
-      }
+      _launchURL(appId);
     } else {
       //!'The url is AppId open Appstore
       OpenStore.instance.open(

@@ -56,10 +56,12 @@ class _ChoiceScreenState extends State<LastScreen> {
     final String appStoreUrl =
         'https://apps.apple.com/app/id$appId?action=write-review';
 
-    if (await canLaunch(appStoreUrl)) {
-      await launch(appStoreUrl);
-    } else {
-      throw 'Could not launch App Store';
+    _launchURL(appStoreUrl);
+  }
+
+  Future<void> _launchURL(String _url) async {
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
     }
   }
 
