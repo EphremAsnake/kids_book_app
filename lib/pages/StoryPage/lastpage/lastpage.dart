@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:open_store/open_store.dart';
 import 'package:resize/resize.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../controller/backgroundMusicAudioController.dart';
 import '../../../model/booklistModel.dart';
 import '../../../model/configModel.dart';
@@ -52,8 +53,16 @@ class _ChoiceScreenState extends State<LastScreen> {
   }
 
   void openAppStore(String appId) async {
-    //!open Playstore
-    OpenStore.instance.open(appStoreId: appId);
+    final String appStoreUrl =
+        'https://apps.apple.com/app/id$appId?action=write-review';
+
+    _launchURL(appStoreUrl);
+  }
+
+  Future<void> _launchURL(String _url) async {
+    if (!await launchUrl(Uri.parse(_url))) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
   @override
