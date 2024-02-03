@@ -15,7 +15,7 @@ class Strings {
 
   static const String leaveStory = "Leave Story?";
   static const String gohomeDescription =
-      "Do you want to leave this story and go back to home?";
+      "Do you want to leave story and return home?";
   static const String leave = "Leave";
   static const String stay = "Stay";
 
@@ -48,12 +48,11 @@ class Strings {
   static const String clearCache = "Clear Cache";
   static const String restorePurchase = "Restore Purchase";
   static const String youareSubscribedtoMonthlypackage =
-      "You are Subscribed to monthly package";
+      "⭐ You are subscribed to \nmonthly package";
   static const String youareSubscribedtoYearlypackage =
-      "You are Subscribed to yearly package";
+      "⭐ You are subscribed to \nyearly package";
 
   //!failed to Subscribe Snackbar Message
   static const String failure = "Failure";
   static const String unableToCompletePurchaseMessage = "Something Went Wrong";
-
 }

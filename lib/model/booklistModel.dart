@@ -1,12 +1,10 @@
 class BookList {
-  final int id;
   final String path;
   final String title;
   final String thumbnail;
   final bool locked;
 
   BookList({
-    required this.id,
     required this.path,
     required this.title,
     required this.thumbnail,
@@ -15,7 +13,6 @@ class BookList {
 
   factory BookList.fromJson(Map<String, dynamic> json) {
     return BookList(
-      id: json['id'] ?? 0,
       path: json['path'] ?? '',
       title: json['title'] ?? '',
       thumbnail: json['thumbnail'] ?? '',
