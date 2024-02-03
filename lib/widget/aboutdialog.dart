@@ -44,7 +44,7 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
             width: MediaQuery.sizeOf(context).width * 0.5,
             padding: const EdgeInsets.only(
                 left: Constants.padding,
-                top: 30,
+                top: 20,
                 right: Constants.padding,
                 bottom: 30),
             margin: const EdgeInsets.only(top: 10),
@@ -56,6 +56,17 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                Center(
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/splashlogo.png"),
+                          fit: BoxFit.contain),
+                    ),
+                  ),
+                ),
                 Text(
                   widget.descriptions!,
                   style: TextStyle(
