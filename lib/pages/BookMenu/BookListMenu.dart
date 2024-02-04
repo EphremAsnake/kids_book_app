@@ -34,6 +34,7 @@ import 'package:get/get.dart' hide Response;
 import '../SubscriptionPage/iap_services.dart';
 import '../SubscriptionPage/status/subscriptionstatus.dart';
 import '../SubscriptionPage/subscription.dart';
+import 'custom/reveal.route.dart';
 
 class BookListPage extends StatefulWidget {
   final ApiResponse booksList;
@@ -279,16 +280,21 @@ class _BookListPageState extends State<BookListPage> {
 
   void goToStoryPage(String folder) {
     if (folderName == folder) {
-      Get.offAll(
-          BookPage(
+      Navigator.pushReplacement(
+            context,
+            RevealRoute(
+              page: BookPage(
             response: singlestoryPageResponse!,
             folder: folder,
             backgroundMusic: widget.booksList.backgroundMusic,
             booksList: widget.booksList,
             configResponse: widget.configResponse,
           ),
-          transition: Transition.circularReveal,
-          duration: const Duration(seconds: 2));
+              maxRadius: 900,
+              centerAlignment: Alignment.center,
+            ),
+          );
+     
     } else {
       getSelectedStory(folder, goto: true);
     }
@@ -312,16 +318,22 @@ class _BookListPageState extends State<BookListPage> {
         folderName = folder;
 
         if (goto != null) {
-          Get.offAll(
-              BookPage(
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+            context,
+            RevealRoute(
+              page:  BookPage(
                 response: singlestoryPageResponse!,
                 folder: folder,
                 backgroundMusic: widget.booksList.backgroundMusic,
                 booksList: widget.booksList,
                 configResponse: widget.configResponse,
               ),
-              transition: Transition.circularReveal,
-              duration: const Duration(seconds: 2));
+              maxRadius: 900,
+              centerAlignment: Alignment.center,
+            ),
+          );
+          
         }
       } else {
         setState(() {
