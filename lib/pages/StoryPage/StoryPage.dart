@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:circular_reveal_animation/circular_reveal_animation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,6 +46,8 @@ class BookPage extends StatefulWidget {
 
 class _BooksPageState extends State<BookPage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> animation;
   AudioPlayer bookplayer = AudioPlayer();
   bool isPlaying = false;
   bool isPl = false;
@@ -77,11 +80,19 @@ class _BooksPageState extends State<BookPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    audioController = Get.find<AudioController>();
-    _controller = AnimationController(
+    animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 1000),
     );
+    animation = CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeIn,
+    );
+    audioController = Get.find<AudioController>();
+    // _controller = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 3000),
+    // );
     audioController.audioVolumeDown();
     isAudioPlaying = audioController.isPlaying;
 
@@ -369,7 +380,7 @@ class _BooksPageState extends State<BookPage>
             onSwipeLeft: (offset) {
               _incrementCounter();
             },
-
+          
             //!Hide Buttons
             // onSwipeUp: (offset) {
             //   setState(() {
@@ -394,15 +405,15 @@ class _BooksPageState extends State<BookPage>
                           child: ImageFade(
                               width: MediaQuery.of(context).size.width,
                               //height: MediaQuery.of(context).size.height * 0.8,
-
+                      
                               //! whenever the image changes, it will be loaded, and then faded in:
                               image: CachedNetworkImageProvider(
                                   images[_counter],
                                   cacheManager: DefaultCacheManager()),
-
+                      
                               //! slow-ish fade for loaded images:
                               duration: const Duration(milliseconds: 900),
-
+                      
                               //! if the image is loaded synchronously ,
                               syncDuration: const Duration(milliseconds: 900),
                               alignment: Alignment.center,
@@ -414,7 +425,7 @@ class _BooksPageState extends State<BookPage>
                                 child: const Icon(Icons.photo,
                                     color: Colors.transparent, size: 128.0),
                               ),
-
+                      
                               //! displayed when an error occurs:
                               errorBuilder: (context, error) {
                                 bookplayer.stop;
@@ -440,12 +451,11 @@ class _BooksPageState extends State<BookPage>
                                 );
                               }),
                         ),
-
+                      
                         //!Home and Page Counter
                         Visibility(
                           visible: buttonsVisiblity,
                           child: Positioned(
-                            
                             top: 20.0,
                             left: MediaQuery.of(context).size.height * 0.08,
                             child: Column(
@@ -475,7 +485,7 @@ class _BooksPageState extends State<BookPage>
                                 const SizedBox(
                                   height: 10,
                                 ),
-
+                      
                                 //!Page Counter
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -497,12 +507,11 @@ class _BooksPageState extends State<BookPage>
                             ),
                           ),
                         ),
-
+                      
                         //!Background Music And Strory Play
                         Visibility(
                           visible: buttonsVisiblity,
                           child: Positioned(
-                            
                             top: 20.0,
                             right: MediaQuery.of(context).size.height * 0.08,
                             child: Column(
@@ -535,7 +544,7 @@ class _BooksPageState extends State<BookPage>
                                 const SizedBox(
                                   height: 10,
                                 ),
-
+                      
                                 //!Story Play
                                 if (_listen)
                                   CircleAvatar(
@@ -558,7 +567,7 @@ class _BooksPageState extends State<BookPage>
                             ),
                           ),
                         ),
-
+                      
                         //!Story Text
                         Positioned(
                           bottom: 0,
@@ -586,7 +595,7 @@ class _BooksPageState extends State<BookPage>
                       ],
                     ),
                   ),
-
+                      
                   //!Previous Button
                   Visibility(
                     visible: buttonsVisiblity,
@@ -598,13 +607,13 @@ class _BooksPageState extends State<BookPage>
                           setState(() {
                             previousbuttonColor = Colors.black.withOpacity(0.1);
                           });
-
+                      
                           Future.delayed(const Duration(milliseconds: 500), () {
                             setState(() {
                               previousbuttonColor = Colors.transparent;
                             });
                           });
-
+                      
                           _deccrementCounter();
                         },
                         child: Container(
@@ -622,7 +631,7 @@ class _BooksPageState extends State<BookPage>
                       ),
                     ),
                   ),
-
+                      
                   //!Next Button
                   Visibility(
                     visible: buttonsVisiblity,
@@ -634,13 +643,13 @@ class _BooksPageState extends State<BookPage>
                           setState(() {
                             nextbuttonColor = Colors.black.withOpacity(0.1);
                           });
-
+                      
                           Future.delayed(const Duration(milliseconds: 500), () {
                             setState(() {
                               nextbuttonColor = Colors.transparent;
                             });
                           });
-
+                      
                           _incrementCounter();
                         },
                         child: Container(

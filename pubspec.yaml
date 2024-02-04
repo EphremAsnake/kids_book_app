@@ -23,7 +23,9 @@ environment:
 
 dependencies:
   audioplayers: ^5.2.1
+  auto_size_text: ^3.0.0
   cached_network_image: ^3.3.0
+  circular_reveal_animation: ^2.0.1
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
   dio: ^5.3.4
@@ -40,14 +42,14 @@ dependencies:
   just_audio: ^0.9.36
   logger: ^2.0.2+1
   open_store: ^0.5.0
+  page_transition: ^2.1.0
   resize: ^1.0.0
   share_plus: ^6.3.4
   shared_preferences: ^2.2.2
+  starsview: ^0.0.2
   url_launcher: ^6.2.1
   wakelock: ^0.6.2
-  starsview: ^0.0.2
-  auto_size_text: ^3.0.0
-  
+
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
   flutter_lints: ^2.0.0
