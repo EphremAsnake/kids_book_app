@@ -213,20 +213,10 @@ class _BookListPageState extends State<BookListPage> {
             booksList: widget.booksList,
             configResponse: widget.configResponse,
           ),
-          maxRadius: 800,
+          maxRadius: 900,
           centerAlignment: Alignment.center,
         ),
       );
-      // Get.offAll(
-      //     BookPage(
-      //       response: singlestoryPageResponse!,
-      //       folder: folder,
-      //       backgroundMusic: widget.booksList.backgroundMusic,
-      //       booksList: widget.booksList,
-      //       configResponse: widget.configResponse,
-      //     ),
-      //     transition: Transition.circularReveal,
-      //     duration: const Duration(seconds: 2));
     } else {
       getSelectedStory(folder, goto: true);
     }
@@ -284,6 +274,7 @@ class _BookListPageState extends State<BookListPage> {
 
     if (await allFilesCached(storyPageresponse, folder)) {
       audioController.audioVolumeDown();
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
         RevealRoute(
@@ -294,20 +285,10 @@ class _BookListPageState extends State<BookListPage> {
             booksList: widget.booksList,
             configResponse: widget.configResponse,
           ),
-          maxRadius: 800,
+          maxRadius: 900,
           centerAlignment: Alignment.center,
         ),
       );
-      // Get.offAll(
-      //     BookPage(
-      //       response: singlestoryPageResponse!,
-      //       folder: folder,
-      //       backgroundMusic: widget.booksList.backgroundMusic,
-      //       booksList: widget.booksList,
-      //       configResponse: widget.configResponse,
-      //     ),
-      //     transition: Transition.circularReveal,
-      //     duration: const Duration(seconds: 2));
     } else {
       // ignore: use_build_context_synchronously
       showDialog(
@@ -350,30 +331,21 @@ class _BookListPageState extends State<BookListPage> {
 
         if (goto != null) {
           audioController.audioVolumeDown();
+          // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
-        context,
-        RevealRoute(
-          page: BookPage(
+            context,
+            RevealRoute(
+              page: BookPage(
                 response: singlestoryPageResponse!,
                 folder: folder,
                 backgroundMusic: widget.booksList.backgroundMusic,
                 booksList: widget.booksList,
                 configResponse: widget.configResponse,
               ),
-          maxRadius: 800,
-          centerAlignment: Alignment.center,
-        ),
-      );
-          // Get.offAll(
-          //     BookPage(
-          //       response: singlestoryPageResponse!,
-          //       folder: folder,
-          //       backgroundMusic: widget.booksList.backgroundMusic,
-          //       booksList: widget.booksList,
-          //       configResponse: widget.configResponse,
-          //     ),
-          //     transition: Transition.circularReveal,
-          //     duration: const Duration(seconds: 2));
+              maxRadius: 900,
+              centerAlignment: Alignment.center,
+            ),
+          );
         }
       } else {
         if (storedStoryList != "") {
@@ -1065,7 +1037,7 @@ class _BookListPageState extends State<BookListPage> {
                         color: Colors.black.withOpacity(0.1),
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
-                        child:  Center(
+                        child: Center(
                           child: CircularProgressIndicator(
                               color: Colors.white.withOpacity(0.5)),
                         ),
