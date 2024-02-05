@@ -1169,11 +1169,11 @@ class _BookListPageState extends State<BookListPage> {
               left: 0,
               right: 0,
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        bottomRight: Radius.circular(12))),
+                // decoration: BoxDecoration(
+                //     color: Colors.black.withOpacity(0.3),
+                //     borderRadius: const BorderRadius.only(
+                //         bottomLeft: Radius.circular(12),
+                //         bottomRight: Radius.circular(12))),
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Center(
                   child: Padding(
@@ -1184,7 +1184,15 @@ class _BookListPageState extends State<BookListPage> {
                       overflow: TextOverflow.visible,
                       maxLines: 3,
                       style: TextStyle(
-                          fontFamily: 'Customfont',
+                          //!Customfont
+                          fontFamily: 'storytitle',
+                          shadows: const [
+                            Shadow(
+                              color: Colors.black,
+                              blurRadius: 3.0,
+                              offset: Offset(3.0, 3.0),
+                            ),
+                          ],
                           height: 1,
                           color: Colors.white,
                           fontSize: 6.sp,
