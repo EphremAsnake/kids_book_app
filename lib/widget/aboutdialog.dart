@@ -41,6 +41,7 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
       children: <Widget>[
         Container(
           width: MediaQuery.sizeOf(context).width * 0.5,
+          height: MediaQuery.sizeOf(context).height * 0.8,
           padding: const EdgeInsets.only(
               left: Constants.padding,
               top: 20,
