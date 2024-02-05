@@ -281,20 +281,19 @@ class _BookListPageState extends State<BookListPage> {
   void goToStoryPage(String folder) {
     if (folderName == folder) {
       Navigator.pushReplacement(
-            context,
-            RevealRoute(
-              page: BookPage(
+        context,
+        RevealRoute(
+          page: BookPage(
             response: singlestoryPageResponse!,
             folder: folder,
             backgroundMusic: widget.booksList.backgroundMusic,
             booksList: widget.booksList,
             configResponse: widget.configResponse,
           ),
-              maxRadius: 900,
-              centerAlignment: Alignment.center,
-            ),
-          );
-     
+          maxRadius: 900,
+          centerAlignment: Alignment.center,
+        ),
+      );
     } else {
       getSelectedStory(folder, goto: true);
     }
@@ -322,7 +321,7 @@ class _BookListPageState extends State<BookListPage> {
           Navigator.pushReplacement(
             context,
             RevealRoute(
-              page:  BookPage(
+              page: BookPage(
                 response: singlestoryPageResponse!,
                 folder: folder,
                 backgroundMusic: widget.booksList.backgroundMusic,
@@ -333,7 +332,6 @@ class _BookListPageState extends State<BookListPage> {
               centerAlignment: Alignment.center,
             ),
           );
-          
         }
       } else {
         setState(() {
@@ -1284,6 +1282,13 @@ class _BookListPageState extends State<BookListPage> {
                       maxLines: 3,
                       style: TextStyle(
                           fontFamily: 'Customfont',
+                          shadows: const [
+                            Shadow(
+                              color: Colors.black,
+                              blurRadius: 4.0,
+                              offset: Offset(0.1, 0.1),
+                            ),
+                          ],
                           height: 1,
                           color: Colors.white,
                           fontSize: 6.sp,
@@ -1301,7 +1306,16 @@ class _BookListPageState extends State<BookListPage> {
                   color: Colors.black.withOpacity(0.5),
                   width: double.infinity,
                   height: double.infinity,
-                  child: const Icon(Icons.lock, color: Colors.white, size: 30),
+                  child: const Icon(Icons.lock,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black,
+                          blurRadius: 4.0,
+                          offset: Offset(0.1, 0.1),
+                        ),
+                      ],
+                      color: Colors.white,
+                      size: 30),
                 ),
               )
           ],

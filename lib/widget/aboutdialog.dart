@@ -37,22 +37,22 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
   }
 
   contentBox(context) {
-    return SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.sizeOf(context).width * 0.5,
-            padding: const EdgeInsets.only(
-                left: Constants.padding,
-                top: 20,
-                right: Constants.padding,
-                bottom: 30),
-            margin: const EdgeInsets.only(top: 10),
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(Constants.padding),
-            ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.sizeOf(context).width * 0.5,
+          padding: const EdgeInsets.only(
+              left: Constants.padding,
+              top: 20,
+              right: Constants.padding,
+              bottom: 20),
+          margin: const EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(Constants.padding),
+          ),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -82,31 +82,31 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
               ],
             ),
           ),
-          Positioned(
-            left: Constants.padding,
-            right: Constants.padding,
+        ),
+        Positioned(
+          left: Constants.padding,
+          right: Constants.padding,
+          child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: Constants.avatarRadius,
+            child: ClipRRect(
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(Constants.avatarRadius)),
+                child: SvgPicture.asset('${widget.img}')),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          child: GestureDetector(
+            onTap: () => widget.secfunctionCall!(),
             child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: Constants.avatarRadius,
-              child: ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(Constants.avatarRadius)),
-                  child: SvgPicture.asset('${widget.img}')),
-            ),
+                backgroundColor: widget.titleColor,
+                radius: Constants.avatarRadius / 3,
+                child: const Icon(Icons.close, color: Colors.white)),
           ),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: GestureDetector(
-              onTap: () => widget.secfunctionCall!(),
-              child: CircleAvatar(
-                  backgroundColor: widget.titleColor,
-                  radius: Constants.avatarRadius / 3,
-                  child: const Icon(Icons.close, color: Colors.white)),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
