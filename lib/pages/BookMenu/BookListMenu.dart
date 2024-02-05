@@ -1266,11 +1266,11 @@ class _BookListPageState extends State<BookListPage> {
               left: 0,
               right: 0,
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        bottomRight: Radius.circular(12))),
+                // decoration: BoxDecoration(
+                //     color: Colors.black.withOpacity(0.3),
+                //     borderRadius: const BorderRadius.only(
+                //         bottomLeft: Radius.circular(12),
+                //         bottomRight: Radius.circular(12))),
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Center(
                   child: Padding(
