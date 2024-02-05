@@ -1184,13 +1184,12 @@ class _BookListPageState extends State<BookListPage> {
                       overflow: TextOverflow.visible,
                       maxLines: 3,
                       style: TextStyle(
-                          //!Customfont
-                          fontFamily: 'storytitle',
+                          fontFamily: 'Customfont',
                           shadows: const [
                             Shadow(
                               color: Colors.black,
-                              blurRadius: 3.0,
-                              offset: Offset(3.0, 3.0),
+                              blurRadius: 4.0,
+                              offset: Offset(0.1, 0.1),
                             ),
                           ],
                           height: 1,
@@ -1210,7 +1209,13 @@ class _BookListPageState extends State<BookListPage> {
                   color: Colors.black.withOpacity(0.3),
                   width: double.infinity,
                   height: double.infinity,
-                  child: const Icon(Icons.lock, color: Colors.white, size: 30),
+                  child: const Icon(shadows: [
+                    Shadow(
+                      color: Colors.black,
+                      blurRadius: 4.0,
+                      offset: Offset(0.1, 0.1),
+                    ),
+                  ], Icons.lock, color: Colors.white, size: 30),
                 ),
               )
           ],
