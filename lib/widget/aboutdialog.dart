@@ -47,7 +47,7 @@ class _AboutDialogBoxState extends State<AboutDialogBox> {
               top: 20,
               right: Constants.padding,
               bottom: 20),
-          margin: const EdgeInsets.only(top: 10),
+          //margin: const EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
