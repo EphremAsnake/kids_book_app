@@ -131,7 +131,6 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void fetchData() async {
-    Logger logger = Logger();
     //!Config Data
     String storedConfigData = await getFromStorageConfig();
     Map<String, dynamic> parsedConfigData = json.decode(storedConfigData);
@@ -146,11 +145,8 @@ class _SplashScreenState extends State<SplashScreen>
           await dio.get('${APIEndpoints.baseUrl}/menu/book_list.json');
 
       if (response.statusCode == 200) {
-        logger.e("server 200");
         ApiResponse apiResponse = ApiResponse.fromJson(response.data);
-        logger.e("after response");
         saveToLocalStorageBookList(response.data);
-        logger.e("after save");
         // ignore: use_build_context_synchronously
         if (configResponses == null) {
           await fetchConfigData();
@@ -174,13 +170,11 @@ class _SplashScreenState extends State<SplashScreen>
               duration: const Duration(seconds: 2));
         }
       } else {
-        logger.e("after save else");
         debugPrint(
             'Something Went Wrong with main server Trying with fallback server');
         await tryFallbackUrl(fallbackUrl);
       }
     } catch (e) {
-      logger.e("after save else");
       debugPrint(
           'Something Went Wrong with main server trying with fallback server $e');
       await tryFallbackUrl(fallbackUrl);
