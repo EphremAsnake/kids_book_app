@@ -230,6 +230,9 @@ class _SplashScreenState extends State<SplashScreen>
         }
       }
     } catch (e) {
+      if (storedBookList != "" && storedConfigData != "") {
+        useLocalDataBoth();
+      }
       debugPrint('Something Went Wrong $e');
     }
   }
