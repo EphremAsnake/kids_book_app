@@ -1163,8 +1163,8 @@ class _BookListPageState extends State<BookListPage> {
                 height: double.infinity,
                 placeholder: const AssetImage('assets/bg.png'),
                 image: CachedNetworkImageProvider(
-                  '${APIEndpoints.baseUrl}/${book.thumbnail}',
-                ),
+                    '${APIEndpoints.baseUrl}/${book.thumbnail}',
+                    cacheManager: DefaultCacheManager()),
                 fadeInDuration: const Duration(milliseconds: 2000),
                 fit: BoxFit.cover,
                 imageErrorBuilder: (context, error, stackTrace) {
