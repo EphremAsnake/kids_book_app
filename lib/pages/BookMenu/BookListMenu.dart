@@ -1147,8 +1147,15 @@ class _BookListPageState extends State<BookListPage> {
     }
   }
 
+  Future<void> cacheImages(String imageUrls) async {
+    final cacheManager = DefaultCacheManager();
+
+    await cacheManager.downloadFile(imageUrls);
+  }
+
   Widget buildBookCard(
       BookList book, bool monthlysubStatus, bool yearlysubStatus) {
+    cacheImages('${APIEndpoints.baseUrl}/${book.thumbnail}');
     return SizedBox(
       height: 150,
       child: Card(
