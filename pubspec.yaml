@@ -39,6 +39,7 @@ dependencies:
   image_fade: ^0.6.2
   in_app_purchase: ^3.1.11
   just_audio: ^0.9.36
+  liquid_pull_to_refresh: ^3.0.1
   logger: ^2.0.2+1
   open_store: ^0.5.0
   resize: ^1.0.0
@@ -80,7 +81,6 @@ flutter:
     - family: StoryText
       fonts:
         - asset: fonts/Roboto-Light.ttf
-    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
