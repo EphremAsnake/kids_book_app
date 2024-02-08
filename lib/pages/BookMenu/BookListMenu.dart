@@ -375,7 +375,6 @@ class _BookListPageState extends State<BookListPage> {
     return GetBuilder<SubscriptionStatus>(builder: (subscriptionStatus) {
       return RefreshIndicator(
         color: AppColors.primaryColor,
-        key: _refreshIndicatorKey,
         onRefresh: onPulltoRefresh,
         child: Scaffold(
           backgroundColor: AppColors.primaryColor,
