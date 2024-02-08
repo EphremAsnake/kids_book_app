@@ -165,6 +165,7 @@ class _SplashScreenState extends State<SplashScreen> {
           await fetchConfigData();
 
           checkAvailabiltyFunction(configResponses!);
+          APIEndpoints.updateBaseUrl(fallbackUrl);
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -174,6 +175,7 @@ class _SplashScreenState extends State<SplashScreen> {
               duration: const Duration(seconds: 2));
         } else {
           checkAvailabiltyFunction(configResponses!);
+          APIEndpoints.updateBaseUrl(fallbackUrl);
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
