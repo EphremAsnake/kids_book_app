@@ -1166,7 +1166,7 @@ class _BookListPageState extends State<BookListPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
-                fadeInDuration: const Duration(milliseconds: 0),
+                
                  fadeOutDuration: const Duration(milliseconds: 0),
                 width: double.infinity,
                 height: double.infinity,
