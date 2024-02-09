@@ -1272,7 +1272,7 @@ class _BookListPageState extends State<BookListPage> {
                 width: double.infinity,
                 height: double.infinity,
                 imageUrl: '${APIEndpoints.baseUrl}/${book.thumbnail}',
-                placeholder: (context, url) => Image.asset('assets/bg.png'),
+                placeholder: (context, url) =>  Container(color: Colors.transparent),
                 errorWidget: (context, url, error) =>
                     Container(color: Colors.transparent),
                 fit: BoxFit.cover,
