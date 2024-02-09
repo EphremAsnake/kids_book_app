@@ -1165,22 +1165,20 @@ class _BookListPageState extends State<BookListPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: FadeInImage(
+              child: CachedNetworkImage(
+                fadeInDuration: const Duration(milliseconds: 0),
+                 fadeOutDuration: const Duration(milliseconds: 0),
                 width: double.infinity,
                 height: double.infinity,
-                placeholder: const AssetImage('assets/bg.png'),
-                image: CachedNetworkImageProvider(
-                    '${APIEndpoints.baseUrl}/${book.thumbnail}',
-                    cacheManager: DefaultCacheManager()),
-                fadeInDuration: const Duration(milliseconds: 2000),
+                imageUrl: '${APIEndpoints.baseUrl}/${book.thumbnail}',
+                placeholder: (context, url) => Image.asset('assets/bg.png'),
+                errorWidget: (context, url, error) =>
+                    Container(color: Colors.transparent),
                 fit: BoxFit.cover,
-                imageErrorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.transparent,
-                  );
-                },
+                cacheManager: DefaultCacheManager(),
               ),
             ),
+
             //! Overlay for the title
             Positioned(
               bottom: 0,
