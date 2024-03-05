@@ -830,24 +830,26 @@ class _BookListPageState extends State<BookListPage> {
                           child: FloatingActionButton(
                             onPressed: () {
                               if (Platform.isAndroid) {
-                                Permission.getPermission(
-                                  context: context,
-                                  onSuccess: () {
-                                    openSubscriptionPage();
-                                  },
-                                  onFail: () {},
-                                  backgroundColor: AppColors.primaryColor,
-                                );
+                                // Permission.getPermission(
+                                //   context: context,
+                                //   onSuccess: () {
+                                //     openSubscriptionPage();
+                                //   },
+                                //   onFail: () {},
+                                //   backgroundColor: AppColors.primaryColor,
+                                // );
+                                openSubscriptionPage();
                                 //: openSubscriptionPage();
                               } else if (Platform.isIOS) {
-                                Permission.getPermission(
-                                  context: context,
-                                  onSuccess: () {
-                                    openSubscriptionPage();
-                                  },
-                                  onFail: () {},
-                                  backgroundColor: AppColors.primaryColor,
-                                );
+                                openSubscriptionPage();
+                                // Permission.getPermission(
+                                //   context: context,
+                                //   onSuccess: () {
+                                //     openSubscriptionPage();
+                                //   },
+                                //   onFail: () {},
+                                //   backgroundColor: AppColors.primaryColor,
+                                // );
                                 //: openSubscriptionPage();
                               }
                             },
