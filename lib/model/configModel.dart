@@ -78,7 +78,6 @@ class AndroidSettings {
   String? unlockDialogText;
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
-  bool? parentalGate;
   String aboutApp;
   String? fallbackServerUrl;
 
@@ -87,7 +86,6 @@ class AndroidSettings {
     this.unlockDialogText,
     this.appRateAndShare,
     this.houseAd,
-    this.parentalGate,
     required this.aboutApp,
     this.fallbackServerUrl,
   });
@@ -97,14 +95,12 @@ class AndroidSettings {
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
       unlockDialogText: json['unlock_dialog_text'],
-      
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
       houseAd: json.containsKey('house_ad')
           ? HouseAd.fromJson(json['house_ad'])
           : null,
-      parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'] ?? '',
     );
@@ -116,7 +112,6 @@ class IOSSettings {
   String? unlockDialogText;
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
-  bool? parentalGate;
   String aboutApp;
   String? fallbackServerUrl;
 
@@ -125,7 +120,6 @@ class IOSSettings {
     this.unlockDialogText,
     this.appRateAndShare,
     this.houseAd,
-    this.parentalGate,
     required this.aboutApp,
     this.fallbackServerUrl,
   });
@@ -135,14 +129,12 @@ class IOSSettings {
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
       unlockDialogText: json['unlock_dialog_text'],
-     
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
       houseAd: json.containsKey('house_ad')
           ? HouseAd.fromJson(json['house_ad'])
           : null,
-      parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'] ?? '',
     );

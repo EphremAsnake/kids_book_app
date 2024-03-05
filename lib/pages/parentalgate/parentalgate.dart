@@ -10,11 +10,13 @@ class Permission {
     required backgroundColor,
     void Function()? onSuccess,
     void Function()? onFail,
+    void Function()? onClose,
   }) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => GetParentPermission(
+          onClose: onClose,
           bgColor: backgroundColor,
         ),
       ),

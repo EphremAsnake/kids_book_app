@@ -491,112 +491,106 @@ class _BookListPageState extends State<BookListPage> {
                                                       }
                                                     } else if (book.locked ==
                                                         true) {
-                                                      final isAndroid =
-                                                          Platform.isAndroid;
+                                                      // final isAndroid =
+                                                      //     Platform.isAndroid;
 
-                                                      final unlockMessage = isAndroid
-                                                          ? widget
-                                                                  .configResponse
-                                                                  .androidSettings
-                                                                  .unlockDialogText ??
-                                                              ""
-                                                          : widget
-                                                                  .configResponse
-                                                                  .iosSettings
-                                                                  .unlockDialogText ??
-                                                              "";
+                                                      // final unlockMessage = isAndroid
+                                                      //     ? widget
+                                                      //             .configResponse
+                                                      //             .androidSettings
+                                                      //             .unlockDialogText ??
+                                                      //         ""
+                                                      //     : widget
+                                                      //             .configResponse
+                                                      //             .iosSettings
+                                                      //             .unlockDialogText ??
+                                                      //         "";
 
-                                                      final subscriptionMessage = isAndroid
-                                                          ? widget
-                                                                  .configResponse
-                                                                  .androidSettings
-                                                                  .subscriptionSettings
-                                                                  .generalSubscriptionText ??
-                                                              ""
-                                                          : widget
-                                                                  .configResponse
-                                                                  .iosSettings
-                                                                  .subscriptionSettings
-                                                                  .generalSubscriptionText ??
-                                                              "";
+                                                      // final subscriptionMessage = isAndroid
+                                                      //     ? widget
+                                                      //             .configResponse
+                                                      //             .androidSettings
+                                                      //             .subscriptionSettings
+                                                      //             .generalSubscriptionText ??
+                                                      //         ""
+                                                      //     : widget
+                                                      //             .configResponse
+                                                      //             .iosSettings
+                                                      //             .subscriptionSettings
+                                                      //             .generalSubscriptionText ??
+                                                      //         "";
+
+                                                      openSubscriptionPage();
                                                       // ignore: use_build_context_synchronously
-                                                      showDialog(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return CustomDialogBox(
-                                                            title: Strings
-                                                                .unloackStory,
-                                                            titleColor:
-                                                                Colors.orange,
-                                                            descriptions: unlockMessage
-                                                                    .isNotEmpty
-                                                                ? unlockMessage
-                                                                : subscriptionMessage,
-                                                            text: null,
-                                                            text2: "Subscribe",
-                                                            functionCall: () {},
-                                                            secfunctionCall:
-                                                                () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              if (Platform
-                                                                  .isAndroid) {
-                                                                widget
-                                                                        .configResponse
-                                                                        .androidSettings
-                                                                        .parentalGate!
-                                                                    ? Permission
-                                                                        .getPermission(
-                                                                        context:
-                                                                            context,
-                                                                        onSuccess:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "True");
-                                                                          openSubscriptionPage();
-                                                                        },
-                                                                        onFail:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "false");
-                                                                        },
-                                                                        backgroundColor:
-                                                                            AppColors.primaryColor,
-                                                                      )
-                                                                    : openSubscriptionPage();
-                                                              } else if (Platform
-                                                                  .isIOS) {
-                                                                widget
-                                                                        .configResponse
-                                                                        .iosSettings
-                                                                        .parentalGate!
-                                                                    ? Permission
-                                                                        .getPermission(
-                                                                        context:
-                                                                            context,
-                                                                        onSuccess:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "True");
-                                                                          openSubscriptionPage();
-                                                                        },
-                                                                        onFail:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "false");
-                                                                        },
-                                                                        backgroundColor:
-                                                                            AppColors.primaryColor,
-                                                                      )
-                                                                    : openSubscriptionPage();
-                                                              }
-                                                            },
-                                                          );
-                                                        },
-                                                      );
+                                                      // showDialog(
+                                                      //   context: context,
+                                                      //   barrierDismissible:
+                                                      //       false,
+                                                      //   builder: (BuildContext
+                                                      //       context) {
+                                                      //     return CustomDialogBox(
+                                                      //       title: Strings
+                                                      //           .unloackStory,
+                                                      //       titleColor:
+                                                      //           Colors.orange,
+                                                      //       descriptions: unlockMessage
+                                                      //               .isNotEmpty
+                                                      //           ? unlockMessage
+                                                      //           : subscriptionMessage,
+                                                      //       text: null,
+                                                      //       text2: "Subscribe",
+                                                      //       functionCall: () {},
+                                                      //       secfunctionCall:
+                                                      //           () {
+                                                      //         Navigator.pop(
+                                                      //             context);
+                                                      //         if (Platform
+                                                      //             .isAndroid) {
+                                                      //           Permission
+                                                      //               .getPermission(
+                                                      //             context:
+                                                      //                 context,
+                                                      //             onSuccess:
+                                                      //                 () {
+                                                      //               debugPrint(
+                                                      //                   "True");
+                                                      //               openSubscriptionPage();
+                                                      //             },
+                                                      //             onFail: () {
+                                                      //               debugPrint(
+                                                      //                   "false");
+                                                      //             },
+                                                      //             backgroundColor:
+                                                      //                 AppColors
+                                                      //                     .primaryColor,
+                                                      //           );
+                                                      //           //: openSubscriptionPage();
+                                                      //         } else if (Platform
+                                                      //             .isIOS) {
+                                                      //           Permission
+                                                      //               .getPermission(
+                                                      //             context:
+                                                      //                 context,
+                                                      //             onSuccess:
+                                                      //                 () {
+                                                      //               debugPrint(
+                                                      //                   "True");
+                                                      //               openSubscriptionPage();
+                                                      //             },
+                                                      //             onFail: () {
+                                                      //               debugPrint(
+                                                      //                   "false");
+                                                      //             },
+                                                      //             backgroundColor:
+                                                      //                 AppColors
+                                                      //                     .primaryColor,
+                                                      //           );
+                                                      //           //: openSubscriptionPage();
+                                                      //         }
+                                                      //       },
+                                                      //     );
+                                                      //   },
+                                                      // );
                                                     }
                                                   } else {
                                                     getSelectedStory(book.path);
@@ -611,112 +605,106 @@ class _BookListPageState extends State<BookListPage> {
                                                           goto: true);
                                                     } else if (book.locked ==
                                                         true) {
-                                                      final isAndroid =
-                                                          Platform.isAndroid;
+                                                      // final isAndroid =
+                                                      //     Platform.isAndroid;
 
-                                                      final unlockMessage = isAndroid
-                                                          ? widget
-                                                                  .configResponse
-                                                                  .androidSettings
-                                                                  .unlockDialogText ??
-                                                              ""
-                                                          : widget
-                                                                  .configResponse
-                                                                  .iosSettings
-                                                                  .unlockDialogText ??
-                                                              "";
+                                                      // final unlockMessage = isAndroid
+                                                      //     ? widget
+                                                      //             .configResponse
+                                                      //             .androidSettings
+                                                      //             .unlockDialogText ??
+                                                      //         ""
+                                                      //     : widget
+                                                      //             .configResponse
+                                                      //             .iosSettings
+                                                      //             .unlockDialogText ??
+                                                      //         "";
 
-                                                      final subscriptionMessage = isAndroid
-                                                          ? widget
-                                                                  .configResponse
-                                                                  .androidSettings
-                                                                  .subscriptionSettings
-                                                                  .generalSubscriptionText ??
-                                                              ""
-                                                          : widget
-                                                                  .configResponse
-                                                                  .iosSettings
-                                                                  .subscriptionSettings
-                                                                  .generalSubscriptionText ??
-                                                              "";
+                                                      // final subscriptionMessage = isAndroid
+                                                      //     ? widget
+                                                      //             .configResponse
+                                                      //             .androidSettings
+                                                      //             .subscriptionSettings
+                                                      //             .generalSubscriptionText ??
+                                                      //         ""
+                                                      //     : widget
+                                                      //             .configResponse
+                                                      //             .iosSettings
+                                                      //             .subscriptionSettings
+                                                      //             .generalSubscriptionText ??
+                                                      //         "";
+
+                                                      openSubscriptionPage();
                                                       // ignore: use_build_context_synchronously
-                                                      showDialog(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return CustomDialogBox(
-                                                            title: Strings
-                                                                .unloackStory,
-                                                            titleColor:
-                                                                Colors.orange,
-                                                            descriptions: unlockMessage
-                                                                    .isNotEmpty
-                                                                ? unlockMessage
-                                                                : subscriptionMessage,
-                                                            text: null,
-                                                            text2: "Subscribe",
-                                                            functionCall: () {},
-                                                            secfunctionCall:
-                                                                () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              if (Platform
-                                                                  .isAndroid) {
-                                                                widget
-                                                                        .configResponse
-                                                                        .androidSettings
-                                                                        .parentalGate!
-                                                                    ? Permission
-                                                                        .getPermission(
-                                                                        context:
-                                                                            context,
-                                                                        onSuccess:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "True");
-                                                                          openSubscriptionPage();
-                                                                        },
-                                                                        onFail:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "false");
-                                                                        },
-                                                                        backgroundColor:
-                                                                            AppColors.primaryColor,
-                                                                      )
-                                                                    : openSubscriptionPage();
-                                                              } else if (Platform
-                                                                  .isIOS) {
-                                                                widget
-                                                                        .configResponse
-                                                                        .iosSettings
-                                                                        .parentalGate!
-                                                                    ? Permission
-                                                                        .getPermission(
-                                                                        context:
-                                                                            context,
-                                                                        onSuccess:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "True");
-                                                                          openSubscriptionPage();
-                                                                        },
-                                                                        onFail:
-                                                                            () {
-                                                                          debugPrint(
-                                                                              "false");
-                                                                        },
-                                                                        backgroundColor:
-                                                                            AppColors.primaryColor,
-                                                                      )
-                                                                    : openSubscriptionPage();
-                                                              }
-                                                            },
-                                                          );
-                                                        },
-                                                      );
+                                                      // showDialog(
+                                                      //   context: context,
+                                                      //   barrierDismissible:
+                                                      //       false,
+                                                      //   builder: (BuildContext
+                                                      //       context) {
+                                                      //     return CustomDialogBox(
+                                                      //       title: Strings
+                                                      //           .unloackStory,
+                                                      //       titleColor:
+                                                      //           Colors.orange,
+                                                      //       descriptions: unlockMessage
+                                                      //               .isNotEmpty
+                                                      //           ? unlockMessage
+                                                      //           : subscriptionMessage,
+                                                      //       text: null,
+                                                      //       text2: "Subscribe",
+                                                      //       functionCall: () {},
+                                                      //       secfunctionCall:
+                                                      //           () {
+                                                      //         Navigator.pop(
+                                                      //             context);
+                                                      //         if (Platform
+                                                      //             .isAndroid) {
+                                                      //           Permission
+                                                      //               .getPermission(
+                                                      //             context:
+                                                      //                 context,
+                                                      //             onSuccess:
+                                                      //                 () {
+                                                      //               debugPrint(
+                                                      //                   "True");
+                                                      //               openSubscriptionPage();
+                                                      //             },
+                                                      //             onFail: () {
+                                                      //               debugPrint(
+                                                      //                   "false");
+                                                      //             },
+                                                      //             backgroundColor:
+                                                      //                 AppColors
+                                                      //                     .primaryColor,
+                                                      //           );
+                                                      //           //: openSubscriptionPage();
+                                                      //         } else if (Platform
+                                                      //             .isIOS) {
+                                                      //           Permission
+                                                      //               .getPermission(
+                                                      //             context:
+                                                      //                 context,
+                                                      //             onSuccess:
+                                                      //                 () {
+                                                      //               debugPrint(
+                                                      //                   "True");
+                                                      //               openSubscriptionPage();
+                                                      //             },
+                                                      //             onFail: () {
+                                                      //               debugPrint(
+                                                      //                   "false");
+                                                      //             },
+                                                      //             backgroundColor:
+                                                      //                 AppColors
+                                                      //                     .primaryColor,
+                                                      //           );
+                                                      //           // : openSubscriptionPage();
+                                                      //         }
+                                                      //       },
+                                                      //     );
+                                                      //   },
+                                                      // );
                                                     } else {}
                                                   }
                                                 }
@@ -842,28 +830,25 @@ class _BookListPageState extends State<BookListPage> {
                           child: FloatingActionButton(
                             onPressed: () {
                               if (Platform.isAndroid) {
-                                widget.configResponse.androidSettings
-                                        .parentalGate!
-                                    ? Permission.getPermission(
-                                        context: context,
-                                        onSuccess: () {
-                                          openSubscriptionPage();
-                                        },
-                                        onFail: () {},
-                                        backgroundColor: AppColors.primaryColor,
-                                      )
-                                    : openSubscriptionPage();
+                                Permission.getPermission(
+                                  context: context,
+                                  onSuccess: () {
+                                    openSubscriptionPage();
+                                  },
+                                  onFail: () {},
+                                  backgroundColor: AppColors.primaryColor,
+                                );
+                                //: openSubscriptionPage();
                               } else if (Platform.isIOS) {
-                                widget.configResponse.iosSettings.parentalGate!
-                                    ? Permission.getPermission(
-                                        context: context,
-                                        onSuccess: () {
-                                          openSubscriptionPage();
-                                        },
-                                        onFail: () {},
-                                        backgroundColor: AppColors.primaryColor,
-                                      )
-                                    : openSubscriptionPage();
+                                Permission.getPermission(
+                                  context: context,
+                                  onSuccess: () {
+                                    openSubscriptionPage();
+                                  },
+                                  onFail: () {},
+                                  backgroundColor: AppColors.primaryColor,
+                                );
+                                //: openSubscriptionPage();
                               }
                             },
                             backgroundColor: buttonColor,
@@ -947,18 +932,17 @@ class _BookListPageState extends State<BookListPage> {
                       alignment: Alignment.topCenter,
                       child: InkWell(
                         onTap: () {
-                          widget.configResponse.androidSettings.parentalGate!
-                              ? Permission.getPermission(
-                                  context: context,
-                                  onSuccess: () {
-                                    openUrlAndroid(widget.configResponse
-                                        .androidSettings.houseAd!.urlId!);
-                                  },
-                                  onFail: () {},
-                                  backgroundColor: AppColors.primaryColor,
-                                )
-                              : openUrlAndroid(widget.configResponse
+                          Permission.getPermission(
+                            context: context,
+                            onSuccess: () {
+                              openUrlAndroid(widget.configResponse
                                   .androidSettings.houseAd!.urlId!);
+                            },
+                            onFail: () {},
+                            backgroundColor: AppColors.primaryColor,
+                          );
+                          // : openUrlAndroid(widget.configResponse
+                          //     .androidSettings.houseAd!.urlId!);
                         },
                         child: Container(
                             width: MediaQuery.sizeOf(context).width * 0.3,
@@ -994,18 +978,17 @@ class _BookListPageState extends State<BookListPage> {
                       alignment: Alignment.topCenter,
                       child: InkWell(
                         onTap: () {
-                          widget.configResponse.iosSettings.parentalGate!
-                              ? Permission.getPermission(
-                                  context: context,
-                                  onSuccess: () {
-                                    openAppStore(widget.configResponse
-                                        .iosSettings.houseAd!.urlId!);
-                                  },
-                                  onFail: () {},
-                                  backgroundColor: AppColors.primaryColor,
-                                )
-                              : openAppStore(widget
+                          Permission.getPermission(
+                            context: context,
+                            onSuccess: () {
+                              openAppStore(widget
                                   .configResponse.iosSettings.houseAd!.urlId!);
+                            },
+                            onFail: () {},
+                            backgroundColor: AppColors.primaryColor,
+                          );
+                          // : openAppStore(widget
+                          //     .configResponse.iosSettings.houseAd!.urlId!);
                         },
                         child: Container(
                             width: MediaQuery.sizeOf(context).width * 0.3,
@@ -1166,12 +1149,12 @@ class _BookListPageState extends State<BookListPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
-                
-                 fadeOutDuration: const Duration(milliseconds: 0),
+                fadeOutDuration: const Duration(milliseconds: 0),
                 width: double.infinity,
                 height: double.infinity,
                 imageUrl: '${APIEndpoints.baseUrl}/${book.thumbnail}',
-                placeholder: (context, url) => Container(color: Colors.transparent),
+                placeholder: (context, url) =>
+                    Container(color: Colors.transparent),
                 errorWidget: (context, url, error) =>
                     Container(color: Colors.transparent),
                 fit: BoxFit.cover,

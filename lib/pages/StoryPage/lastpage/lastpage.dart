@@ -172,31 +172,25 @@ class _ChoiceScreenState extends State<LastScreen> {
                                   borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
                                     if (Platform.isAndroid) {
-                                      widget.configResponse.androidSettings
-                                              .parentalGate!
-                                          ? Permission.getPermission(
-                                              context: context,
-                                              onSuccess: () {
-                                                shareApp();
-                                              },
-                                              onFail: () {},
-                                              backgroundColor:
-                                                  AppColors.primaryColor,
-                                            )
-                                          : shareApp();
+                                      Permission.getPermission(
+                                        context: context,
+                                        onSuccess: () {
+                                          shareApp();
+                                        },
+                                        onFail: () {},
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                      //: shareApp();
                                     } else if (Platform.isIOS) {
-                                      widget.configResponse.iosSettings
-                                              .parentalGate!
-                                          ? Permission.getPermission(
-                                              context: context,
-                                              onSuccess: () {
-                                                shareApp();
-                                              },
-                                              onFail: () {},
-                                              backgroundColor:
-                                                  AppColors.primaryColor,
-                                            )
-                                          : shareApp();
+                                      Permission.getPermission(
+                                        context: context,
+                                        onSuccess: () {
+                                          shareApp();
+                                        },
+                                        onFail: () {},
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                      //: shareApp();
                                     }
                                   },
                                   child: Padding(
@@ -221,47 +215,41 @@ class _ChoiceScreenState extends State<LastScreen> {
                                   borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
                                     if (Platform.isAndroid) {
-                                      widget.configResponse.androidSettings
-                                              .parentalGate!
-                                          ? Permission.getPermission(
-                                              context: context,
-                                              onSuccess: () {
-                                                openUrlAndroid(widget
-                                                    .configResponse
-                                                    .androidSettings
-                                                    .appRateAndShare!
-                                                    .urlId!);
-                                              },
-                                              onFail: () {},
-                                              backgroundColor:
-                                                  AppColors.primaryColor,
-                                            )
-                                          : openUrlAndroid(widget
+                                      Permission.getPermission(
+                                        context: context,
+                                        onSuccess: () {
+                                          openUrlAndroid(widget
                                               .configResponse
                                               .androidSettings
                                               .appRateAndShare!
                                               .urlId!);
+                                        },
+                                        onFail: () {},
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                      //  openUrlAndroid(widget
+                                      //     .configResponse
+                                      //     .androidSettings
+                                      //     .appRateAndShare!
+                                      //     .urlId!);
                                     } else {
-                                      widget.configResponse.iosSettings
-                                              .parentalGate!
-                                          ? Permission.getPermission(
-                                              context: context,
-                                              onSuccess: () {
-                                                openAppStore(widget
-                                                    .configResponse
-                                                    .iosSettings
-                                                    .appRateAndShare!
-                                                    .urlId!);
-                                              },
-                                              onFail: () {},
-                                              backgroundColor:
-                                                  AppColors.primaryColor,
-                                            )
-                                          : openAppStore(widget
+                                      Permission.getPermission(
+                                        context: context,
+                                        onSuccess: () {
+                                          openAppStore(widget
                                               .configResponse
                                               .iosSettings
                                               .appRateAndShare!
                                               .urlId!);
+                                        },
+                                        onFail: () {},
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                      //  openAppStore(widget
+                                      //     .configResponse
+                                      //     .iosSettings
+                                      //     .appRateAndShare!
+                                      //     .urlId!);
                                     }
                                   },
                                   child: Padding(

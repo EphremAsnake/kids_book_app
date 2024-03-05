@@ -19,6 +19,7 @@ import '../../utils/Constants/colors.dart';
 import '../../utils/Constants/dimention.dart';
 import '../../widget/choice.dart';
 import '../BookMenu/BookListMenu.dart';
+import '../parentalgate/parentalgate.dart';
 import 'status/subscriptionstatus.dart';
 
 class SubscriptionPage extends StatefulWidget {
@@ -274,8 +275,23 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     children: [
                                       TextButton(
                                         onPressed: () {
-                                          InAppPurchase.instance
-                                              .restorePurchases();
+                                          Permission.getPermission(
+                                            onClose: () {
+                                              subscriptionController
+                                                  .hideProgress();
+                                            },
+                                            context: context,
+                                            onSuccess: () {
+                                              debugPrint("True");
+                                              InAppPurchase.instance
+                                                  .restorePurchases();
+                                            },
+                                            onFail: () {
+                                              debugPrint("false");
+                                            },
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          );
                                         },
                                         child: const Text(
                                           Strings.restorePurchase,
@@ -304,7 +320,22 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     children: [
                                       TextButton(
                                         onPressed: () {
-                                          _launchURL(widget.termofuseUrl);
+                                          Permission.getPermission(
+                                            onClose: () {
+                                              subscriptionController
+                                                  .hideProgress();
+                                            },
+                                            context: context,
+                                            onSuccess: () {
+                                              debugPrint("True");
+                                              _launchURL(widget.termofuseUrl);
+                                            },
+                                            onFail: () {
+                                              debugPrint("false");
+                                            },
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          );
                                         },
                                         child: const Text(
                                           Strings.termsofUse,
@@ -316,7 +347,23 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          _launchURL(widget.privacyPolicyUrl);
+                                          Permission.getPermission(
+                                            onClose: () {
+                                              subscriptionController
+                                                  .hideProgress();
+                                            },
+                                            context: context,
+                                            onSuccess: () {
+                                              debugPrint("True");
+                                              _launchURL(
+                                                  widget.privacyPolicyUrl);
+                                            },
+                                            onFail: () {
+                                              debugPrint("false");
+                                            },
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          );
                                         },
                                         child: const Text(
                                           Strings.privacyPolicy,
@@ -403,19 +450,32 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             borderRadius: BorderRadius.circular(12.0),
             onTap: () {
               subscriptionController.showProgress();
-              late PurchaseParam purchaseParam;
-              if (Platform.isAndroid) {
-                purchaseParam = GooglePlayPurchaseParam(
-                    productDetails: _products[index],
-                    changeSubscriptionParam: null);
-              } else {
-                purchaseParam = PurchaseParam(
-                  productDetails: _products[index],
-                );
-              }
+              Permission.getPermission(
+                onClose: () {
+                  subscriptionController.hideProgress();
+                },
+                context: context,
+                onSuccess: () {
+                  debugPrint("True");
+                  late PurchaseParam purchaseParam;
+                  if (Platform.isAndroid) {
+                    purchaseParam = GooglePlayPurchaseParam(
+                        productDetails: _products[index],
+                        changeSubscriptionParam: null);
+                  } else {
+                    purchaseParam = PurchaseParam(
+                      productDetails: _products[index],
+                    );
+                  }
 
-              InAppPurchase.instance.buyNonConsumable(
-                purchaseParam: purchaseParam,
+                  InAppPurchase.instance.buyNonConsumable(
+                    purchaseParam: purchaseParam,
+                  );
+                },
+                onFail: () {
+                  debugPrint("false");
+                },
+                backgroundColor: AppColors.primaryColor,
               );
             },
             child: Padding(

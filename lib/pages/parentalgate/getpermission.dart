@@ -11,7 +11,8 @@ import '../../utils/Constants/dimention.dart';
 // Custom widget to get parent permission
 class GetParentPermission extends StatefulWidget {
   final Color bgColor;
-  const GetParentPermission({super.key, required this.bgColor});
+  void Function()? onClose;
+  GetParentPermission({super.key, required this.bgColor, this.onClose});
 
   @override
   State<GetParentPermission> createState() => _GetParentPermissionState();
@@ -86,17 +87,14 @@ class _GetParentPermissionState extends State<GetParentPermission> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                AppColors.primaryColor,
-                AppColors.secondaryColor
-              ],
+              colors: [AppColors.primaryColor, AppColors.secondaryColor],
             ),
           ),
           child: Stack(
             alignment: Alignment.center,
             children: [
               //!Background Image
-              
+
               const StarsView(
                 fps: 60,
               ),
@@ -127,7 +125,6 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                             const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                               
                                 Column(
                                   children: [
                                     Padding(
@@ -145,7 +142,6 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                         ),
                                       ),
                                     ),
-                                    
                                   ],
                                 )
                               ],
@@ -300,6 +296,10 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                           iconSize: IconSizes.medium,
                           onPressed: () {
                             // Close the screen with a failure flag
+
+                            if (widget.onClose != null) {
+                              widget.onClose!();
+                            }
                             Navigator.pop(context, false);
                           },
                           icon: const Icon(
