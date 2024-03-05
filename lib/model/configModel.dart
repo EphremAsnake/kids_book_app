@@ -75,7 +75,7 @@ class HouseAd {
 
 class AndroidSettings {
   SubscriptionSettings subscriptionSettings;
-  String? unlockDialogText;
+  
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   String aboutApp;
@@ -83,7 +83,6 @@ class AndroidSettings {
 
   AndroidSettings({
     required this.subscriptionSettings,
-    this.unlockDialogText,
     this.appRateAndShare,
     this.houseAd,
     required this.aboutApp,
@@ -94,7 +93,7 @@ class AndroidSettings {
     return AndroidSettings(
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
-      unlockDialogText: json['unlock_dialog_text'],
+      
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
@@ -109,7 +108,6 @@ class AndroidSettings {
 
 class IOSSettings {
   SubscriptionSettings subscriptionSettings;
-  String? unlockDialogText;
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   String aboutApp;
@@ -117,7 +115,6 @@ class IOSSettings {
 
   IOSSettings({
     required this.subscriptionSettings,
-    this.unlockDialogText,
     this.appRateAndShare,
     this.houseAd,
     required this.aboutApp,
@@ -128,7 +125,6 @@ class IOSSettings {
     return IOSSettings(
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
-      unlockDialogText: json['unlock_dialog_text'],
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
