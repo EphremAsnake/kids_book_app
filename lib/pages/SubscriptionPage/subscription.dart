@@ -55,9 +55,15 @@ class SubscriptionPage extends StatefulWidget {
 class _SubscriptionPageState extends State<SubscriptionPage> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
 
-  late List<String> _productIds;
-  bool gotproducts = false;
-  List<ProductDetails> _products = [];
+  //late List<String> _productIds;
+  late List<String> _productIdMonthly;
+  late List<String> _productIdYearly;
+  //bool gotproducts = false;
+  bool gotproductMonthly = false;
+  bool gotproductYearly = false;
+  //List<ProductDetails> _products = [];
+  List<ProductDetails> _productMonthly = [];
+  List<ProductDetails> _productYearly = [];
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
   final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
@@ -69,7 +75,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   void initState() {
     super.initState();
     audioController = Get.find<AudioController>();
-    _productIds = [widget.monthlyProductId, widget.yearlyProductId];
+    //_productIds = [widget.monthlyProductId, widget.yearlyProductId];
+    _productIdMonthly = [widget.monthlyProductId];
+    _productIdYearly = [widget.yearlyProductId];
     checkInternetConnection();
   }
 
@@ -95,26 +103,53 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               text: Strings.ok,
               functionCall: () {
                 Navigator.pop(context);
-                initStoreInfo();
+                initStoreInfoMonthly();
+                initStoreInfoYearly();
                 //checkInternetConnection();
               },
               closeicon: true,
             );
           });
     } else {
-      initStoreInfo();
+      initStoreInfoMonthly();
+      initStoreInfoYearly();
+      //initStoreInfo();
     }
   }
 
-  Future<void> initStoreInfo() async {
+  // Future<void> initStoreInfo() async {
+  //   await _inAppPurchase.isAvailable();
+
+  //   ProductDetailsResponse productDetailsResponse =
+  //       await _inAppPurchase.queryProductDetails(_productIds.toSet());
+
+  //   setState(() {
+  //     _products = productDetailsResponse.productDetails;
+  //     gotproducts = true;
+  //   });
+  // }
+
+  Future<void> initStoreInfoMonthly() async {
     await _inAppPurchase.isAvailable();
 
     ProductDetailsResponse productDetailsResponse =
-        await _inAppPurchase.queryProductDetails(_productIds.toSet());
+        await _inAppPurchase.queryProductDetails(_productIdMonthly.toSet());
 
     setState(() {
-      _products = productDetailsResponse.productDetails;
-      gotproducts = true;
+      _productMonthly = productDetailsResponse.productDetails;
+      gotproductMonthly = true;
+    });
+  }
+
+  Future<void> initStoreInfoYearly() async {
+    await _inAppPurchase.isAvailable();
+
+    ProductDetailsResponse productDetailsResponse =
+        await _inAppPurchase.queryProductDetails(_productIdYearly.toSet());
+
+    setState(() {
+      _productYearly = productDetailsResponse.productDetails;
+      gotproductYearly = true;
     });
   }
 
@@ -194,197 +229,176 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                         height: MediaQuery.of(context).size.height,
                       )),
 
-                  _products.isNotEmpty
-                      ? SizedBox(
-                          height: MediaQuery.sizeOf(context).height,
-                          child: NestedScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            headerSliverBuilder: (BuildContext context,
-                                bool innerBoxIsScrolled) {
-                              return <Widget>[];
-                            },
-                            body: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Obx(() => Text(
-                                        subscriptionStatus.isMonthly.value
-                                            ? Strings
-                                                .youareSubscribedtoMonthlypackage
-                                            : subscriptionStatus.isYearly.value
-                                                ? Strings
-                                                    .youareSubscribedtoYearlypackage
-                                                : widget
-                                                    .generalSubscriptionText,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: 'Customfont',
-                                          fontSize: 9.sp,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: _products.length,
-                                          itemBuilder: ((context, index) {
-                                            return SizedBox(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.5,
-                                              child: subTypeContainer(
-                                                  context,
-                                                  _products[index].price,
-                                                  _products[index].id ==
-                                                          widget
-                                                              .monthlyProductId
-                                                      ? '1 MONTH'
-                                                      : '1 YEAR',
-                                                  _products[index].id ==
-                                                          widget
-                                                              .monthlyProductId
-                                                      ? widget.monthly
-                                                      : widget.yearly,
-                                                  index,
-                                                  isYear: _products[index].id ==
-                                                          widget
-                                                              .monthlyProductId
-                                                      ? null
-                                                      : true),
-                                            );
-                                          })),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10.0),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Permission.getPermission(
-                                            onClose: () {
-                                              subscriptionController
-                                                  .hideProgress();
-                                            },
-                                            context: context,
-                                            onSuccess: () {
-                                              debugPrint("True");
-                                              InAppPurchase.instance
-                                                  .restorePurchases();
-                                            },
-                                            onFail: () {
-                                              debugPrint("false");
-                                            },
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          );
-                                        },
-                                        child: const Text(
-                                          Strings.restorePurchase,
-                                          style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          clearCachedFiles();
-                                        },
-                                        child: const Text(
-                                          Strings.clearCache,
-                                          style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Permission.getPermission(
-                                            onClose: () {
-                                              subscriptionController
-                                                  .hideProgress();
-                                            },
-                                            context: context,
-                                            onSuccess: () {
-                                              debugPrint("True");
-                                              _launchURL(widget.termofuseUrl);
-                                            },
-                                            onFail: () {
-                                              debugPrint("false");
-                                            },
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          );
-                                        },
-                                        child: const Text(
-                                          Strings.termsofUse,
-                                          style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Permission.getPermission(
-                                            onClose: () {
-                                              subscriptionController
-                                                  .hideProgress();
-                                            },
-                                            context: context,
-                                            onSuccess: () {
-                                              debugPrint("True");
-                                              _launchURL(
-                                                  widget.privacyPolicyUrl);
-                                            },
-                                            onFail: () {
-                                              debugPrint("false");
-                                            },
-                                            backgroundColor:
-                                                AppColors.primaryColor,
-                                          );
-                                        },
-                                        child: const Text(
-                                          Strings.privacyPolicy,
-                                          style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                  // _products.isNotEmpty
+                  //?
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height,
+                    child: NestedScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      headerSliverBuilder:
+                          (BuildContext context, bool innerBoxIsScrolled) {
+                        return <Widget>[];
+                      },
+                      body: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ),
-                        )
-                      : Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white.withOpacity(0.5),
-                          ),
+                            Obx(() => Text(
+                                  subscriptionStatus.isMonthly.value
+                                      ? Strings.youareSubscribedtoMonthlypackage
+                                      : subscriptionStatus.isYearly.value
+                                          ? Strings
+                                              .youareSubscribedtoYearlypackage
+                                          : widget.generalSubscriptionText,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: 'Customfont',
+                                    fontSize: 9.sp,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: 2,
+                                    itemBuilder: ((context, index) {
+                                      return SizedBox(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.5,
+                                        child: subTypeContainer(
+                                            context,
+                                            index == 0 ? '1 MONTH' : '1 YEAR',
+                                            index == 0
+                                                ? widget.monthly
+                                                : widget.yearly,
+                                            index,
+                                            isYear: index == 0 ? null : true),
+                                      );
+                                    })),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Permission.getPermission(
+                                      onClose: () {
+                                        subscriptionController.hideProgress();
+                                      },
+                                      context: context,
+                                      onSuccess: () {
+                                        debugPrint("True");
+                                        InAppPurchase.instance
+                                            .restorePurchases();
+                                      },
+                                      onFail: () {
+                                        debugPrint("false");
+                                      },
+                                      backgroundColor: AppColors.primaryColor,
+                                    );
+                                  },
+                                  child: const Text(
+                                    Strings.restorePurchase,
+                                    style: TextStyle(
+                                      fontFamily: 'Customfont',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    clearCachedFiles();
+                                  },
+                                  child: const Text(
+                                    Strings.clearCache,
+                                    style: TextStyle(
+                                      fontFamily: 'Customfont',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Permission.getPermission(
+                                      onClose: () {
+                                        subscriptionController.hideProgress();
+                                      },
+                                      context: context,
+                                      onSuccess: () {
+                                        debugPrint("True");
+                                        _launchURL(widget.termofuseUrl);
+                                      },
+                                      onFail: () {
+                                        debugPrint("false");
+                                      },
+                                      backgroundColor: AppColors.primaryColor,
+                                    );
+                                  },
+                                  child: const Text(
+                                    Strings.termsofUse,
+                                    style: TextStyle(
+                                      fontFamily: 'Customfont',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Permission.getPermission(
+                                      onClose: () {
+                                        subscriptionController.hideProgress();
+                                      },
+                                      context: context,
+                                      onSuccess: () {
+                                        debugPrint("True");
+                                        _launchURL(widget.privacyPolicyUrl);
+                                      },
+                                      onFail: () {
+                                        debugPrint("false");
+                                      },
+                                      backgroundColor: AppColors.primaryColor,
+                                    );
+                                  },
+                                  child: const Text(
+                                    Strings.privacyPolicy,
+                                    style: TextStyle(
+                                      fontFamily: 'Customfont',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
+                      ),
+                    ),
+                  ),
+                  // : Center(
+                  //     child: CircularProgressIndicator(
+                  //       color: Colors.white.withOpacity(0.5),
+                  //     ),
+                  //   ),
 
                   Positioned(
                       bottom: 0,
@@ -438,8 +452,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     );
   }
 
-  Center subTypeContainer(BuildContext context, String price,
-      String leadingName, String perText, int index,
+  Center subTypeContainer(
+      BuildContext context, String leadingName, String perText, int index,
       {bool? isYear}) {
     return Center(
       child: Padding(
@@ -460,11 +474,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   late PurchaseParam purchaseParam;
                   if (Platform.isAndroid) {
                     purchaseParam = GooglePlayPurchaseParam(
-                        productDetails: _products[index],
+                        productDetails:
+                            index == 0 ? _productMonthly[0] : _productYearly[0],
                         changeSubscriptionParam: null);
                   } else {
                     purchaseParam = PurchaseParam(
-                      productDetails: _products[index],
+                      productDetails:
+                          index == 0 ? _productMonthly[0] : _productYearly[0],
                     );
                   }
 
@@ -499,7 +515,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '$price$perText',
+                        perText,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Customfont',
