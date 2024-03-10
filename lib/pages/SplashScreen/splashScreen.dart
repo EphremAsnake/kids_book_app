@@ -8,6 +8,7 @@ import 'package:get/get.dart' hide Response;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../controller/subscription.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../utils/Constants/AllStrings.dart';
@@ -33,6 +34,15 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> animation;
   late AnimationController _controller;
   late Animation<double> _animation;
+
+  List<String> _monthlyproductIds = [];
+  List<String> _yearlyproductIds = [];
+  bool gotproducts = false;
+  List<ProductDetails> _monthproducts = [];
+  List<ProductDetails> _yearproducts = [];
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  final SubscriptionPriceController priceController =
+      Get.put(SubscriptionPriceController());
 
   @override
   void initState() {
@@ -152,6 +162,25 @@ class _SplashScreenState extends State<SplashScreen>
           await fetchConfigData();
 
           checkAvailabiltyFunction(configResponses!);
+
+          //!
+          _monthlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .monthSubscriptionProductID!
+                : configResponses!.iosSettings.subscriptionSettings
+                    .monthSubscriptionProductID!,
+          ];
+          _yearlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .yearSubscriptionProductID!
+                : configResponses!
+                    .iosSettings.subscriptionSettings.yearSubscriptionProductID!
+          ];
+
+          initStoreInfo();
+
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -161,6 +190,23 @@ class _SplashScreenState extends State<SplashScreen>
               duration: const Duration(seconds: 2));
         } else {
           checkAvailabiltyFunction(configResponses!);
+          //!
+          _monthlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .monthSubscriptionProductID!
+                : configResponses!.iosSettings.subscriptionSettings
+                    .monthSubscriptionProductID!,
+          ];
+          _yearlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .yearSubscriptionProductID!
+                : configResponses!
+                    .iosSettings.subscriptionSettings.yearSubscriptionProductID!
+          ];
+
+          initStoreInfo();
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -199,6 +245,22 @@ class _SplashScreenState extends State<SplashScreen>
           checkAvailabiltyFunction(configResponses!);
           APIEndpoints.updateBaseUrl(fallbackUrl);
 
+          //!
+          _monthlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .monthSubscriptionProductID!
+                : configResponses!.iosSettings.subscriptionSettings
+                    .monthSubscriptionProductID!,
+          ];
+          _yearlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .yearSubscriptionProductID!
+                : configResponses!
+                    .iosSettings.subscriptionSettings.yearSubscriptionProductID!
+          ];
+          initStoreInfo();
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -209,6 +271,22 @@ class _SplashScreenState extends State<SplashScreen>
         } else {
           checkAvailabiltyFunction(configResponses!);
           APIEndpoints.updateBaseUrl(fallbackUrl);
+          //!
+          _monthlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .monthSubscriptionProductID!
+                : configResponses!.iosSettings.subscriptionSettings
+                    .monthSubscriptionProductID!,
+          ];
+          _yearlyproductIds = [
+            Platform.isAndroid
+                ? configResponses!.androidSettings.subscriptionSettings
+                    .yearSubscriptionProductID!
+                : configResponses!
+                    .iosSettings.subscriptionSettings.yearSubscriptionProductID!
+          ];
+          initStoreInfo();
           Get.offAll(
               BookListPage(
                 booksList: apiResponse,
@@ -290,7 +368,22 @@ class _SplashScreenState extends State<SplashScreen>
     //! Set the ad unit IDs in AdHelper
 
     checkAvailabiltyFunction(storedConfigResponse);
-
+    //!
+    _monthlyproductIds = [
+      Platform.isAndroid
+          ? configResponses!
+              .androidSettings.subscriptionSettings.monthSubscriptionProductID!
+          : configResponses!
+              .iosSettings.subscriptionSettings.monthSubscriptionProductID!,
+    ];
+    _yearlyproductIds = [
+      Platform.isAndroid
+          ? configResponses!
+              .androidSettings.subscriptionSettings.yearSubscriptionProductID!
+          : configResponses!
+              .iosSettings.subscriptionSettings.yearSubscriptionProductID!
+    ];
+    initStoreInfo();
     Get.offAll(
         BookListPage(
             booksList: storedBookListResponse,
@@ -298,6 +391,38 @@ class _SplashScreenState extends State<SplashScreen>
             fromlocal: true),
         transition: Transition.zoom,
         duration: const Duration(seconds: 2));
+  }
+
+  //!
+  Future<void> initStoreInfo() async {
+    await _inAppPurchase.isAvailable();
+
+    ProductDetailsResponse monthproductDetailsResponse =
+        await _inAppPurchase.queryProductDetails(_monthlyproductIds.toSet());
+
+    setState(() {
+      _monthproducts = monthproductDetailsResponse.productDetails;
+      //gotproducts = true;
+    });
+
+    ProductDetailsResponse yearproductDetailsResponse =
+        await _inAppPurchase.queryProductDetails(_yearlyproductIds.toSet());
+
+    setState(() {
+      _yearproducts = yearproductDetailsResponse.productDetails;
+      gotproducts = true;
+    });
+
+    if (_yearproducts.isNotEmpty) {
+      priceController.saveYearlyPrice(
+        _yearproducts[0].price,
+      );
+    }
+    if (_monthproducts.isNotEmpty) {
+      priceController.saveMonthlyPrice(
+        _monthproducts[0].price,
+      );
+    }
   }
 
   @override

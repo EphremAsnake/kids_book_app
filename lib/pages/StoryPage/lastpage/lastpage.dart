@@ -171,25 +171,42 @@ class _ChoiceScreenState extends State<LastScreen> {
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
+                                    bool? showparentalgate = Platform.isAndroid
+                                        ? widget.configResponse.androidSettings
+                                            .parentalGate
+                                        : widget.configResponse.iosSettings
+                                            .parentalGate;
+
                                     if (Platform.isAndroid) {
-                                      Permission.getPermission(
-                                        context: context,
-                                        onSuccess: () {
-                                          shareApp();
-                                        },
-                                        onFail: () {},
-                                        backgroundColor: AppColors.primaryColor,
-                                      );
+                                      if (showparentalgate ?? true) {
+                                        Permission.getPermission(
+                                          context: context,
+                                          onSuccess: () {
+                                            shareApp();
+                                          },
+                                          onFail: () {},
+                                          backgroundColor:
+                                              AppColors.primaryColor,
+                                        );
+                                      } else {
+                                        shareApp();
+                                      }
+
                                       //: shareApp();
                                     } else if (Platform.isIOS) {
-                                      Permission.getPermission(
-                                        context: context,
-                                        onSuccess: () {
-                                          shareApp();
-                                        },
-                                        onFail: () {},
-                                        backgroundColor: AppColors.primaryColor,
-                                      );
+                                      if (showparentalgate ?? true) {
+                                        Permission.getPermission(
+                                          context: context,
+                                          onSuccess: () {
+                                            shareApp();
+                                          },
+                                          onFail: () {},
+                                          backgroundColor:
+                                              AppColors.primaryColor,
+                                        );
+                                      } else {
+                                        shareApp();
+                                      }
                                       //: shareApp();
                                     }
                                   },
@@ -214,37 +231,62 @@ class _ChoiceScreenState extends State<LastScreen> {
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(15.0),
                                   onTap: () {
+                                    bool? showparentalgate = Platform.isAndroid
+                                        ? widget.configResponse.androidSettings
+                                            .parentalGate
+                                        : widget.configResponse.iosSettings
+                                            .parentalGate;
                                     if (Platform.isAndroid) {
-                                      Permission.getPermission(
-                                        context: context,
-                                        onSuccess: () {
-                                          openUrlAndroid(widget
-                                              .configResponse
-                                              .androidSettings
-                                              .appRateAndShare!
-                                              .urlId!);
-                                        },
-                                        onFail: () {},
-                                        backgroundColor: AppColors.primaryColor,
-                                      );
+                                      if (showparentalgate ?? true) {
+                                        Permission.getPermission(
+                                          context: context,
+                                          onSuccess: () {
+                                            openUrlAndroid(widget
+                                                .configResponse
+                                                .androidSettings
+                                                .appRateAndShare!
+                                                .urlId!);
+                                          },
+                                          onFail: () {},
+                                          backgroundColor:
+                                              AppColors.primaryColor,
+                                        );
+                                      } else {
+                                        openUrlAndroid(widget
+                                            .configResponse
+                                            .androidSettings
+                                            .appRateAndShare!
+                                            .urlId!);
+                                      }
                                       //  openUrlAndroid(widget
                                       //     .configResponse
                                       //     .androidSettings
                                       //     .appRateAndShare!
                                       //     .urlId!);
                                     } else {
-                                      Permission.getPermission(
-                                        context: context,
-                                        onSuccess: () {
-                                          openAppStore(widget
-                                              .configResponse
-                                              .iosSettings
-                                              .appRateAndShare!
-                                              .urlId!);
-                                        },
-                                        onFail: () {},
-                                        backgroundColor: AppColors.primaryColor,
-                                      );
+                                      if (showparentalgate ?? true) {
+                                        Permission.getPermission(
+                                          context: context,
+                                          onSuccess: () {
+                                            openAppStore(widget
+                                                .configResponse
+                                                .iosSettings
+                                                .appRateAndShare!
+                                                .urlId!);
+                                          },
+                                          onFail: () {},
+                                          backgroundColor:
+                                              AppColors.primaryColor,
+                                        );
+                                      } else {
+                                        debugPrint("True");
+                                        openAppStore(widget
+                                            .configResponse
+                                            .iosSettings
+                                            .appRateAndShare!
+                                            .urlId!);
+                                      }
+
                                       //  openAppStore(widget
                                       //     .configResponse
                                       //     .iosSettings

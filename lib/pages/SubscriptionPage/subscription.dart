@@ -12,6 +12,7 @@ import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/backgroundMusicAudioController.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import '../../controller/subscription.dart';
 import '../../controller/subscriptionController.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
@@ -67,6 +68,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   SubscriptionController subscriptionController =
       Get.put(SubscriptionController());
   final SubscriptionStatus subscriptionStatus = Get.put(SubscriptionStatus());
+  final SubscriptionPriceController priceController =
+      Get.put(SubscriptionPriceController());
   //!check Sub
 
   late AudioController audioController;
@@ -296,21 +299,31 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Permission.getPermission(
-                                      onClose: () {
-                                        subscriptionController.hideProgress();
-                                      },
-                                      context: context,
-                                      onSuccess: () {
-                                        debugPrint("True");
-                                        InAppPurchase.instance
-                                            .restorePurchases();
-                                      },
-                                      onFail: () {
-                                        debugPrint("false");
-                                      },
-                                      backgroundColor: AppColors.primaryColor,
-                                    );
+                                    bool? showparentalgate = Platform.isAndroid
+                                        ? widget.configResponse.androidSettings
+                                            .parentalGate
+                                        : widget.configResponse.iosSettings
+                                            .parentalGate;
+                                    if (showparentalgate ?? true) {
+                                      Permission.getPermission(
+                                        onClose: () {
+                                          subscriptionController.hideProgress();
+                                        },
+                                        context: context,
+                                        onSuccess: () {
+                                          debugPrint("True");
+                                          InAppPurchase.instance
+                                              .restorePurchases();
+                                        },
+                                        onFail: () {
+                                          debugPrint("false");
+                                        },
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                    } else {
+                                      debugPrint("True");
+                                      InAppPurchase.instance.restorePurchases();
+                                    }
                                   },
                                   child: const Text(
                                     Strings.restorePurchase,
@@ -339,20 +352,30 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Permission.getPermission(
-                                      onClose: () {
-                                        subscriptionController.hideProgress();
-                                      },
-                                      context: context,
-                                      onSuccess: () {
-                                        debugPrint("True");
-                                        _launchURL(widget.termofuseUrl);
-                                      },
-                                      onFail: () {
-                                        debugPrint("false");
-                                      },
-                                      backgroundColor: AppColors.primaryColor,
-                                    );
+                                    bool? showparentalgate = Platform.isAndroid
+                                        ? widget.configResponse.androidSettings
+                                            .parentalGate
+                                        : widget.configResponse.iosSettings
+                                            .parentalGate;
+                                    if (showparentalgate ?? true) {
+                                      Permission.getPermission(
+                                        onClose: () {
+                                          subscriptionController.hideProgress();
+                                        },
+                                        context: context,
+                                        onSuccess: () {
+                                          debugPrint("True");
+                                          _launchURL(widget.termofuseUrl);
+                                        },
+                                        onFail: () {
+                                          debugPrint("false");
+                                        },
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                    } else {
+                                      debugPrint("True");
+                                      _launchURL(widget.termofuseUrl);
+                                    }
                                   },
                                   child: const Text(
                                     Strings.termsofUse,
@@ -364,20 +387,30 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Permission.getPermission(
-                                      onClose: () {
-                                        subscriptionController.hideProgress();
-                                      },
-                                      context: context,
-                                      onSuccess: () {
-                                        debugPrint("True");
-                                        _launchURL(widget.privacyPolicyUrl);
-                                      },
-                                      onFail: () {
-                                        debugPrint("false");
-                                      },
-                                      backgroundColor: AppColors.primaryColor,
-                                    );
+                                    bool? showparentalgate = Platform.isAndroid
+                                        ? widget.configResponse.androidSettings
+                                            .parentalGate
+                                        : widget.configResponse.iosSettings
+                                            .parentalGate;
+                                    if (showparentalgate ?? true) {
+                                      Permission.getPermission(
+                                        onClose: () {
+                                          subscriptionController.hideProgress();
+                                        },
+                                        context: context,
+                                        onSuccess: () {
+                                          debugPrint("True");
+                                          _launchURL(widget.privacyPolicyUrl);
+                                        },
+                                        onFail: () {
+                                          debugPrint("false");
+                                        },
+                                        backgroundColor: AppColors.primaryColor,
+                                      );
+                                    } else {
+                                      debugPrint("True");
+                                      _launchURL(widget.privacyPolicyUrl);
+                                    }
                                   },
                                   child: const Text(
                                     Strings.privacyPolicy,
@@ -455,6 +488,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   Center subTypeContainer(
       BuildContext context, String leadingName, String perText, int index,
       {bool? isYear}) {
+    String pricem = isYear == null
+        ? priceController.monthlyPrice.toString()
+        : priceController.yearlyPrice.toString();
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -464,35 +500,58 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             borderRadius: BorderRadius.circular(12.0),
             onTap: () {
               subscriptionController.showProgress();
-              Permission.getPermission(
-                onClose: () {
-                  subscriptionController.hideProgress();
-                },
-                context: context,
-                onSuccess: () {
-                  debugPrint("True");
-                  late PurchaseParam purchaseParam;
-                  if (Platform.isAndroid) {
-                    purchaseParam = GooglePlayPurchaseParam(
+              bool? showparentalgate = Platform.isAndroid
+                  ? widget.configResponse.androidSettings.parentalGate
+                  : widget.configResponse.iosSettings.parentalGate;
+              if (showparentalgate ?? true) {
+                Permission.getPermission(
+                  onClose: () {
+                    subscriptionController.hideProgress();
+                  },
+                  context: context,
+                  onSuccess: () {
+                    debugPrint("True");
+                    late PurchaseParam purchaseParam;
+                    if (Platform.isAndroid) {
+                      purchaseParam = GooglePlayPurchaseParam(
+                          productDetails: index == 0
+                              ? _productMonthly[0]
+                              : _productYearly[0],
+                          changeSubscriptionParam: null);
+                    } else {
+                      purchaseParam = PurchaseParam(
                         productDetails:
                             index == 0 ? _productMonthly[0] : _productYearly[0],
-                        changeSubscriptionParam: null);
-                  } else {
-                    purchaseParam = PurchaseParam(
+                      );
+                    }
+
+                    InAppPurchase.instance.buyNonConsumable(
+                      purchaseParam: purchaseParam,
+                    );
+                  },
+                  onFail: () {
+                    debugPrint("false");
+                  },
+                  backgroundColor: AppColors.primaryColor,
+                );
+              } else {
+                late PurchaseParam purchaseParam;
+                if (Platform.isAndroid) {
+                  purchaseParam = GooglePlayPurchaseParam(
                       productDetails:
                           index == 0 ? _productMonthly[0] : _productYearly[0],
-                    );
-                  }
-
-                  InAppPurchase.instance.buyNonConsumable(
-                    purchaseParam: purchaseParam,
+                      changeSubscriptionParam: null);
+                } else {
+                  purchaseParam = PurchaseParam(
+                    productDetails:
+                        index == 0 ? _productMonthly[0] : _productYearly[0],
                   );
-                },
-                onFail: () {
-                  debugPrint("false");
-                },
-                backgroundColor: AppColors.primaryColor,
-              );
+                }
+
+                InAppPurchase.instance.buyNonConsumable(
+                  purchaseParam: purchaseParam,
+                );
+              }
             },
             child: Padding(
               padding: const EdgeInsets.all(2.0),
@@ -515,7 +574,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        perText,
+                        '$pricem $perText',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Customfont',

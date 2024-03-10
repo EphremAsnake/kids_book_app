@@ -75,10 +75,11 @@ class HouseAd {
 
 class AndroidSettings {
   SubscriptionSettings subscriptionSettings;
-  
+
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   String aboutApp;
+  bool? parentalGate;
   String? fallbackServerUrl;
 
   AndroidSettings({
@@ -86,6 +87,7 @@ class AndroidSettings {
     this.appRateAndShare,
     this.houseAd,
     required this.aboutApp,
+    required this.parentalGate,
     this.fallbackServerUrl,
   });
 
@@ -93,13 +95,13 @@ class AndroidSettings {
     return AndroidSettings(
       subscriptionSettings:
           SubscriptionSettings.fromJson(json['subscription_settings']),
-      
       appRateAndShare: json.containsKey('app_rate_share')
           ? AppRateAndShare.fromJson(json['app_rate_share'])
           : null,
       houseAd: json.containsKey('house_ad')
           ? HouseAd.fromJson(json['house_ad'])
           : null,
+      parentalGate: json['parental_gate'] ?? true,
       aboutApp: json['about_app'] ?? '',
       fallbackServerUrl: json['fallback_server_url'] ?? '',
     );
@@ -111,12 +113,14 @@ class IOSSettings {
   AppRateAndShare? appRateAndShare;
   HouseAd? houseAd;
   String aboutApp;
+  bool? parentalGate;
   String? fallbackServerUrl;
 
   IOSSettings({
     required this.subscriptionSettings,
     this.appRateAndShare,
     this.houseAd,
+    required this.parentalGate,
     required this.aboutApp,
     this.fallbackServerUrl,
   });
@@ -132,6 +136,7 @@ class IOSSettings {
           ? HouseAd.fromJson(json['house_ad'])
           : null,
       aboutApp: json['about_app'] ?? '',
+      parentalGate: json['parental_gate'] ?? true,
       fallbackServerUrl: json['fallback_server_url'] ?? '',
     );
   }

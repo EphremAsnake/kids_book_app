@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:starsview/starsview.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:resize/resize.dart';
 import 'package:storyapp/utils/colorConvet.dart';
 import '../../controller/backgroundMusicAudioController.dart';
+import '../../controller/subscription.dart';
 import '../../model/booklistModel.dart';
 import '../../model/configModel.dart';
 import '../../model/storyPage.dart';
@@ -75,6 +77,15 @@ class _BookListPageState extends State<BookListPage> {
     await InAppPurchase.instance.restorePurchases();
   }
 
+  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  final SubscriptionPriceController priceController =
+      Get.put(SubscriptionPriceController());
+  late List<String> _monthlyproductIds;
+  late List<String> _yearlyproductIds;
+  bool gotproducts = false;
+  List<ProductDetails> _monthproducts = [];
+  List<ProductDetails> _yearproducts = [];
+
   @override
   void initState() {
     super.initState();
@@ -100,6 +111,22 @@ class _BookListPageState extends State<BookListPage> {
       _iapSubscription.cancel();
     }) as StreamSubscription<List<PurchaseDetails>>;
 
+    // //!
+    // _monthlyproductIds = [
+    //   Platform.isAndroid
+    //       ? widget.configResponse.androidSettings.subscriptionSettings
+    //           .monthSubscriptionProductID!
+    //       : widget.configResponse.iosSettings.subscriptionSettings
+    //           .monthSubscriptionProductID!,
+    // ];
+    // _yearlyproductIds = [
+    //   Platform.isAndroid
+    //       ? widget.configResponse.androidSettings.subscriptionSettings
+    //           .yearSubscriptionProductID!
+    //       : widget.configResponse.iosSettings.subscriptionSettings
+    //           .yearSubscriptionProductID!
+    // ];
+
     //!Check Subscription Availability
     IAPService(
             monthlyProductId: Platform.isAndroid
@@ -115,7 +142,46 @@ class _BookListPageState extends State<BookListPage> {
         .checkSubscriptionAvailabilty();
 
     initcalls();
+    //   Logger logger = Logger();
+    //   if (priceController.yearlyPrice.value != '' ||
+    //       priceController.monthlyPrice.value != '') {
+    //     logger.e('init store called');
+    //     initStoreInfo();
+    //   } else {
+    //     logger.e('else of');
+    //   }
   }
+  // //!
+  // Future<void> initStoreInfo() async {
+  //   await _inAppPurchase.isAvailable();
+
+  //   ProductDetailsResponse monthproductDetailsResponse =
+  //       await _inAppPurchase.queryProductDetails(_monthlyproductIds.toSet());
+
+  //   setState(() {
+  //     _monthproducts = monthproductDetailsResponse.productDetails;
+  //     //gotproducts = true;
+  //   });
+
+  //   ProductDetailsResponse yearproductDetailsResponse =
+  //       await _inAppPurchase.queryProductDetails(_yearlyproductIds.toSet());
+
+  //   setState(() {
+  //     _yearproducts = yearproductDetailsResponse.productDetails;
+  //     gotproducts = true;
+  //   });
+
+  //   if (_yearproducts.isNotEmpty) {
+  //     priceController.saveYearlyPrice(
+  //       _yearproducts[0].price,
+  //     );
+  //   }
+  //   if (_monthproducts.isNotEmpty) {
+  //     priceController.saveMonthlyPrice(
+  //       _monthproducts[0].price,
+  //     );
+  //   }
+  // }
 
   void initcalls() {
     audioController = Get.put(AudioController());
@@ -767,6 +833,9 @@ class _BookListPageState extends State<BookListPage> {
                             color: AppColors.iconColor,
                           ),
                           onPressed: () {
+                            // debugPrint(
+                            //     'month p: ${priceController.monthlyPrice}');
+                            // debugPrint('year: ${priceController.yearlyPrice}');
                             audioController.toggleAudio();
                           },
                         );
@@ -934,15 +1003,26 @@ class _BookListPageState extends State<BookListPage> {
                       alignment: Alignment.topCenter,
                       child: InkWell(
                         onTap: () {
-                          Permission.getPermission(
-                            context: context,
-                            onSuccess: () {
-                              openUrlAndroid(widget.configResponse
-                                  .androidSettings.houseAd!.urlId!);
-                            },
-                            onFail: () {},
-                            backgroundColor: AppColors.primaryColor,
-                          );
+                          bool? showparentalgate = Platform.isAndroid
+                              ? widget
+                                  .configResponse.androidSettings.parentalGate
+                              : widget.configResponse.iosSettings.parentalGate;
+                          if (showparentalgate ?? true) {
+                            Permission.getPermission(
+                              context: context,
+                              onSuccess: () {
+                                openUrlAndroid(widget.configResponse
+                                    .androidSettings.houseAd!.urlId!);
+                              },
+                              onFail: () {},
+                              backgroundColor: AppColors.primaryColor,
+                            );
+                          } else {
+                            debugPrint("True");
+                            openUrlAndroid(widget.configResponse.androidSettings
+                                .houseAd!.urlId!);
+                          }
+
                           // : openUrlAndroid(widget.configResponse
                           //     .androidSettings.houseAd!.urlId!);
                         },
