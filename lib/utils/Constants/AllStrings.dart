@@ -56,4 +56,6 @@ class Strings {
   static const String failure = "Failure";
   static const String unableToCompletePurchaseMessage =
       "Unable to complete subscription purchase. Check your internet or payment details";
+
+  static const String subscriptionendtext = "Tap a subscription and tap \"Cancel subscription\" to cancel it";
 }

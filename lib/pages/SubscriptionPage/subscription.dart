@@ -345,11 +345,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
                                 TextButton(
                                   onPressed: () {
                                     bool? showparentalgate = Platform.isAndroid
@@ -422,6 +417,25 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                 ),
                               ],
                             ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+
+                            //   ],
+                            // ),
+                            // const Column(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(
+                            //       'Tap a subscription and tap "Cancel subscription" to cancel it',
+                            //       style: TextStyle(
+                            //         fontFamily: 'Customfont',
+                            //         fontSize: 10,
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
@@ -432,7 +446,21 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   //       color: Colors.white.withOpacity(0.5),
                   //     ),
                   //   ),
-
+                  Positioned(
+                    bottom: 20,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        Strings.subscriptionendtext,
+                        style: TextStyle(
+                          fontFamily: 'Customfont',
+                          fontSize: 10,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                   Positioned(
                       bottom: 0,
                       left: 0,
