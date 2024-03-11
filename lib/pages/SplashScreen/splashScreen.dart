@@ -371,16 +371,16 @@ class _SplashScreenState extends State<SplashScreen>
     //!
     _monthlyproductIds = [
       Platform.isAndroid
-          ? configResponses!
+          ? storedConfigResponse
               .androidSettings.subscriptionSettings.monthSubscriptionProductID!
-          : configResponses!
+          : storedConfigResponse
               .iosSettings.subscriptionSettings.monthSubscriptionProductID!,
     ];
     _yearlyproductIds = [
       Platform.isAndroid
-          ? configResponses!
+          ? storedConfigResponse
               .androidSettings.subscriptionSettings.yearSubscriptionProductID!
-          : configResponses!
+          : storedConfigResponse
               .iosSettings.subscriptionSettings.yearSubscriptionProductID!
     ];
     initStoreInfo();
@@ -393,6 +393,7 @@ class _SplashScreenState extends State<SplashScreen>
         duration: const Duration(seconds: 2));
   }
 
+  Logger logger = Logger();
   //!
   Future<void> initStoreInfo() async {
     await _inAppPurchase.isAvailable();
