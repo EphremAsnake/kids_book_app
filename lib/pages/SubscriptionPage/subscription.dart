@@ -446,7 +446,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   //       color: Colors.white.withOpacity(0.5),
                   //     ),
                   //   ),
-                  Positioned(
+                  const Positioned(
                     bottom: 20,
                     left: 0,
                     right: 0,
@@ -517,8 +517,12 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       BuildContext context, String leadingName, String perText, int index,
       {bool? isYear}) {
     String pricem = isYear == null
-        ? priceController.monthlyPrice.toString()
-        : priceController.yearlyPrice.toString();
+        ? priceController.monthlyPrice.toString() == ''
+            ? Strings.monthlydefaultvalue
+            : priceController.monthlyPrice.toString()
+        : priceController.yearlyPrice.toString() == ''
+            ? Strings.yearlydefaultvalue
+            : priceController.yearlyPrice.toString();
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
