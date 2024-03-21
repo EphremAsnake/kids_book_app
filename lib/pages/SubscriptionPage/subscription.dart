@@ -209,6 +209,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           body: Obx(() {
             return Container(
               decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                    image: AssetImage(
+                  'assets/parental_gate.jpg',
+                )),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -593,10 +598,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.grey),
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFFC66C40), Colors.transparent],
+                    colors: [const Color(0xFFC66C40), AppColors.primaryColor.withOpacity(0.5)],
                   ),
                 ),
                 child: Padding(
