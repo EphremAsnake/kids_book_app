@@ -230,7 +230,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
                   //!blury background
                   BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
                       child: Container(
                         color: Colors.black.withOpacity(0.3),
                         width: MediaQuery.of(context).size.width,
