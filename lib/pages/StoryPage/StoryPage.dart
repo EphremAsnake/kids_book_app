@@ -51,6 +51,8 @@ class _BooksPageState extends State<BookPage>
   bool wasplayingdialog = false;
   bool wasPlayingBeforeInterruption = false;
 
+  //!loading
+  bool loading = true;
   //! New flag to track previous state
   List<String> audioUrls = [];
   int _counter = 0;
@@ -91,7 +93,11 @@ class _BooksPageState extends State<BookPage>
           .add('${APIEndpoints.baseUrl}/${widget.folder}/${page.audio}');
     }
 
-    _preCacheImages();
+    _preCacheImages().then((_) {
+      setState(() {
+        loading = false;
+      });
+    });
     _preCacheAudios();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -362,306 +368,325 @@ class _BooksPageState extends State<BookPage>
             }
             return shouldPop;
           },
-          child: SwipeDetector(
-            onSwipeRight: (offset) {
-              _deccrementCounter();
-            },
-            onSwipeLeft: (offset) {
-              _incrementCounter();
-            },
+          child: loading
+              ? Center(child: CircularProgressIndicator())
+              : SwipeDetector(
+                  onSwipeRight: (offset) {
+                    _deccrementCounter();
+                  },
+                  onSwipeLeft: (offset) {
+                    _incrementCounter();
+                  },
 
-            //!Hide Buttons
-            // onSwipeUp: (offset) {
-            //   setState(() {
-            //     buttonsVisiblity = false;
-            //   });
-            // },
-            // onSwipeDown: (offset) {
-            //   setState(() {
-            //     buttonsVisiblity = true;
-            //   }
-            //   );
-            // },
-            child: Center(
-              child: Stack(
-                children: <Widget>[
-                  Center(
+                  //!Hide Buttons
+                  // onSwipeUp: (offset) {
+                  //   setState(() {
+                  //     buttonsVisiblity = false;
+                  //   });
+                  // },
+                  // onSwipeDown: (offset) {
+                  //   setState(() {
+                  //     buttonsVisiblity = true;
+                  //   }
+                  //   );
+                  // },
+                  child: Center(
                     child: Stack(
-                      children: [
-                        //!StoryImage
-                        Positioned(
-                          bottom: MediaQuery.of(context).size.height * 0.2,
-                          child: ImageFade(
-                              width: MediaQuery.of(context).size.width,
-                              //height: MediaQuery.of(context).size.height * 0.8,
+                      children: <Widget>[
+                        Center(
+                          child: Stack(
+                            children: [
+                              //!StoryImage
+                              Positioned(
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                child: ImageFade(
+                                    width: MediaQuery.of(context).size.width,
+                                    //height: MediaQuery.of(context).size.height * 0.8,
 
-                              //! whenever the image changes, it will be loaded, and then faded in:
-                              image: CachedNetworkImageProvider(
-                                  images[_counter],
-                                  cacheManager: DefaultCacheManager()),
+                                    //! whenever the image changes, it will be loaded, and then faded in:
+                                    image: CachedNetworkImageProvider(
+                                        images[_counter],
+                                        cacheManager: DefaultCacheManager()),
 
-                              //! slow-ish fade for loaded images:
-                              duration: const Duration(milliseconds: 900),
+                                    //! slow-ish fade for loaded images:
+                                    duration: const Duration(milliseconds: 900),
 
-                              //! if the image is loaded synchronously ,
-                              syncDuration: const Duration(milliseconds: 900),
-                              alignment: Alignment.center,
-                              fit: BoxFit.fitWidth,
-                              //scale: 2,
-                              placeholder: Container(
-                                color: Colors.transparent,
-                                alignment: Alignment.center,
-                                child: const Icon(Icons.photo,
-                                    color: Colors.transparent, size: 128.0),
+                                    //! if the image is loaded synchronously ,
+                                    syncDuration:
+                                        const Duration(milliseconds: 900),
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.fitWidth,
+                                    //scale: 2,
+                                    placeholder: Container(
+                                      color: Colors.transparent,
+                                      alignment: Alignment.center,
+                                      child: const Icon(Icons.photo,
+                                          color: Colors.transparent,
+                                          size: 128.0),
+                                    ),
+
+                                    //! displayed when an error occurs:
+                                    errorBuilder: (context, error) {
+                                      bookplayer.stop;
+                                      return Center(
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor:
+                                                AppColors.backgroundColor,
+                                          ),
+                                          onPressed: () {
+                                            //_incrementCounter();
+                                            _deccrementCounter();
+                                          },
+                                          child: Text(
+                                            Strings.tryAgain,
+                                            style: TextStyle(
+                                              fontFamily: 'Customfont',
+                                              color: Colors.white,
+                                              fontSize: 8.sp,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
                               ),
 
-                              //! displayed when an error occurs:
-                              errorBuilder: (context, error) {
-                                bookplayer.stop;
-                                return Center(
-                                  child: TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor:
-                                          AppColors.backgroundColor,
-                                    ),
-                                    onPressed: () {
-                                      //_incrementCounter();
-                                      _deccrementCounter();
-                                    },
-                                    child: Text(
-                                      Strings.tryAgain,
-                                      style: TextStyle(
-                                        fontFamily: 'Customfont',
-                                        color: Colors.white,
-                                        fontSize: 8.sp,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                        ),
-
-                        //!Home and Page Counter
-                        Visibility(
-                          visible: buttonsVisiblity,
-                          child: Positioned(
-                            
-                            top: 20.0,
-                            left: MediaQuery.of(context).size.height * 0.08,
-                            child: Column(
-                              children: [
-                                //!Home Button
-                                CircleAvatar(
-                                  radius: 25.0,
-                                  backgroundColor: AppColors.backgroundColor,
-                                  child: IconButton(
-                                    iconSize: IconSizes.medium,
-                                    icon: const Icon(Icons.home_outlined,
-                                        color: AppColors.iconColor),
-                                    onPressed: () async {
-                                      if (_listen) {
-                                        //if (bookplayer.playing) {
-                                        bookplayer.pause();
-                                        setState(() {
-                                          isPlaying = false;
-                                          isPl = true;
-                                        });
-                                        // }
-                                      }
-                                      await exitDialog(context);
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-
-                                //!Page Counter
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.backgroundColor,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '${_counter + 1}/${widget.response.pages.length}',
-                                    style: const TextStyle(
-                                      color: AppColors.pageCounterTextColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        //!Background Music And Strory Play
-                        Visibility(
-                          visible: buttonsVisiblity,
-                          child: Positioned(
-                            
-                            top: 20.0,
-                            right: MediaQuery.of(context).size.height * 0.08,
-                            child: Column(
-                              children: [
-                                //!Background Music
-                                CircleAvatar(
-                                    radius: 25.0,
-                                    backgroundColor: AppColors.backgroundColor,
-                                    child: GetBuilder<AudioController>(
-                                        builder: (audioController) {
-                                      return IconButton(
-                                        iconSize: IconSizes.medium,
-                                        icon: GetBuilder<AudioController>(
-                                          builder: (audioController) {
-                                            return Icon(
-                                              audioController.isPlaying
-                                                  ? Icons.music_note_outlined
-                                                  : Icons.music_off_outlined,
-                                              color: AppColors.iconColor,
-                                            );
+                              //!Home and Page Counter
+                              Visibility(
+                                visible: buttonsVisiblity,
+                                child: Positioned(
+                                  top: 20.0,
+                                  left:
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  child: Column(
+                                    children: [
+                                      //!Home Button
+                                      CircleAvatar(
+                                        radius: 25.0,
+                                        backgroundColor:
+                                            AppColors.backgroundColor,
+                                        child: IconButton(
+                                          iconSize: IconSizes.medium,
+                                          icon: const Icon(Icons.home_outlined,
+                                              color: AppColors.iconColor),
+                                          onPressed: () async {
+                                            if (_listen) {
+                                              //if (bookplayer.playing) {
+                                              bookplayer.pause();
+                                              setState(() {
+                                                isPlaying = false;
+                                                isPl = true;
+                                              });
+                                              // }
+                                            }
+                                            await exitDialog(context);
                                           },
                                         ),
-                                        onPressed: () {
-                                          AudioController audioController =
-                                              Get.find<AudioController>();
-                                          audioController.toggleAudio();
-                                        },
-                                      );
-                                    })),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
 
-                                //!Story Play
-                                if (_listen)
-                                  CircleAvatar(
-                                      radius: 25.0,
-                                      backgroundColor:
-                                          AppColors.backgroundColor,
-                                      child: IconButton(
-                                        iconSize: IconSizes.medium,
-                                        icon: Icon(
-                                          isPlaying
-                                              ? Icons.pause
-                                              : Icons.play_arrow_outlined,
-                                          color: AppColors.iconColor,
+                                      //!Page Counter
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.backgroundColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                        onPressed: () {
-                                          togglePlayback();
-                                        },
-                                      )),
-                              ],
+                                        child: Text(
+                                          '${_counter + 1}/${widget.response.pages.length}',
+                                          style: const TextStyle(
+                                            color:
+                                                AppColors.pageCounterTextColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              //!Background Music And Strory Play
+                              Visibility(
+                                visible: buttonsVisiblity,
+                                child: Positioned(
+                                  top: 20.0,
+                                  right:
+                                      MediaQuery.of(context).size.height * 0.08,
+                                  child: Column(
+                                    children: [
+                                      //!Background Music
+                                      CircleAvatar(
+                                          radius: 25.0,
+                                          backgroundColor:
+                                              AppColors.backgroundColor,
+                                          child: GetBuilder<AudioController>(
+                                              builder: (audioController) {
+                                            return IconButton(
+                                              iconSize: IconSizes.medium,
+                                              icon: GetBuilder<AudioController>(
+                                                builder: (audioController) {
+                                                  return Icon(
+                                                    audioController.isPlaying
+                                                        ? Icons
+                                                            .music_note_outlined
+                                                        : Icons
+                                                            .music_off_outlined,
+                                                    color: AppColors.iconColor,
+                                                  );
+                                                },
+                                              ),
+                                              onPressed: () {
+                                                AudioController
+                                                    audioController =
+                                                    Get.find<AudioController>();
+                                                audioController.toggleAudio();
+                                              },
+                                            );
+                                          })),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+
+                                      //!Story Play
+                                      if (_listen)
+                                        CircleAvatar(
+                                            radius: 25.0,
+                                            backgroundColor:
+                                                AppColors.backgroundColor,
+                                            child: IconButton(
+                                              iconSize: IconSizes.medium,
+                                              icon: Icon(
+                                                isPlaying
+                                                    ? Icons.pause
+                                                    : Icons.play_arrow_outlined,
+                                                color: AppColors.iconColor,
+                                              ),
+                                              onPressed: () {
+                                                togglePlayback();
+                                              },
+                                            )),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              //!Story Text
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  child: Center(
+                                    child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.035 +
+                                              55,
+                                        ),
+                                        child: AnimatedTextWidgetstory(
+                                          text: widget
+                                              .response.pages[_counter].text,
+                                        )),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        //!Previous Button
+                        Visibility(
+                          visible: buttonsVisiblity,
+                          child: Positioned(
+                            bottom: MediaQuery.of(context).size.height * 0.02,
+                            left: MediaQuery.of(context).size.width * 0.035,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  previousbuttonColor =
+                                      Colors.black.withOpacity(0.1);
+                                });
+
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  setState(() {
+                                    previousbuttonColor = Colors.transparent;
+                                  });
+                                });
+
+                                _deccrementCounter();
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: previousbuttonColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(3.0),
+                                child: SvgPicture.asset(
+                                  'assets/previous.svg',
+                                  height: 55,
+                                  color: AppColors.navigationbuttonsColor,
+                                ),
+                              ),
                             ),
                           ),
                         ),
 
-                        //!Story Text
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                            ),
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            child: Center(
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        MediaQuery.of(context).size.width *
-                                                0.035 +
-                                            55,
-                                  ),
-                                  child: AnimatedTextWidgetstory(
-                                    text: widget.response.pages[_counter].text,
-                                  )),
+                        //!Next Button
+                        Visibility(
+                          visible: buttonsVisiblity,
+                          child: Positioned(
+                            bottom: MediaQuery.of(context).size.height * 0.02,
+                            right: MediaQuery.of(context).size.width * 0.035,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  nextbuttonColor =
+                                      Colors.black.withOpacity(0.1);
+                                });
+
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  setState(() {
+                                    nextbuttonColor = Colors.transparent;
+                                  });
+                                });
+
+                                _incrementCounter();
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: nextbuttonColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(3.0),
+                                child: SvgPicture.asset(
+                                  'assets/next.svg',
+                                  height: 55,
+                                  color: AppColors.navigationbuttonsColor,
+                                ),
+                              ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
-
-                  //!Previous Button
-                  Visibility(
-                    visible: buttonsVisiblity,
-                    child: Positioned(
-                      bottom: MediaQuery.of(context).size.height * 0.02,
-                      left: MediaQuery.of(context).size.width * 0.035,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            previousbuttonColor = Colors.black.withOpacity(0.1);
-                          });
-
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            setState(() {
-                              previousbuttonColor = Colors.transparent;
-                            });
-                          });
-
-                          _deccrementCounter();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: previousbuttonColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.all(3.0),
-                          child: SvgPicture.asset(
-                            'assets/previous.svg',
-                            height: 55,
-                            color: AppColors.navigationbuttonsColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  //!Next Button
-                  Visibility(
-                    visible: buttonsVisiblity,
-                    child: Positioned(
-                      bottom: MediaQuery.of(context).size.height * 0.02,
-                      right: MediaQuery.of(context).size.width * 0.035,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            nextbuttonColor = Colors.black.withOpacity(0.1);
-                          });
-
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            setState(() {
-                              nextbuttonColor = Colors.transparent;
-                            });
-                          });
-
-                          _incrementCounter();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: nextbuttonColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.all(3.0),
-                          child: SvgPicture.asset(
-                            'assets/next.svg',
-                            height: 55,
-                            color: AppColors.navigationbuttonsColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
         ));
   }
 

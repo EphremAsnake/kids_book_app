@@ -85,7 +85,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         subscriptionController.hideProgress();
         Navigator.pop(context);
         return false;
@@ -93,231 +93,240 @@ class _GetParentPermissionState extends State<GetParentPermission> {
       child: Scaffold(
           backgroundColor: widget.bgColor,
           body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
+            width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.7,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white, width: 3),
+              gradient: const LinearGradient(
+                
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [AppColors.primaryColor, AppColors.secondaryColor],
               ),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Stack(
               alignment: Alignment.center,
               children: [
                 //!Background Image
-
-                const StarsView(
-                  fps: 60,
-                ),
-                BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.3),
+      
+                // const StarsView(
+                //   fps: 60,
+                // ),
+                 Container(
+                      decoration: BoxDecoration(
+      
+                        color: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                    )),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width / 2.1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    ),
+                Row(
+                  children: [
+                    const Spacer(),
+      
+                    SizedBox(
+                      //height: 80,
+                      width: MediaQuery.of(context).size.width / 4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Spacer(),
+                          if (MediaQuery.of(context).size.height > 800)
+                            const SizedBox(),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(),
-                              if (MediaQuery.of(context).size.height > 800)
-                                const SizedBox(),
-                              const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              Column(
                                 children: [
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                        child: Text(
-                                          Strings.askYourParents,
-                                          maxLines: 2,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Customfont',
-                                            color: Colors.white,
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                    child: Text(
+                                      Strings.askYourParents,
+                                      maxLines: 2,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: 'Customfont',
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
                                       ),
-                                    ],
-                                  )
+                                    ),
+                                  ),
                                 ],
-                              ),
-                              Text(
-                                numberWord.join(" , "),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  for (int i = 0; i < 3; i++)
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                (ansNumber[i] ?? '').toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                  height: 2,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Container(
-                                                height: 2.5,
-                                                width: 30,
-                                                color: Colors.white,
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                ],
-                              ),
-                              const SizedBox(),
-                              if (MediaQuery.of(context).size.height > 800)
-                                const SizedBox(),
+                              )
                             ],
                           ),
-                        ),
-                      ),
-                      // Right Column
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width / 2.1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          Spacer(),
+                          // const SizedBox(
+                          //   height: 40,
+                          // ),
+                          Text(
+                            numberWord.join(" , "),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const SizedBox(),
-                              // Buttons for user input
                               for (int i = 0; i < 3; i++)
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                Column(
                                   children: [
-                                    for (int j = 1; j < 4; j++)
-                                      IgnorePointer(
-                                        ignoring: currentIndex > 3,
-                                        child: CustomButton(
-                                          child: Text(
-                                            "${(i * 3) + j}",
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            (ansNumber[i] ?? '').toString(),
                                             style: const TextStyle(
-                                              color: AppColors.iconColor,
+                                              color: Colors.white,
                                               fontSize: 20,
+                                              height: 2,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          onTap: () {
-                                            setState(() {
-                                              ansNumber[currentIndex] =
-                                                  (i * 3) + j;
-                                              checkSuccess();
-                                            });
-                                          },
-                                        ),
+                                          Container(
+                                            height: 2.5,
+                                            width: 30,
+                                            color: Colors.white,
+                                          )
+                                        ],
                                       ),
+                                    )
                                   ],
-                                ),
-
-                              // Buttons for '0' and 'back'
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  IgnorePointer(
-                                    ignoring: currentIndex > 3,
-                                    child: CustomButton(
-                                      child: const Text(
-                                        "0",
-                                        style: TextStyle(
-                                          color: AppColors.iconColor,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          ansNumber[currentIndex] = 0;
-                                          checkSuccess();
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  IgnorePointer(
-                                    ignoring: currentIndex > 3,
-                                    child: CustomButton(
-                                      width: 120,
-                                      child: const Icon(
-                                        Icons.arrow_back,
-                                        color: AppColors.iconColor,
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          if (currentIndex > 0) {
-                                            currentIndex--;
-                                            ansNumber[currentIndex] = null;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(),
+                                )
                             ],
                           ),
-                        ),
+                           Spacer(), Spacer(),
+                          const SizedBox(),
+                          if (MediaQuery.of(context).size.height > 800)
+                            const SizedBox(),
+                        ],
                       ),
-                      const Spacer()
-                    ],
-                  ),
+                    ),
+                    // Right Column
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(),
+                        // Buttons for user input
+                        for (int i = 0; i < 3; i++)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              for (int j = 1; j < 4; j++)
+                                IgnorePointer(
+                                  ignoring: currentIndex > 3,
+                                  child: CustomButton(
+                                    child: Text(
+                                      "${(i * 3) + j}",
+                                      style: const TextStyle(
+                                        color: AppColors.iconColor,
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        ansNumber[currentIndex] = (i * 3) + j;
+                                        checkSuccess();
+                                      });
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+      
+                        // Buttons for '0' and 'back'
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IgnorePointer(
+                              ignoring: currentIndex > 3,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 14.0),
+                                child: CustomButton(
+                                  child: const Text(
+                                    "0",
+                                    style: TextStyle(
+                                      color: AppColors.iconColor,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      ansNumber[currentIndex] = 0;
+                                      checkSuccess();
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            IgnorePointer(
+                              ignoring: currentIndex > 3,
+                              child: CustomButton(
+                                width: 90,
+                                child: const Icon(
+                                  Icons.arrow_back,
+                                  color: AppColors.iconColor,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    if (currentIndex > 0) {
+                                      currentIndex--;
+                                      ansNumber[currentIndex] = null;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(),
+                      ],
+                    ),
+                    const Spacer(),
+                  ],
                 ),
                 Positioned(
-                    top: 20.0,
-                    right: MediaQuery.of(context).size.height * 0.08,
-                    child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: AppColors.backgroundColor,
-                        child: IconButton(
-                            iconSize: IconSizes.medium,
-                            onPressed: () {
-                              // Close the screen with a failure flag
-
-                              if (widget.onClose != null) {
-                                widget.onClose!();
-                              }
-                              Navigator.pop(context, false);
-                            },
-                            icon: const Icon(
-                              Icons.close_rounded,
-                              color: AppColors.iconColor,
-                              size: 30,
-                            )))),
+                  top: -3,
+                  right: -3,
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadius.only(bottomLeft: Radius.circular(10)),
+                      color: AppColors.backgroundColor,
+                    ),
+                    child: IconButton(
+                      iconSize: IconSizes.medium,
+                      onPressed: () {
+                        if (widget.onClose != null) {
+                          widget.onClose!();
+                        }
+                        Navigator.pop(context, false);
+                      },
+                      icon: const Icon(
+                        Icons.close_rounded,
+                        color: AppColors.iconColor,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           )),
@@ -334,7 +343,7 @@ class CustomButton extends StatefulWidget {
 
   const CustomButton({
     super.key,
-    this.buttonSize = 60,
+    this.buttonSize = 45,
     required this.child,
     required this.onTap,
     this.width,
@@ -368,6 +377,7 @@ class _CustomButtonState extends State<CustomButton> {
       },
       child: Container(
         alignment: Alignment.center,
+        margin: const EdgeInsets.all(7),
         height: widget.buttonSize,
         width: widget.width ?? widget.buttonSize,
         decoration: BoxDecoration(
