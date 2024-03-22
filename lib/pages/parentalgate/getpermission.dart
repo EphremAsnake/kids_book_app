@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:resize/resize.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 
@@ -94,11 +95,10 @@ class _GetParentPermissionState extends State<GetParentPermission> {
           backgroundColor: Colors.transparent,
           body: Container(
             width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.7,
+            height: MediaQuery.of(context).size.height * 0.7,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white, width: 3),
               gradient: const LinearGradient(
-                
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [AppColors.primaryColor, AppColors.secondaryColor],
@@ -109,25 +109,24 @@ class _GetParentPermissionState extends State<GetParentPermission> {
               alignment: Alignment.center,
               children: [
                 //!Background Image
-      
+
                 // const StarsView(
                 //   fps: 60,
                 // ),
-                 Container(
-                      decoration: BoxDecoration(
-      
-                        color: Colors.black.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height,
-                    ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                ),
                 Row(
                   children: [
                     const Spacer(),
-      
+
                     SizedBox(
-                      //height: 80,
+                      height: 380.h,
                       width: MediaQuery.of(context).size.width / 4,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -135,7 +134,9 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                         children: [
                           Spacer(),
                           if (MediaQuery.of(context).size.height > 800)
-                            const SizedBox(),
+                            const Spacer(),
+                          if (MediaQuery.of(context).size.height > 800)
+                            const Spacer(),
                           const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -172,7 +173,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                               fontSize: 18,
                             ),
                           ),
-                          
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -206,10 +207,10 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 )
                             ],
                           ),
-                           Spacer(), Spacer(),
+                          Spacer(), Spacer(),
                           const SizedBox(),
                           if (MediaQuery.of(context).size.height > 800)
-                            const SizedBox(),
+                            const Spacer(),
                         ],
                       ),
                     ),
@@ -246,7 +247,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                                 ),
                             ],
                           ),
-      
+
                         // Buttons for '0' and 'back'
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -378,8 +379,9 @@ class _CustomButtonState extends State<CustomButton> {
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.all(7),
-        height: widget.buttonSize,
-        width: widget.width ?? widget.buttonSize,
+        height: MediaQuery.of(context).size.height > 800?50:widget.buttonSize,
+        width: widget.width ?? (MediaQuery.of(context).size.height > 800 ? 50 : widget.buttonSize),
+
         decoration: BoxDecoration(
           color: _isPressed ? Colors.black.withOpacity(0.1) : Colors.white,
           borderRadius: BorderRadius.circular(15),
