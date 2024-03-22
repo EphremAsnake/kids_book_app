@@ -210,10 +210,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             return Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  fit: BoxFit.fill,
+                    fit: BoxFit.fill,
                     image: AssetImage(
-                  'assets/parental_gate.jpg',
-                )),
+                      'assets/parental_gate.jpg',
+                    )),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -239,236 +239,272 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
                   // _products.isNotEmpty
                   //?
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).height,
-                    child: NestedScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[];
-                      },
-                      body: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Container(
-                           height: MediaQuery.sizeOf(context).height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // const SizedBox(
-                              //   height: 10,
-                              // ),
-                              Obx(() => Text(
-                                    subscriptionStatus.isMonthly.value
-                                        ? Strings.youareSubscribedtoMonthlypackage
-                                        : subscriptionStatus.isYearly.value
-                                            ? Strings
-                                                .youareSubscribedtoYearlypackage
-                                            : widget.generalSubscriptionText,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontFamily: 'Customfont',
-                                      fontSize: 9.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: 2,
-                                      itemBuilder: ((context, index) {
-                                        return SizedBox(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.5,
-                                          child: subTypeContainer(
-                                              context,
-                                              index == 0 ? '1 MONTH' : '1 YEAR',
-                                              index == 0
-                                                  ? widget.monthly
-                                                  : widget.yearly,
-                                              index,
-                                              isYear: index == 0 ? null : true),
-                                        );
-                                      })),
-                                ],
-                              ),
-                              const SizedBox(height: 10.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      bool? showparentalgate = Platform.isAndroid
-                                          ? widget.configResponse.androidSettings
-                                              .parentalGate
-                                          : widget.configResponse.iosSettings
-                                              .parentalGate;
-                                      if (showparentalgate ?? true) {
-                                        Permission.getPermission(
-                                          onClose: () {
-                                            subscriptionController.hideProgress();
-                                          },
-                                          context: context,
-                                          onSuccess: () {
-                                            debugPrint("True");
-                                            InAppPurchase.instance
-                                                .restorePurchases();
-                                          },
-                                          onFail: () {
-                                            debugPrint("false");
-                                          },
-                                          backgroundColor: AppColors.primaryColor,
-                                        );
-                                      } else {
-                                        debugPrint("True");
-                                        InAppPurchase.instance.restorePurchases();
-                                      }
-                                    },
-                                    child: const Text(
-                                      Strings.restorePurchase,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                //MediaQuery.of(context).size.height
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Obx(() => Text(
+                                      subscriptionStatus.isMonthly.value
+                                          ? Strings
+                                              .youareSubscribedtoMonthlypackage
+                                          : subscriptionStatus.isYearly.value
+                                              ? Strings
+                                                  .youareSubscribedtoYearlypackage
+                                              : widget.generalSubscriptionText,
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Customfont',
+                                        fontSize: 9.sp,
                                         color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: 2,
+                                        itemBuilder: ((context, index) {
+                                          return SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.5,
+                                            child: subTypeContainer(
+                                                context,
+                                                index == 0
+                                                    ? '1 MONTH'
+                                                    : '1 YEAR',
+                                                index == 0
+                                                    ? widget.monthly
+                                                    : widget.yearly,
+                                                index,
+                                                isYear:
+                                                    index == 0 ? null : true),
+                                          );
+                                        })),
+                                  ],
+                                ),
+                                const SizedBox(height: 10.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        bool? showparentalgate =
+                                            Platform.isAndroid
+                                                ? widget
+                                                    .configResponse
+                                                    .androidSettings
+                                                    .parentalGate
+                                                : widget.configResponse
+                                                    .iosSettings.parentalGate;
+                                        if (showparentalgate ?? true) {
+                                          Permission.getPermission(
+                                            onClose: () {
+                                              subscriptionController
+                                                  .hideProgress();
+                                            },
+                                            context: context,
+                                            onSuccess: () {
+                                              debugPrint("True");
+                                              InAppPurchase.instance
+                                                  .restorePurchases();
+                                            },
+                                            onFail: () {
+                                              debugPrint("false");
+                                            },
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          );
+                                        } else {
+                                          debugPrint("True");
+                                          InAppPurchase.instance
+                                              .restorePurchases();
+                                        }
+                                      },
+                                      child: const Text(
+                                        Strings.restorePurchase,
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      clearCachedFiles();
-                                    },
-                                    child: const Text(
-                                      Strings.clearCache,
-                                      style: TextStyle(
-                                        fontFamily: 'Customfont',
-                                        color: Colors.white,
+                                    TextButton(
+                                      onPressed: () {
+                                        clearCachedFiles();
+                                      },
+                                      child: const Text(
+                                        Strings.clearCache,
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      bool? showparentalgate = Platform.isAndroid
-                                          ? widget.configResponse.androidSettings
-                                              .parentalGate
-                                          : widget.configResponse.iosSettings
-                                              .parentalGate;
-                                      if (showparentalgate ?? true) {
-                                        Permission.getPermission(
-                                          onClose: () {
-                                            subscriptionController.hideProgress();
-                                          },
-                                          context: context,
-                                          onSuccess: () {
-                                            debugPrint("True");
-                                            _launchURL(widget.termofuseUrl);
-                                          },
-                                          onFail: () {
-                                            debugPrint("false");
-                                          },
-                                          backgroundColor: AppColors.primaryColor,
-                                        );
-                                      } else {
-                                        debugPrint("True");
-                                        _launchURL(widget.termofuseUrl);
-                                      }
-                                    },
-                                    child: const Text(
-                                      Strings.termsofUse,
-                                      style: TextStyle(
-                                        fontFamily: 'Customfont',
-                                        color: Colors.white,
+                                    TextButton(
+                                      onPressed: () {
+                                        bool? showparentalgate =
+                                            Platform.isAndroid
+                                                ? widget
+                                                    .configResponse
+                                                    .androidSettings
+                                                    .parentalGate
+                                                : widget.configResponse
+                                                    .iosSettings.parentalGate;
+                                        if (showparentalgate ?? true) {
+                                          Permission.getPermission(
+                                            onClose: () {
+                                              subscriptionController
+                                                  .hideProgress();
+                                            },
+                                            context: context,
+                                            onSuccess: () {
+                                              debugPrint("True");
+                                              _launchURL(widget.termofuseUrl);
+                                            },
+                                            onFail: () {
+                                              debugPrint("false");
+                                            },
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          );
+                                        } else {
+                                          debugPrint("True");
+                                          _launchURL(widget.termofuseUrl);
+                                        }
+                                      },
+                                      child: const Text(
+                                        Strings.termsofUse,
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      bool? showparentalgate = Platform.isAndroid
-                                          ? widget.configResponse.androidSettings
-                                              .parentalGate
-                                          : widget.configResponse.iosSettings
-                                              .parentalGate;
-                                      if (showparentalgate ?? true) {
-                                        Permission.getPermission(
-                                          onClose: () {
-                                            subscriptionController.hideProgress();
-                                          },
-                                          context: context,
-                                          onSuccess: () {
-                                            debugPrint("True");
-                                            _launchURL(widget.privacyPolicyUrl);
-                                          },
-                                          onFail: () {
-                                            debugPrint("false");
-                                          },
-                                          backgroundColor: AppColors.primaryColor,
-                                        );
-                                      } else {
-                                        debugPrint("True");
-                                        _launchURL(widget.privacyPolicyUrl);
-                                      }
-                                    },
-                                    child: const Text(
-                                      Strings.privacyPolicy,
-                                      style: TextStyle(
-                                        fontFamily: 'Customfont',
-                                        color: Colors.white,
+                                    TextButton(
+                                      onPressed: () {
+                                        bool? showparentalgate =
+                                            Platform.isAndroid
+                                                ? widget
+                                                    .configResponse
+                                                    .androidSettings
+                                                    .parentalGate
+                                                : widget.configResponse
+                                                    .iosSettings.parentalGate;
+                                        if (showparentalgate ?? true) {
+                                          Permission.getPermission(
+                                            onClose: () {
+                                              subscriptionController
+                                                  .hideProgress();
+                                            },
+                                            context: context,
+                                            onSuccess: () {
+                                              debugPrint("True");
+                                              _launchURL(
+                                                  widget.privacyPolicyUrl);
+                                            },
+                                            onFail: () {
+                                              debugPrint("false");
+                                            },
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                          );
+                                        } else {
+                                          debugPrint("True");
+                                          _launchURL(widget.privacyPolicyUrl);
+                                        }
+                                      },
+                                      child: const Text(
+                                        Strings.privacyPolicy,
+                                        style: TextStyle(
+                                          fontFamily: 'Customfont',
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.center,
-                              //   children: [
-                          
-                              //   ],
-                              // ),
-                              // const Column(
-                              //   mainAxisAlignment: MainAxisAlignment.center,
-                              //   children: [
-                              //     Text(
-                              //       'Tap a subscription and tap "Cancel subscription" to cancel it',
-                              //       style: TextStyle(
-                              //         fontFamily: 'Customfont',
-                              //         fontSize: 10,
-                              //         color: Colors.white,
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                            ],
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                )
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+
+                                //   ],
+                                // ),
+                                // const Column(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     Text(
+                                //       'Tap a subscription and tap "Cancel subscription" to cancel it',
+                                //       style: TextStyle(
+                                //         fontFamily: 'Customfont',
+                                //         fontSize: 10,
+                                //         color: Colors.white,
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 20.0, top: 5),
+                        child: Center(
+                          child: Text(
+                            Strings.subscriptionendtext,
+                            style: TextStyle(
+                              fontFamily: 'Customfont',
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
                   // : Center(
                   //     child: CircularProgressIndicator(
                   //       color: Colors.white.withOpacity(0.5),
                   //     ),
                   //   ),
-                  const Positioned(
-                    bottom: 20,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: Text(
-                        Strings.subscriptionendtext,
-                        style: TextStyle(
-                          fontFamily: 'Customfont',
-                          fontSize: 10,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // const Positioned(
+                  //   bottom: 20,
+                  //   left: 0,
+                  //   right: 0,
+                  //   child: Center(
+                  //     child: Text(
+                  //       Strings.subscriptionendtext,
+                  //       style: TextStyle(
+                  //         fontFamily: 'Customfont',
+                  //         fontSize: 10,
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   Positioned(
                       bottom: 0,
                       left: 0,
@@ -604,7 +640,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [const Color(0xFFC66C40), AppColors.primaryColor.withOpacity(0.5)],
+                    colors: [
+                      const Color(0xFFC66C40),
+                      AppColors.primaryColor.withOpacity(0.5)
+                    ],
                   ),
                 ),
                 child: Padding(

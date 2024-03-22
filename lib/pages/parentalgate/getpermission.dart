@@ -91,7 +91,7 @@ class _GetParentPermissionState extends State<GetParentPermission> {
         return false;
       },
       child: Scaffold(
-          backgroundColor: widget.bgColor,
+          backgroundColor: Colors.transparent,
           body: Container(
             width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.7,
