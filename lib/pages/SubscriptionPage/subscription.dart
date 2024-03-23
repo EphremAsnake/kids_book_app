@@ -243,10 +243,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const SizedBox(
+                                  height: 20,
+                                ),
                       Expanded(
                         child: Center(
                           child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
+                            //physics: const AlwaysScrollableScrollPhysics(),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,6 +274,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     )),
+                                    
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
