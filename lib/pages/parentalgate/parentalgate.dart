@@ -20,8 +20,12 @@ class Permission {
         return Align(
           alignment: Alignment.center,
           child: SizedBox(
-            width: MediaQuery.of(context).size.height > 800?200.w:220.w, // Adjust as needed
-            height: MediaQuery.of(context).size.height > 800?450.h:500.h, // Adjust as needed
+            width: MediaQuery.of(context).size.height > 800
+                ? 200.w
+                : 220.w, // Adjust as needed
+            height: MediaQuery.of(context).size.height > 800
+                ? 300.h
+                : 500.h, // Adjust as needed
             child: GetParentPermission(
               onClose: onClose,
               bgColor: backgroundColor,
@@ -47,7 +51,7 @@ class Permission {
         );
       },
     ).then((value) {
-      if (value != null&& value is bool) {
+      if (value != null && value is bool) {
         if (value) {
           if (onSuccess != null) onSuccess();
         } else {
