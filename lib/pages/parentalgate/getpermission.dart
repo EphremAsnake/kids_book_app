@@ -143,8 +143,8 @@ class _GetParentPermissionState extends State<GetParentPermission> {
                               Column(
                                 children: [
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10.0),
                                     child: Text(
                                       Strings.askYourParents,
                                       maxLines: 2,
@@ -379,9 +379,10 @@ class _CustomButtonState extends State<CustomButton> {
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.all(7),
-        height: MediaQuery.of(context).size.height > 800?50:widget.buttonSize,
-        width: widget.width ?? (MediaQuery.of(context).size.height > 800 ? 50 : widget.buttonSize),
-
+        height:
+            MediaQuery.of(context).size.height > 800 ? 50 : widget.buttonSize,
+        width: widget.width ??
+            (MediaQuery.of(context).size.height > 800 ? 50 : widget.buttonSize),
         decoration: BoxDecoration(
           color: _isPressed ? Colors.black.withOpacity(0.1) : Colors.white,
           borderRadius: BorderRadius.circular(15),
