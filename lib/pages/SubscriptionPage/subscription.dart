@@ -7,6 +7,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 // ignore: depend_on_referenced_packages
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:resize/resize.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/utils/Constants/AllStrings.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -159,8 +160,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   Color bColor = Colors.black.withOpacity(0.3);
   AudioController backgroundaudioController = Get.put(AudioController());
 
+  Future<void> saveFlag(String key, bool flagValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, flagValue);
+  }
+
   Future<void> clearCachedFiles() async {
     DefaultCacheManager cacheManager = DefaultCacheManager();
+    await saveFlag("clearCache", true);
     await cacheManager.emptyCache();
     Get.snackbar(
       '',
@@ -244,8 +251,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(
-                                  height: 20,
-                                ),
+                        height: 20,
+                      ),
                       Expanded(
                         child: Center(
                           child: SingleChildScrollView(
@@ -274,7 +281,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     )),
-                                    
+
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
