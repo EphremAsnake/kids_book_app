@@ -272,9 +272,29 @@ class _BookListPageState extends State<BookListPage> {
     return false;
   }
 
-  void goToStoryPage(String folder) {
+  Future<void> goToStoryPage(String folder) async {
     if (folderName == folder) {
       audioController.audioVolumeDown();
+      for (StoryPageModel page in singlestoryPageResponse!.pages) {
+        images.add('${APIEndpoints.baseUrl}/$folder/${page.image}');
+        bookAudioUrls.add('${APIEndpoints.baseUrl}/$folder/${page.audio}');
+      }
+      bool? flagValue = await getFlag('${folder}imagekey');
+      bool? iscleared = await getFlag('clearCache');
+      Logger logger = Logger();
+      logger.e(iscleared);
+      if ((iscleared == null || iscleared)) {
+        await preCacheImages(images, updateProgress).then((_) async {
+          //bool? flagValue = await getFlag();
+          await saveFlag('${folder}imagekey', false);
+        });
+        await saveFlag('clearCache', false);
+      } else if (flagValue != false) {
+        await preCacheImages(images, updateProgress).then((_) async {
+          //bool? flagValue = await getFlag();
+          await saveFlag('${folder}imagekey', false);
+        });
+      }
       Navigator.pushReplacement(
         context,
         RevealRoute(
@@ -346,6 +366,26 @@ class _BookListPageState extends State<BookListPage> {
 
     if (await allFilesCached(storyPageresponse, folder)) {
       audioController.audioVolumeDown();
+      for (StoryPageModel page in singlestoryPageResponse!.pages) {
+        images.add('${APIEndpoints.baseUrl}/$folder/${page.image}');
+        bookAudioUrls.add('${APIEndpoints.baseUrl}/$folder/${page.audio}');
+      }
+      bool? flagValue = await getFlag('${folder}imagekey');
+      bool? iscleared = await getFlag('clearCache');
+      Logger logger = Logger();
+      logger.e(iscleared);
+      if ((iscleared == null || iscleared)) {
+        await preCacheImages(images, updateProgress).then((_) async {
+          //bool? flagValue = await getFlag();
+          await saveFlag('${folder}imagekey', false);
+        });
+        await saveFlag('clearCache', false);
+      } else if (flagValue != false) {
+        await preCacheImages(images, updateProgress).then((_) async {
+          //bool? flagValue = await getFlag();
+          await saveFlag('${folder}imagekey', false);
+        });
+      }
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
         context,
@@ -751,7 +791,9 @@ class _BookListPageState extends State<BookListPage> {
                                                     bool? iscleared =
                                                         await getFlag(
                                                             'clearCache');
-
+                                                    Logger logger = Logger();
+                                                    logger.e(
+                                                        "flag Value: $flagValue");
                                                     setState(() {
                                                       cachedflag =
                                                           iscleared == null ||
@@ -759,7 +801,7 @@ class _BookListPageState extends State<BookListPage> {
                                                               ? true
                                                               : false;
                                                       storedflag =
-                                                          flagValue ?? false;
+                                                          flagValue ?? true;
                                                       showdownloading = true;
                                                       clickedindex = index;
                                                     });
