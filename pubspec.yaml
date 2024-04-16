@@ -28,10 +28,12 @@ dependencies:
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
   dio: ^5.3.4
+  fast_cached_network_image: ^1.2.9
   flutter:
     sdk: flutter
   flutter_animate: ^4.3.0
   flutter_cache_manager: ^3.3.1
+  flutter_spinkit: ^5.2.1
   flutter_staggered_animations: ^1.1.1
   flutter_svg: ^2.0.9
   flutter_swipe_detector: ^2.0.0
@@ -41,6 +43,7 @@ dependencies:
   just_audio: ^0.9.36
   logger: ^2.0.2+1
   open_store: ^0.5.0
+  percent_indicator: ^4.2.3
   resize: ^1.0.0
   share_plus: ^6.3.4
   shared_preferences: ^2.2.2

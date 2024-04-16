@@ -4,10 +4,12 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:logger/logger.dart';
 import 'package:open_store/open_store.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:starsview/starsview.dart';
 import 'package:storyapp/pages/parentalgate/parentalgate.dart';
@@ -60,7 +62,7 @@ class _BookListPageState extends State<BookListPage> {
 
   late AudioController audioController;
   late List<Future<bool>> lockStatusList;
-
+  //ValueNotifier downloadProgressNotifier = ValueNotifier(0);
   Dio dio = Dio();
   ConnectivityResult _connectivityResult = ConnectivityResult.none;
   List<StoryPageApiResponse?> storypageresponses = [];
@@ -85,6 +87,10 @@ class _BookListPageState extends State<BookListPage> {
   bool gotproducts = false;
   List<ProductDetails> _monthproducts = [];
   List<ProductDetails> _yearproducts = [];
+  bool showdownloading = false;
+  bool storedflag = false;
+  bool cachedflag = false;
+  int clickedindex = -10000;
 
   @override
   void initState() {
@@ -375,6 +381,63 @@ class _BookListPageState extends State<BookListPage> {
     }
   }
 
+  // Future<void> preCacheImages(List<String> imageUrls) async {
+  //   final cacheManager = DefaultCacheManager();
+
+  //   for (String url in imageUrls) {
+  //     await cacheManager.downloadFile(url);
+  //   }
+  // }
+  Future<void> preCacheImages(
+      List<String> imageUrls, Function(int) updateProgress) async {
+    final cacheManager = DefaultCacheManager();
+    int totalImages = imageUrls.length;
+    int downloadedImages = 0;
+
+    for (int i = 0; i < imageUrls.length; i++) {
+      String url = imageUrls[i];
+      await cacheManager.downloadFile(url);
+      downloadedImages++;
+      int progress = (downloadedImages * 100 / totalImages).round();
+      updateProgress(progress);
+    }
+  }
+
+  //!variables
+  List<String> images = [];
+  List<String> bookAudioUrls = [];
+
+  // Future<void> _preCacheImages() async {
+  //   List<String> images = [];
+
+  //   await preCacheImages(images);
+  // }
+
+  Future<void> saveFlag(String key, bool flagValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(key, flagValue);
+  }
+
+  int progressValue = 0;
+
+  void updateProgress(int value) {
+    setState(() {
+      progressValue = value;
+    });
+  }
+
+  Future<bool?> getFlag(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? flagValue = prefs.getBool(key);
+
+    if (flagValue == null) {
+      //await saveFlag(key, true); //! Set the flag to true if it is null
+      return null;
+    }
+
+    return flagValue;
+  }
+
   Future<void> getSelectedStory(String folder, {bool? goto}) async {
     setState(() {
       loadingStory = true;
@@ -396,9 +459,33 @@ class _BookListPageState extends State<BookListPage> {
         saveToLocalStorageStoryList(sResponse.data, folder);
 
         if (goto != null) {
+          //!here
           audioController.audioVolumeDown();
+
+          for (StoryPageModel page in singlestoryPageResponse!.pages) {
+            images.add('${APIEndpoints.baseUrl}/$folder/${page.image}');
+            bookAudioUrls.add('${APIEndpoints.baseUrl}/$folder/${page.audio}');
+          }
+          bool? flagValue = await getFlag('${folder}imagekey');
+          bool? iscleared = await getFlag('clearCache');
+          Logger logger = Logger();
+          logger.e(iscleared);
+          if ((iscleared == null || iscleared)) {
+            await preCacheImages(images, updateProgress).then((_) async {
+              //bool? flagValue = await getFlag();
+              await saveFlag('${folder}imagekey', false);
+            });
+            await saveFlag('clearCache', false);
+          } else if (flagValue != false) {
+            await preCacheImages(images, updateProgress).then((_) async {
+              //bool? flagValue = await getFlag();
+              await saveFlag('${folder}imagekey', false);
+            });
+          }
+
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
             context,
             RevealRoute(
               page: BookPage(
@@ -659,6 +746,24 @@ class _BookListPageState extends State<BookListPage> {
                                                       // );
                                                     }
                                                   } else {
+                                                    bool? flagValue = await getFlag(
+                                                        '${book.path}imagekey');
+                                                    bool? iscleared =
+                                                        await getFlag(
+                                                            'clearCache');
+
+                                                    setState(() {
+                                                      cachedflag =
+                                                          iscleared == null ||
+                                                                  iscleared
+                                                              ? true
+                                                              : false;
+                                                      storedflag =
+                                                          flagValue ?? false;
+                                                      showdownloading = true;
+                                                      clickedindex = index;
+                                                    });
+
                                                     getSelectedStory(book.path);
                                                     if (!book.locked ||
                                                         subscriptionStatus
@@ -776,11 +881,15 @@ class _BookListPageState extends State<BookListPage> {
                                                 }
                                               },
                                               child: Obx(() => buildBookCard(
+                                                  index,
                                                   book,
                                                   subscriptionStatus
                                                       .isMonthly.value,
                                                   subscriptionStatus
-                                                      .isYearly.value))),
+                                                      .isYearly.value,
+                                                  showdownloading,
+                                                  storedflag,
+                                                  cachedflag))),
                                         ),
                                       ),
                                     ),
@@ -1219,8 +1328,17 @@ class _BookListPageState extends State<BookListPage> {
   }
 
   Widget buildBookCard(
-      BookList book, bool monthlysubStatus, bool yearlysubStatus) {
+      int index,
+      BookList book,
+      bool monthlysubStatus,
+      bool yearlysubStatus,
+      bool downloadVisible,
+      bool storedflag,
+      bool cacheclearedflag) {
     cacheImages('${APIEndpoints.baseUrl}/${book.thumbnail}');
+
+    bool showdownloading =
+        ((index == clickedindex) && (storedflag || cacheclearedflag));
     return SizedBox(
       height: 150,
       child: Card(
@@ -1249,37 +1367,67 @@ class _BookListPageState extends State<BookListPage> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                // decoration: BoxDecoration(
-                //     color: Colors.black.withOpacity(0.3),
-                //     borderRadius: const BorderRadius.only(
-                //         bottomLeft: Radius.circular(12),
-                //         bottomRight: Radius.circular(12))),
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      book.title,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.visible,
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontFamily: 'Customfont',
-                          shadows: const [
-                            Shadow(
-                              color: Colors.black,
-                              blurRadius: 4.0,
-                              offset: Offset(0.1, 0.1),
-                            ),
-                          ],
-                          height: 1,
-                          color: Colors.white,
-                          fontSize: 6.sp,
-                          fontWeight: FontWeight.bold),
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: showdownloading,
+                    child: Column(
+                      children: [
+                        Text(
+                          "${progressValue}%",
+                          style: const TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        LinearPercentIndicator(
+                          // animation: true,
+                          barRadius: const Radius.circular(10),
+                          // animationDuration: 400,
+                          lineHeight: 15.0,
+                          percent: progressValue / 100,
+                          backgroundColor: Colors.grey.shade300,
+                          progressColor: Colors.blue,
+                        ),
+                      ],
                     ),
                   ),
-                ),
+                  Container(
+                    // decoration: BoxDecoration(
+                    //     color: Colors.black.withOpacity(0.3),
+                    //     borderRadius: const BorderRadius.only(
+                    //         bottomLeft: Radius.circular(12),
+                    //         bottomRight: Radius.circular(12))),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text(
+                          book.title,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.visible,
+                          maxLines: 3,
+                          style: TextStyle(
+                              fontFamily: 'Customfont',
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 4.0,
+                                  offset: Offset(0.1, 0.1),
+                                ),
+                              ],
+                              height: 1,
+                              color: Colors.white,
+                              fontSize: 6.sp,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
